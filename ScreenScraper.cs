@@ -13,7 +13,7 @@ namespace GarlicPress
 {
     internal static class ScreenScraper
     {
-        static string ssDevId = ConfigurationManager.AppSettings["ssDevId"]; 
+        static string ssDevId = ConfigurationManager.AppSettings["ssDevId"];
         static string ssDevPassword = ConfigurationManager.AppSettings["ssDevPassword"];  
         static string ssSoftname = ConfigurationManager.AppSettings["ssSoftname"]; 
 

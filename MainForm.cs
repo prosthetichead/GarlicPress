@@ -192,7 +192,7 @@ namespace GarlicPress
             if (skinSettings.textalignment == "right")
             {
                 textImage = (Bitmap)Image.FromFile(@"assets/SampleTextRight.png");
-                txtMargin = 640 - skinSettings.textmargin;
+                txtMargin = skinSettings.textmargin * -1;
             }
             else if (skinSettings.textalignment == "left")
             {
@@ -316,6 +316,7 @@ namespace GarlicPress
             foreach (string file in files)
             {
                 txtCurrentTask.Text = "uploading " + file + " for system " + system.name + " to SD " + comboDrive.SelectedIndex + 1;
+                GarlicADBConnection.UploadFile(file, currentSystemPath + "/" + Path.GetFileName(file));
             }
         }
 
@@ -424,7 +425,14 @@ namespace GarlicPress
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            AboutForm aboutForm = new AboutForm();
+            aboutForm.ShowDialog();
 
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

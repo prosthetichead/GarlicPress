@@ -47,8 +47,8 @@
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.txtSaveBackupLocation = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.boolAutoBackup = new System.Windows.Forms.CheckBox();
             this.boolSystemTrayOnClose = new System.Windows.Forms.CheckBox();
+            this.boolAutoBackup = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.GridMediaLayout)).BeginInit();
             this.SuspendLayout();
             // 
@@ -199,16 +199,6 @@
             this.label4.TabIndex = 30;
             this.label4.Text = "Saves Backup Location";
             // 
-            // boolAutoBackup
-            // 
-            this.boolAutoBackup.AutoSize = true;
-            this.boolAutoBackup.Location = new System.Drawing.Point(629, 50);
-            this.boolAutoBackup.Name = "boolAutoBackup";
-            this.boolAutoBackup.Size = new System.Drawing.Size(159, 19);
-            this.boolAutoBackup.TabIndex = 31;
-            this.boolAutoBackup.Text = "Auto Backup on Connect";
-            this.boolAutoBackup.UseVisualStyleBackColor = true;
-            // 
             // boolSystemTrayOnClose
             // 
             this.boolSystemTrayOnClose.AutoSize = true;
@@ -218,6 +208,17 @@
             this.boolSystemTrayOnClose.TabIndex = 32;
             this.boolSystemTrayOnClose.Text = "Minimise to System Tray on Close";
             this.boolSystemTrayOnClose.UseVisualStyleBackColor = true;
+            // 
+            // boolAutoBackup
+            // 
+            this.boolAutoBackup.AutoSize = true;
+            this.boolAutoBackup.Enabled = false;
+            this.boolAutoBackup.Location = new System.Drawing.Point(629, 50);
+            this.boolAutoBackup.Name = "boolAutoBackup";
+            this.boolAutoBackup.Size = new System.Drawing.Size(159, 19);
+            this.boolAutoBackup.TabIndex = 31;
+            this.boolAutoBackup.Text = "Auto Backup on Connect";
+            this.boolAutoBackup.UseVisualStyleBackColor = true;
             // 
             // SettingsForm
             // 
@@ -266,7 +267,7 @@
         private HelpProvider helpProvider1;
         private TextBox txtSaveBackupLocation;
         private Label label4;
-        private CheckBox boolAutoBackup;
         private CheckBox boolSystemTrayOnClose;
+        private CheckBox boolAutoBackup;
     }
 }

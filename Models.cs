@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Web;
+using static System.Net.WebRequestMethods;
 
 namespace GarlicPress
 {
@@ -29,7 +30,7 @@ namespace GarlicPress
         public static List<GarlicSystem> GetAllSystems()
         {
             List<GarlicSystem> systems = new List<GarlicSystem>()
-            {
+            { //https://github.com/OnionUI/Onion/wiki/Emulators#rom-folders---quick-reference
                 new GarlicSystem("Amiga",  "AMIGA", "64", "rom", new List<string>(){}),
                 new GarlicSystem("Amstrad CPC",  "CPC", "65", "rom", new List<string>(){}),
                 new GarlicSystem("Arcade (Mame 2003+)",  "ARCADE", "75", "rom", new List<string>(){}),
@@ -60,7 +61,7 @@ namespace GarlicPress
                 new GarlicSystem("Nintendo Satellaview", "SATELLAVIEW", "107", "rom", new List<string>(){}),
                 new GarlicSystem("Nintendo Super Game Boy", "SGB", "127", "rom", new List<string>(){}),
                 new GarlicSystem("Nintendo Super Nintendo", "SFC", "4", "rom", new List<string>(){}),
-                new GarlicSystem("Nintendo Virtual Boy", "SFC", "4", "rom", new List<string>(){}),
+                new GarlicSystem("Nintendo Virtual Boy", "VB", "11", "rom", new List<string>(){}),
                 new GarlicSystem("Nintendo Game Boy", "VB", "11", "rom", new List<string>(){".gb", ".gbc", ".dmg", ".zip", ".7z"}),
                 new GarlicSystem("Nintendo Game Boy Color", "GBC", "10", "rom", new List<string>(){".gb", ".gbc", ".dmg", ".zip", ".7z"}),
                 new GarlicSystem("Nintendo Game Boy Advance", "GBA", "12", "rom", new List<string>(){".gb", ".gbc", ".dmg", ".zip", ".7z"}),
