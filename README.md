@@ -24,7 +24,6 @@ GarlicPress uses ADB to comunicate with the RG35xx and GarlicOS over usb. By def
 ### Enabling ADB
 * Insert the main SD card into a PC
 * On the Misc partition (not the larger partition with Roms foldeer) create a text file in the root of the drive. Rename this new file to "enableADB" making sure to remove the .txt file extention.
-* Or save and copy the supplied file [Here (right click save link as)](https://raw.githubusercontent.com/prosthetichead/GarlicPress-Release/main/enableADB). Don't forget to remove .txt when you save it.
   ![image](https://github.com/prosthetichead/GarlicPress-Release/assets/1934681/4d7718a1-f4e3-42ae-bd96-11780ff07f2e)
 * Reinsert the SD Card into the RG35xx and GarlicPress should now be able to connect to the device over USB if it is turned on (not on the battery charging screen).
   
