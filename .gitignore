@@ -363,3 +363,7 @@ MigrationBackup/
 FodyWeavers.xsd
 AppSettingsSecrets.config
 ScreenScraperExtra.cs
+adb.exe
+AdbWinApi.dll
+AdbWinUsbApi.dll
+adb.exe
