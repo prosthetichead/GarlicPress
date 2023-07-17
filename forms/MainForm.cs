@@ -146,11 +146,14 @@ namespace GarlicPress
                 fileListBox.DataSource = files;
 
                 //refresh counts
-                foreach (var system in (List<GarlicSystem>)comboSystems.DataSource)
-                {
-                    var listCount = GarlicADBConnection.GetDirectoryListing(currentSDPath + "/roms/" + system.folder).Where(w=>w.Path != "." && w.Path != ".." && w.Path != "Imgs").Count();
-                    system.name = system.name + " [" + listCount + "]";
-                }
+                //List<GarlicSystem> systems = GarlicSystem.GetAllSystems();
+                //int selectedIndex = comboSystems.SelectedIndex;
+                //foreach (var system in systems)
+                //{
+                //    var listCount = GarlicADBConnection.GetDirectoryListing(currentSDPath + "/roms/" + system.folder).Where(w=>w.Path != "." && w.Path != ".." && w.Path != "Imgs").Count();
+                //    system.name = system.name + " [" + listCount + "]";
+                //}
+                
             }
 
 
@@ -326,6 +329,8 @@ namespace GarlicPress
                     MessageBox.Show(file + " apears to be a directory right now GarlicPress does not support uploading directories. ");
                 }
             }
+            txtCurrentTask.Text = "upload complete";
+            RefreshBrowserFiles();
         }
 
         private void miSkinSettings_Click(object sender, EventArgs e)
