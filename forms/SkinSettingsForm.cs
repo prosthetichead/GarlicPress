@@ -61,6 +61,8 @@ namespace GarlicPress
             File.WriteAllText("assets/skinSettings.json", json);
             GarlicADBConnection.UploadFile("assets/skinSettings.json", "/mnt/mmc/CFW/skin/settings.json");
             GarlicADBConnection.client.Reboot(GarlicADBConnection.device);
+
+            Close();
         }
 
         private void btnTextColourActivePicker_Click(object sender, EventArgs e)
@@ -76,6 +78,11 @@ namespace GarlicPress
         private void btnColorInactive_Click(object sender, EventArgs e)
         {
             GetColor(txtColorInactive);
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

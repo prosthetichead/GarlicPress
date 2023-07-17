@@ -60,11 +60,11 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(332, 512);
+            this.btnSave.Location = new System.Drawing.Point(287, 512);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(75, 23);
+            this.btnSave.Size = new System.Drawing.Size(120, 23);
             this.btnSave.TabIndex = 1;
-            this.btnSave.Text = "Save";
+            this.btnSave.Text = "Save and Reboot";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
@@ -76,6 +76,7 @@
             this.btnCancel.TabIndex = 2;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // label1
             // 
@@ -199,7 +200,7 @@
             this.Controls.Add(this.comboTextAlignment);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "SkinSettingsForm";
-            this.Text = "SkinSettingsForm";
+            this.Text = "Skin Settings";
             this.ResumeLayout(false);
             this.PerformLayout();
 

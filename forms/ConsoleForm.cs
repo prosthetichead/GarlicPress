@@ -22,12 +22,27 @@ namespace GarlicPress
 
         private void btnSend_Click(object sender, EventArgs e)
         {
+            sendCommand();
+        }
+
+
+        private void sendCommand()
+        {
             ConsoleOutputReceiver receiver = new ConsoleOutputReceiver();
             GarlicADBConnection.client.ExecuteRemoteCommand(txtCommand.Text, GarlicADBConnection.device, receiver);
 
 
             string results = receiver.ToString().Trim();
             txtOutput.Text = results;
+        }
+
+        private void txtCommand_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                sendCommand();
+                e.SuppressKeyPress = true;
+            }
         }
     }
 }

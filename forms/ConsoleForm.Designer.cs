@@ -35,12 +35,14 @@
             // 
             // txtCommand
             // 
+            this.txtCommand.AcceptsReturn = true;
             this.txtCommand.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtCommand.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtCommand.Location = new System.Drawing.Point(12, 436);
             this.txtCommand.Name = "txtCommand";
             this.txtCommand.Size = new System.Drawing.Size(655, 22);
             this.txtCommand.TabIndex = 0;
+            this.txtCommand.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtCommand_KeyDown);
             // 
             // txtOutput
             // 
@@ -52,6 +54,7 @@
             this.txtOutput.Location = new System.Drawing.Point(0, 0);
             this.txtOutput.Multiline = true;
             this.txtOutput.Name = "txtOutput";
+            this.txtOutput.ReadOnly = true;
             this.txtOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txtOutput.Size = new System.Drawing.Size(734, 426);
             this.txtOutput.TabIndex = 1;
