@@ -40,6 +40,7 @@
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.miConsole = new System.Windows.Forms.ToolStripMenuItem();
             this.miSkinSettings = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.miOpenGalicPress = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,7 +55,7 @@
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnBackupSaves = new System.Windows.Forms.Button();
             this.btnUpdateArtPrompt = new System.Windows.Forms.Button();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.notifyIconMenu.SuspendLayout();
@@ -123,7 +124,8 @@
             // miFile
             // 
             this.miFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.miSettings});
+            this.miSettings,
+            this.exitToolStripMenuItem});
             this.miFile.Name = "miFile";
             this.miFile.Size = new System.Drawing.Size(37, 20);
             this.miFile.Text = "File";
@@ -131,8 +133,8 @@
             // miSettings
             // 
             this.miSettings.Name = "miSettings";
-            this.miSettings.Size = new System.Drawing.Size(119, 22);
-            this.miSettings.Text = "Settiings";
+            this.miSettings.Size = new System.Drawing.Size(180, 22);
+            this.miSettings.Text = "Settings";
             this.miSettings.Click += new System.EventHandler(this.miSettings_Click);
             // 
             // toolsToolStripMenuItem
@@ -157,6 +159,13 @@
             this.miSkinSettings.Size = new System.Drawing.Size(164, 22);
             this.miSkinSettings.Text = "Edit Skin Settings";
             this.miSkinSettings.Click += new System.EventHandler(this.miSkinSettings_Click);
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // notifyIcon
             // 
@@ -296,12 +305,12 @@
             this.btnUpdateArtPrompt.UseVisualStyleBackColor = true;
             this.btnUpdateArtPrompt.Click += new System.EventHandler(this.btnUpdateArtPrompt_Click);
             // 
-            // aboutToolStripMenuItem
+            // exitToolStripMenuItem
             // 
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
-            this.aboutToolStripMenuItem.Text = "About";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -374,5 +383,6 @@
         private Button btnBackupSaves;
         private Button btnUpdateArtPrompt;
         private ToolStripMenuItem aboutToolStripMenuItem;
+        private ToolStripMenuItem exitToolStripMenuItem;
     }
 }

@@ -30,7 +30,7 @@
         {
             this.labTitle = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.labVersion = new System.Windows.Forms.Label();
             this.labIssue = new System.Windows.Forms.Label();
             this.labCoffee = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -53,16 +53,16 @@
             this.label2.TabIndex = 1;
             this.label2.Text = "Created by prostheticHead\r\n";
             // 
-            // label1
+            // labVersion
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("m5x7", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(275, 198);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(92, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "ver. 16072023";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.labVersion.AutoSize = true;
+            this.labVersion.Font = new System.Drawing.Font("m5x7", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labVersion.Location = new System.Drawing.Point(275, 198);
+            this.labVersion.Name = "labVersion";
+            this.labVersion.Size = new System.Drawing.Size(92, 13);
+            this.labVersion.TabIndex = 2;
+            this.labVersion.Text = "ver. 16072023";
+            this.labVersion.TextAlign = System.Drawing.ContentAlignment.BottomRight;
             // 
             // labIssue
             // 
@@ -96,7 +96,7 @@
             this.ClientSize = new System.Drawing.Size(370, 214);
             this.Controls.Add(this.labCoffee);
             this.Controls.Add(this.labIssue);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.labVersion);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.labTitle);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -111,7 +111,7 @@
 
         private Label labTitle;
         private Label label2;
-        private Label label1;
+        private Label labVersion;
         private Label labIssue;
         private Label labCoffee;
     }

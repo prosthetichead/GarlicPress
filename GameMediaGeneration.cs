@@ -72,7 +72,7 @@ namespace GarlicPress
 
                 baseImage.Dispose();
             }
-            finalImage.Save("tempimg.png", ImageFormat.Png);
+            finalImage.Save("assets/tempimg.png", ImageFormat.Png);
             return true;
         }
 

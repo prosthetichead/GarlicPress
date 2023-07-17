@@ -58,8 +58,8 @@ namespace GarlicPress
                 WriteIndented = true,                
             };
             string json = JsonSerializer.Serialize(skinSettings, options);
-            File.WriteAllText("skinSettings.json", json);
-            GarlicADBConnection.UploadFile("skinSettings.json", "/mnt/mmc/CFW/skin/settings.json");
+            File.WriteAllText("assets/skinSettings.json", json);
+            GarlicADBConnection.UploadFile("assets/skinSettings.json", "/mnt/mmc/CFW/skin/settings.json");
             GarlicADBConnection.client.Reboot(GarlicADBConnection.device);
         }
 

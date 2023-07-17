@@ -11,11 +11,9 @@ using System.Web;
 
 namespace GarlicPress
 {
-    internal static class ScreenScraper
+    internal static partial class ScreenScraper
     {
-        static string ssDevId = ConfigurationManager.AppSettings["ssDevId"];
-        static string ssDevPassword = ConfigurationManager.AppSettings["ssDevPassword"];  
-        static string ssSoftname = ConfigurationManager.AppSettings["ssSoftname"]; 
+        
 
         public static GameResponse GetGameData(string systemId, string romType, string romName)
         {
@@ -24,8 +22,8 @@ namespace GarlicPress
             query["devid"] = ssDevId;
             query["devpassword"] = ssDevPassword;
             query["softname"] = ssSoftname;
-            query["ssid"] = Properties.Settings.Default.ssUsername; //fix this later
-            query["sspassword"] = Properties.Settings.Default.ssPassword; //fix this later
+            query["ssid"] = Properties.Settings.Default.ssUsername; 
+            query["sspassword"] = Properties.Settings.Default.ssPassword; 
             query["output"] = "json";
             query["systemeid"] = systemId;
             query["romtype"] = romType;
@@ -75,7 +73,7 @@ namespace GarlicPress
 
                 var media = medias.First();
 
-                string mediaDownloadPath = mediaType + "." + media.format;
+                string mediaDownloadPath = "assets/" + mediaType + "." + media.format;
                 webClient.DownloadFile(new Uri(media.url), mediaDownloadPath);
 
                 return mediaDownloadPath;

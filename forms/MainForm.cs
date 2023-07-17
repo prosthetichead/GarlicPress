@@ -103,11 +103,11 @@ namespace GarlicPress
                     RefreshBrowserFiles();
 
                     //get skin files
-                    GarlicADBConnection.DownloadFile("/mnt/mmc/CFW/skin/background.png", "background.png");
-                    GarlicADBConnection.DownloadFile("/mnt/mmc/CFW/skin/settings.json", "skinSettings.json");
+                    GarlicADBConnection.DownloadFile("/mnt/mmc/CFW/skin/background.png", "assets/background.png");
+                    GarlicADBConnection.DownloadFile("/mnt/mmc/CFW/skin/settings.json", "assets/skinSettings.json");
 
                     //read skin file get text position
-                    string json = File.ReadAllText(@"skinSettings.json");
+                    string json = File.ReadAllText(@"assets/skinSettings.json");
                     skinSettings = JsonSerializer.Deserialize<GarlicSkinSettings>(json);
                 }
                 else
@@ -170,7 +170,7 @@ namespace GarlicPress
             {
                 //get img file if one exists
                 string imgFile = Path.ChangeExtension(item.Path, ".png");
-                if (GarlicADBConnection.DownloadFile(currentSystemPath + "/Imgs/" + imgFile, "tempimg.png"))
+                if (GarlicADBConnection.DownloadFile(currentSystemPath + "/Imgs/" + imgFile, "assets/tempimg.png"))
                 {
                     OverlayImageWithSkinBackground();
                     //picGame.ImageLocation = "tempimg.png";
@@ -185,8 +185,8 @@ namespace GarlicPress
 
         private void OverlayImageWithSkinBackground()
         {
-            var baseImage = (Bitmap)Image.FromFile(@"background.png");
-            var overlayImage = (Bitmap)Image.FromFile(@"tempimg.png");
+            var baseImage = (Bitmap)Image.FromFile(@"assets/background.png");
+            var overlayImage = (Bitmap)Image.FromFile(@"assets/tempimg.png");
             var textImage = (Bitmap)Image.FromFile(@"assets/SampleTextCenter.png");
             int txtMargin = 0;
             if (skinSettings.textalignment == "right")
@@ -315,8 +315,16 @@ namespace GarlicPress
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
             foreach (string file in files)
             {
-                txtCurrentTask.Text = "uploading " + file + " for system " + system.name + " to SD " + comboDrive.SelectedIndex + 1;
-                GarlicADBConnection.UploadFile(file, currentSystemPath + "/" + Path.GetFileName(file));
+                FileAttributes attr = File.GetAttributes(file);
+                if(attr != FileAttributes.Directory)
+                {
+                    txtCurrentTask.Text = "uploading " + file + " for system " + system.name + " to SD " + comboDrive.SelectedIndex + 1;
+                    GarlicADBConnection.UploadFile(file, currentSystemPath + "/" + Path.GetFileName(file));
+                }
+                else
+                {
+                    MessageBox.Show(file + " apears to be a directory right now GarlicPress does not support uploading directories. ");
+                }
             }
         }
 
@@ -414,7 +422,7 @@ namespace GarlicPress
                 OverlayImageWithSkinBackground();
 
                 string imgFile = Path.ChangeExtension(item.Path, ".png");
-                GarlicADBConnection.UploadFile("tempimg.png", currentSystemPath + "/Imgs/" + imgFile);
+                GarlicADBConnection.UploadFile("assets/tempimg.png", currentSystemPath + "/Imgs/" + imgFile);
 
                 Update();
                 count++;
