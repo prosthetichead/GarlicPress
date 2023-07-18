@@ -23,7 +23,7 @@ namespace GarlicPress
         {
             ProcessStartInfo psInfo = new ProcessStartInfo
             {
-                FileName = "https://github.com/prosthetichead/GarlicPress-Release/issues",
+                FileName = "https://github.com/prosthetichead/GarlicPress/issues",
                 UseShellExecute = true
             };
             Process.Start(psInfo);
