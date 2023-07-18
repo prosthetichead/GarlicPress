@@ -432,13 +432,14 @@ namespace GarlicPress
                 }
                 GameResponse game = ScreenScraper.GetGameData(system.ss_systemeid, system.ss_romtype, romName);
 
-                GameMediaGeneration.GenerateGameMedia(game);
+                if (game != null && game.status != "error") //game was not found Skip doing its art
+                {
+                    GameMediaGeneration.GenerateGameMedia(game);
+                    OverlayImageWithSkinBackground();
 
-                OverlayImageWithSkinBackground();
-
-                string imgFile = Path.ChangeExtension(item.Path, ".png");
-                GarlicADBConnection.UploadFile("assets/tempimg.png", currentSystemPath + "/Imgs/" + imgFile);
-
+                    string imgFile = Path.ChangeExtension(item.Path, ".png");
+                    GarlicADBConnection.UploadFile("assets/tempimg.png", currentSystemPath + "/Imgs/" + imgFile);
+                }
                 Update();
                 count++;
             }
