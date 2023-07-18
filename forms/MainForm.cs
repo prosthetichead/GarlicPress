@@ -1,19 +1,7 @@
 using AdvancedSharpAdbClient;
-using System;
-using System.Configuration;
-using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.Intrinsics.X86;
 using System.Text.Json;
-using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
-using System.Xml.Linq;
-using static System.Windows.Forms.AxHost;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace GarlicPress
 {
@@ -35,6 +23,7 @@ namespace GarlicPress
         
 
         GarlicSkinSettings skinSettings;
+        bool validSkinSettings;
 
         public MainForm()
         {
@@ -104,18 +93,20 @@ namespace GarlicPress
 
                     //get skin files
                     GarlicADBConnection.DownloadFile("/mnt/mmc/CFW/skin/background.png", "assets/background.png");
-                    GarlicADBConnection.DownloadFile("/mnt/mmc/CFW/skin/settings.json", "assets/skinSettings.json");
+                    GarlicADBConnection.DownloadFile("/mnt/mmc/CFW/skin/settings.json", "assets/skinSettings.json"); //cat /mnt/mmc/cfw/skin/settings.json
 
                     //read skin file get text position
                     string json = File.ReadAllText(@"assets/skinSettings.json");
                     try
                     {
                         skinSettings = JsonSerializer.Deserialize<GarlicSkinSettings>(json);
+                        validSkinSettings = true;
                     }
                     catch (Exception ex)
                     {
                         skinSettings = new GarlicSkinSettings();
-                        MessageBox.Show("ERROR: " + ex.Message + " an empty skin settings has been loaded.", "Error Reading Skin Json on Device", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        validSkinSettings = false;
+                        MessageBox.Show("CFW/skin/settings.json skin settings can not be loaded. \n\n Preview will not display text position \n skin settings tool will not function. \n\n Please report the skin you are using to issues link in About \n\n Error Text : \n " + ex.Message, "Error Reading Skin Settings Json on Device", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     
                 }
@@ -211,7 +202,8 @@ namespace GarlicPress
                 textImage = (Bitmap)Image.FromFile(@"assets/SampleTextLeft.png");
                 txtMargin = skinSettings.textmargin;
             }
-            textImage.SetResolution(baseImage.HorizontalResolution, baseImage.VerticalResolution);
+            baseImage.SetResolution(overlayImage.HorizontalResolution, overlayImage.VerticalResolution);
+            textImage.SetResolution(overlayImage.HorizontalResolution, overlayImage.VerticalResolution);
 
             var finalImage = new Bitmap(baseImage.Width, baseImage.Height, PixelFormat.Format32bppArgb);
             var graphics = Graphics.FromImage(finalImage);
@@ -219,7 +211,10 @@ namespace GarlicPress
 
             graphics.DrawImage(baseImage, 0, 0);
             graphics.DrawImage(overlayImage, 0, 0);
-            graphics.DrawImage(textImage, txtMargin, 0);
+            if (validSkinSettings)
+            {
+                graphics.DrawImage(textImage, txtMargin, 0);
+            }
 
             //show in a winform picturebox
             picGame.Image = finalImage;
@@ -345,14 +340,20 @@ namespace GarlicPress
 
         private void miSkinSettings_Click(object sender, EventArgs e)
         {
-
-            if (GarlicADBConnection.deviceConnected)
+            if (validSkinSettings)
             {
-                SkinSettingsForm skinSettingsForm = new SkinSettingsForm(skinSettings);
-                skinSettingsForm.ShowDialog();
+                if (GarlicADBConnection.deviceConnected)
+                {
+                    SkinSettingsForm skinSettingsForm = new SkinSettingsForm(skinSettings);
+                    skinSettingsForm.ShowDialog();
+                }
+                else
+                    MessageBox.Show("No Device Connected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
-                MessageBox.Show("No Device Connected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            {
+                MessageBox.Show("Skin Settings load was invalid can not open skin settings", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
       

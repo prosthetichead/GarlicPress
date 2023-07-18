@@ -28,11 +28,7 @@ namespace GarlicPress
 
         private void sendCommand()
         {
-            ConsoleOutputReceiver receiver = new ConsoleOutputReceiver();
-            GarlicADBConnection.client.ExecuteRemoteCommand(txtCommand.Text, GarlicADBConnection.device, receiver);
-
-
-            string results = receiver.ToString().Trim();
+            var results = GarlicADBConnection.ExecuteCommand(txtCommand.Text);
             txtOutput.Text = results;
         }
 
