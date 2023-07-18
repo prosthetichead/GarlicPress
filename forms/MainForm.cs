@@ -108,7 +108,16 @@ namespace GarlicPress
 
                     //read skin file get text position
                     string json = File.ReadAllText(@"assets/skinSettings.json");
-                    skinSettings = JsonSerializer.Deserialize<GarlicSkinSettings>(json);
+                    try
+                    {
+                        skinSettings = JsonSerializer.Deserialize<GarlicSkinSettings>(json);
+                    }
+                    catch (Exception ex)
+                    {
+                        skinSettings = new GarlicSkinSettings();
+                        MessageBox.Show("ERROR: " + ex.Message + " an empty skin settings has been loaded.", "Error Reading Skin Json on Device", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    
                 }
                 else
                 {
@@ -216,6 +225,7 @@ namespace GarlicPress
             picGame.Image = finalImage;
             baseImage.Dispose();
             overlayImage.Dispose();
+            textImage.Dispose();
         }
 
 
