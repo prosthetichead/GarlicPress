@@ -100,6 +100,10 @@ namespace GarlicPress
             {
                 using (SyncService service = new SyncService(new AdbSocket(client.EndPoint), device))
                 {
+                    if (File.Exists(writePath))
+                    {
+                        File.Delete(writePath); //we need to kill the old file before we download the new one
+                    }
                     using (Stream stream = File.OpenWrite(writePath))
                     {
                         try
@@ -146,6 +150,15 @@ namespace GarlicPress
             }
 
             return false;
+        }
+
+        public static string ExecuteCommand(string command)
+        {
+            ConsoleOutputReceiver receiver = new ConsoleOutputReceiver();
+            client.ExecuteRemoteCommand(command, device, receiver);
+            string results = receiver.ToString().Trim();
+
+            return results;
         }
 
         public static string DevicePathType(string path)

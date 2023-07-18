@@ -37,6 +37,7 @@
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.miFile = new System.Windows.Forms.ToolStripMenuItem();
             this.miSettings = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.miConsole = new System.Windows.Forms.ToolStripMenuItem();
             this.miSkinSettings = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,7 +56,6 @@
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnBackupSaves = new System.Windows.Forms.Button();
             this.btnUpdateArtPrompt = new System.Windows.Forms.Button();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.notifyIconMenu.SuspendLayout();
@@ -133,9 +133,16 @@
             // miSettings
             // 
             this.miSettings.Name = "miSettings";
-            this.miSettings.Size = new System.Drawing.Size(180, 22);
+            this.miSettings.Size = new System.Drawing.Size(116, 22);
             this.miSettings.Text = "Settings";
             this.miSettings.Click += new System.EventHandler(this.miSettings_Click);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // toolsToolStripMenuItem
             // 
@@ -255,7 +262,7 @@
             this.picGame.Location = new System.Drawing.Point(361, 72);
             this.picGame.Name = "picGame";
             this.picGame.Size = new System.Drawing.Size(640, 480);
-            this.picGame.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picGame.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.picGame.TabIndex = 13;
             this.picGame.TabStop = false;
             // 
@@ -304,13 +311,6 @@
             this.btnUpdateArtPrompt.Text = "Update Art Prompt";
             this.btnUpdateArtPrompt.UseVisualStyleBackColor = true;
             this.btnUpdateArtPrompt.Click += new System.EventHandler(this.btnUpdateArtPrompt_Click);
-            // 
-            // exitToolStripMenuItem
-            // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.exitToolStripMenuItem.Text = "Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // MainForm
             // 
