@@ -49,6 +49,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.boolSystemTrayOnClose = new System.Windows.Forms.CheckBox();
             this.boolAutoBackup = new System.Windows.Forms.CheckBox();
+            this.boolAutoSkip = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.GridMediaLayout)).BeginInit();
             this.SuspendLayout();
             // 
@@ -220,11 +221,22 @@
             this.boolAutoBackup.Text = "Auto Backup on Connect";
             this.boolAutoBackup.UseVisualStyleBackColor = true;
             // 
+            // boolAutoSkip
+            // 
+            this.boolAutoSkip.AutoSize = true;
+            this.boolAutoSkip.Location = new System.Drawing.Point(12, 153);
+            this.boolAutoSkip.Name = "boolAutoSkip";
+            this.boolAutoSkip.Size = new System.Drawing.Size(217, 19);
+            this.boolAutoSkip.TabIndex = 33;
+            this.boolAutoSkip.Text = "Skip Prompt When Game not Found";
+            this.boolAutoSkip.UseVisualStyleBackColor = true;
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.boolAutoSkip);
             this.Controls.Add(this.boolSystemTrayOnClose);
             this.Controls.Add(this.boolAutoBackup);
             this.Controls.Add(this.label4);
@@ -269,5 +281,6 @@
         private Label label4;
         private CheckBox boolSystemTrayOnClose;
         private CheckBox boolAutoBackup;
+        private CheckBox boolAutoSkip;
     }
 }

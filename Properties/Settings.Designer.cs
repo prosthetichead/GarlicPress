@@ -94,5 +94,29 @@ namespace GarlicPress.Properties {
                 this["ssRegionOrder"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool settingsUpgradeRequired {
+            get {
+                return ((bool)(this["settingsUpgradeRequired"]));
+            }
+            set {
+                this["settingsUpgradeRequired"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ssSkipGameNotFound {
+            get {
+                return ((bool)(this["ssSkipGameNotFound"]));
+            }
+            set {
+                this["ssSkipGameNotFound"] = value;
+            }
+        }
     }
 }

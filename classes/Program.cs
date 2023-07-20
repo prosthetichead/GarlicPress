@@ -15,6 +15,14 @@ namespace GarlicPress
         {
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
+
+            if (Properties.Settings.Default.settingsUpgradeRequired)
+            {
+                Properties.Settings.Default.Upgrade();
+                Properties.Settings.Default.settingsUpgradeRequired = false;
+                Properties.Settings.Default.Save();
+            }
+
             ApplicationConfiguration.Initialize();
             Application.Run(new MainForm());
         }

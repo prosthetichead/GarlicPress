@@ -26,35 +26,43 @@ namespace GarlicPress
 
     internal static class Updater
     {
-        public static UpdateInfo CheckForUpdate()
+        private static UpdateInfo updateInfo;
+
+        public static UpdateInfo GetUpdateInfo()
         {
-            UpdateInfo updateInfo = new UpdateInfo();
-            try
+            if (updateInfo == null)
             {
-                Version appVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+                updateInfo = new UpdateInfo();
+                try
+                {
+                    Version appVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
 
-                //check github for latest release
-                var github = new GitHubClient(new ProductHeaderValue("GarlicPress"));
-                Release latestRelease = github.Repository.Release.GetLatest("prosthetichead", "GarlicPress").Result;
-                updateInfo.latestRelease = latestRelease;
+                    //check github for latest release
+                    var github = new GitHubClient(new ProductHeaderValue("GarlicPress"));
+                    Release latestRelease = github.Repository.Release.GetLatest("prosthetichead", "GarlicPress").Result;
+                    updateInfo.latestRelease = latestRelease;
 
-                //convert the tag into a version number
-                Version gitHubVersion = Version.Parse(latestRelease.TagName);
-                int versionComparison = gitHubVersion.CompareTo(appVersion);
-                updateInfo.versionComparison = versionComparison;
+                    //convert the tag into a version number
+                    Version gitHubVersion = Version.Parse(latestRelease.TagName);
+                    int versionComparison = gitHubVersion.CompareTo(appVersion);
+                    updateInfo.versionComparison = versionComparison;
 
-                updateInfo.success = true;
+                    updateInfo.success = true;
+                    return updateInfo;
+                }
+                catch (Exception ex)
+                {
+                    // versions cant be matched so give up just return No Updates
+                    updateInfo.success = false;
+                    updateInfo.message = ex.Message;
+                    updateInfo.versionComparison = 0;
+                    return updateInfo;
+                }
+            }
+            else
+            {
                 return updateInfo;
             }
-            catch (Exception ex)
-            {
-                // versions cant be matched so give up just return No Updates
-                updateInfo.success = false;
-                updateInfo.message = ex.Message;
-                updateInfo.versionComparison = 0;
-                return updateInfo;
-            }
-            
         }
     }
 }
