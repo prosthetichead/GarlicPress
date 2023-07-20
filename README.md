@@ -6,7 +6,8 @@ GarlicPress is a companion application for the RG35xx running [GarlicOS](https:/
 ## Features
 * Easily view files stored in the Roms folders for each system and SD Card
 * Scrape game art from [screenscraper.fr](https://screenscraper.fr)
-* Copy to and Delete files from the Roms folders
+* Edit game art layouts using layers
+* Copy to and Delete files from the Roms folders using drag and drop
 * Edit the skin configuration and preview (not all features enabled yet)
 * Simple console for executing commands on the device
 * Backup save game files
