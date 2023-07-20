@@ -55,11 +55,11 @@
             // 
             // labVersion
             // 
-            this.labVersion.AutoSize = true;
+            this.labVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.labVersion.Font = new System.Drawing.Font("m5x7", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labVersion.Location = new System.Drawing.Point(275, 198);
+            this.labVersion.Location = new System.Drawing.Point(214, 198);
             this.labVersion.Name = "labVersion";
-            this.labVersion.Size = new System.Drawing.Size(92, 13);
+            this.labVersion.Size = new System.Drawing.Size(156, 13);
             this.labVersion.TabIndex = 2;
             this.labVersion.Text = "ver. 16072023";
             this.labVersion.TextAlign = System.Drawing.ContentAlignment.BottomRight;
@@ -103,7 +103,6 @@
             this.Name = "AboutForm";
             this.Text = "About";
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

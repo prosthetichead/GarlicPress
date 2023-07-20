@@ -16,7 +16,12 @@ namespace GarlicPress
         public AboutForm()
         {
             InitializeComponent();
-            labVersion.Text = "ver. 20230718";
+            Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            labVersion.Text = "ver. "+version.ToString();
+
+
+           // UpdateInfo updateInfo = Updater.CheckForUpdate();
+            
         }
 
         private void labIssue_Click(object sender, EventArgs e)

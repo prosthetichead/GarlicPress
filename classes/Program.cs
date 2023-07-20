@@ -5,6 +5,8 @@ namespace GarlicPress
 {
     internal static class Program
     {
+        public static string version = "";
+
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
