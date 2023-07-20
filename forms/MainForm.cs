@@ -415,22 +415,28 @@ namespace GarlicPress
         {
             int totalCount = fileListBox.SelectedItems.Count;
             int count = 1;
+            bool skipPrompt = Properties.Settings.Default.ssSkipGameNotFound;
 
             var system = (GarlicSystem)comboSystems.SelectedItem;
             foreach (FileStatistics item in fileListBox.SelectedItems.Cast<FileStatistics>())
             {
-                txtCurrentTask.Text = "Updating Art " + count + "/" + totalCount + " : " + item.Path;
+                
 
                 string romName = item.Path;
+                
                 if (promptName)
                 {
+                    skipPrompt = false; //we asked for prompts using the prompt all buttons so you get prompts..
                     GameNameDialogForm gameNameDialog = new GameNameDialogForm(romName, "Search for Game " + romName );
                     if (gameNameDialog.ShowDialog() == DialogResult.OK)
                     {
                         romName = gameNameDialog.NewSearchValue;
                     }
                 }
-                GameResponse game = ScreenScraper.GetGameData(system.ss_systemeid, system.ss_romtype, romName);
+                txtCurrentTask.Text = skipPrompt ? "Auto Skipping Errors - " : "";
+                txtCurrentTask.Text += "Updating Art " + count + "/" + totalCount + " : " + item.Path;
+
+                GameResponse game = ScreenScraper.GetGameData(system.ss_systemeid, system.ss_romtype, romName, skipPrompt);
 
                 if (game != null && game.status != "error") //game was not found Skip doing its art
                 {
