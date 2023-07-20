@@ -17,11 +17,7 @@ namespace GarlicPress
         {
             InitializeComponent();
             Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-            labVersion.Text = "ver. "+version.ToString();
-
-
-           // UpdateInfo updateInfo = Updater.CheckForUpdate();
-            
+            labVersion.Text = "ver. "+version.ToString();            
         }
 
         private void labIssue_Click(object sender, EventArgs e)

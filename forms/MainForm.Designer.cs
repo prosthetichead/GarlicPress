@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.txtUpdate = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripDeviceStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.txtCurrentTask = new System.Windows.Forms.ToolStripStatusLabel();
             this.fileListBox = new System.Windows.Forms.ListBox();
@@ -66,6 +67,7 @@
             // 
             this.statusStrip.BackColor = System.Drawing.SystemColors.ControlLight;
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.txtUpdate,
             this.toolStripDeviceStatus,
             this.txtCurrentTask});
             this.statusStrip.Location = new System.Drawing.Point(0, 588);
@@ -75,6 +77,19 @@
             this.statusStrip.SizingGrip = false;
             this.statusStrip.TabIndex = 3;
             this.statusStrip.Text = "statusStrip";
+            // 
+            // txtUpdate
+            // 
+            this.txtUpdate.BackColor = System.Drawing.SystemColors.Control;
+            this.txtUpdate.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.txtUpdate.ForeColor = System.Drawing.Color.Blue;
+            this.txtUpdate.Name = "txtUpdate";
+            this.txtUpdate.Size = new System.Drawing.Size(100, 19);
+            this.txtUpdate.Text = "Update Available";
+            this.txtUpdate.Visible = false;
+            this.txtUpdate.Click += new System.EventHandler(this.txtUpdate_Click);
             // 
             // toolStripDeviceStatus
             // 
@@ -86,7 +101,6 @@
             this.toolStripDeviceStatus.Name = "toolStripDeviceStatus";
             this.toolStripDeviceStatus.Size = new System.Drawing.Size(81, 19);
             this.toolStripDeviceStatus.Text = "Device Status";
-            this.toolStripDeviceStatus.Click += new System.EventHandler(this.toolStripDeviceStatus_Click);
             // 
             // txtCurrentTask
             // 
@@ -133,14 +147,14 @@
             // miSettings
             // 
             this.miSettings.Name = "miSettings";
-            this.miSettings.Size = new System.Drawing.Size(116, 22);
+            this.miSettings.Size = new System.Drawing.Size(180, 22);
             this.miSettings.Text = "Settings";
             this.miSettings.Click += new System.EventHandler(this.miSettings_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -384,5 +398,6 @@
         private Button btnUpdateArtPrompt;
         private ToolStripMenuItem aboutToolStripMenuItem;
         private ToolStripMenuItem exitToolStripMenuItem;
+        private ToolStripStatusLabel txtUpdate;
     }
 }

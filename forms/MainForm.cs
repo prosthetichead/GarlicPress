@@ -1,4 +1,5 @@
 using AdvancedSharpAdbClient;
+using GarlicPress.forms;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Text.Json;
@@ -28,6 +29,13 @@ namespace GarlicPress
         public MainForm()
         {
             InitializeComponent();
+
+            //check version
+            var updateInfo = Updater.GetUpdateInfo();
+            if(updateInfo.versionComparison > 0)
+            {
+                txtUpdate.Visible = true;
+            }
 
             //Set notification Icon to disconnected
             notifyIcon.Icon = Properties.Resources.garlicDisconnect;
@@ -73,6 +81,7 @@ namespace GarlicPress
 
             ConnectToDevice();
         }
+
 
         private void ConnectToDevice()
         {
@@ -152,19 +161,9 @@ namespace GarlicPress
                 //{
                 //    var listCount = GarlicADBConnection.GetDirectoryListing(currentSDPath + "/roms/" + system.folder).Where(w=>w.Path != "." && w.Path != ".." && w.Path != "Imgs").Count();
                 //    system.name = system.name + " [" + listCount + "]";
-                //}
-                
+                //}                
             }
-
-
         }
-
-
-        private void toolStripDeviceStatus_Click(object sender, EventArgs e)
-        {
-            ConnectToDevice();
-        }
-
 
         private void fileListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -458,6 +457,12 @@ namespace GarlicPress
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void txtUpdate_Click(object sender, EventArgs e)
+        {
+            UpdateForm updateForm = new UpdateForm();
+            updateForm.ShowDialog();
         }
     }
 }
