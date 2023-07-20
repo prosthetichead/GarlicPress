@@ -42,6 +42,7 @@ namespace GarlicPress
             txtSaveBackupLocation.Text = Properties.Settings.Default.saveBackupPath;
             boolAutoBackup.Checked = Properties.Settings.Default.autoBackup;
             boolSystemTrayOnClose.Checked = Properties.Settings.Default.systemTrayOnClose;
+            boolAutoSkip.Checked = Properties.Settings.Default.ssSkipGameNotFound;
 
 
             SetDataSource();
@@ -79,6 +80,7 @@ namespace GarlicPress
             Properties.Settings.Default.saveBackupPath = txtSaveBackupLocation.Text;
             Properties.Settings.Default.autoBackup = boolAutoBackup.Checked;
             Properties.Settings.Default.systemTrayOnClose = boolSystemTrayOnClose.Checked;
+            Properties.Settings.Default.ssSkipGameNotFound = boolAutoSkip.Checked;
             Properties.Settings.Default.Save();
 
 

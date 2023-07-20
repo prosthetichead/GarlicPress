@@ -15,7 +15,7 @@ namespace GarlicPress
     {
         
 
-        public static GameResponse GetGameData(string systemId, string romType, string romName)
+        public static GameResponse GetGameData(string systemId, string romType, string romName, bool skipPrompt)
         {
             UriBuilder uriBuilder = new UriBuilder("https://www.screenscraper.fr/api2/jeuInfos.php");
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
@@ -49,12 +49,15 @@ namespace GarlicPress
                 {
                     game.statusMessage = "Game not Found.";
                 }
-                
-                GameNameDialogForm gameNameDialog = new GameNameDialogForm(game, romName);
-                if (gameNameDialog.ShowDialog() == DialogResult.OK)
+
+                if (!skipPrompt)
                 {
-                    game = GetGameData(systemId, romType, gameNameDialog.NewSearchValue);
-                    return game;
+                    GameNameDialogForm gameNameDialog = new GameNameDialogForm(game, romName);
+                    if (gameNameDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        game = GetGameData(systemId, romType, gameNameDialog.NewSearchValue, skipPrompt);
+                        return game;
+                    }
                 }
 
                 return game;
