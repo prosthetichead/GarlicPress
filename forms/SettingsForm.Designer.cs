@@ -50,6 +50,7 @@
             this.boolSystemTrayOnClose = new System.Windows.Forms.CheckBox();
             this.boolAutoBackup = new System.Windows.Forms.CheckBox();
             this.boolAutoSkip = new System.Windows.Forms.CheckBox();
+            this.btnCancel = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.GridMediaLayout)).BeginInit();
             this.SuspendLayout();
             // 
@@ -117,9 +118,9 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(707, 407);
+            this.btnSave.Location = new System.Drawing.Point(665, 407);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(81, 31);
+            this.btnSave.Size = new System.Drawing.Size(123, 31);
             this.btnSave.TabIndex = 21;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
@@ -236,11 +237,22 @@
             this.boolAutoSkip.Text = "Skip Prompt When Game not Found";
             this.boolAutoSkip.UseVisualStyleBackColor = true;
             // 
+            // btnCancel
+            // 
+            this.btnCancel.Location = new System.Drawing.Point(578, 407);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(81, 31);
+            this.btnCancel.TabIndex = 34;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.boolAutoSkip);
             this.Controls.Add(this.boolSystemTrayOnClose);
             this.Controls.Add(this.boolAutoBackup);
@@ -287,5 +299,6 @@
         private CheckBox boolSystemTrayOnClose;
         private CheckBox boolAutoBackup;
         private CheckBox boolAutoSkip;
+        private Button btnCancel;
     }
 }

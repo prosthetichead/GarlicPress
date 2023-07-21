@@ -61,7 +61,8 @@ namespace GarlicPress
 
         private void btnAddLayer_Click(object sender, EventArgs e)
         {
-            tempMediaLayout.Add(new MediaLayer());
+            tempMediaLayout.Add(new MediaLayer() { order=tempMediaLayout.Count()+1 });
+
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -88,18 +89,23 @@ namespace GarlicPress
                 if (!int.TryParse(Convert.ToString(e.FormattedValue), out i))
                 {
                     e.Cancel = true;
-                    MessageBox.Show("This column accepts numbers only.");
+                    MessageBox.Show("This column accepts whole numbers only.");
                 }
             }
             else if(e.ColumnIndex == 1)
             {
                 float f;
-                if (!float.TryParse(Convert.ToString(e.FormattedValue), out f))
+                if (!float.TryParse(Convert.ToString(e.FormattedValue), out f) || f < 0)
                 {
                     e.Cancel = true;
-                    MessageBox.Show("This column accepts numbers only.");
+                    MessageBox.Show("This column accepts positive numbers only.");
                 }
             }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

@@ -17,7 +17,6 @@ namespace GarlicPress
         private static List<MediaLayer> mediaLayout;
         private static string jsonPath = Path.Combine(Program.exePath, "assets/mediaLayout.json");
 
-
         static GameMediaGeneration()
         {
             mediaLayout = new List<MediaLayer>();
