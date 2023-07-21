@@ -15,7 +15,7 @@ namespace GarlicPress
     {
         public static List<MediaLayer> MediaLayers { get { return mediaLayout.OrderBy(o=>o.order).ToList() ; } set { mediaLayout = value; } }
         private static List<MediaLayer> mediaLayout;
-        private static string jsonPath = Path.Combine(Program.exePath, "assets/mediaLayout.json");
+        private static string jsonPath = "assets/mediaLayout.json";
 
         static GameMediaGeneration()
         {
@@ -30,12 +30,11 @@ namespace GarlicPress
             {
                 
 
-                if (File.Exists( Path.Combine(Program.exePath, "mediaLayout.json")))
+                if (File.Exists("mediaLayout.json"))
                 {
                     //this is the old location we used to keep the file, its now in the assets folder..
-                    //move it to the new assets/mediaLayout.json
-                    string readPath = Path.Combine(Program.exePath, "mediaLayout.json");
-                    File.Move( readPath, jsonPath);
+                    //move it to the new assets/mediaLayout.json                    
+                    File.Move("mediaLayout.json", jsonPath);
                 }
                 if (File.Exists(jsonPath))
                 {
@@ -98,7 +97,7 @@ namespace GarlicPress
                     baseImage.Dispose();
                 }
             }
-            finalImage.Save(Path.Combine(Program.exePath, "assets/tempimg.png"), ImageFormat.Png);
+            finalImage.Save("assets/tempimg.png", ImageFormat.Png);
             return true;
         }
 
