@@ -73,13 +73,15 @@ namespace GarlicPress
                 List<string> ssRegionOrder = Settings.Default.ssRegionOrder.Split(',').ToList();
 
                 var medias = game.response.jeu.medias.Where(w => w.type == mediaType).OrderBy(o => ssRegionOrder.IndexOf(o.region)); //.OrderBy(o => o.support == null).ThenBy(o => o.support);
+                if (medias.Count() > 0)
+                {
+                    var media = medias.First();
 
-                var media = medias.First();
+                    string mediaDownloadPath = "assets/" + mediaType + "." + media.format;
+                    webClient.DownloadFile(new Uri(media.url), mediaDownloadPath);
 
-                string mediaDownloadPath = "assets/" + mediaType + "." + media.format;
-                webClient.DownloadFile(new Uri(media.url), mediaDownloadPath);
-
-                return mediaDownloadPath;
+                    return mediaDownloadPath;
+                }
             }
             return "";
         }

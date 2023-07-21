@@ -55,6 +55,10 @@
             // 
             // GridMediaLayout
             // 
+            this.GridMediaLayout.AllowUserToAddRows = false;
+            this.GridMediaLayout.AllowUserToDeleteRows = false;
+            this.GridMediaLayout.AllowUserToResizeColumns = false;
+            this.GridMediaLayout.AllowUserToResizeRows = false;
             this.GridMediaLayout.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.GridMediaLayout.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.GridMediaLayout.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -73,6 +77,7 @@
             this.GridMediaLayout.RowTemplate.Height = 25;
             this.GridMediaLayout.Size = new System.Drawing.Size(776, 161);
             this.GridMediaLayout.TabIndex = 20;
+            this.GridMediaLayout.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.GridMediaLayout_CellValidating);
             // 
             // gridColMediaType
             // 

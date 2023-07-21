@@ -14,7 +14,7 @@ namespace GarlicPress
     public partial class SettingsForm : Form
     {
 
-        List<MediaLayer> tempMediaLayout;
+        BindingList<MediaLayer> tempMediaLayout;
 
         public SettingsForm()
         {
@@ -34,8 +34,9 @@ namespace GarlicPress
             gridColMediaType.DisplayMember = "label";
             gridColMediaType.ValueMember = "value";
 
-            tempMediaLayout = new List<MediaLayer>();
-            tempMediaLayout.AddRange(GameMediaGeneration.mediaLayout);
+            tempMediaLayout = new BindingList<MediaLayer>();
+            foreach(MediaLayer layer in GameMediaGeneration.MediaLayers)
+                tempMediaLayout.Add(layer);
 
             txtSSUsername.Text = Properties.Settings.Default.ssUsername;
             txtSSPassword.Text = Properties.Settings.Default.ssPassword;
@@ -45,15 +46,9 @@ namespace GarlicPress
             boolAutoSkip.Checked = Properties.Settings.Default.ssSkipGameNotFound;
 
 
-            SetDataSource();
-        }
-        
-        private void SetDataSource()
-        {
-            GridMediaLayout.DataSource = null;
             GridMediaLayout.DataSource = tempMediaLayout;
         }
-
+        
         private void btnDeleteLayer_Click(object sender, EventArgs e)
         {
             var selectedRows = GridMediaLayout.SelectedRows;
@@ -62,15 +57,11 @@ namespace GarlicPress
                 MediaLayer rowData = (MediaLayer)row.DataBoundItem;
                 tempMediaLayout.Remove(rowData);
             }
-
-            SetDataSource();
         }
 
         private void btnAddLayer_Click(object sender, EventArgs e)
         {
             tempMediaLayout.Add(new MediaLayer());
-
-            SetDataSource();
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -83,11 +74,32 @@ namespace GarlicPress
             Properties.Settings.Default.ssSkipGameNotFound = boolAutoSkip.Checked;
             Properties.Settings.Default.Save();
 
-
-            GameMediaGeneration.mediaLayout = tempMediaLayout;
+            GameMediaGeneration.MediaLayers = tempMediaLayout.ToList<MediaLayer>();
             GameMediaGeneration.SaveMediaLayoutJson();
 
             this.Close();
+        }
+
+        private void GridMediaLayout_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            if (e.ColumnIndex > 1) //all coloums should be numbers only
+            {
+                int i;
+                if (!int.TryParse(Convert.ToString(e.FormattedValue), out i))
+                {
+                    e.Cancel = true;
+                    MessageBox.Show("This column accepts numbers only.");
+                }
+            }
+            else if(e.ColumnIndex == 1)
+            {
+                float f;
+                if (!float.TryParse(Convert.ToString(e.FormattedValue), out f))
+                {
+                    e.Cancel = true;
+                    MessageBox.Show("This column accepts numbers only.");
+                }
+            }
         }
     }
 }
