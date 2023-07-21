@@ -50,11 +50,16 @@
             this.boolSystemTrayOnClose = new System.Windows.Forms.CheckBox();
             this.boolAutoBackup = new System.Windows.Forms.CheckBox();
             this.boolAutoSkip = new System.Windows.Forms.CheckBox();
+            this.btnCancel = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.GridMediaLayout)).BeginInit();
             this.SuspendLayout();
             // 
             // GridMediaLayout
             // 
+            this.GridMediaLayout.AllowUserToAddRows = false;
+            this.GridMediaLayout.AllowUserToDeleteRows = false;
+            this.GridMediaLayout.AllowUserToResizeColumns = false;
+            this.GridMediaLayout.AllowUserToResizeRows = false;
             this.GridMediaLayout.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.GridMediaLayout.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.GridMediaLayout.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -73,6 +78,7 @@
             this.GridMediaLayout.RowTemplate.Height = 25;
             this.GridMediaLayout.Size = new System.Drawing.Size(776, 161);
             this.GridMediaLayout.TabIndex = 20;
+            this.GridMediaLayout.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.GridMediaLayout_CellValidating);
             // 
             // gridColMediaType
             // 
@@ -112,9 +118,9 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(707, 407);
+            this.btnSave.Location = new System.Drawing.Point(665, 407);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(81, 31);
+            this.btnSave.Size = new System.Drawing.Size(123, 31);
             this.btnSave.TabIndex = 21;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
@@ -231,11 +237,22 @@
             this.boolAutoSkip.Text = "Skip Prompt When Game not Found";
             this.boolAutoSkip.UseVisualStyleBackColor = true;
             // 
+            // btnCancel
+            // 
+            this.btnCancel.Location = new System.Drawing.Point(578, 407);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(81, 31);
+            this.btnCancel.TabIndex = 34;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.boolAutoSkip);
             this.Controls.Add(this.boolSystemTrayOnClose);
             this.Controls.Add(this.boolAutoBackup);
@@ -282,5 +299,6 @@
         private CheckBox boolSystemTrayOnClose;
         private CheckBox boolAutoBackup;
         private CheckBox boolAutoSkip;
+        private Button btnCancel;
     }
 }

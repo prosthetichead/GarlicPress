@@ -1,11 +1,12 @@
 using AdvancedSharpAdbClient;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace GarlicPress
 {
     internal static class Program
     {
-        public static string version = "";
+        public static readonly string exePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
         /// <summary>
         ///  The main entry point for the application.
