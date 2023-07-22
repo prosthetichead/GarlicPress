@@ -147,14 +147,14 @@
             // miSettings
             // 
             this.miSettings.Name = "miSettings";
-            this.miSettings.Size = new System.Drawing.Size(180, 22);
+            this.miSettings.Size = new System.Drawing.Size(116, 22);
             this.miSettings.Text = "Settings";
             this.miSettings.Click += new System.EventHandler(this.miSettings_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -276,7 +276,7 @@
             this.picGame.Location = new System.Drawing.Point(361, 72);
             this.picGame.Name = "picGame";
             this.picGame.Size = new System.Drawing.Size(640, 480);
-            this.picGame.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.picGame.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picGame.TabIndex = 13;
             this.picGame.TabStop = false;
             // 

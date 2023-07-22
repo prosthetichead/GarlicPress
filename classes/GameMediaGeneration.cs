@@ -81,6 +81,7 @@ namespace GarlicPress
                 if (!string.IsNullOrEmpty(filename))
                 {
                     var baseImage = (Bitmap)Image.FromFile(filename);
+                    baseImage.SetResolution(graphics.DpiX, graphics.DpiY);
                     if (layer.resizePercent > 0)
                     {
                         graphics.DrawImage(baseImage, layer.x, layer.y, (float)((layer.resizePercent / 100) * baseImage.Width), (float)((layer.resizePercent / 100) * baseImage.Height));

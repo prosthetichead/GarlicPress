@@ -200,19 +200,21 @@ namespace GarlicPress
             {
                 textImage = (Bitmap)Image.FromFile(@"assets/SampleTextLeft.png");
                 txtMargin = skinSettings.textmargin;
-            }
-            baseImage.SetResolution(overlayImage.HorizontalResolution, overlayImage.VerticalResolution);
-            textImage.SetResolution(overlayImage.HorizontalResolution, overlayImage.VerticalResolution);
+            }           
 
-            var finalImage = new Bitmap(baseImage.Width, baseImage.Height, PixelFormat.Format32bppArgb);
+            var finalImage = new Bitmap(640, 480, PixelFormat.Format32bppArgb);
             var graphics = Graphics.FromImage(finalImage);
             graphics.CompositingMode = CompositingMode.SourceOver;
 
-            graphics.DrawImage(baseImage, 0, 0);
-            graphics.DrawImage(overlayImage, 0, 0);
+            baseImage.SetResolution(graphics.DpiX, graphics.DpiY);
+            overlayImage.SetResolution(graphics.DpiX, graphics.DpiY);
+            textImage.SetResolution(graphics.DpiX, graphics.DpiY);
+
+            graphics.DrawImage(baseImage, 0, 0, 640, 480);
+            graphics.DrawImage(overlayImage, 0, 0, 640, 480);
             if (validSkinSettings)
             {
-                graphics.DrawImage(textImage, txtMargin, 0);
+                graphics.DrawImage(textImage, txtMargin, 0, 640,480);
             }
 
             //show in a winform picturebox
