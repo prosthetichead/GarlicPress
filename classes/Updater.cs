@@ -64,5 +64,6 @@ namespace GarlicPress
                 return updateInfo;
             }
         }
+
     }
 }

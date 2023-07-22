@@ -6,7 +6,6 @@ namespace GarlicPress
 {
     internal static class Program
     {
-        public static readonly string exePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
         /// <summary>
         ///  The main entry point for the application.
