@@ -60,6 +60,7 @@
             this.GridMediaLayout.AllowUserToDeleteRows = false;
             this.GridMediaLayout.AllowUserToResizeColumns = false;
             this.GridMediaLayout.AllowUserToResizeRows = false;
+            this.GridMediaLayout.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.GridMediaLayout.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.GridMediaLayout.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.GridMediaLayout.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
