@@ -36,6 +36,8 @@ namespace GarlicPress.forms
                 UseShellExecute = true
             };
             Process.Start(psInfo);
+
+            Close();
         }
     }
 }

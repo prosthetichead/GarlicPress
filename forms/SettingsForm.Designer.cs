@@ -60,6 +60,7 @@
             this.GridMediaLayout.AllowUserToDeleteRows = false;
             this.GridMediaLayout.AllowUserToResizeColumns = false;
             this.GridMediaLayout.AllowUserToResizeRows = false;
+            this.GridMediaLayout.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.GridMediaLayout.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.GridMediaLayout.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.GridMediaLayout.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -249,8 +250,8 @@
             // 
             // SettingsForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.boolAutoSkip);
