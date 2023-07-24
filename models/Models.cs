@@ -82,6 +82,7 @@ namespace GarlicPress
                 new GarlicSystem("TIC-80", "TIC", "222", "rom", new List<string>(){}),
                 new GarlicSystem("VideoPac", "VIDEOPAC", "104", "rom", new List<string>(){}),
                 new GarlicSystem("Watara Supervision", "SUPERVISION", "207", "rom", new List<string>(){}),
+                new GarlicSystem("Commodore 64", "COMMODORE", "66", "rom", new List<string>(){}),
             };
 
             return systems.OrderBy(o=>o.name).ToList();
