@@ -15,7 +15,7 @@ namespace GarlicPress
     {
         
 
-        public static GameResponse GetGameData(string systemId, string romType, string romName, bool skipPrompt)
+        public static GameResponse GetGameData(string systemId, string romType, string romName, bool skipPrompt, string gameid = "0")
         {
             UriBuilder uriBuilder = new UriBuilder("https://www.screenscraper.fr/api2/jeuInfos.php");
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
@@ -25,9 +25,18 @@ namespace GarlicPress
             query["ssid"] = Properties.Settings.Default.ssUsername; 
             query["sspassword"] = Properties.Settings.Default.ssPassword; 
             query["output"] = "json";
-            query["systemeid"] = systemId;
             query["romtype"] = romType;
-            query["romnom"] = romName;
+
+            if (gameid == "0")
+            {
+                query["romnom"] = romName;
+                query["systemeid"] = systemId;
+            }
+            else
+            {
+                query["gameid"] = gameid;
+            }
+
             uriBuilder.Query = query.ToString();
             string url = uriBuilder.ToString();
 
@@ -45,18 +54,24 @@ namespace GarlicPress
             {
                 var json = response.Content.ReadAsStringAsync().Result;
                 GameResponse game = new GameResponse() { status = "error", statusMessage = response.StatusCode + "  " + json };
-                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                {
-                    game.statusMessage = "Game not Found.";
-                }
-
                 if (!skipPrompt)
                 {
-                    GameNameDialogForm gameNameDialog = new GameNameDialogForm(game, romName);
-                    if (gameNameDialog.ShowDialog() == DialogResult.OK)
+                    string message = "Searching for ";
+                    message += string.IsNullOrEmpty(romName) ? gameid : romName;
+                    message += "\nGame not found.";
+                    GameSearchDialogForm gameSearchDialog = new GameSearchDialogForm(romName == null ? gameid : romName, message);
+                    if (gameSearchDialog.ShowDialog() == DialogResult.OK)
                     {
-                        game = GetGameData(systemId, romType, gameNameDialog.NewSearchValue, skipPrompt);
-                        return game;
+                        if (gameSearchDialog.SelectedSearchType == SearchType.GameName)
+                        {
+                            game = GetGameData(systemId, romType, gameSearchDialog.NewSearchValue, skipPrompt);
+                            return game;
+                        }
+                        else if(gameSearchDialog.SelectedSearchType == SearchType.GameID)
+                        {
+                            game = GetGameData(systemId, romType,"", skipPrompt, gameSearchDialog.NewSearchValue);
+                            return game;
+                        }
                     }
                 }
 

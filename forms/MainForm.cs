@@ -416,29 +416,43 @@ namespace GarlicPress
         private void UpdateArt( bool promptName)
         {
             int totalCount = fileListBox.SelectedItems.Count;
-            int count = 1;
+            int count = 0;
             bool skipPrompt = Properties.Settings.Default.ssSkipGameNotFound;
 
             var system = (GarlicSystem)comboSystems.SelectedItem;
             foreach (FileStatistics item in fileListBox.SelectedItems.Cast<FileStatistics>())
             {
-                
-
+                count++;
                 string romName = item.Path;
+                string gameId = "0";
                 
                 if (promptName)
                 {
                     skipPrompt = false; //we asked for prompts using the prompt all buttons so you get prompts..
-                    GameNameDialogForm gameNameDialog = new GameNameDialogForm(romName, "Search for Game " + romName );
-                    if (gameNameDialog.ShowDialog() == DialogResult.OK)
+                    GameSearchDialogForm gameSearchDialog = new GameSearchDialogForm(romName, "Search for Game " + romName );
+                    if (gameSearchDialog.ShowDialog() == DialogResult.OK)
                     {
-                        romName = gameNameDialog.NewSearchValue;
+                        if (gameSearchDialog.SelectedSearchType == SearchType.GameName)
+                        {
+                            romName = gameSearchDialog.NewSearchValue;
+                            gameId = "0";
+                        }
+                        else if (gameSearchDialog.SelectedSearchType == SearchType.GameID)
+                        {
+                            romName = "";
+                            gameId = gameSearchDialog.NewSearchValue;
+                        }
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
                 txtCurrentTask.Text = skipPrompt ? "Auto Skipping Errors - " : "";
                 txtCurrentTask.Text += "Updating Art " + count + "/" + totalCount + " : " + item.Path;
+                Refresh();
 
-                GameResponse game = ScreenScraper.GetGameData(system.ss_systemeid, system.ss_romtype, romName, skipPrompt);
+                GameResponse game = ScreenScraper.GetGameData(system.ss_systemeid, system.ss_romtype, romName, skipPrompt, gameId);
 
                 if (game != null && game.status != "error") //game was not found Skip doing its art
                 {
@@ -448,11 +462,10 @@ namespace GarlicPress
                     string imgFile = Path.ChangeExtension(item.Path, ".png");
                     GarlicADBConnection.UploadFile("assets/tempimg.png", currentSystemPath + "/Imgs/" + imgFile);
                 }
-                Update();
-                count++;
+                Update();                
             }
 
-            txtCurrentTask.Text = "Updating Art Complete";
+            txtCurrentTask.Text = "Updating Art Complete";            
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)

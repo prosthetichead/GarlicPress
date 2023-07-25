@@ -1,6 +1,6 @@
 ﻿namespace GarlicPress
 {
-    partial class GameNameDialogForm
+    partial class GameSearchDialogForm
     {
         /// <summary>
         /// Required designer variable.
@@ -31,13 +31,14 @@
             this.btnSkip = new System.Windows.Forms.Button();
             this.btnRetry = new System.Windows.Forms.Button();
             this.txtNewSearch = new System.Windows.Forms.TextBox();
-            this.labError = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.labMessage = new System.Windows.Forms.Label();
+            this.cbSearchType = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // btnSkip
             // 
-            this.btnSkip.Location = new System.Drawing.Point(285, 141);
+            this.btnSkip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSkip.Location = new System.Drawing.Point(285, 114);
             this.btnSkip.Name = "btnSkip";
             this.btnSkip.Size = new System.Drawing.Size(75, 23);
             this.btnSkip.TabIndex = 0;
@@ -47,7 +48,8 @@
             // btnRetry
             // 
             this.btnRetry.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnRetry.Location = new System.Drawing.Point(199, 141);
+            this.btnRetry.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRetry.Location = new System.Drawing.Point(199, 114);
             this.btnRetry.Name = "btnRetry";
             this.btnRetry.Size = new System.Drawing.Size(80, 23);
             this.btnRetry.TabIndex = 1;
@@ -56,29 +58,31 @@
             // 
             // txtNewSearch
             // 
-            this.txtNewSearch.Location = new System.Drawing.Point(12, 112);
+            this.txtNewSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtNewSearch.Location = new System.Drawing.Point(112, 85);
             this.txtNewSearch.Name = "txtNewSearch";
-            this.txtNewSearch.Size = new System.Drawing.Size(348, 23);
+            this.txtNewSearch.Size = new System.Drawing.Size(248, 23);
             this.txtNewSearch.TabIndex = 2;
             // 
-            // labError
+            // labMessage
             // 
-            this.labError.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.labError.Location = new System.Drawing.Point(12, 9);
-            this.labError.Name = "labError";
-            this.labError.Size = new System.Drawing.Size(348, 85);
-            this.labError.TabIndex = 3;
-            this.labError.Text = "[gamename]\r\nwas not found\r\n\r\n[error]";
-            this.labError.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.labMessage.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.labMessage.Location = new System.Drawing.Point(12, 9);
+            this.labMessage.Name = "labMessage";
+            this.labMessage.Size = new System.Drawing.Size(348, 73);
+            this.labMessage.TabIndex = 3;
+            this.labMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label2
+            // cbSearchType
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 94);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(138, 15);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "New Game Name Search";
+            this.cbSearchType.FormattingEnabled = true;
+            this.cbSearchType.Items.AddRange(new object[] {
+            "Game Name",
+            "SS Game ID"});
+            this.cbSearchType.Location = new System.Drawing.Point(12, 85);
+            this.cbSearchType.Name = "cbSearchType";
+            this.cbSearchType.Size = new System.Drawing.Size(94, 23);
+            this.cbSearchType.TabIndex = 5;
             // 
             // GameNameDialogForm
             // 
@@ -86,15 +90,15 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CancelButton = this.btnSkip;
-            this.ClientSize = new System.Drawing.Size(372, 176);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.labError);
+            this.ClientSize = new System.Drawing.Size(372, 145);
+            this.Controls.Add(this.cbSearchType);
+            this.Controls.Add(this.labMessage);
             this.Controls.Add(this.txtNewSearch);
             this.Controls.Add(this.btnRetry);
             this.Controls.Add(this.btnSkip);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "GameNameDialogForm";
-            this.Text = "Game Not Found";
+            this.Text = "Game Search";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -104,8 +108,8 @@
 
         private Button btnSkip;
         private Button btnRetry;
-        private Label labError;
-        private Label label2;
+        private Label labMessage;
         public TextBox txtNewSearch;
+        private ComboBox cbSearchType;
     }
 }
