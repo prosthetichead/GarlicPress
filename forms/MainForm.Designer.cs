@@ -33,6 +33,7 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.txtUpdate = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripDeviceStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.txtCurrentTask = new System.Windows.Forms.ToolStripStatusLabel();
             this.fileListBox = new System.Windows.Forms.ListBox();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
@@ -69,6 +70,7 @@
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.txtUpdate,
             this.toolStripDeviceStatus,
+            this.toolStripProgressBar1,
             this.txtCurrentTask});
             this.statusStrip.Location = new System.Drawing.Point(0, 588);
             this.statusStrip.Name = "statusStrip";
@@ -101,6 +103,11 @@
             this.toolStripDeviceStatus.Name = "toolStripDeviceStatus";
             this.toolStripDeviceStatus.Size = new System.Drawing.Size(81, 19);
             this.toolStripDeviceStatus.Text = "Device Status";
+            // 
+            // toolStripProgressBar1
+            // 
+            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
+            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 18);
             // 
             // txtCurrentTask
             // 
@@ -399,5 +406,6 @@
         private ToolStripMenuItem aboutToolStripMenuItem;
         private ToolStripMenuItem exitToolStripMenuItem;
         private ToolStripStatusLabel txtUpdate;
+        private ToolStripProgressBar toolStripProgressBar1;
     }
 }

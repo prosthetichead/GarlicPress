@@ -80,8 +80,12 @@
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.txtOutput);
             this.Controls.Add(this.txtCommand);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "ConsoleForm";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Console";
             this.ResumeLayout(false);
             this.PerformLayout();

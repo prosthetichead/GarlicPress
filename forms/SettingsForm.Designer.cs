@@ -119,7 +119,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(665, 407);
+            this.btnSave.Location = new System.Drawing.Point(578, 407);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(123, 31);
             this.btnSave.TabIndex = 21;
@@ -240,7 +240,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(578, 407);
+            this.btnCancel.Location = new System.Drawing.Point(707, 407);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(81, 31);
             this.btnCancel.TabIndex = 34;
@@ -263,6 +263,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ControlBox = false;
             this.Controls.Add(this.boolRomsRootSecondSD);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.boolAutoSkip);
@@ -281,6 +282,8 @@
             this.Controls.Add(this.GridMediaLayout);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "SettingsForm";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Settings";
             ((System.ComponentModel.ISupportInitialize)(this.GridMediaLayout)).EndInit();
             this.ResumeLayout(false);

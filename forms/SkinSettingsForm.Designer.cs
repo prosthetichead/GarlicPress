@@ -183,6 +183,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(500, 547);
+            this.ControlBox = false;
             this.Controls.Add(this.label5);
             this.Controls.Add(this.txtMargin);
             this.Controls.Add(this.btnColorInactive);
@@ -200,6 +201,8 @@
             this.Controls.Add(this.comboTextAlignment);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "SkinSettingsForm";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Skin Settings";
             this.ResumeLayout(false);
             this.PerformLayout();
