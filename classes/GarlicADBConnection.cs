@@ -156,6 +156,7 @@ namespace GarlicPress
         {
             ConsoleOutputReceiver receiver = new ConsoleOutputReceiver();
             client.ExecuteRemoteCommand(command, device, receiver);
+            
             string results = receiver.ToString().Trim();
 
             return results;

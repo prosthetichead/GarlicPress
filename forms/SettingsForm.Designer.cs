@@ -44,13 +44,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.txtSaveBackupLocation = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.boolSystemTrayOnClose = new System.Windows.Forms.CheckBox();
             this.boolAutoBackup = new System.Windows.Forms.CheckBox();
             this.boolAutoSkip = new System.Windows.Forms.CheckBox();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.boolRomsRootSecondSD = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.GridMediaLayout)).BeginInit();
             this.SuspendLayout();
             // 
@@ -210,7 +210,7 @@
             // boolSystemTrayOnClose
             // 
             this.boolSystemTrayOnClose.AutoSize = true;
-            this.boolSystemTrayOnClose.Location = new System.Drawing.Point(343, 90);
+            this.boolSystemTrayOnClose.Location = new System.Drawing.Point(343, 102);
             this.boolSystemTrayOnClose.Name = "boolSystemTrayOnClose";
             this.boolSystemTrayOnClose.Size = new System.Drawing.Size(203, 19);
             this.boolSystemTrayOnClose.TabIndex = 32;
@@ -248,11 +248,22 @@
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // boolRomsRootSecondSD
+            // 
+            this.boolRomsRootSecondSD.AutoSize = true;
+            this.boolRomsRootSecondSD.Location = new System.Drawing.Point(343, 77);
+            this.boolRomsRootSecondSD.Name = "boolRomsRootSecondSD";
+            this.boolRomsRootSecondSD.Size = new System.Drawing.Size(246, 19);
+            this.boolRomsRootSecondSD.TabIndex = 35;
+            this.boolRomsRootSecondSD.Text = "Rom System Folders on Root of SD Card 2";
+            this.boolRomsRootSecondSD.UseVisualStyleBackColor = true;
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.boolRomsRootSecondSD);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.boolAutoSkip);
             this.Controls.Add(this.boolSystemTrayOnClose);
@@ -294,12 +305,12 @@
         private Label label1;
         private Label label2;
         private Label label3;
-        private HelpProvider helpProvider1;
         private TextBox txtSaveBackupLocation;
         private Label label4;
         private CheckBox boolSystemTrayOnClose;
         private CheckBox boolAutoBackup;
         private CheckBox boolAutoSkip;
         private Button btnCancel;
+        private CheckBox boolRomsRootSecondSD;
     }
 }
