@@ -118,5 +118,17 @@ namespace GarlicPress.Properties {
                 this["ssSkipGameNotFound"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool romsOnRootSD2 {
+            get {
+                return ((bool)(this["romsOnRootSD2"]));
+            }
+            set {
+                this["romsOnRootSD2"] = value;
+            }
+        }
     }
 }

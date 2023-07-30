@@ -14,13 +14,20 @@ namespace GarlicPress
                 GarlicDrive drive = (GarlicDrive)comboDrive.SelectedItem;
                 var path = drive.path;
                 return path;
-            } }
+            } 
+        }
         string currentSystemPath { get
             {
                 var system = (GarlicSystem)comboSystems.SelectedItem;
-                var path = currentSDPath + "/Roms/" + system.folder;
-                return path;
-            } }
+                GarlicDrive drive = (GarlicDrive)comboDrive.SelectedItem;
+
+                if (drive.number == 2 && Properties.Settings.Default.romsOnRootSD2) {
+                    return currentSDPath + "/" + system.folder; //Roms on the root of the SD 2
+                }    
+                
+                return currentSDPath + "/Roms/" + system.folder;
+            } 
+        }
         
 
         GarlicSkinSettings skinSettings;
@@ -97,8 +104,7 @@ namespace GarlicPress
                     this.Icon = Properties.Resources.garlicConnect;
                     notifyIcon.Text = "GarlicPress : RG35xx Connected";
 
-                    //LETS GO We are Connected
-                    RefreshBrowserFiles();
+                    
 
                     //get skin files
                     GarlicADBConnection.DownloadFile("/mnt/mmc/CFW/skin/background.png", "assets/background.png");
@@ -117,7 +123,9 @@ namespace GarlicPress
                         validSkinSettings = false;
                         MessageBox.Show("CFW/skin/settings.json skin settings can not be loaded. \n\n Preview will not display text position \n skin settings tool will not function. \n\n Please report the skin you are using to issues link in About \n\n Error Text : \n " + ex.Message, "Error Reading Skin Settings Json on Device", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                    
+
+                    //LETS GO We are Connected
+                    RefreshBrowserFiles();
                 }
                 else
                 {
