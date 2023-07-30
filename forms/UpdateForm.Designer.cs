@@ -74,6 +74,8 @@
             this.Controls.Add(this.txtNewVersion);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "UpdateForm";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Update GarlicPress";
             this.ResumeLayout(false);
             this.PerformLayout();

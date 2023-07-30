@@ -84,20 +84,23 @@
             this.cbSearchType.Size = new System.Drawing.Size(94, 23);
             this.cbSearchType.TabIndex = 5;
             // 
-            // GameNameDialogForm
+            // GameSearchDialogForm
             // 
             this.AcceptButton = this.btnRetry;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CancelButton = this.btnSkip;
             this.ClientSize = new System.Drawing.Size(372, 145);
+            this.ControlBox = false;
             this.Controls.Add(this.cbSearchType);
             this.Controls.Add(this.labMessage);
             this.Controls.Add(this.txtNewSearch);
             this.Controls.Add(this.btnRetry);
             this.Controls.Add(this.btnSkip);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "GameNameDialogForm";
+            this.Name = "GameSearchDialogForm";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Game Search";
             this.ResumeLayout(false);
             this.PerformLayout();
