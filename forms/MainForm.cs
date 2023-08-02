@@ -9,26 +9,16 @@ namespace GarlicPress
     public partial class MainForm : Form
     {
 
-        string currentSDPath { get
-            {
-                GarlicDrive drive = (GarlicDrive)comboDrive.SelectedItem;
-                var path = drive.path;
-                return path;
-            } 
-        }
-        string currentSystemPath { get
-            {
-                var system = (GarlicSystem)comboSystems.SelectedItem;
-                GarlicDrive drive = (GarlicDrive)comboDrive.SelectedItem;
-
-                if (drive.number == 2 && Properties.Settings.Default.romsOnRootSD2) {
-                    return currentSDPath + "/" + system.folder; //Roms on the root of the SD 2
-                }    
-                
-                return currentSDPath + "/Roms/" + system.folder;
-            } 
-        }
-        
+        //string currentSDPath { get
+        //    {
+        //        GarlicDrive drive = (GarlicDrive)comboDrive.SelectedItem;
+        //        var path = drive.path;
+        //        return path;
+        //    } 
+        //}
+        string currentSystemPath { get { return SelectedDrive.romPath + "/" + SelectedSystem.folder; } }
+        GarlicDrive SelectedDrive { get { return (GarlicDrive)comboDrive.SelectedItem; } }
+        GarlicSystem SelectedSystem { get { return (GarlicSystem)comboSystems.SelectedItem; } }
 
         GarlicSkinSettings skinSettings;
         bool validSkinSettings;
@@ -407,7 +397,7 @@ namespace GarlicPress
 
                     var backupPath = Path.Combine(backupDir, "SD" + drive.number);
                     Directory.CreateDirectory(backupPath);
-                    var readPath = currentSDPath + "/Saves";
+                    var readPath = SelectedDrive.path + "/Saves";
 
                     txtCurrentTask.Text = "Backing up Saves on SD Card " + drive.number + " to " + backupPath;
 
@@ -492,6 +482,26 @@ namespace GarlicPress
         {
             UpdateForm updateForm = new UpdateForm();
             updateForm.ShowDialog();
+        }
+
+        private void btnUpdateSelectedArt_Click(object sender, EventArgs e)
+        {
+            var selectedFiles = fileListBox.SelectedItems.Cast<FileStatistics>();
+            var system = (GarlicSystem)comboSystems.SelectedItem;
+            var drive = (GarlicDrive)comboDrive.SelectedItem;
+
+            List<GarlicGameArtSearch> searchItems = new List<GarlicGameArtSearch>();
+            foreach (var item in selectedFiles)
+            {
+                GarlicGameArtSearch ggas = new GarlicGameArtSearch(system, drive, SearchType.GameName, item.Path);
+                searchItems.Add(ggas);
+            }
+
+            if(searchItems.Count > 0)
+            {
+                GameArtUpdateForm gameArtUpdateForm = new GameArtUpdateForm(searchItems);
+                gameArtUpdateForm.ShowDialog();
+            }
         }
     }
 }

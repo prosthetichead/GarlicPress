@@ -28,98 +28,103 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.searchType = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.searchText = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.system = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.retry = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.picGame = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picGame)).BeginInit();
+            this.dataGridSearch = new System.Windows.Forms.DataGridView();
+            this.gridColFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.gridColDrive = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.gridColSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.gridColSearchType = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.gridColSearchText = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.gridColStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridSearch)).BeginInit();
             this.SuspendLayout();
             // 
-            // dataGridView1
+            // dataGridSearch
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.searchType,
-            this.searchText,
-            this.system,
-            this.status,
-            this.retry});
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowTemplate.Height = 25;
-            this.dataGridView1.Size = new System.Drawing.Size(563, 550);
-            this.dataGridView1.TabIndex = 0;
+            this.dataGridSearch.AllowUserToAddRows = false;
+            this.dataGridSearch.AllowUserToDeleteRows = false;
+            this.dataGridSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridSearch.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridSearch.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            this.dataGridSearch.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridSearch.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.gridColFileName,
+            this.gridColDrive,
+            this.gridColSystem,
+            this.gridColSearchType,
+            this.gridColSearchText,
+            this.gridColStatus});
+            this.dataGridSearch.Location = new System.Drawing.Point(0, 0);
+            this.dataGridSearch.Name = "dataGridSearch";
+            this.dataGridSearch.RowHeadersVisible = false;
+            this.dataGridSearch.RowHeadersWidth = 10;
+            this.dataGridSearch.RowTemplate.Height = 25;
+            this.dataGridSearch.Size = new System.Drawing.Size(735, 540);
+            this.dataGridSearch.TabIndex = 0;
             // 
-            // searchType
+            // gridColFileName
             // 
-            this.searchType.HeaderText = "SearchType";
-            this.searchType.Name = "searchType";
+            this.gridColFileName.DataPropertyName = "fileName";
+            this.gridColFileName.HeaderText = "File Name";
+            this.gridColFileName.Name = "gridColFileName";
+            this.gridColFileName.ReadOnly = true;
             // 
-            // searchText
+            // gridColDrive
             // 
-            this.searchText.HeaderText = "Search Text";
-            this.searchText.Name = "searchText";
+            this.gridColDrive.HeaderText = "Drive";
+            this.gridColDrive.Name = "gridColDrive";
+            this.gridColDrive.ReadOnly = true;
             // 
-            // system
+            // gridColSystem
             // 
-            this.system.HeaderText = "System";
-            this.system.Name = "system";
+            this.gridColSystem.HeaderText = "System";
+            this.gridColSystem.Name = "gridColSystem";
+            this.gridColSystem.ReadOnly = true;
+            this.gridColSystem.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridColSystem.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // status
+            // gridColSearchType
             // 
-            this.status.HeaderText = "Status";
-            this.status.Name = "status";
+            this.gridColSearchType.HeaderText = "SearchType";
+            this.gridColSearchType.Name = "gridColSearchType";
             // 
-            // retry
+            // gridColSearchText
             // 
-            this.retry.HeaderText = "";
-            this.retry.Name = "retry";
-            this.retry.Text = "Retry";
+            this.gridColSearchText.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.gridColSearchText.DataPropertyName = "searchText";
+            this.gridColSearchText.HeaderText = "Search Text";
+            this.gridColSearchText.Name = "gridColSearchText";
             // 
-            // picGame
+            // gridColStatus
             // 
-            this.picGame.BackColor = System.Drawing.Color.Transparent;
-            this.picGame.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.picGame.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picGame.Location = new System.Drawing.Point(569, 12);
-            this.picGame.Name = "picGame";
-            this.picGame.Size = new System.Drawing.Size(640, 480);
-            this.picGame.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picGame.TabIndex = 14;
-            this.picGame.TabStop = false;
+            this.gridColStatus.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.gridColStatus.HeaderText = "Status";
+            this.gridColStatus.Name = "gridColStatus";
+            this.gridColStatus.ReadOnly = true;
             // 
             // GameArtUpdateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(1217, 550);
-            this.Controls.Add(this.picGame);
-            this.Controls.Add(this.dataGridView1);
+            this.ClientSize = new System.Drawing.Size(1115, 540);
+            this.Controls.Add(this.dataGridSearch);
             this.Name = "GameArtUpdateForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "GameArtUpdateForm";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picGame)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridSearch)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private DataGridView dataGridView1;
-        private DataGridViewComboBoxColumn searchType;
-        private DataGridViewTextBoxColumn searchText;
-        private DataGridViewComboBoxColumn system;
-        private DataGridViewTextBoxColumn status;
-        private DataGridViewButtonColumn retry;
-        private PictureBox picGame;
+        private DataGridView dataGridSearch;
+        private DataGridViewTextBoxColumn gridColFileName;
+        private DataGridViewTextBoxColumn gridColDrive;
+        private DataGridViewTextBoxColumn gridColSystem;
+        private DataGridViewComboBoxColumn gridColSearchType;
+        private DataGridViewTextBoxColumn gridColSearchText;
+        private DataGridViewTextBoxColumn gridColStatus;
     }
 }

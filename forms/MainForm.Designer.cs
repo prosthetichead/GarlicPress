@@ -42,6 +42,8 @@
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.miConsole = new System.Windows.Forms.ToolStripMenuItem();
             this.miSkinSettings = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.updateAllArtToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -53,11 +55,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.comboDrive = new System.Windows.Forms.ComboBox();
             this.picGame = new System.Windows.Forms.PictureBox();
-            this.btnUpdateImg = new System.Windows.Forms.Button();
+            this.btnUpdateSelectedArt = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnBackupSaves = new System.Windows.Forms.Button();
-            this.updateAllArtToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.notifyIconMenu.SuspendLayout();
@@ -184,6 +184,17 @@
             this.miSkinSettings.Text = "Edit Skin Settings";
             this.miSkinSettings.Click += new System.EventHandler(this.miSkinSettings_Click);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(161, 6);
+            // 
+            // updateAllArtToolStripMenuItem
+            // 
+            this.updateAllArtToolStripMenuItem.Name = "updateAllArtToolStripMenuItem";
+            this.updateAllArtToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.updateAllArtToolStripMenuItem.Text = "Update All Art";
+            // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
@@ -283,15 +294,16 @@
             this.picGame.TabIndex = 13;
             this.picGame.TabStop = false;
             // 
-            // btnUpdateImg
+            // btnUpdateSelectedArt
             // 
-            this.btnUpdateImg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnUpdateImg.Location = new System.Drawing.Point(361, 556);
-            this.btnUpdateImg.Name = "btnUpdateImg";
-            this.btnUpdateImg.Size = new System.Drawing.Size(50, 26);
-            this.btnUpdateImg.TabIndex = 15;
-            this.btnUpdateImg.Text = "Art";
-            this.btnUpdateImg.UseVisualStyleBackColor = true;
+            this.btnUpdateSelectedArt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnUpdateSelectedArt.Location = new System.Drawing.Point(361, 556);
+            this.btnUpdateSelectedArt.Name = "btnUpdateSelectedArt";
+            this.btnUpdateSelectedArt.Size = new System.Drawing.Size(50, 26);
+            this.btnUpdateSelectedArt.TabIndex = 15;
+            this.btnUpdateSelectedArt.Text = "Art";
+            this.btnUpdateSelectedArt.UseVisualStyleBackColor = true;
+            this.btnUpdateSelectedArt.Click += new System.EventHandler(this.btnUpdateSelectedArt_Click);
             // 
             // btnDelete
             // 
@@ -317,17 +329,6 @@
             this.btnBackupSaves.UseVisualStyleBackColor = true;
             this.btnBackupSaves.Click += new System.EventHandler(this.btnBackupSaves_Click);
             // 
-            // updateAllArtToolStripMenuItem
-            // 
-            this.updateAllArtToolStripMenuItem.Name = "updateAllArtToolStripMenuItem";
-            this.updateAllArtToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-            this.updateAllArtToolStripMenuItem.Text = "Update All Art";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(161, 6);
-            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -337,7 +338,7 @@
             this.ClientSize = new System.Drawing.Size(1013, 612);
             this.Controls.Add(this.btnBackupSaves);
             this.Controls.Add(this.btnDelete);
-            this.Controls.Add(this.btnUpdateImg);
+            this.Controls.Add(this.btnUpdateSelectedArt);
             this.Controls.Add(this.picGame);
             this.Controls.Add(this.comboDrive);
             this.Controls.Add(this.label2);
@@ -392,7 +393,7 @@
         private Panel panelImage;
         private PictureBox picSkinBackground;
         private ToolStripMenuItem miSkinSettings;
-        private Button btnUpdateImg;
+        private Button btnUpdateSelectedArt;
         private ToolStripStatusLabel txtCurrentTask;
         private Button btnDelete;
         private Button btnBackupSaves;
