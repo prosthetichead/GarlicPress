@@ -94,6 +94,7 @@ namespace GarlicPress
         public string name { get; set; }
         public string path { get; set; }
         public int number { get; set; }
+        public string romPath { get { return number == 2 && Properties.Settings.Default.romsOnRootSD2 ? path + "/" : path + "/Roms"; } }
 
         public GarlicDrive(string name, string path, int number)
         {
@@ -196,11 +197,9 @@ namespace GarlicPress
         public string mediaType { get; set; }
         public double resizePercent { get; set; }
         public int width { get; set; }
-        public int height { get; set; }
-        
+        public int height { get; set; }        
         public int x { get; set; }
         public int y { get; set; }
-
         public int order { get; set; }
 
         public MediaLayer()

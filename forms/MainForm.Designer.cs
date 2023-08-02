@@ -33,7 +33,6 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.txtUpdate = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripDeviceStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.txtCurrentTask = new System.Windows.Forms.ToolStripStatusLabel();
             this.fileListBox = new System.Windows.Forms.ListBox();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
@@ -57,7 +56,8 @@
             this.btnUpdateImg = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnBackupSaves = new System.Windows.Forms.Button();
-            this.btnUpdateArtPrompt = new System.Windows.Forms.Button();
+            this.updateAllArtToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.notifyIconMenu.SuspendLayout();
@@ -70,7 +70,6 @@
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.txtUpdate,
             this.toolStripDeviceStatus,
-            this.toolStripProgressBar1,
             this.txtCurrentTask});
             this.statusStrip.Location = new System.Drawing.Point(0, 588);
             this.statusStrip.Name = "statusStrip";
@@ -103,11 +102,6 @@
             this.toolStripDeviceStatus.Name = "toolStripDeviceStatus";
             this.toolStripDeviceStatus.Size = new System.Drawing.Size(81, 19);
             this.toolStripDeviceStatus.Text = "Device Status";
-            // 
-            // toolStripProgressBar1
-            // 
-            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
-            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 18);
             // 
             // txtCurrentTask
             // 
@@ -169,7 +163,9 @@
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.miConsole,
-            this.miSkinSettings});
+            this.miSkinSettings,
+            this.toolStripSeparator2,
+            this.updateAllArtToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -292,22 +288,21 @@
             this.btnUpdateImg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnUpdateImg.Location = new System.Drawing.Point(361, 556);
             this.btnUpdateImg.Name = "btnUpdateImg";
-            this.btnUpdateImg.Size = new System.Drawing.Size(105, 26);
+            this.btnUpdateImg.Size = new System.Drawing.Size(50, 26);
             this.btnUpdateImg.TabIndex = 15;
-            this.btnUpdateImg.Text = "Auto Update Art";
+            this.btnUpdateImg.Text = "Art";
             this.btnUpdateImg.UseVisualStyleBackColor = true;
-            this.btnUpdateImg.Click += new System.EventHandler(this.btnUpdateImg_Click);
             // 
             // btnDelete
             // 
             this.btnDelete.BackColor = System.Drawing.Color.DarkRed;
             this.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDelete.ForeColor = System.Drawing.Color.White;
-            this.btnDelete.Location = new System.Drawing.Point(878, 556);
+            this.btnDelete.Location = new System.Drawing.Point(948, 556);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(123, 26);
+            this.btnDelete.Size = new System.Drawing.Size(53, 26);
             this.btnDelete.TabIndex = 16;
-            this.btnDelete.Text = "Delete Selected Files";
+            this.btnDelete.Text = "Delete";
             this.btnDelete.UseVisualStyleBackColor = false;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
@@ -322,16 +317,16 @@
             this.btnBackupSaves.UseVisualStyleBackColor = true;
             this.btnBackupSaves.Click += new System.EventHandler(this.btnBackupSaves_Click);
             // 
-            // btnUpdateArtPrompt
+            // updateAllArtToolStripMenuItem
             // 
-            this.btnUpdateArtPrompt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnUpdateArtPrompt.Location = new System.Drawing.Point(472, 556);
-            this.btnUpdateArtPrompt.Name = "btnUpdateArtPrompt";
-            this.btnUpdateArtPrompt.Size = new System.Drawing.Size(117, 26);
-            this.btnUpdateArtPrompt.TabIndex = 18;
-            this.btnUpdateArtPrompt.Text = "Update Art Prompt";
-            this.btnUpdateArtPrompt.UseVisualStyleBackColor = true;
-            this.btnUpdateArtPrompt.Click += new System.EventHandler(this.btnUpdateArtPrompt_Click);
+            this.updateAllArtToolStripMenuItem.Name = "updateAllArtToolStripMenuItem";
+            this.updateAllArtToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.updateAllArtToolStripMenuItem.Text = "Update All Art";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(161, 6);
             // 
             // MainForm
             // 
@@ -340,7 +335,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
             this.ClientSize = new System.Drawing.Size(1013, 612);
-            this.Controls.Add(this.btnUpdateArtPrompt);
             this.Controls.Add(this.btnBackupSaves);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnUpdateImg);
@@ -402,10 +396,10 @@
         private ToolStripStatusLabel txtCurrentTask;
         private Button btnDelete;
         private Button btnBackupSaves;
-        private Button btnUpdateArtPrompt;
         private ToolStripMenuItem aboutToolStripMenuItem;
         private ToolStripMenuItem exitToolStripMenuItem;
         private ToolStripStatusLabel txtUpdate;
-        private ToolStripProgressBar toolStripProgressBar1;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripMenuItem updateAllArtToolStripMenuItem;
     }
 }

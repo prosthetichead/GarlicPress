@@ -20,6 +20,16 @@ namespace GarlicPress
         public static DeviceData device;
 
 
+        public static string GetImgPath(GarlicDrive drive, GarlicSystem system)
+        {
+            return GetSystemPath(drive, system) + "/Imgs";
+        }
+
+        public static string GetSystemPath(GarlicDrive drive, GarlicSystem system)
+        {
+            return drive.romPath + "/" + system.folder;
+        }
+
         public static bool ConnectToDevice()
         {
             if (AdbServer.Instance.GetStatus().IsRunning)
@@ -66,6 +76,20 @@ namespace GarlicPress
             else
             {
                 return null;
+            }
+        }
+
+        public static void UploadFile(string readPath, string writePath, Progress<int> progress, CancellationToken cancellationToken)
+        {
+            if (deviceConnected)
+            {
+                using (SyncService service = new SyncService(new AdbSocket(client.EndPoint), device))
+                {
+                    using (Stream stream = File.OpenRead(readPath))
+                    {
+                        service.Push(stream, writePath, 777, new DateTimeOffset(DateTime.Now), progress, cancellationToken);
+                    }
+                }
             }
         }
 

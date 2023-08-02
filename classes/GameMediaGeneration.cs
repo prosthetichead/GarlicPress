@@ -64,7 +64,7 @@ namespace GarlicPress
             File.WriteAllText(jsonPath, mediaLayoutJson);
         }
 
-        public static bool GenerateGameMedia(GameResponse game)
+        public static Bitmap? GenerateGameMedia(GameResponse game)
         {
 
             var finalImage = new Bitmap(640, 480, PixelFormat.Format32bppArgb);
@@ -73,7 +73,7 @@ namespace GarlicPress
             
             if(game.status == "error")
             {
-                return false;
+                return null;
             }
             foreach (var layer in mediaLayout.OrderBy(o=>o.order) )
             {                
@@ -98,8 +98,36 @@ namespace GarlicPress
                     baseImage.Dispose();
                 }
             }
-            finalImage.Save("assets/tempimg.png", ImageFormat.Png);
-            return true;
+            //finalImage.Save("assets/tempimg.png", ImageFormat.Png);
+            return finalImage;
+        }
+
+
+
+        //public static async Task UpdateGameArtAsync(GarlicSystem system, GarlicDrive drive, List<FileStatistics> files, bool promptPerGame = false)
+        //{
+        //    int totalCount = files.Count;
+        //    bool skipPrompt = Properties.Settings.Default.ssSkipGameNotFound;
+        //    int count = 0;
+
+            
+        //    foreach (FileStatistics item in files)
+        //    {
+        //        count++;
+        //        string romName = item.Path;
+        //        GameResponse game = ScreenScraper.GetGameData(system.ss_systemeid, system.ss_romtype, romName, "0", promptPerGame);
+        //        if (game != null && game.status != "error") //game was not found Skip doing its art
+        //        {
+                    
+        //        }
+        //    }
+        //}
+
+        public delegate void GameArtUpdatedEventHandler(int progressPercentage, GarlicSystem system, GarlicDrive drive, FileStatistics file, string imagePath );
+        public static event GameArtUpdatedEventHandler GameArtUpdated;
+        public static void OnGameArtUpdated(int progressPercentage, GarlicSystem system, GarlicDrive drive, FileStatistics file, string imagePath)
+        {
+            GameArtUpdated?.Invoke(progressPercentage, system, drive, file, imagePath);
         }
 
     }
