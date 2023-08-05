@@ -19,6 +19,25 @@ namespace GarlicPress
         public static AdbClient client;
         public static DeviceData device;
 
+        public static GarlicSkinSettings skinSettings;
+        public static bool validSkinSettings;
+
+        public static void ReadSkinSettings()
+        {
+            //read skin file get text position
+            string json = File.ReadAllText(@"assets/skinSettings.json");
+            try
+            {
+                skinSettings = JsonSerializer.Deserialize<GarlicSkinSettings>(json);
+                validSkinSettings = true;
+            }
+            catch (Exception ex)
+            {
+                skinSettings = new GarlicSkinSettings();
+                validSkinSettings = false;
+                MessageBox.Show("CFW/skin/settings.json skin settings can not be loaded. \n\n Preview will not display text position \n skin settings tool will not function. \n\n Please report the skin you are using to issues link in About \n\n Error Text : \n " + ex.Message, "Error Reading Skin Settings Json on Device", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         public static string GetImgPath(GarlicDrive drive, GarlicSystem system)
         {
@@ -79,7 +98,7 @@ namespace GarlicPress
             }
         }
 
-        public static void UploadFile(string readPath, string writePath, Progress<int> progress, CancellationToken cancellationToken)
+        public static async Task<bool> UploadFileAsync(string readPath, string writePath, Progress<int> progress, CancellationToken cancellationToken)
         {
             if (deviceConnected)
             {
@@ -87,10 +106,14 @@ namespace GarlicPress
                 {
                     using (Stream stream = File.OpenRead(readPath))
                     {
-                        service.Push(stream, writePath, 777, new DateTimeOffset(DateTime.Now), progress, cancellationToken);
+                        await Task.Run(() =>
+                            service.Push(stream, writePath, 777, new DateTimeOffset(DateTime.Now), progress, cancellationToken)
+                        );
+                        return true;
                     }
                 }
             }
+            return false;
         }
 
         public static bool UploadFile(string readPath, string writePath)
@@ -203,6 +226,17 @@ namespace GarlicPress
             {
                 ConsoleOutputReceiver receiver = new ConsoleOutputReceiver();
                 client.ExecuteRemoteCommand($"rm {path}" , device, receiver);
+                return true;
+            }
+            return false;
+        }
+
+        public static bool RenameFile(string path, string newPath)
+        {
+            if (deviceConnected)
+            {
+                ConsoleOutputReceiver receiver = new ConsoleOutputReceiver();
+                client.ExecuteRemoteCommand($"mv {path} {newPath}", device, receiver);
                 return true;
             }
             return false;

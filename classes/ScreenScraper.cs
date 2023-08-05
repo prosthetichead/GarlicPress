@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net;
+using System.Security.Policy;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -64,22 +65,27 @@ namespace GarlicPress
         
 
 
-        public static string DownloadMedia(GameResponse game, string mediaType = "box-3D")
+        public static async Task<string> DownloadMedia(GameResponse game, string mediaType = "box-3D")
         {
             if (game.status != "error")
             {
-                WebClient webClient = new WebClient();
+                HttpClient httpClient = new HttpClient();
 
                 List<string> ssRegionOrder = Settings.Default.ssRegionOrder.Split(',').ToList();
 
                 var medias = game.response.jeu.medias.Where(w => w.type == mediaType).OrderBy(o => ssRegionOrder.IndexOf(o.region)); //.OrderBy(o => o.support == null).ThenBy(o => o.support);
+                
                 if (medias.Count() > 0)
                 {
                     var media = medias.First();
-
                     string mediaDownloadPath = "assets/" + mediaType + "." + media.format;
-                    webClient.DownloadFile(new Uri(media.url), mediaDownloadPath);
-
+                    using (var s = await httpClient.GetStreamAsync(new Uri(media.url)))
+                    {
+                        using (var fs = new FileStream(mediaDownloadPath, FileMode.Create))
+                        {
+                            await s.CopyToAsync(fs);
+                        }
+                    }
                     return mediaDownloadPath;
                 }
             }

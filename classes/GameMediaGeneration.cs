@@ -24,6 +24,7 @@ namespace GarlicPress
         }
 
 
+
         public static void LoadMediaLayoutJson()
         {
             try
@@ -64,9 +65,47 @@ namespace GarlicPress
             File.WriteAllText(jsonPath, mediaLayoutJson);
         }
 
-        public static Bitmap? GenerateGameMedia(GameResponse game)
-        {
 
+        public static Bitmap OverlayImageWithSkinBackground(Bitmap imageToOverlay)
+        {
+            var baseImage = (Bitmap)Image.FromFile(@"assets/background.png");
+            var overlayImage = imageToOverlay;
+            var textImage = (Bitmap)Image.FromFile(@"assets/SampleTextCenter.png");
+            int txtMargin = 0;
+            if (GarlicADBConnection.skinSettings.textalignment == "right")
+            {
+                textImage = (Bitmap)Image.FromFile(@"assets/SampleTextRight.png");
+                txtMargin = GarlicADBConnection.skinSettings.textmargin * -1;
+            }
+            else if (GarlicADBConnection.skinSettings.textalignment == "left")
+            {
+                textImage = (Bitmap)Image.FromFile(@"assets/SampleTextLeft.png");
+                txtMargin = GarlicADBConnection.skinSettings.textmargin;
+            }
+
+            var finalImage = new Bitmap(640, 480, PixelFormat.Format32bppArgb);
+            var graphics = Graphics.FromImage(finalImage);
+            graphics.CompositingMode = CompositingMode.SourceOver;
+
+            baseImage.SetResolution(graphics.DpiX, graphics.DpiY);
+            overlayImage.SetResolution(graphics.DpiX, graphics.DpiY);
+            textImage.SetResolution(graphics.DpiX, graphics.DpiY);
+
+            graphics.DrawImage(baseImage, 0, 0, 640, 480);
+            graphics.DrawImage(overlayImage, 0, 0, 640, 480);
+            if (GarlicADBConnection.validSkinSettings)
+            {
+                graphics.DrawImage(textImage, txtMargin, 0, 640, 480);
+            }
+            baseImage.Dispose();
+            textImage.Dispose();
+
+            //show in a winform picturebox
+            return finalImage;
+        }
+
+        public static async Task<Bitmap?> GenerateGameMedia(GameResponse game )
+        {
             var finalImage = new Bitmap(640, 480, PixelFormat.Format32bppArgb);
             var graphics = Graphics.FromImage(finalImage);
             graphics.CompositingMode = CompositingMode.SourceOver;
@@ -77,7 +116,7 @@ namespace GarlicPress
             }
             foreach (var layer in mediaLayout.OrderBy(o=>o.order) )
             {                
-                var filename = ScreenScraper.DownloadMedia(game, layer.mediaType);
+                var filename = await ScreenScraper.DownloadMedia(game, layer.mediaType);
                 if (!string.IsNullOrEmpty(filename))
                 {
                     var baseImage = (Bitmap)Image.FromFile(filename);
@@ -93,42 +132,13 @@ namespace GarlicPress
                     else
                     {
                         graphics.DrawImage(baseImage, layer.x, layer.y, baseImage.Width, baseImage.Height);
-                    }
-
+                    }                    
                     baseImage.Dispose();
+                    File.Delete(filename); //clean up the old temp image
                 }
             }
             //finalImage.Save("assets/tempimg.png", ImageFormat.Png);
             return finalImage;
         }
-
-
-
-        //public static async Task UpdateGameArtAsync(GarlicSystem system, GarlicDrive drive, List<FileStatistics> files, bool promptPerGame = false)
-        //{
-        //    int totalCount = files.Count;
-        //    bool skipPrompt = Properties.Settings.Default.ssSkipGameNotFound;
-        //    int count = 0;
-
-            
-        //    foreach (FileStatistics item in files)
-        //    {
-        //        count++;
-        //        string romName = item.Path;
-        //        GameResponse game = ScreenScraper.GetGameData(system.ss_systemeid, system.ss_romtype, romName, "0", promptPerGame);
-        //        if (game != null && game.status != "error") //game was not found Skip doing its art
-        //        {
-                    
-        //        }
-        //    }
-        //}
-
-        public delegate void GameArtUpdatedEventHandler(int progressPercentage, GarlicSystem system, GarlicDrive drive, FileStatistics file, string imagePath );
-        public static event GameArtUpdatedEventHandler GameArtUpdated;
-        public static void OnGameArtUpdated(int progressPercentage, GarlicSystem system, GarlicDrive drive, FileStatistics file, string imagePath)
-        {
-            GameArtUpdated?.Invoke(progressPercentage, system, drive, file, imagePath);
-        }
-
     }
 }

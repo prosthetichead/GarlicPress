@@ -42,8 +42,9 @@
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.miConsole = new System.Windows.Forms.ToolStripMenuItem();
             this.miSkinSettings = new System.Windows.Forms.ToolStripMenuItem();
+            this.miBackupSaves = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.updateAllArtToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.miUpdateAllArt = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -57,7 +58,10 @@
             this.picGame = new System.Windows.Forms.PictureBox();
             this.btnUpdateSelectedArt = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
-            this.btnBackupSaves = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.txtFileName = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.btnRename = new System.Windows.Forms.Button();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.notifyIconMenu.SuspendLayout();
@@ -164,8 +168,9 @@
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.miConsole,
             this.miSkinSettings,
+            this.miBackupSaves,
             this.toolStripSeparator2,
-            this.updateAllArtToolStripMenuItem});
+            this.miUpdateAllArt});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -173,27 +178,34 @@
             // miConsole
             // 
             this.miConsole.Name = "miConsole";
-            this.miConsole.Size = new System.Drawing.Size(164, 22);
+            this.miConsole.Size = new System.Drawing.Size(194, 22);
             this.miConsole.Text = "Console";
             this.miConsole.Click += new System.EventHandler(this.miConsole_Click);
             // 
             // miSkinSettings
             // 
             this.miSkinSettings.Name = "miSkinSettings";
-            this.miSkinSettings.Size = new System.Drawing.Size(164, 22);
+            this.miSkinSettings.Size = new System.Drawing.Size(194, 22);
             this.miSkinSettings.Text = "Edit Skin Settings";
             this.miSkinSettings.Click += new System.EventHandler(this.miSkinSettings_Click);
+            // 
+            // miBackupSaves
+            // 
+            this.miBackupSaves.Name = "miBackupSaves";
+            this.miBackupSaves.Size = new System.Drawing.Size(194, 22);
+            this.miBackupSaves.Text = "Backup Saves";
+            this.miBackupSaves.Click += new System.EventHandler(this.miBackupSaves_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(161, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(191, 6);
             // 
-            // updateAllArtToolStripMenuItem
+            // miUpdateAllArt
             // 
-            this.updateAllArtToolStripMenuItem.Name = "updateAllArtToolStripMenuItem";
-            this.updateAllArtToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-            this.updateAllArtToolStripMenuItem.Text = "Update All Art";
+            this.miUpdateAllArt.Name = "miUpdateAllArt";
+            this.miUpdateAllArt.Size = new System.Drawing.Size(194, 22);
+            this.miUpdateAllArt.Text = "Update All Systems Art";
             // 
             // aboutToolStripMenuItem
             // 
@@ -245,16 +257,16 @@
             this.comboSystems.FormattingEnabled = true;
             this.comboSystems.Items.AddRange(new object[] {
             "GameBoy"});
-            this.comboSystems.Location = new System.Drawing.Point(118, 42);
+            this.comboSystems.Location = new System.Drawing.Point(107, 43);
             this.comboSystems.Name = "comboSystems";
-            this.comboSystems.Size = new System.Drawing.Size(237, 23);
+            this.comboSystems.Size = new System.Drawing.Size(248, 23);
             this.comboSystems.TabIndex = 9;
             this.comboSystems.SelectedIndexChanged += new System.EventHandler(this.comboSystems_SelectedIndexChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(118, 24);
+            this.label1.Location = new System.Drawing.Point(107, 24);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(45, 15);
             this.label1.TabIndex = 10;
@@ -297,11 +309,11 @@
             // btnUpdateSelectedArt
             // 
             this.btnUpdateSelectedArt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnUpdateSelectedArt.Location = new System.Drawing.Point(361, 556);
+            this.btnUpdateSelectedArt.Location = new System.Drawing.Point(449, 556);
             this.btnUpdateSelectedArt.Name = "btnUpdateSelectedArt";
-            this.btnUpdateSelectedArt.Size = new System.Drawing.Size(50, 26);
+            this.btnUpdateSelectedArt.Size = new System.Drawing.Size(82, 26);
             this.btnUpdateSelectedArt.TabIndex = 15;
-            this.btnUpdateSelectedArt.Text = "Art";
+            this.btnUpdateSelectedArt.Text = "Update Art";
             this.btnUpdateSelectedArt.UseVisualStyleBackColor = true;
             this.btnUpdateSelectedArt.Click += new System.EventHandler(this.btnUpdateSelectedArt_Click);
             // 
@@ -310,24 +322,52 @@
             this.btnDelete.BackColor = System.Drawing.Color.DarkRed;
             this.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDelete.ForeColor = System.Drawing.Color.White;
-            this.btnDelete.Location = new System.Drawing.Point(948, 556);
+            this.btnDelete.Location = new System.Drawing.Point(919, 556);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(53, 26);
+            this.btnDelete.Size = new System.Drawing.Size(82, 26);
             this.btnDelete.TabIndex = 16;
             this.btnDelete.Text = "Delete";
             this.btnDelete.UseVisualStyleBackColor = false;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
-            // btnBackupSaves
+            // button1
             // 
-            this.btnBackupSaves.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnBackupSaves.Location = new System.Drawing.Point(896, 42);
-            this.btnBackupSaves.Name = "btnBackupSaves";
-            this.btnBackupSaves.Size = new System.Drawing.Size(105, 26);
-            this.btnBackupSaves.TabIndex = 17;
-            this.btnBackupSaves.Text = "Backup Saves";
-            this.btnBackupSaves.UseVisualStyleBackColor = true;
-            this.btnBackupSaves.Click += new System.EventHandler(this.btnBackupSaves_Click);
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Location = new System.Drawing.Point(361, 556);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(82, 26);
+            this.button1.TabIndex = 18;
+            this.button1.Text = "Sellect All";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // txtFileName
+            // 
+            this.txtFileName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtFileName.Location = new System.Drawing.Point(361, 42);
+            this.txtFileName.Name = "txtFileName";
+            this.txtFileName.Size = new System.Drawing.Size(572, 23);
+            this.txtFileName.TabIndex = 19;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(361, 24);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(60, 15);
+            this.label3.TabIndex = 21;
+            this.label3.Text = "File Name";
+            // 
+            // btnRename
+            // 
+            this.btnRename.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRename.Location = new System.Drawing.Point(939, 42);
+            this.btnRename.Name = "btnRename";
+            this.btnRename.Size = new System.Drawing.Size(62, 23);
+            this.btnRename.TabIndex = 22;
+            this.btnRename.Text = "Rename";
+            this.btnRename.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnRename.UseVisualStyleBackColor = true;
+            this.btnRename.Click += new System.EventHandler(this.btnRename_Click);
             // 
             // MainForm
             // 
@@ -336,7 +376,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
             this.ClientSize = new System.Drawing.Size(1013, 612);
-            this.Controls.Add(this.btnBackupSaves);
+            this.Controls.Add(this.btnRename);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.txtFileName);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnUpdateSelectedArt);
             this.Controls.Add(this.picGame);
@@ -396,11 +439,15 @@
         private Button btnUpdateSelectedArt;
         private ToolStripStatusLabel txtCurrentTask;
         private Button btnDelete;
-        private Button btnBackupSaves;
         private ToolStripMenuItem aboutToolStripMenuItem;
         private ToolStripMenuItem exitToolStripMenuItem;
         private ToolStripStatusLabel txtUpdate;
         private ToolStripSeparator toolStripSeparator2;
-        private ToolStripMenuItem updateAllArtToolStripMenuItem;
+        private ToolStripMenuItem miUpdateAllArt;
+        private ToolStripMenuItem miBackupSaves;
+        private Button button1;
+        private TextBox txtFileName;
+        private Label label3;
+        private Button btnRename;
     }
 }
