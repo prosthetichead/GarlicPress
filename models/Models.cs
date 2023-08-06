@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -10,6 +11,30 @@ using static System.Net.WebRequestMethods;
 
 namespace GarlicPress
 {
+    public class GarlicGameArtSearch
+    {
+        public GarlicSystem system { get; set; }
+        public GarlicDrive drive { get; set; }
+        public SearchType searchType { get; set; }
+        public string status { get; set; }
+        public string searchText { get; set; }
+        public string fileName { get; set; }
+        public string systemName { get { return system.name; } }
+        public string driveName { get { return drive.name; } }
+        public string filePath { get { return drive.romPath + "/" + system.folder + "/" + fileName; } }
+        public string imgPath { get { return drive.romPath + "/" + system.folder + "/Imgs/" + Path.ChangeExtension(fileName, ".png"); } }
+
+        public GarlicGameArtSearch(GarlicSystem system, GarlicDrive drive, SearchType searchType, string fileName)
+        {
+            this.system = system;
+            this.drive = drive;
+            this.searchType = searchType;
+            this.fileName = fileName;
+            status = "";
+            searchText = fileName;
+        }
+    }
+
     public class GarlicSystem
     {
         public string name { get; set; }
@@ -94,6 +119,7 @@ namespace GarlicPress
         public string name { get; set; }
         public string path { get; set; }
         public int number { get; set; }
+        public string romPath { get { return number == 2 && Properties.Settings.Default.romsOnRootSD2 ? path + "/" : path + "/Roms"; } }
 
         public GarlicDrive(string name, string path, int number)
         {
@@ -191,16 +217,21 @@ namespace GarlicPress
         }
     }
 
+    public class MediaLayerCollection
+    {
+        public string name { get; set; }
+        public List<MediaLayer> mediaLayers { get; set; }
+        
+    }
+
     public class MediaLayer
     {
         public string mediaType { get; set; }
         public double resizePercent { get; set; }
         public int width { get; set; }
-        public int height { get; set; }
-        
+        public int height { get; set; }        
         public int x { get; set; }
         public int y { get; set; }
-
         public int order { get; set; }
 
         public MediaLayer()

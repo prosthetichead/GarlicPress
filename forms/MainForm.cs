@@ -2,36 +2,27 @@ using AdvancedSharpAdbClient;
 using GarlicPress.forms;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Runtime.ExceptionServices;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace GarlicPress
 {
     public partial class MainForm : Form
     {
 
-        string currentSDPath { get
-            {
-                GarlicDrive drive = (GarlicDrive)comboDrive.SelectedItem;
-                var path = drive.path;
-                return path;
-            } 
-        }
-        string currentSystemPath { get
-            {
-                var system = (GarlicSystem)comboSystems.SelectedItem;
-                GarlicDrive drive = (GarlicDrive)comboDrive.SelectedItem;
+        //string currentSDPath { get
+        //    {
+        //        GarlicDrive drive = (GarlicDrive)comboDrive.SelectedItem;
+        //        var path = drive.path;
+        //        return path;
+        //    } 
+        //}
+        string currentSystemPath { get { return SelectedDrive.romPath + "/" + SelectedSystem.folder; } }
+        GarlicDrive SelectedDrive { get { return (GarlicDrive)comboDrive.SelectedItem; } }
+        GarlicSystem SelectedSystem { get { return (GarlicSystem)comboSystems.SelectedItem; } }
 
-                if (drive.number == 2 && Properties.Settings.Default.romsOnRootSD2) {
-                    return currentSDPath + "/" + system.folder; //Roms on the root of the SD 2
-                }    
-                
-                return currentSDPath + "/Roms/" + system.folder;
-            } 
-        }
-        
-
-        GarlicSkinSettings skinSettings;
-        bool validSkinSettings;
+        FileStatistics currentSelectedItem;
 
         public MainForm()
         {
@@ -103,26 +94,12 @@ namespace GarlicPress
                     notifyIcon.Icon = Properties.Resources.garlicConnect;
                     this.Icon = Properties.Resources.garlicConnect;
                     notifyIcon.Text = "GarlicPress : RG35xx Connected";
-
                     
-
                     //get skin files
                     GarlicADBConnection.DownloadFile("/mnt/mmc/CFW/skin/background.png", "assets/background.png");
                     GarlicADBConnection.DownloadFile("/mnt/mmc/CFW/skin/settings.json", "assets/skinSettings.json"); //cat /mnt/mmc/cfw/skin/settings.json
 
-                    //read skin file get text position
-                    string json = File.ReadAllText(@"assets/skinSettings.json");
-                    try
-                    {
-                        skinSettings = JsonSerializer.Deserialize<GarlicSkinSettings>(json);
-                        validSkinSettings = true;
-                    }
-                    catch (Exception ex)
-                    {
-                        skinSettings = new GarlicSkinSettings();
-                        validSkinSettings = false;
-                        MessageBox.Show("CFW/skin/settings.json skin settings can not be loaded. \n\n Preview will not display text position \n skin settings tool will not function. \n\n Please report the skin you are using to issues link in About \n\n Error Text : \n " + ex.Message, "Error Reading Skin Settings Json on Device", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    GarlicADBConnection.ReadSkinSettings();
 
                     //LETS GO We are Connected
                     RefreshBrowserFiles();
@@ -153,36 +130,38 @@ namespace GarlicPress
             }
         }
 
-        private void RefreshBrowserFiles()
+        private void RefreshBrowserFiles(int index = 0)
         {
             if (GarlicADBConnection.deviceConnected)
             {
                 var list = GarlicADBConnection.GetDirectoryListing(currentSystemPath);
                 var files = list.Where(w => w.Path != "." && w.Path != ".." && w.Path != "Imgs").OrderBy(o => o.Path).ToList();
-                                
+                fileListBox.ClearSelected();
                 fileListBox.DataSource = files;
-
-                //refresh counts
-                //List<GarlicSystem> systems = GarlicSystem.GetAllSystems();
-                //int selectedIndex = comboSystems.SelectedIndex;
-                //foreach (var system in systems)
-                //{
-                //    var listCount = GarlicADBConnection.GetDirectoryListing(currentSDPath + "/roms/" + system.folder).Where(w=>w.Path != "." && w.Path != ".." && w.Path != "Imgs").Count();
-                //    system.name = system.name + " [" + listCount + "]";
-                //}                
+                if (files.Count > 0 && files.Count - 1 >= index)
+                {
+                    fileListBox.ClearSelected();
+                    fileListBox.SelectedIndex = index;
+                }
             }
         }
 
         private void fileListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             var item = (FileStatistics)fileListBox.SelectedItem;
-            if (item != null)
+            
+            if (item != null && item != currentSelectedItem)
             {
+                currentSelectedItem = item;
+                txtFileName.Text = item.Path;
+
                 //get img file if one exists
                 string imgFile = Path.ChangeExtension(item.Path, ".png");
                 if (GarlicADBConnection.DownloadFile(currentSystemPath + "/Imgs/" + imgFile, "assets/tempimg.png"))
                 {
-                    OverlayImageWithSkinBackground();
+                    Bitmap overlayImage = (Bitmap)Image.FromFile(@"assets/tempimg.png");
+                    picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage);
+                    overlayImage.Dispose();
                     //picGame.ImageLocation = "tempimg.png";
                     picGame.Refresh();
                 }
@@ -192,46 +171,6 @@ namespace GarlicPress
                 }
             }
         }
-
-        private void OverlayImageWithSkinBackground()
-        {
-            var baseImage = (Bitmap)Image.FromFile(@"assets/background.png");
-            var overlayImage = (Bitmap)Image.FromFile(@"assets/tempimg.png");
-            var textImage = (Bitmap)Image.FromFile(@"assets/SampleTextCenter.png");
-            int txtMargin = 0;
-            if (skinSettings.textalignment == "right")
-            {
-                textImage = (Bitmap)Image.FromFile(@"assets/SampleTextRight.png");
-                txtMargin = skinSettings.textmargin * -1;
-            }
-            else if (skinSettings.textalignment == "left")
-            {
-                textImage = (Bitmap)Image.FromFile(@"assets/SampleTextLeft.png");
-                txtMargin = skinSettings.textmargin;
-            }           
-
-            var finalImage = new Bitmap(640, 480, PixelFormat.Format32bppArgb);
-            var graphics = Graphics.FromImage(finalImage);
-            graphics.CompositingMode = CompositingMode.SourceOver;
-
-            baseImage.SetResolution(graphics.DpiX, graphics.DpiY);
-            overlayImage.SetResolution(graphics.DpiX, graphics.DpiY);
-            textImage.SetResolution(graphics.DpiX, graphics.DpiY);
-
-            graphics.DrawImage(baseImage, 0, 0, 640, 480);
-            graphics.DrawImage(overlayImage, 0, 0, 640, 480);
-            if (validSkinSettings)
-            {
-                graphics.DrawImage(textImage, txtMargin, 0, 640,480);
-            }
-
-            //show in a winform picturebox
-            picGame.Image = finalImage;
-            baseImage.Dispose();
-            overlayImage.Dispose();
-            textImage.Dispose();
-        }
-
 
         //Detect the USB Device Changes
         //if a USB Device Change happens fire off the connect method.
@@ -349,11 +288,11 @@ namespace GarlicPress
 
         private void miSkinSettings_Click(object sender, EventArgs e)
         {
-            if (validSkinSettings)
+            if (GarlicADBConnection.validSkinSettings)
             {
                 if (GarlicADBConnection.deviceConnected)
                 {
-                    SkinSettingsForm skinSettingsForm = new SkinSettingsForm(skinSettings);
+                    SkinSettingsForm skinSettingsForm = new SkinSettingsForm(GarlicADBConnection.skinSettings);
                     skinSettingsForm.ShowDialog();
                 }
                 else
@@ -365,21 +304,16 @@ namespace GarlicPress
             }
         }
 
-      
-
-        private void btnUpdateImg_Click(object sender, EventArgs e)
-        {
-
-            UpdateArt(false);
-        }
-
         private void btnDelete_Click(object sender, EventArgs e)
         {
             if (fileListBox.SelectedItems.Count > 0)
             {
+                int firstIndex = fileListBox.Items.IndexOf(fileListBox.SelectedItems[0]);
                 var result = MessageBox.Show("Delete " + fileListBox.SelectedItems.Count + " Selected the files from the device?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+
                 if (result == DialogResult.Yes)
                 {
+                    
                     foreach (FileStatistics item in fileListBox.SelectedItems.Cast<FileStatistics>())
                     {
                         var fullPath = "\"" + currentSystemPath + "/" + item.Path + "\"";
@@ -388,93 +322,19 @@ namespace GarlicPress
                         GarlicADBConnection.DeleteFile(fullPath);
                         GarlicADBConnection.DeleteFile(fullImgPath);
                         txtCurrentTask.Text = item.Path + " Deleted ";
-                        Update();
-                        
+                        Refresh();
+
                     }
-                    RefreshBrowserFiles();
-                }
-            }
-        }
-
-        private async void btnBackupSaves_Click(object sender, EventArgs e)
-        {
-            if (GarlicADBConnection.deviceConnected)
-            {
-                var backupDir = Properties.Settings.Default.saveBackupPath;
-
-                foreach (GarlicDrive drive in comboDrive.Items)
-                {
-
-                    var backupPath = Path.Combine(backupDir, "SD" + drive.number);
-                    Directory.CreateDirectory(backupPath);
-                    var readPath = currentSDPath + "/Saves";
-
-                    txtCurrentTask.Text = "Backing up Saves on SD Card " + drive.number + " to " + backupPath;
-
-                    GarlicADBConnection.DownloadDirectory(readPath, backupPath);
-                }
-            }
-        }
-
-        private void btnUpdateArtPrompt_Click(object sender, EventArgs e)
-        {
-            UpdateArt(true);
-        }
-
-        private void UpdateArt( bool promptName)
-        {
-            int totalCount = fileListBox.SelectedItems.Count;
-            int count = 0;
-            bool skipPrompt = Properties.Settings.Default.ssSkipGameNotFound;
-
-            var system = (GarlicSystem)comboSystems.SelectedItem;
-            foreach (FileStatistics item in fileListBox.SelectedItems.Cast<FileStatistics>())
-            {
-                count++;
-                string romName = item.Path;
-                string gameId = "0";
-                
-                if (promptName)
-                {
-                    skipPrompt = false; //we asked for prompts using the prompt all buttons so you get prompts..
-                    GameSearchDialogForm gameSearchDialog = new GameSearchDialogForm(romName, "Search for Game " + romName );
-                    if (gameSearchDialog.ShowDialog() == DialogResult.OK)
+                    RefreshBrowserFiles(firstIndex);
+                    if(firstIndex >= fileListBox.Items.Count)
                     {
-                        if (gameSearchDialog.SelectedSearchType == SearchType.GameName)
-                        {
-                            romName = gameSearchDialog.NewSearchValue;
-                            gameId = "0";
-                        }
-                        else if (gameSearchDialog.SelectedSearchType == SearchType.GameID)
-                        {
-                            romName = "";
-                            gameId = gameSearchDialog.NewSearchValue;
-                        }
-                    }
-                    else
-                    {
-                        break;
+                        fileListBox.ClearSelected();    
+                        fileListBox.SelectedIndex = fileListBox.Items.Count-1;
                     }
                 }
-                txtCurrentTask.Text = skipPrompt ? "Auto Skipping Errors - " : "";
-                txtCurrentTask.Text += "Updating Art " + count + "/" + totalCount + " : " + item.Path;
-                Refresh();
-
-                GameResponse game = ScreenScraper.GetGameData(system.ss_systemeid, system.ss_romtype, romName, skipPrompt, gameId);
-
-                if (game != null && game.status != "error") //game was not found Skip doing its art
-                {
-                    GameMediaGeneration.GenerateGameMedia(game);
-                    OverlayImageWithSkinBackground();
-
-                    string imgFile = Path.ChangeExtension(item.Path, ".png");
-                    GarlicADBConnection.UploadFile("assets/tempimg.png", currentSystemPath + "/Imgs/" + imgFile);
-                }
-                Update();                
             }
-
-            txtCurrentTask.Text = "Updating Art Complete";            
         }
+               
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -492,6 +352,106 @@ namespace GarlicPress
         {
             UpdateForm updateForm = new UpdateForm();
             updateForm.ShowDialog();
+        }
+
+        private void btnUpdateSelectedArt_Click(object sender, EventArgs e)
+        {
+            var selectedFiles = fileListBox.SelectedItems.Cast<FileStatistics>();
+            var system = (GarlicSystem)comboSystems.SelectedItem;
+            var drive = (GarlicDrive)comboDrive.SelectedItem;
+
+            List<GarlicGameArtSearch> searchItems = new List<GarlicGameArtSearch>();
+            foreach (var item in selectedFiles)
+            {
+                GarlicGameArtSearch ggas = new GarlicGameArtSearch(system, drive, SearchType.GameName, item.Path);
+                searchItems.Add(ggas);
+            }
+
+            if(searchItems.Count > 0)
+            {
+                GameArtUpdateForm gameArtUpdateForm = new GameArtUpdateForm(searchItems);
+                gameArtUpdateForm.ShowDialog();
+            }
+        }
+
+        private void miBackupSaves_Click(object sender, EventArgs e)
+        {
+            if (GarlicADBConnection.deviceConnected)
+            {
+                var backupDir = Properties.Settings.Default.saveBackupPath;
+
+                foreach (GarlicDrive drive in comboDrive.Items)
+                {
+
+                    var backupPath = Path.Combine(backupDir, "SD" + drive.number);
+                    Directory.CreateDirectory(backupPath);
+                    var readPath = SelectedDrive.path + "/Saves";
+
+                    txtCurrentTask.Text = "Backing up Saves on SD Card " + drive.number + " to " + backupPath;
+
+                    GarlicADBConnection.DownloadDirectory(readPath, backupPath);
+                }
+            }
+        }
+
+        private void btnRename_Click(object sender, EventArgs e)
+        {
+            string newFileName = txtFileName.Text;  
+            var item = (FileStatistics)fileListBox.SelectedItem;
+            var index = fileListBox.SelectedIndex;
+
+            var invalidChars = new string(Path.GetInvalidFileNameChars());
+            Regex regFixFileName = new Regex("[" + Regex.Escape(invalidChars) + "]");
+            if (!regFixFileName.IsMatch(newFileName) && item != null)
+            {                
+                var fullPath = "\"" + currentSystemPath + "/" + item.Path + "\"";
+                var newFullPath = "\"" + currentSystemPath + "/" + newFileName + "\"";
+                string imgFile = Path.ChangeExtension(item.Path, ".png");
+                string newImgFile = Path.ChangeExtension(newFileName, ".png");
+                var fullImgPath = "\"" + currentSystemPath + "/Imgs/" + imgFile + "\"";
+                var newFullImgPath = "\"" + currentSystemPath + "/Imgs/" + newImgFile + "\"";
+                GarlicADBConnection.RenameFile(fullPath, newFullPath);
+                GarlicADBConnection.RenameFile(fullImgPath, newFullImgPath);
+                txtCurrentTask.Text = item.Path + " Renamed to " + newFileName;
+                Refresh();                
+            }
+            RefreshBrowserFiles(index);
+        }
+
+        private void btnSelectAll_Click(object sender, EventArgs e)
+        {
+            
+            fileListBox.BeginUpdate();
+            //fileListBox.SelectionMode = SelectionMode.MultiSimple;
+            for (int i = 0; i < fileListBox.Items.Count; i++)
+                fileListBox.SetSelected(i, true);
+            //fileListBox.SelectionMode = SelectionMode.MultiExtended;
+            fileListBox.EndUpdate();
+        }
+
+        private void miUpdateAllArt_Click(object sender, EventArgs e)
+        {
+            List<GarlicGameArtSearch> searchItems = new List<GarlicGameArtSearch>();
+
+            foreach (var drive in comboDrive.Items.Cast<GarlicDrive>())
+            {
+                foreach (var system in comboSystems.Items.Cast<GarlicSystem>())
+                {
+                    //get items from the drive system combo
+                    var list = GarlicADBConnection.GetDirectoryListing(drive.romPath + "/" + system.folder);
+                    var files = list.Where(w => w.Path != "." && w.Path != ".." && w.Path != "Imgs").OrderBy(o => o.Path).ToList();
+                    foreach(var item in files)
+                    {
+                        GarlicGameArtSearch ggas = new GarlicGameArtSearch(system, drive, SearchType.GameName, item.Path);
+                        searchItems.Add(ggas);
+                    }
+                }
+            }
+            if (searchItems.Count > 0)
+            {
+                GameArtUpdateForm gameArtUpdateForm = new GameArtUpdateForm(searchItems);
+                gameArtUpdateForm.ShowDialog();
+            }
         }
     }
 }

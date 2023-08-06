@@ -31,14 +31,14 @@ namespace GarlicPress
             cbSearchType.SelectedIndex = 0;
         }
 
-        
-        public GameSearchDialogForm(string searchText, string message)
+        public GameSearchDialogForm(string searchText, string message, SearchType searchType = SearchType.GameName)
         {
             InitializeComponent();
             labMessage.Text = message;
-            txtNewSearch.Text = searchText;
+            txtNewSearch.Text = searchText;            
 
             SetupSearchType();
+            cbSearchType.SelectedItem = searchType;
         }
 
         public string NewSearchValue { get { return txtNewSearch.Text; } }

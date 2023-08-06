@@ -4,18 +4,19 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net;
+using System.Security.Policy;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
+using System.Windows.Forms;
+using static GarlicPress.GameResponse;
 
 namespace GarlicPress
 {
     internal static partial class ScreenScraper
     {
-        
-
-        public static GameResponse GetGameData(string systemId, string romType, string romName, bool skipPrompt, string gameid = "0")
+        public static async Task<GameResponse> GetGameData(GarlicSystem system, string searchText, SearchType searchType = SearchType.GameName)
         {
             UriBuilder uriBuilder = new UriBuilder("https://www.screenscraper.fr/api2/jeuInfos.php");
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
@@ -25,76 +26,66 @@ namespace GarlicPress
             query["ssid"] = Properties.Settings.Default.ssUsername; 
             query["sspassword"] = Properties.Settings.Default.ssPassword; 
             query["output"] = "json";
-            query["romtype"] = romType;
+            query["romtype"] = system.ss_romtype;
 
-            if (gameid == "0")
+            if(searchType == SearchType.GameName)
             {
-                query["romnom"] = romName;
-                query["systemeid"] = systemId;
+                query["romnom"] = searchText;
+                query["systemeid"] = system.ss_systemeid;
             }
-            else
+            else if(searchType == SearchType.GameID)
             {
-                query["gameid"] = gameid;
+                query["gameid"] = searchText;
             }
 
             uriBuilder.Query = query.ToString();
             string url = uriBuilder.ToString();
 
             HttpClient client = new HttpClient();
-            var response = client.GetAsync(url).Result;
-            if (response.IsSuccessStatusCode)
+            var response =  await client.GetAsync(url);
+
+            var json = await response.Content.ReadAsStringAsync();            
+            if (!response.IsSuccessStatusCode)
             {
-                var json = response.Content.ReadAsStringAsync().Result;
-                GameResponse game = JsonSerializer.Deserialize<GameResponse>(json);
+                return new GameResponse() { status = "error", statusMessage = response.StatusCode + "  " + json };                              
+            }
+
+            GameResponse? game = JsonSerializer.Deserialize<GameResponse>(json);
+            if (game != null)
+            {
                 game.status = "ok";
                 game.statusMessage = "ok";
                 return game;
             }
             else
             {
-                var json = response.Content.ReadAsStringAsync().Result;
-                GameResponse game = new GameResponse() { status = "error", statusMessage = response.StatusCode + "  " + json };
-                if (!skipPrompt)
-                {
-                    string message = "Searching for ";
-                    message += string.IsNullOrEmpty(romName) ? gameid : romName;
-                    message += "\nGame not found.";
-                    GameSearchDialogForm gameSearchDialog = new GameSearchDialogForm(romName == null ? gameid : romName, message);
-                    if (gameSearchDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        if (gameSearchDialog.SelectedSearchType == SearchType.GameName)
-                        {
-                            game = GetGameData(systemId, romType, gameSearchDialog.NewSearchValue, skipPrompt);
-                            return game;
-                        }
-                        else if(gameSearchDialog.SelectedSearchType == SearchType.GameID)
-                        {
-                            game = GetGameData(systemId, romType,"", skipPrompt, gameSearchDialog.NewSearchValue);
-                            return game;
-                        }
-                    }
-                }
-
-                return game;
+                return new GameResponse() { status = "error", statusMessage = response.StatusCode + "  " + json };
             }
         }
+        
 
-        public static string DownloadMedia(GameResponse game, string mediaType = "box-3D")
+
+        public static async Task<string> DownloadMedia(GameResponse game, string mediaType = "box-3D")
         {
             if (game.status != "error")
             {
-                WebClient webClient = new WebClient();
+                HttpClient httpClient = new HttpClient();
 
                 List<string> ssRegionOrder = Settings.Default.ssRegionOrder.Split(',').ToList();
 
                 var medias = game.response.jeu.medias.Where(w => w.type == mediaType).OrderBy(o => ssRegionOrder.IndexOf(o.region)); //.OrderBy(o => o.support == null).ThenBy(o => o.support);
+                
                 if (medias.Count() > 0)
                 {
                     var media = medias.First();
-
                     string mediaDownloadPath = "assets/" + mediaType + "." + media.format;
-                    webClient.DownloadFile(new Uri(media.url), mediaDownloadPath);
-
+                    using (var s = await httpClient.GetStreamAsync(new Uri(media.url)))
+                    {
+                        using (var fs = new FileStream(mediaDownloadPath, FileMode.Create))
+                        {
+                            await s.CopyToAsync(fs);
+                        }
+                    }
                     return mediaDownloadPath;
                 }
             }
