@@ -185,7 +185,7 @@ namespace GarlicPress.forms
             foreach(var row in rowsToRemove)
             {
                 searchItems.Remove(row);
-            }
+            } 
         }
 
         private void btnClose_Click(object sender, EventArgs e)
