@@ -58,7 +58,12 @@ namespace GarlicPress
             { //https://github.com/OnionUI/Onion/wiki/Emulators#rom-folders---quick-reference
                 new GarlicSystem("Amiga",  "AMIGA", "64", "rom", new List<string>(){}),
                 new GarlicSystem("Amstrad CPC",  "CPC", "65", "rom", new List<string>(){}),
+                
                 new GarlicSystem("Arcade (Mame 2003+)",  "ARCADE", "75", "rom", new List<string>(){}),
+                new GarlicSystem("Arcade (FinalBurn 2012)",  "FBA2012", "75", "rom", new List<string>(){}),
+                new GarlicSystem("Arcade (FinalBurn Neo)",  "FBNEO", "75", "rom", new List<string>(){}),
+                new GarlicSystem("Arcade (Mame 2000)",  "MAME2000", "75", "rom", new List<string>(){}),
+
                 new GarlicSystem("Atari 2600", "ATARI", "26", "rom", new List<string>(){}),
                 new GarlicSystem("Atari 5200", "FIFTYTWOHUNDRED", "40", "rom", new List<string>(){}),
                 new GarlicSystem("Atari 7800", "SEVENTYEIGHTHUNDRED", "41", "rom", new List<string>(){}),
