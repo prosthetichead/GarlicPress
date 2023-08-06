@@ -1,5 +1,4 @@
 # GarlicPress
-[![](https://dcbadge.vercel.app/api/server/MsSxZcDTGk)](https://discord.gg/MsSxZcDTGk)
 
 GarlicPress is a companion application for the RG35xx running [GarlicOS](https://www.patreon.com/posts/garlicos-for-76561333). The main aim of the application is to never require you to remove the SDCards from your device.
 ![image](https://github.com/prosthetichead/GarlicPress/assets/1934681/ffbb4831-1ea3-422a-abed-daaa2c980bf0)
