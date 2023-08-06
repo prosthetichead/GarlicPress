@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.Runtime.ExceptionServices;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace GarlicPress
 {
@@ -250,11 +251,14 @@ namespace GarlicPress
         private void comboSystems_SelectedIndexChanged(object sender, EventArgs e)
         {
             RefreshBrowserFiles();
+            fileListBox.Focus();
+
         }
 
         private void comboDrive_SelectedIndexChanged(object sender, EventArgs e)
         {
             RefreshBrowserFiles();
+            fileListBox.Focus();
         }
 
         private void MainForm_DragDropEnter(object sender, DragEventArgs e)
@@ -304,16 +308,35 @@ namespace GarlicPress
             }
         }
 
+        private void fileListBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                DeleteSelectedFiles();
+            }
+        }
+
         private void btnDelete_Click(object sender, EventArgs e)
+        {
+            DeleteSelectedFiles();
+        }
+
+        private void DeleteSelectedFiles()
         {
             if (fileListBox.SelectedItems.Count > 0)
             {
                 int firstIndex = fileListBox.Items.IndexOf(fileListBox.SelectedItems[0]);
-                var result = MessageBox.Show("Delete " + fileListBox.SelectedItems.Count + " Selected the files from the device?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
 
-                if (result == DialogResult.Yes)
+                bool deleteFiles = true;
+                if (Properties.Settings.Default.warningBeforeDelete)
+                {                    
+                    var result = MessageBox.Show("Delete " + fileListBox.SelectedItems.Count + " Selected files from the device?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                    if (result == DialogResult.No)
+                        deleteFiles = false;
+                }
+
+                if(deleteFiles)
                 {
-                    
                     foreach (FileStatistics item in fileListBox.SelectedItems.Cast<FileStatistics>())
                     {
                         var fullPath = "\"" + currentSystemPath + "/" + item.Path + "\"";
@@ -326,10 +349,10 @@ namespace GarlicPress
 
                     }
                     RefreshBrowserFiles(firstIndex);
-                    if(firstIndex >= fileListBox.Items.Count)
+                    if (firstIndex >= fileListBox.Items.Count)
                     {
-                        fileListBox.ClearSelected();    
-                        fileListBox.SelectedIndex = fileListBox.Items.Count-1;
+                        fileListBox.ClearSelected();
+                        fileListBox.SelectedIndex = fileListBox.Items.Count - 1;
                     }
                 }
             }
@@ -427,6 +450,7 @@ namespace GarlicPress
                 fileListBox.SetSelected(i, true);
             //fileListBox.SelectionMode = SelectionMode.MultiExtended;
             fileListBox.EndUpdate();
+            fileListBox.Focus();
         }
 
         private void miUpdateAllArt_Click(object sender, EventArgs e)
@@ -453,5 +477,7 @@ namespace GarlicPress
                 gameArtUpdateForm.ShowDialog();
             }
         }
+
+
     }
 }

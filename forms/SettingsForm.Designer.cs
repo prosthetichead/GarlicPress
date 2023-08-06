@@ -48,9 +48,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.boolSystemTrayOnClose = new System.Windows.Forms.CheckBox();
             this.boolAutoBackup = new System.Windows.Forms.CheckBox();
-            this.boolAutoSkip = new System.Windows.Forms.CheckBox();
             this.btnCancel = new System.Windows.Forms.Button();
             this.boolRomsRootSecondSD = new System.Windows.Forms.CheckBox();
+            this.boolWarnBeforeDelete = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.GridMediaLayout)).BeginInit();
             this.SuspendLayout();
             // 
@@ -228,16 +228,6 @@
             this.boolAutoBackup.Text = "Auto Backup on Connect";
             this.boolAutoBackup.UseVisualStyleBackColor = true;
             // 
-            // boolAutoSkip
-            // 
-            this.boolAutoSkip.AutoSize = true;
-            this.boolAutoSkip.Location = new System.Drawing.Point(12, 153);
-            this.boolAutoSkip.Name = "boolAutoSkip";
-            this.boolAutoSkip.Size = new System.Drawing.Size(217, 19);
-            this.boolAutoSkip.TabIndex = 33;
-            this.boolAutoSkip.Text = "Skip Prompt When Game not Found";
-            this.boolAutoSkip.UseVisualStyleBackColor = true;
-            // 
             // btnCancel
             // 
             this.btnCancel.Location = new System.Drawing.Point(707, 407);
@@ -258,15 +248,25 @@
             this.boolRomsRootSecondSD.Text = "Rom System Folders on Root of SD Card 2";
             this.boolRomsRootSecondSD.UseVisualStyleBackColor = true;
             // 
+            // boolWarnBeforeDelete
+            // 
+            this.boolWarnBeforeDelete.AutoSize = true;
+            this.boolWarnBeforeDelete.Location = new System.Drawing.Point(343, 125);
+            this.boolWarnBeforeDelete.Name = "boolWarnBeforeDelete";
+            this.boolWarnBeforeDelete.Size = new System.Drawing.Size(149, 19);
+            this.boolWarnBeforeDelete.TabIndex = 36;
+            this.boolWarnBeforeDelete.Text = "Warning Before Deletes";
+            this.boolWarnBeforeDelete.UseVisualStyleBackColor = true;
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.ControlBox = false;
+            this.Controls.Add(this.boolWarnBeforeDelete);
             this.Controls.Add(this.boolRomsRootSecondSD);
             this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.boolAutoSkip);
             this.Controls.Add(this.boolSystemTrayOnClose);
             this.Controls.Add(this.boolAutoBackup);
             this.Controls.Add(this.label4);
@@ -312,8 +312,8 @@
         private Label label4;
         private CheckBox boolSystemTrayOnClose;
         private CheckBox boolAutoBackup;
-        private CheckBox boolAutoSkip;
         private Button btnCancel;
         private CheckBox boolRomsRootSecondSD;
+        private CheckBox boolWarnBeforeDelete;
     }
 }
