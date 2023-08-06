@@ -127,6 +127,7 @@
             this.fileListBox.Size = new System.Drawing.Size(343, 510);
             this.fileListBox.TabIndex = 5;
             this.fileListBox.SelectedIndexChanged += new System.EventHandler(this.fileListBox_SelectedIndexChanged);
+            this.fileListBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.fileListBox_KeyDown);
             // 
             // menuStrip
             // 
@@ -254,6 +255,7 @@
             // 
             // comboSystems
             // 
+            this.comboSystems.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboSystems.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboSystems.FormattingEnabled = true;
             this.comboSystems.Items.AddRange(new object[] {
@@ -284,6 +286,7 @@
             // 
             // comboDrive
             // 
+            this.comboDrive.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboDrive.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboDrive.FormattingEnabled = true;
             this.comboDrive.Items.AddRange(new object[] {

@@ -130,5 +130,17 @@ namespace GarlicPress.Properties {
                 this["romsOnRootSD2"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool warningBeforeDelete {
+            get {
+                return ((bool)(this["warningBeforeDelete"]));
+            }
+            set {
+                this["warningBeforeDelete"] = value;
+            }
+        }
     }
 }

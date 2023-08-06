@@ -43,7 +43,7 @@ namespace GarlicPress
             txtSaveBackupLocation.Text = Properties.Settings.Default.saveBackupPath;
             boolAutoBackup.Checked = Properties.Settings.Default.autoBackup;
             boolSystemTrayOnClose.Checked = Properties.Settings.Default.systemTrayOnClose;
-            boolAutoSkip.Checked = Properties.Settings.Default.ssSkipGameNotFound;
+            boolWarnBeforeDelete.Checked = Properties.Settings.Default.warningBeforeDelete;
             boolRomsRootSecondSD.Checked = Properties.Settings.Default.romsOnRootSD2;
 
 
@@ -73,8 +73,8 @@ namespace GarlicPress
             Properties.Settings.Default.saveBackupPath = txtSaveBackupLocation.Text;
             Properties.Settings.Default.autoBackup = boolAutoBackup.Checked;
             Properties.Settings.Default.systemTrayOnClose = boolSystemTrayOnClose.Checked;
-            Properties.Settings.Default.ssSkipGameNotFound = boolAutoSkip.Checked;
             Properties.Settings.Default.romsOnRootSD2 = boolRomsRootSecondSD.Checked;
+            Properties.Settings.Default.warningBeforeDelete = boolWarnBeforeDelete.Checked;
             Properties.Settings.Default.Save();
 
             GameMediaGeneration.MediaLayers = tempMediaLayout.ToList<MediaLayer>();
