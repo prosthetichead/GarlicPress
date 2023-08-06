@@ -5,23 +5,15 @@ GarlicPress is a companion application for the RG35xx running [GarlicOS](https:/
 
 ![Bulk Art Updating](https://github.com/prosthetichead/GarlicPress/assets/1934681/00c546b7-679e-4ce4-a974-154dd761e12b)
 
-
 ## Features
 * Easily view files stored in the Roms folders for each system and SD Card
 * Scrape game art from [screenscraper.fr](https://screenscraper.fr)
 * Edit game art layouts using layers
-* Copy to and Delete files from the Roms folders using drag and drop
+* Copy file to System Folders using drag and drop
+* Delete and Rename files
 * Edit the skin configuration and preview (not all features enabled yet)
 * Simple console for executing commands on the device
 * Backup save game files
-
-## Not Yet but Coming Soon Features
-* Copy files from the Rom Folders
-* Auto Backup when device is connected
-* Speed up backups (only backup changes)
-* Restore Saves
-* Rename Files
-* Full Skin configuration editing
 
 ## How to Setup GarlicPress 
 GarlicPress uses ADB to comunicate with the RG35xx and GarlicOS over usb. By default garlicOS disables ADB but it can be enabled very easily.
