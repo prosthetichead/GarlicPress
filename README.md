@@ -1,7 +1,8 @@
 # GarlicPress
 
 GarlicPress is a companion application for the RG35xx running [GarlicOS](https://www.patreon.com/posts/garlicos-for-76561333). The main aim of the application is to never require you to remove the SDCards from your device.
-![image](https://github.com/prosthetichead/GarlicPress/assets/1934681/eb52f28e-7d2f-4121-aa90-6227f9acee29)
+![image](https://github.com/prosthetichead/GarlicPress/assets/1934681/ffbb4831-1ea3-422a-abed-daaa2c980bf0)
+
 
 ## Features
 * Easily view files stored in the Roms folders for each system and SD Card
