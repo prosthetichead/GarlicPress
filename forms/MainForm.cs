@@ -394,6 +394,7 @@ namespace GarlicPress
             {
                 GameArtUpdateForm gameArtUpdateForm = new GameArtUpdateForm(searchItems);
                 gameArtUpdateForm.ShowDialog();
+                RefreshBrowserFiles();
             }
         }
 
