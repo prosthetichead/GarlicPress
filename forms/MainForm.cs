@@ -2,6 +2,7 @@ using AdvancedSharpAdbClient;
 using GarlicPress.forms;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Runtime.ExceptionServices;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -21,6 +22,7 @@ namespace GarlicPress
         GarlicDrive SelectedDrive { get { return (GarlicDrive)comboDrive.SelectedItem; } }
         GarlicSystem SelectedSystem { get { return (GarlicSystem)comboSystems.SelectedItem; } }
 
+        FileStatistics currentSelectedItem;
 
         public MainForm()
         {
@@ -147,8 +149,10 @@ namespace GarlicPress
         private void fileListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             var item = (FileStatistics)fileListBox.SelectedItem;
-            if (item != null)
+            
+            if (item != null && item != currentSelectedItem)
             {
+                currentSelectedItem = item;
                 txtFileName.Text = item.Path;
 
                 //get img file if one exists
@@ -300,22 +304,16 @@ namespace GarlicPress
             }
         }
 
-      
-
-        //private void btnUpdateImg_Click(object sender, EventArgs e)
-        //{
-
-        //    UpdateArt(false);
-        //}
-
         private void btnDelete_Click(object sender, EventArgs e)
         {
             if (fileListBox.SelectedItems.Count > 0)
             {
-
+                int firstIndex = fileListBox.Items.IndexOf(fileListBox.SelectedItems[0]);
                 var result = MessageBox.Show("Delete " + fileListBox.SelectedItems.Count + " Selected the files from the device?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+
                 if (result == DialogResult.Yes)
                 {
+                    
                     foreach (FileStatistics item in fileListBox.SelectedItems.Cast<FileStatistics>())
                     {
                         var fullPath = "\"" + currentSystemPath + "/" + item.Path + "\"";
@@ -324,10 +322,15 @@ namespace GarlicPress
                         GarlicADBConnection.DeleteFile(fullPath);
                         GarlicADBConnection.DeleteFile(fullImgPath);
                         txtCurrentTask.Text = item.Path + " Deleted ";
-                        Update();
-                        
+                        Refresh();
+
                     }
-                    RefreshBrowserFiles();
+                    RefreshBrowserFiles(firstIndex);
+                    if(firstIndex >= fileListBox.Items.Count)
+                    {
+                        fileListBox.ClearSelected();    
+                        fileListBox.SelectedIndex = fileListBox.Items.Count-1;
+                    }
                 }
             }
         }
@@ -410,9 +413,45 @@ namespace GarlicPress
                 GarlicADBConnection.RenameFile(fullPath, newFullPath);
                 GarlicADBConnection.RenameFile(fullImgPath, newFullImgPath);
                 txtCurrentTask.Text = item.Path + " Renamed to " + newFileName;
-                Update();                
+                Refresh();                
             }
             RefreshBrowserFiles(index);
+        }
+
+        private void btnSelectAll_Click(object sender, EventArgs e)
+        {
+            
+            fileListBox.BeginUpdate();
+            //fileListBox.SelectionMode = SelectionMode.MultiSimple;
+            for (int i = 0; i < fileListBox.Items.Count; i++)
+                fileListBox.SetSelected(i, true);
+            //fileListBox.SelectionMode = SelectionMode.MultiExtended;
+            fileListBox.EndUpdate();
+        }
+
+        private void miUpdateAllArt_Click(object sender, EventArgs e)
+        {
+            List<GarlicGameArtSearch> searchItems = new List<GarlicGameArtSearch>();
+
+            foreach (var drive in comboDrive.Items.Cast<GarlicDrive>())
+            {
+                foreach (var system in comboSystems.Items.Cast<GarlicSystem>())
+                {
+                    //get items from the drive system combo
+                    var list = GarlicADBConnection.GetDirectoryListing(drive.romPath + "/" + system.folder);
+                    var files = list.Where(w => w.Path != "." && w.Path != ".." && w.Path != "Imgs").OrderBy(o => o.Path).ToList();
+                    foreach(var item in files)
+                    {
+                        GarlicGameArtSearch ggas = new GarlicGameArtSearch(system, drive, SearchType.GameName, item.Path);
+                        searchItems.Add(ggas);
+                    }
+                }
+            }
+            if (searchItems.Count > 0)
+            {
+                GameArtUpdateForm gameArtUpdateForm = new GameArtUpdateForm(searchItems);
+                gameArtUpdateForm.ShowDialog();
+            }
         }
     }
 }

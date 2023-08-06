@@ -58,7 +58,7 @@
             this.picGame = new System.Windows.Forms.PictureBox();
             this.btnUpdateSelectedArt = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnSelectAll = new System.Windows.Forms.Button();
             this.txtFileName = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.btnRename = new System.Windows.Forms.Button();
@@ -206,6 +206,7 @@
             this.miUpdateAllArt.Name = "miUpdateAllArt";
             this.miUpdateAllArt.Size = new System.Drawing.Size(194, 22);
             this.miUpdateAllArt.Text = "Update All Systems Art";
+            this.miUpdateAllArt.Click += new System.EventHandler(this.miUpdateAllArt_Click);
             // 
             // aboutToolStripMenuItem
             // 
@@ -330,15 +331,16 @@
             this.btnDelete.UseVisualStyleBackColor = false;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
-            // button1
+            // btnSelectAll
             // 
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Location = new System.Drawing.Point(361, 556);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(82, 26);
-            this.button1.TabIndex = 18;
-            this.button1.Text = "Sellect All";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnSelectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSelectAll.Location = new System.Drawing.Point(361, 556);
+            this.btnSelectAll.Name = "btnSelectAll";
+            this.btnSelectAll.Size = new System.Drawing.Size(82, 26);
+            this.btnSelectAll.TabIndex = 18;
+            this.btnSelectAll.Text = "Select All";
+            this.btnSelectAll.UseVisualStyleBackColor = true;
+            this.btnSelectAll.Click += new System.EventHandler(this.btnSelectAll_Click);
             // 
             // txtFileName
             // 
@@ -379,7 +381,7 @@
             this.Controls.Add(this.btnRename);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txtFileName);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnSelectAll);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnUpdateSelectedArt);
             this.Controls.Add(this.picGame);
@@ -445,7 +447,7 @@
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripMenuItem miUpdateAllArt;
         private ToolStripMenuItem miBackupSaves;
-        private Button button1;
+        private Button btnSelectAll;
         private TextBox txtFileName;
         private Label label3;
         private Button btnRename;

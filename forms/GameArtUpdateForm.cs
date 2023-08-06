@@ -131,7 +131,7 @@ namespace GarlicPress.forms
                                 Progress<int> progress = new Progress<int>( p => { log(".."+p.ToString()+"%", Color.Orange, false); });
                                 await GarlicADBConnection.UploadFileAsync("assets/tempimg.png", item.imgPath, progress, CancellationToken.None);
                                 log("");
-                                item.status = "Complete";
+                                item.status = "Complete";                                
                             }
                             else if(bitmap == null)
                             {
@@ -158,6 +158,7 @@ namespace GarlicPress.forms
                 }
                 //finished
                 StopArtUpdate();
+                Refresh();
             }
         }
 
@@ -184,6 +185,14 @@ namespace GarlicPress.forms
             foreach(var row in rowsToRemove)
             {
                 searchItems.Remove(row);
+            }
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            if (!ArtUpdateRunning)
+            {
+                Close();
             }
         }
     }

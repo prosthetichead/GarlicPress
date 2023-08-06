@@ -220,26 +220,27 @@ namespace GarlicPress
                 return null; 
         }
 
-        public static bool DeleteFile(string path)
+        public static string DeleteFile(string path)
         {
             if (deviceConnected)
             {
                 ConsoleOutputReceiver receiver = new ConsoleOutputReceiver();
-                client.ExecuteRemoteCommand($"rm {path}" , device, receiver);
-                return true;
+                client.ExecuteRemoteCommand($"rm -r {path}" , device, receiver);
+
+                return receiver.ToString().Trim();
             }
-            return false;
+            return "device not connected";
         }
 
-        public static bool RenameFile(string path, string newPath)
+        public static string RenameFile(string path, string newPath)
         {
             if (deviceConnected)
             {
                 ConsoleOutputReceiver receiver = new ConsoleOutputReceiver();
                 client.ExecuteRemoteCommand($"mv {path} {newPath}", device, receiver);
-                return true;
+                return receiver.ToString().Trim();
             }
-            return false;
+            return "device not connected";
         }
     }
 }
