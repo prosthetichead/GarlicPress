@@ -262,8 +262,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.ControlBox = false;
             this.Controls.Add(this.boolWarnBeforeDelete);
             this.Controls.Add(this.boolRomsRootSecondSD);
             this.Controls.Add(this.btnCancel);
