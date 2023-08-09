@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -27,7 +28,11 @@ namespace GarlicPress
             txtColorActive.Text = skinSettings.coloractive;
             txtColorGuide.Text = skinSettings.colorguide;
             txtColorInactive.Text = skinSettings.colorinactive;
+            txtColourFavActive.Text = skinSettings.colorfavoriteactive;
             txtMargin.Text = skinSettings.textmargin.ToString();
+
+            boolMainMenuTextVisibility.Checked = skinSettings.mainmenutextvisibility;
+            boolGuideButtonTextVisibility.Checked = skinSettings.guidebuttontextvisibility;
         }
 
         private void GetColor(TextBox txtBox)
@@ -49,6 +54,10 @@ namespace GarlicPress
             skinSettings.coloractive = txtColorActive.Text;
             skinSettings.colorguide = txtColorGuide.Text;
             skinSettings.colorinactive = txtColorInactive.Text;
+            skinSettings.colorfavoriteactive = txtColourFavActive.Text;
+
+            skinSettings.guidebuttontextvisibility = boolGuideButtonTextVisibility.Checked;
+            skinSettings.mainmenutextvisibility = boolMainMenuTextVisibility.Checked;
             int intTextMargin = 0;
             int.TryParse(txtMargin.Text, out intTextMargin);
             skinSettings.textmargin = intTextMargin;
@@ -79,10 +88,68 @@ namespace GarlicPress
         {
             GetColor(txtColorInactive);
         }
+        private void btnColourFavActive_Click(object sender, EventArgs e)
+        {
+            GetColor(txtColourFavActive);
+        }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
             Close();
         }
+
+        private async void btnLoadBootScreen_Click(object sender, EventArgs e)
+        {
+            await DownloadBootScreenPreview();
+        }
+
+
+        private async Task DownloadBootScreenPreview()
+        {
+            Directory.CreateDirectory("assets/skin/misc");
+            GarlicADBConnection.DownloadFile("/misc/boot_logo.bmp.gz", "assets/skin/misc/boot_logo.bmp.gz");
+
+            GzipDecompress(new FileInfo("assets/skin/misc/boot_logo.bmp.gz"));
+
+            Bitmap bootScreen = (Bitmap)Image.FromFile(@"assets/skin/misc/boot_logo.bmp");
+            
+            picBootScreen.Image = bootScreen;
+        }
+
+        public static void GzipDecompress(FileInfo fileToDecompress)
+        {
+            using (FileStream originalFileStream = fileToDecompress.OpenRead())
+            {
+                string currentFileName = fileToDecompress.FullName;
+                string newFileName = currentFileName.Remove(currentFileName.Length - fileToDecompress.Extension.Length);
+
+                using (FileStream decompressedFileStream = File.Create(newFileName))
+                {
+                    using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
+                    {
+                        decompressionStream.CopyTo(decompressedFileStream);
+                    }
+                }
+            }
+        }
+
+        private void btnUploadBootScreen_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "boot logo|boot_logo.bmp.gz";
+            openFileDialog.Multiselect = false;
+            openFileDialog.CheckFileExists = true;
+            DialogResult result = openFileDialog.ShowDialog();
+            if(result == DialogResult.OK)
+            {
+                string fileName = openFileDialog.FileName;
+
+                GarlicADBConnection.ExecuteCommand("mount -o remount,rw /misc");
+                GarlicADBConnection.UploadFile(fileName, "/misc/boot_logo.bmp.gz");
+                GarlicADBConnection.ExecuteCommand("mount -o remount,ro /misc");
+            }
+        }
+
+
     }
 }

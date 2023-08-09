@@ -130,8 +130,9 @@ namespace GarlicPress
                             service.Push(stream, writePath, 777, new DateTimeOffset(DateTime.Now), progress, CancellationToken.None);
                             return true;
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
+                            ex.ToString();
                             return false;
                         }
                     }
@@ -230,6 +231,11 @@ namespace GarlicPress
                 return receiver.ToString().Trim();
             }
             return "device not connected";
+        }        
+
+        public static void SetBacklight(int bightness)
+        {
+            ExecuteCommand("echo " + bightness + " > /sys/devices/backlight.2/backlight/backlight.2/brightness");
         }
 
         public static string RenameFile(string path, string newPath)
@@ -238,7 +244,11 @@ namespace GarlicPress
             {
                 ConsoleOutputReceiver receiver = new ConsoleOutputReceiver();
                 client.ExecuteRemoteCommand($"mv {path} {newPath}", device, receiver);
+               
+
                 return receiver.ToString().Trim();
+
+
             }
             return "device not connected";
         }

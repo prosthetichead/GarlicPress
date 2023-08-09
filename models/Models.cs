@@ -146,20 +146,13 @@ namespace GarlicPress
 
     public class GarlicSkinSettings
     {
-        [JsonPropertyName("text-alignment")] public string textalignment { get; set; }
-        
-        [JsonPropertyName("text-margin")] public int textmargin { get; set; }
-        
-        [JsonPropertyName("color-guide")] public string colorguide { get; set; }
-        
+        [JsonPropertyName("text-alignment")] public string textalignment { get; set; }        
+        [JsonPropertyName("text-margin")] public int textmargin { get; set; }        
+        [JsonPropertyName("color-guide")] public string colorguide { get; set; }        
         [JsonPropertyName("color-inactive")] public string colorinactive { get; set; }
-        
-        [JsonPropertyName("color-active")] public string coloractive { get; set; }
-        
-        [JsonPropertyName("color-favorite-inactive")] public string colorfavoriteinactive { get; set; }
-        
+        [JsonPropertyName("color-active")] public string coloractive { get; set; }        
+        [JsonPropertyName("color-favorite-inactive")] public string colorfavoriteinactive { get; set; }        
         [JsonPropertyName("color-favorite-active")] public string colorfavoriteactive { get; set; }
-
         [JsonPropertyName("main-menu-text-visibility")] public bool mainmenutextvisibility { get; set; }
         [JsonPropertyName("guide-button-text-visibility")] public bool guidebuttontextvisibility { get; set; }
         [JsonPropertyName("recent-label")] public string recentlabel { get; set; }
