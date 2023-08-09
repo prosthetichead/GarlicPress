@@ -409,7 +409,7 @@ namespace GarlicPress
 
                     var backupPath = Path.Combine(backupDir, "SD" + drive.number);
                     Directory.CreateDirectory(backupPath);
-                    var readPath = SelectedDrive.path + "/Saves";
+                    var readPath = drive.path + "/Saves";
 
                     txtCurrentTask.Text = "Backing up Saves on SD Card " + drive.number + " to " + backupPath;
 
