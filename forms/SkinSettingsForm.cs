@@ -15,14 +15,15 @@ namespace GarlicPress
 {
     public partial class SkinSettingsForm : Form
     {
-
         GarlicSkinSettings skinSettings;
 
-        public SkinSettingsForm(GarlicSkinSettings skinSettings)
+        public SkinSettingsForm()
         {
             InitializeComponent();
 
-            this.skinSettings = skinSettings;
+            //Get skin settings
+            skinSettings = GarlicADBConnection.skinSettings;
+            Task.Run( ()=> DownloadBootScreenPreview() );
 
             comboTextAlignment.SelectedItem = skinSettings.textalignment;
             txtColorActive.Text = skinSettings.coloractive;
@@ -33,6 +34,30 @@ namespace GarlicPress
 
             boolMainMenuTextVisibility.Checked = skinSettings.mainmenutextvisibility;
             boolGuideButtonTextVisibility.Checked = skinSettings.guidebuttontextvisibility;
+
+            txtRecentLabel.Text = skinSettings.recentlabel;
+            txtFavoritesLabel.Text = skinSettings.favoriteslabel;
+            txtConsolesLabel.Text = skinSettings.consoleslabel;
+            txtRetroarchLabel.Text = skinSettings.retroarchlabel;
+            txtRtcLabel.Text = skinSettings.rtclabel;
+            txtNavigateLabel.Text = skinSettings.navigatelabel;
+            txtOpenLabel.Text = skinSettings.openlabel;
+            txtBackLabel.Text = skinSettings.backlabel;
+            txtFavoriteLabel.Text = skinSettings.favoritelabel;
+            txtRemoveLabel.Text = skinSettings.removelabel;
+            txtEmptyLabel.Text = skinSettings.emptylabel;
+            txtSaveStatesUnsupported.Text = skinSettings.savestatesunsupported;
+            txtOnLabel.Text = skinSettings.onlabel;
+            txtOffLabel.Text = skinSettings.offlabel;
+            txtAmLabel.Text = skinSettings.amlabel;
+            txtPmLabel.Text = skinSettings.pmlabel;
+            txtYearLabel.Text = skinSettings.yearlabel;
+            txtMonthLabel.Text = skinSettings.monthlabel;
+            txtDayLabel.Text = skinSettings.daylabel;
+            txtHourLabel.Text = skinSettings.hourlabel;
+            txtMinuteLabel.Text = skinSettings.minutelabel;
+            txtMeridianTimeLabel.Text = skinSettings.meridiantimelabel;
+            txtTitleLabel.Text = skinSettings.titlelabel;
         }
 
         private void GetColor(TextBox txtBox)
@@ -58,6 +83,31 @@ namespace GarlicPress
 
             skinSettings.guidebuttontextvisibility = boolGuideButtonTextVisibility.Checked;
             skinSettings.mainmenutextvisibility = boolMainMenuTextVisibility.Checked;
+
+            skinSettings.recentlabel = txtRecentLabel.Text;
+            skinSettings.favoriteslabel = txtFavoritesLabel.Text;
+            skinSettings.consoleslabel = txtConsolesLabel.Text;
+            skinSettings.retroarchlabel = txtRetroarchLabel.Text;
+            skinSettings.rtclabel = txtRtcLabel.Text;
+            skinSettings.navigatelabel = txtNavigateLabel.Text;
+            skinSettings.openlabel = txtOpenLabel.Text;
+            skinSettings.backlabel = txtBackLabel.Text;
+            skinSettings.favoritelabel = txtFavoriteLabel.Text;
+            skinSettings.removelabel = txtRemoveLabel.Text;
+            skinSettings.emptylabel = txtEmptyLabel.Text;
+            skinSettings.savestatesunsupported = txtSaveStatesUnsupported.Text;
+            skinSettings.onlabel = txtOnLabel.Text;
+            skinSettings.offlabel = txtOffLabel.Text;
+            skinSettings.amlabel = txtAmLabel.Text;
+            skinSettings.pmlabel = txtPmLabel.Text;
+            skinSettings.yearlabel = txtYearLabel.Text;
+            skinSettings.monthlabel = txtMonthLabel.Text;
+            skinSettings.daylabel = txtDayLabel.Text;
+            skinSettings.hourlabel = txtHourLabel.Text;
+            skinSettings.minutelabel = txtMinuteLabel.Text;
+            skinSettings.meridiantimelabel = txtMeridianTimeLabel.Text;
+            skinSettings.titlelabel = txtTitleLabel.Text;
+
             int intTextMargin = 0;
             int.TryParse(txtMargin.Text, out intTextMargin);
             skinSettings.textmargin = intTextMargin;
@@ -67,8 +117,8 @@ namespace GarlicPress
                 WriteIndented = true,                
             };
             string json = JsonSerializer.Serialize(skinSettings, options);
-            File.WriteAllText("assets/skinSettings.json", json);
-            GarlicADBConnection.UploadFile("assets/skinSettings.json", "/mnt/mmc/CFW/skin/settings.json");
+            File.WriteAllText("assets/skin/settings.json", json);
+            GarlicADBConnection.UploadFile("assets/skin/settings.json", "/mnt/mmc/CFW/skin/settings.json");
             GarlicADBConnection.client.Reboot(GarlicADBConnection.device);
 
             Close();
@@ -98,22 +148,18 @@ namespace GarlicPress
             Close();
         }
 
-        private async void btnLoadBootScreen_Click(object sender, EventArgs e)
-        {
-            await DownloadBootScreenPreview();
-        }
-
-
         private async Task DownloadBootScreenPreview()
         {
-            Directory.CreateDirectory("assets/skin/misc");
-            GarlicADBConnection.DownloadFile("/misc/boot_logo.bmp.gz", "assets/skin/misc/boot_logo.bmp.gz");
+            Directory.CreateDirectory("assets/bootScreen");
+            GarlicADBConnection.DownloadFile("/misc/boot_logo.bmp.gz", "assets/bootScreen/boot_logo.bmp.gz");
 
-            GzipDecompress(new FileInfo("assets/skin/misc/boot_logo.bmp.gz"));
+            GzipDecompress(new FileInfo("assets/bootScreen/boot_logo.bmp.gz"));
 
-            Bitmap bootScreen = (Bitmap)Image.FromFile(@"assets/skin/misc/boot_logo.bmp");
-            
-            picBootScreen.Image = bootScreen;
+            using (FileStream fs = new FileStream("assets/bootScreen/boot_logo.bmp", FileMode.Open))
+            {
+                picBootScreen.Image = Image.FromStream(fs);
+                fs.Close();
+            }
         }
 
         public static void GzipDecompress(FileInfo fileToDecompress)
@@ -147,9 +193,9 @@ namespace GarlicPress
                 GarlicADBConnection.ExecuteCommand("mount -o remount,rw /misc");
                 GarlicADBConnection.UploadFile(fileName, "/misc/boot_logo.bmp.gz");
                 GarlicADBConnection.ExecuteCommand("mount -o remount,ro /misc");
+
+                DownloadBootScreenPreview();
             }
         }
-
-
     }
 }

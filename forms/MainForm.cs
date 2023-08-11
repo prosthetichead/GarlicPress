@@ -95,11 +95,7 @@ namespace GarlicPress
                     notifyIcon.Icon = Properties.Resources.garlicConnect;
                     this.Icon = Properties.Resources.garlicConnect;
                     notifyIcon.Text = "GarlicPress : RG35xx Connected";
-                    
-                    //get skin files
-                    GarlicADBConnection.DownloadFile("/mnt/mmc/CFW/skin/background.png", "assets/background.png");
-                    GarlicADBConnection.DownloadFile("/mnt/mmc/CFW/skin/settings.json", "assets/skinSettings.json"); //cat /mnt/mmc/cfw/skin/settings.json
-
+                                        
                     GarlicADBConnection.ReadSkinSettings();
 
                     //LETS GO We are Connected
@@ -296,7 +292,7 @@ namespace GarlicPress
             {
                 if (GarlicADBConnection.deviceConnected)
                 {
-                    SkinSettingsForm skinSettingsForm = new SkinSettingsForm(GarlicADBConnection.skinSettings);
+                    SkinSettingsForm skinSettingsForm = new SkinSettingsForm();
                     skinSettingsForm.ShowDialog();
                 }
                 else

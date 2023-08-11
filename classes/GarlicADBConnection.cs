@@ -25,10 +25,16 @@ namespace GarlicPress
         public static void ReadSkinSettings()
         {
             //read skin file get text position
-            string json = File.ReadAllText(@"assets/skinSettings.json");
+            string skinSettingsJson = ReadTextFile("/mnt/mmc/CFW/skin/settings.json");
+
+            //DownloadFile("/mnt/mmc/CFW/skin/background.png", "assets/background.png");
+            DownloadDirectory("/mnt/mmc/CFW/skin", "assets/skin");
+            DownloadDirectory("/mnt/mmc/CFW/lang", "assets/lang");
+
+
             try
             {
-                skinSettings = JsonSerializer.Deserialize<GarlicSkinSettings>(json);
+                skinSettings = JsonSerializer.Deserialize<GarlicSkinSettings>(skinSettingsJson);
                 validSkinSettings = true;
             }
             catch (Exception ex)
@@ -37,16 +43,6 @@ namespace GarlicPress
                 validSkinSettings = false;
                 MessageBox.Show("CFW/skin/settings.json skin settings can not be loaded. \n\n Preview will not display text position \n skin settings tool will not function. \n\n Please report the skin you are using to issues link in About \n\n Error Text : \n " + ex.Message, "Error Reading Skin Settings Json on Device", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        public static string GetImgPath(GarlicDrive drive, GarlicSystem system)
-        {
-            return GetSystemPath(drive, system) + "/Imgs";
-        }
-
-        public static string GetSystemPath(GarlicDrive drive, GarlicSystem system)
-        {
-            return drive.romPath + "/" + system.folder;
         }
 
         public static bool ConnectToDevice()
@@ -80,6 +76,11 @@ namespace GarlicPress
             {
                 return false;
             }
+        }
+
+        public static string ReadTextFile(string readPath)
+        {
+            return ExecuteCommand($"cat {readPath}");
         }
 
         public static List<FileStatistics> GetDirectoryListing(string path)
@@ -171,11 +172,14 @@ namespace GarlicPress
 
         public static bool DownloadDirectory(string readPath, string writePath)
         {
+            
+            Directory.CreateDirectory(writePath);
+
             //check if readpath is a Directory
             var pathType = DevicePathType(readPath);
             if (pathType == "dir")
             {
-                
+                                
                 //list the directory and start writing files to the writePath
                 using (SyncService service = new SyncService(new AdbSocket(client.EndPoint), device))
                 {
@@ -196,7 +200,6 @@ namespace GarlicPress
                     }
                 }
             }
-
             return false;
         }
 
