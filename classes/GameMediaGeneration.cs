@@ -68,7 +68,7 @@ namespace GarlicPress
 
         public static Bitmap OverlayImageWithSkinBackground(Bitmap imageToOverlay)
         {
-            var baseImage = (Bitmap)Image.FromFile(@"assets/background.png");
+            var baseImage = (Bitmap)Image.FromFile(@"assets/skin/background.png");
             var overlayImage = imageToOverlay;
             var textImage = (Bitmap)Image.FromFile(@"assets/SampleTextCenter.png");
             int txtMargin = 0;
