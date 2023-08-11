@@ -19,7 +19,11 @@ namespace GarlicPress
         //        return path;
         //    } 
         //}
-        string currentSystemPath { get { return SelectedDrive.romPath + "/" + SelectedSystem.folder; } }
+        //string currentSystemPath { get { return SelectedDrive.romPath + "/" + SelectedSystem.folder; } }
+
+        string SelectedImgPath { get { return SelectedDrive.path + "/Roms/" + SelectedSystem.folder + "/Imgs/"; } }
+        string SelectedRomPath { get { return SelectedDrive.romPath + "/" + SelectedSystem.folder; } }
+
         GarlicDrive SelectedDrive { get { return (GarlicDrive)comboDrive.SelectedItem; } }
         GarlicSystem SelectedSystem { get { return (GarlicSystem)comboSystems.SelectedItem; } }
 
@@ -135,7 +139,7 @@ namespace GarlicPress
         {
             if (GarlicADBConnection.deviceConnected)
             {
-                var list = GarlicADBConnection.GetDirectoryListing(currentSystemPath);
+                var list = GarlicADBConnection.GetDirectoryListing(SelectedRomPath);
                 var files = list.Where(w => w.Path != "." && w.Path != ".." && w.Path != "Imgs").OrderBy(o => o.Path).ToList();
                 fileListBox.ClearSelected();
                 fileListBox.DataSource = files;
@@ -158,7 +162,7 @@ namespace GarlicPress
 
                 //get img file if one exists
                 string imgFile = Path.ChangeExtension(item.Path, ".png");
-                if (GarlicADBConnection.DownloadFile(currentSystemPath + "/Imgs/" + imgFile, "assets/tempimg.png"))
+                if (GarlicADBConnection.DownloadFile( SelectedImgPath + imgFile, "assets/tempimg.png"))
                 {
                     Bitmap overlayImage = (Bitmap)Image.FromFile(@"assets/tempimg.png");
                     picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage);
@@ -279,7 +283,7 @@ namespace GarlicPress
                 if(attr != FileAttributes.Directory)
                 {
                     txtCurrentTask.Text = "uploading " + file + " for system " + system.name + " to SD " + comboDrive.SelectedIndex + 1;
-                    GarlicADBConnection.UploadFile(file, currentSystemPath + "/" + Path.GetFileName(file));
+                    GarlicADBConnection.UploadFile(file, SelectedRomPath + "/" + Path.GetFileName(file));
                 }
                 else
                 {
@@ -339,9 +343,9 @@ namespace GarlicPress
                 {
                     foreach (FileStatistics item in fileListBox.SelectedItems.Cast<FileStatistics>())
                     {
-                        var fullPath = "\"" + currentSystemPath + "/" + item.Path + "\"";
+                        var fullPath = "\"" + SelectedRomPath + "/" + item.Path + "\"";
                         string imgFile = Path.ChangeExtension(item.Path, ".png");
-                        var fullImgPath = "\"" + currentSystemPath + "/Imgs/" + imgFile + "\"";
+                        var fullImgPath = "\"" + SelectedImgPath + imgFile + "\"";
                         GarlicADBConnection.DeleteFile(fullPath);
                         GarlicADBConnection.DeleteFile(fullImgPath);
                         txtCurrentTask.Text = item.Path + " Deleted ";
@@ -428,12 +432,12 @@ namespace GarlicPress
             Regex regFixFileName = new Regex("[" + Regex.Escape(invalidChars) + "]");
             if (!regFixFileName.IsMatch(newFileName) && item != null)
             {                
-                var fullPath = "\"" + currentSystemPath + "/" + item.Path + "\"";
-                var newFullPath = "\"" + currentSystemPath + "/" + newFileName + "\"";
+                var fullPath = "\"" + SelectedRomPath + "/" + item.Path + "\"";
+                var newFullPath = "\"" + SelectedRomPath + "/" + newFileName + "\"";
                 string imgFile = Path.ChangeExtension(item.Path, ".png");
                 string newImgFile = Path.ChangeExtension(newFileName, ".png");
-                var fullImgPath = "\"" + currentSystemPath + "/Imgs/" + imgFile + "\"";
-                var newFullImgPath = "\"" + currentSystemPath + "/Imgs/" + newImgFile + "\"";
+                var fullImgPath = "\"" + SelectedImgPath + imgFile + "\"";
+                var newFullImgPath = "\"" + SelectedImgPath + newImgFile + "\"";
                 GarlicADBConnection.RenameFile(fullPath, newFullPath);
                 GarlicADBConnection.RenameFile(fullImgPath, newFullImgPath);
                 txtCurrentTask.Text = item.Path + " Renamed to " + newFileName;

@@ -22,7 +22,7 @@ namespace GarlicPress
         public string systemName { get { return system.name; } }
         public string driveName { get { return drive.name; } }
         public string filePath { get { return drive.romPath + "/" + system.folder + "/" + fileName; } }
-        public string imgPath { get { return drive.romPath + "/" + system.folder + "/Imgs/" + Path.ChangeExtension(fileName, ".png"); } }
+        public string imgPath { get { return drive.path + "/Roms/" + system.folder + "/Imgs/" + Path.ChangeExtension(fileName, ".png"); } }
 
         public GarlicGameArtSearch(GarlicSystem system, GarlicDrive drive, SearchType searchType, string fileName)
         {
