@@ -8,7 +8,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <StartupObject>GarlicPress.Program</StartupObject>
     <AssemblyVersion>0.0.2308.121</AssemblyVersion>
-    <FileVersion>0.0.2308.071</FileVersion>
+    <FileVersion>0.0.2308.121</FileVersion>
     <Version></Version>
   </PropertyGroup>
 
