@@ -162,18 +162,20 @@ namespace GarlicPress
 
                 //get img file if one exists
                 string imgFile = Path.ChangeExtension(item.Path, ".png");
-                if (GarlicADBConnection.DownloadFile( SelectedImgPath + imgFile, "assets/tempimg.png"))
+                if ( GarlicADBConnection.DownloadFile( SelectedImgPath + imgFile, "assets/temp/gameart-down.png") )
                 {
-                    Bitmap overlayImage = (Bitmap)Image.FromFile(@"assets/tempimg.png");
+                    Bitmap overlayImage = (Bitmap)Image.FromFile(@"assets/temp/gameart-down.png");
                     picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage);
                     overlayImage.Dispose();
-                    //picGame.ImageLocation = "tempimg.png";
                     picGame.Refresh();
                 }
                 else
                 {
-                    picGame.ImageLocation = "background.png";
+                    Bitmap overlayImage = (Bitmap)Image.FromFile(@"assets/skin/background.png");
+                    picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage);
+                    overlayImage.Dispose();                   
                 }
+                picGame.Refresh();
             }
         }
 

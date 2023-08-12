@@ -137,7 +137,6 @@ namespace GarlicPress
                     File.Delete(filename); //clean up the old temp image
                 }
             }
-            //finalImage.Save("assets/tempimg.png", ImageFormat.Png);
             return finalImage;
         }
     }
