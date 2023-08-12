@@ -147,24 +147,24 @@ namespace GarlicPress
             Progress<int> progress = new Progress<int>();
             if (deviceConnected)
             {
-                using (SyncService service = new SyncService(new AdbSocket(client.EndPoint), device))
+                try
                 {
-                    if (File.Exists(writePath))
-                    {
-                        File.Delete(writePath); //we need to kill the old file before we download the new one
-                    }
-                    using (Stream stream = File.OpenWrite(writePath))
-                    {
-                        try
+
+                    new FileInfo(writePath).Directory?.Create();
+
+                    using (SyncService service = new SyncService(new AdbSocket(client.EndPoint), device))
+                    {                    
+                        using (Stream stream = File.Create(writePath))
                         {               
                             service.Pull(readPath, stream, progress, CancellationToken.None);
                             return true;
                         }
-                        catch (Exception ex)
-                        {
-                            return false;
-                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    //MessageBox.Show($"Error Downloading File {readPath} to {writePath} \n " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
                 }
             }
             return false;
@@ -177,6 +177,7 @@ namespace GarlicPress
 
             //check if readpath is a Directory
             var pathType = DevicePathType(readPath);
+
             if (pathType == "dir")
             {
                                 
