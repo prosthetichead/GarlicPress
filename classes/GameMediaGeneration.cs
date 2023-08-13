@@ -100,7 +100,6 @@ namespace GarlicPress
             baseImage.Dispose();
             textImage.Dispose();
 
-            //show in a winform picturebox
             return finalImage;
         }
 

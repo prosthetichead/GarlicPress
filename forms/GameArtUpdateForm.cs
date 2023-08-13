@@ -90,6 +90,7 @@ namespace GarlicPress.forms
             txtLog.AppendText(message + "\n");
             Refresh();
         }
+
         private void log(string message, Color color, bool newline = true)
         {
             txtLog.HideSelection = false;
