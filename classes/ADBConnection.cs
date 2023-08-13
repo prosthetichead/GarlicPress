@@ -244,7 +244,7 @@ namespace GarlicPress
             if (deviceConnected)
             {
                 ConsoleOutputReceiver receiver = new ConsoleOutputReceiver();
-                client.ExecuteRemoteCommand($"rm -r {path}" , device, receiver);
+                client.ExecuteRemoteCommand($"rm -r \"{path}\" " , device, receiver);
 
                 return receiver.ToString().Trim();
             }

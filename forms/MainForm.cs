@@ -277,20 +277,21 @@ namespace GarlicPress
 
         private void miSkinSettings_Click(object sender, EventArgs e)
         {
-            if (GarlicSkin.validSkinSettings)
+            if (ADBConnection.deviceConnected)
             {
-                if (ADBConnection.deviceConnected)
+                if (GarlicSkin.validSkinSettings)
                 {
+
                     SkinSettingsForm skinSettingsForm = new SkinSettingsForm();
                     skinSettingsForm.ShowDialog();
                 }
                 else
-                    MessageBox.Show("No Device Connected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                {
+                    MessageBox.Show("Skin Settings load was invalid can not open skin settings", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             else
-            {
-                MessageBox.Show("Skin Settings load was invalid can not open skin settings", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+                MessageBox.Show("No Device Connected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void fileListBox_KeyDown(object sender, KeyEventArgs e)
@@ -443,26 +444,29 @@ namespace GarlicPress
 
         private void miUpdateAllArt_Click(object sender, EventArgs e)
         {
-            List<GarlicGameArtSearch> searchItems = new List<GarlicGameArtSearch>();
-
-            foreach (var drive in comboDrive.Items.Cast<GarlicDrive>())
+            if (ADBConnection.deviceConnected)
             {
-                foreach (var system in comboSystems.Items.Cast<GarlicSystem>())
+                List<GarlicGameArtSearch> searchItems = new List<GarlicGameArtSearch>();
+
+                foreach (var drive in comboDrive.Items.Cast<GarlicDrive>())
                 {
-                    //get items from the drive system combo
-                    var list = ADBConnection.GetDirectoryListing(drive.romPath + "/" + system.folder);
-                    var files = list.Where(w => w.Path != "." && w.Path != ".." && w.Path != "Imgs").OrderBy(o => o.Path).ToList();
-                    foreach (var item in files)
+                    foreach (var system in comboSystems.Items.Cast<GarlicSystem>())
                     {
-                        GarlicGameArtSearch ggas = new GarlicGameArtSearch(system, drive, SearchType.GameName, item.Path);
-                        searchItems.Add(ggas);
+                        //get items from the drive system combo
+                        var list = ADBConnection.GetDirectoryListing(drive.romPath + "/" + system.folder);
+                        var files = list.Where(w => w.Path != "." && w.Path != ".." && w.Path != "Imgs").OrderBy(o => o.Path).ToList();
+                        foreach (var item in files)
+                        {
+                            GarlicGameArtSearch ggas = new GarlicGameArtSearch(system, drive, SearchType.GameName, item.Path);
+                            searchItems.Add(ggas);
+                        }
                     }
                 }
-            }
-            if (searchItems.Count > 0)
-            {
-                GameArtUpdateForm gameArtUpdateForm = new GameArtUpdateForm(searchItems);
-                gameArtUpdateForm.ShowDialog();
+                if (searchItems.Count > 0)
+                {
+                    GameArtUpdateForm gameArtUpdateForm = new GameArtUpdateForm(searchItems);
+                    gameArtUpdateForm.ShowDialog();
+                }
             }
         }
 

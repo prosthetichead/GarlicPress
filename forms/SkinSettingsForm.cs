@@ -16,6 +16,7 @@ namespace GarlicPress
     public partial class SkinSettingsForm : Form
     {
         GarlicSkinSettings skinSettings;
+        BindingList<KeyValuePair<string, GarlicLanguageSettings>> languageSettingsList;
 
         public SkinSettingsForm()
         {
@@ -23,7 +24,16 @@ namespace GarlicPress
 
             //Get skin settings
             skinSettings = GarlicSkin.skinSettings;
-            Task.Run( ()=> DownloadBootScreenPreview() );
+            languageSettingsList = new BindingList<KeyValuePair<string, GarlicLanguageSettings>>();
+            foreach (var lang in GarlicSkin.languageSettingsDictonary)
+            {
+                languageSettingsList.Add(lang);
+            }
+            cbLangSettings.ValueMember = "Value";
+            cbLangSettings.DisplayMember = "Key";
+            cbLangSettings.DataSource = languageSettingsList;
+
+            DownloadBootScreenPreview();
 
             comboTextAlignment.SelectedItem = skinSettings.textalignment;
             txtColorActive.Text = skinSettings.coloractive;
@@ -65,7 +75,7 @@ namespace GarlicPress
             ColorDialog cd = new ColorDialog();
             cd.Color = ColorTranslator.FromHtml(txtBox.Text);
             cd.AnyColor = true;
-            cd.FullOpen = true;            
+            cd.FullOpen = true;
             var result = cd.ShowDialog();
             if (result == DialogResult.OK)
             {
@@ -110,14 +120,14 @@ namespace GarlicPress
 
             int intTextMargin = 0;
             int.TryParse(txtMargin.Text, out intTextMargin);
-            skinSettings.textmargin = intTextMargin;   
-            
+            skinSettings.textmargin = intTextMargin;
+
             GarlicSkin.WriteSkinSettings(skinSettings);
         }
 
         private void btnTextColourActivePicker_Click(object sender, EventArgs e)
         {
-            GetColor(txtColorActive);          
+            GetColor(txtColorActive);
         }
 
         private void btnColorGuide_Click(object sender, EventArgs e)
@@ -139,7 +149,7 @@ namespace GarlicPress
             Close();
         }
 
-        private async Task DownloadBootScreenPreview()
+        private void DownloadBootScreenPreview()
         {
             Directory.CreateDirectory("assets/bootScreen");
             ADBConnection.DownloadFile("/misc/boot_logo.bmp.gz", "assets/bootScreen/boot_logo.bmp.gz");
@@ -177,7 +187,7 @@ namespace GarlicPress
             openFileDialog.Multiselect = false;
             openFileDialog.CheckFileExists = true;
             DialogResult result = openFileDialog.ShowDialog();
-            if(result == DialogResult.OK)
+            if (result == DialogResult.OK)
             {
                 string fileName = openFileDialog.FileName;
 
@@ -192,6 +202,78 @@ namespace GarlicPress
         private void btnReboot_Click(object sender, EventArgs e)
         {
             ADBConnection.client.Reboot(ADBConnection.device);
+        }
+
+        private void btnDeleteLangFile_Click(object sender, EventArgs e)
+        {
+            if (languageSettingsList.Count > 1)
+            {
+                var selectedIndex = cbLangSettings.SelectedIndex;
+                var lang = (KeyValuePair<string, GarlicLanguageSettings>)cbLangSettings.SelectedItem;
+
+                GarlicSkin.DeleteLangFile(lang.Key);
+
+                languageSettingsList.RemoveAt(selectedIndex);
+            }
+            else
+            {
+                MessageBox.Show("You must keep at least 1 language settings file");
+            }
+        }
+
+        private void btnSaveLang_Click(object sender, EventArgs e)
+        {
+            GarlicLanguageSettings languageSettings = new GarlicLanguageSettings();
+
+            languageSettings.isocode = txtLangIsoCode.Text;
+            languageSettings.font = txtLangFont.Text;
+            int fontSize = 28;
+            int.TryParse(txtLangFontSize.Text, out fontSize);
+            languageSettings.fontsize = fontSize;
+            int guideFontSize = 28;
+            int.TryParse(txtLangButtonGuideFontSize.Text, out guideFontSize);
+            languageSettings.buttonguidefontsize = guideFontSize;
+            languageSettings.recentlabel = txtLangRecentLabel.Text;
+
+            GarlicSkin.SaveLangFile(txtLangFileName.Text, languageSettings);
+
+            var newKeypair = new KeyValuePair<string, GarlicLanguageSettings>(txtLangFileName.Text.ToLower(), languageSettings);
+            if (languageSettingsList.Any(a => a.Key == newKeypair.Key))
+            {
+                var keypair = languageSettingsList.Where(a => a.Key == newKeypair.Key).First();
+                var index = languageSettingsList.IndexOf(keypair);
+                languageSettingsList[index] = newKeypair;
+            }
+            else
+            {
+                languageSettingsList.Add(newKeypair);
+            }
+        }
+
+        private void cbLangSettings_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var LangKeyPair = (KeyValuePair<string, GarlicLanguageSettings>)cbLangSettings.SelectedItem;
+            txtLangFileName.Text = LangKeyPair.Key;
+            txtLangIsoCode.Text = LangKeyPair.Value.isocode;
+            txtLangFont.Text = LangKeyPair.Value.font;
+            txtLangFontSize.Text = LangKeyPair.Value.fontsize.ToString();
+            txtLangButtonGuideFontSize.Text = LangKeyPair.Value.buttonguidefontsize.ToString();
+            txtLangRecentLabel.Text = LangKeyPair.Value.recentlabel;
+        }
+
+        private void label32_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label35_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtLangOpenLabel_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

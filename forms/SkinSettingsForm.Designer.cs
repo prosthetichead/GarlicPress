@@ -28,806 +28,1411 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnSave = new System.Windows.Forms.Button();
-            this.btnCancel = new System.Windows.Forms.Button();
-            this.colorDialog = new System.Windows.Forms.ColorDialog();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabSkinSettings = new System.Windows.Forms.TabPage();
-            this.label24 = new System.Windows.Forms.Label();
-            this.txtTitleLabel = new System.Windows.Forms.TextBox();
-            this.label25 = new System.Windows.Forms.Label();
-            this.txtMeridianTimeLabel = new System.Windows.Forms.TextBox();
-            this.label26 = new System.Windows.Forms.Label();
-            this.txtMinuteLabel = new System.Windows.Forms.TextBox();
-            this.label27 = new System.Windows.Forms.Label();
-            this.txtHourLabel = new System.Windows.Forms.TextBox();
-            this.label28 = new System.Windows.Forms.Label();
-            this.txtDayLabel = new System.Windows.Forms.TextBox();
-            this.label22 = new System.Windows.Forms.Label();
-            this.txtMonthLabel = new System.Windows.Forms.TextBox();
-            this.label23 = new System.Windows.Forms.Label();
-            this.txtYearLabel = new System.Windows.Forms.TextBox();
-            this.label20 = new System.Windows.Forms.Label();
-            this.txtPmLabel = new System.Windows.Forms.TextBox();
-            this.label21 = new System.Windows.Forms.Label();
-            this.txtAmLabel = new System.Windows.Forms.TextBox();
-            this.label19 = new System.Windows.Forms.Label();
-            this.txtOffLabel = new System.Windows.Forms.TextBox();
-            this.label18 = new System.Windows.Forms.Label();
-            this.txtOnLabel = new System.Windows.Forms.TextBox();
-            this.label17 = new System.Windows.Forms.Label();
-            this.txtSaveStatesUnsupported = new System.Windows.Forms.TextBox();
-            this.label16 = new System.Windows.Forms.Label();
-            this.txtEmptyLabel = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.txtRemoveLabel = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.txtFavoriteLabel = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.txtBackLabel = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.txtOpenLabel = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.txtNavigateLabel = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.txtRtcLabel = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.txtRetroarchLabel = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.txtConsolesLabel = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.txtFavoritesLabel = new System.Windows.Forms.TextBox();
-            this.recentLabel = new System.Windows.Forms.Label();
-            this.txtRecentLabel = new System.Windows.Forms.TextBox();
-            this.boolGuideButtonTextVisibility = new System.Windows.Forms.CheckBox();
-            this.btnColourFavActive = new System.Windows.Forms.Button();
-            this.label6 = new System.Windows.Forms.Label();
-            this.txtColourFavActive = new System.Windows.Forms.TextBox();
-            this.txtMargin = new System.Windows.Forms.TextBox();
-            this.boolMainMenuTextVisibility = new System.Windows.Forms.CheckBox();
-            this.comboTextAlignment = new System.Windows.Forms.ComboBox();
-            this.btnColorInactive = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.txtColorInactive = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.btnColorGuide = new System.Windows.Forms.Button();
-            this.txtColorActive = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.txtColorGuide = new System.Windows.Forms.TextBox();
-            this.btnTextColourActivePicker = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.tabLangSettings = new System.Windows.Forms.TabPage();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.tabBootScreen = new System.Windows.Forms.TabPage();
-            this.btnUploadBootScreen = new System.Windows.Forms.Button();
-            this.picBootScreen = new System.Windows.Forms.PictureBox();
-            this.btnReboot = new System.Windows.Forms.Button();
-            this.tabControl1.SuspendLayout();
-            this.tabSkinSettings.SuspendLayout();
-            this.tabLangSettings.SuspendLayout();
-            this.tabBootScreen.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picBootScreen)).BeginInit();
-            this.SuspendLayout();
+            btnSave = new Button();
+            btnCancel = new Button();
+            colorDialog = new ColorDialog();
+            tabControl1 = new TabControl();
+            tabSkinSettings = new TabPage();
+            label24 = new Label();
+            txtTitleLabel = new TextBox();
+            label25 = new Label();
+            txtMeridianTimeLabel = new TextBox();
+            label26 = new Label();
+            txtMinuteLabel = new TextBox();
+            label27 = new Label();
+            txtHourLabel = new TextBox();
+            label28 = new Label();
+            txtDayLabel = new TextBox();
+            label22 = new Label();
+            txtMonthLabel = new TextBox();
+            label23 = new Label();
+            txtYearLabel = new TextBox();
+            label20 = new Label();
+            txtPmLabel = new TextBox();
+            label21 = new Label();
+            txtAmLabel = new TextBox();
+            label19 = new Label();
+            txtOffLabel = new TextBox();
+            label18 = new Label();
+            txtOnLabel = new TextBox();
+            label17 = new Label();
+            txtSaveStatesUnsupported = new TextBox();
+            label16 = new Label();
+            txtEmptyLabel = new TextBox();
+            label15 = new Label();
+            txtRemoveLabel = new TextBox();
+            label14 = new Label();
+            txtFavoriteLabel = new TextBox();
+            label13 = new Label();
+            txtBackLabel = new TextBox();
+            label12 = new Label();
+            txtOpenLabel = new TextBox();
+            label11 = new Label();
+            txtNavigateLabel = new TextBox();
+            label10 = new Label();
+            txtRtcLabel = new TextBox();
+            label9 = new Label();
+            txtRetroarchLabel = new TextBox();
+            label8 = new Label();
+            txtConsolesLabel = new TextBox();
+            label7 = new Label();
+            txtFavoritesLabel = new TextBox();
+            recentLabel = new Label();
+            txtRecentLabel = new TextBox();
+            boolGuideButtonTextVisibility = new CheckBox();
+            btnColourFavActive = new Button();
+            label6 = new Label();
+            txtColourFavActive = new TextBox();
+            txtMargin = new TextBox();
+            boolMainMenuTextVisibility = new CheckBox();
+            comboTextAlignment = new ComboBox();
+            btnColorInactive = new Button();
+            label5 = new Label();
+            label4 = new Label();
+            txtColorInactive = new TextBox();
+            label3 = new Label();
+            btnColorGuide = new Button();
+            txtColorActive = new TextBox();
+            label2 = new Label();
+            txtColorGuide = new TextBox();
+            btnTextColourActivePicker = new Button();
+            label1 = new Label();
+            tabLangSettings = new TabPage();
+            label34 = new Label();
+            txtLangRecentLabel = new TextBox();
+            label33 = new Label();
+            txtLangButtonGuideFontSize = new TextBox();
+            label32 = new Label();
+            txtLangFontSize = new TextBox();
+            label31 = new Label();
+            txtLangFont = new TextBox();
+            label30 = new Label();
+            txtLangIsoCode = new TextBox();
+            btnSaveLang = new Button();
+            txtLangFileName = new TextBox();
+            btnDeleteLangFile = new Button();
+            label29 = new Label();
+            cbLangSettings = new ComboBox();
+            tabBootScreen = new TabPage();
+            btnUploadBootScreen = new Button();
+            picBootScreen = new PictureBox();
+            btnReboot = new Button();
+            label35 = new Label();
+            txtLangFavoritesLabel = new TextBox();
+            label36 = new Label();
+            txtLangRetroarchLabel = new TextBox();
+            label37 = new Label();
+            txtLangConsoleLabel = new TextBox();
+            label38 = new Label();
+            txtLangLanguageLabel = new TextBox();
+            label39 = new Label();
+            txtLangSettingsLabel = new TextBox();
+            label40 = new Label();
+            txtLangOpenLabel = new TextBox();
+            label41 = new Label();
+            txtLangNavigateLabel = new TextBox();
+            label42 = new Label();
+            txtLangBackLabel = new TextBox();
+            label43 = new Label();
+            txtLangFavoriteLabel = new TextBox();
+            label44 = new Label();
+            txtLangRemoveLabel = new TextBox();
+            label45 = new Label();
+            txtLangEmptyLabel = new TextBox();
+            label46 = new Label();
+            txtLangSavestatesUnsupported = new TextBox();
+            label47 = new Label();
+            txtLangOnLabel = new TextBox();
+            label48 = new Label();
+            txtLangOffLabel = new TextBox();
+            labLangPMLabel = new Label();
+            txtLangPMLabel = new TextBox();
+            label50 = new Label();
+            txtLangAMLabel = new TextBox();
+            label49 = new Label();
+            textBox1 = new TextBox();
+            label51 = new Label();
+            txtLangDayLabel = new TextBox();
+            label52 = new Label();
+            txtLangMonthLabel = new TextBox();
+            label53 = new Label();
+            txtLangYearLabel = new TextBox();
+            label54 = new Label();
+            txtLangMinuteLabel = new TextBox();
+            label55 = new Label();
+            txtLangMeridianLabel = new TextBox();
+            label56 = new Label();
+            txtLangTitleLabel = new TextBox();
+            tabControl1.SuspendLayout();
+            tabSkinSettings.SuspendLayout();
+            tabLangSettings.SuspendLayout();
+            tabBootScreen.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picBootScreen).BeginInit();
+            SuspendLayout();
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(531, 517);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(76, 23);
-            this.btnSave.TabIndex = 1;
-            this.btnSave.Text = "Save";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            btnSave.Location = new Point(530, 517);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(76, 23);
+            btnSave.TabIndex = 1;
+            btnSave.Text = "Save";
+            btnSave.UseVisualStyleBackColor = true;
+            btnSave.Click += btnSave_Click;
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(535, 590);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(76, 23);
-            this.btnCancel.TabIndex = 2;
-            this.btnCancel.Text = "Close";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            btnCancel.Location = new Point(535, 590);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(76, 23);
+            btnCancel.TabIndex = 2;
+            btnCancel.Text = "Close";
+            btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancel_Click;
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.Add(this.tabSkinSettings);
-            this.tabControl1.Controls.Add(this.tabLangSettings);
-            this.tabControl1.Controls.Add(this.tabBootScreen);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(622, 584);
-            this.tabControl1.TabIndex = 16;
+            tabControl1.Controls.Add(tabSkinSettings);
+            tabControl1.Controls.Add(tabLangSettings);
+            tabControl1.Controls.Add(tabBootScreen);
+            tabControl1.Dock = DockStyle.Top;
+            tabControl1.Location = new Point(0, 0);
+            tabControl1.Name = "tabControl1";
+            tabControl1.SelectedIndex = 0;
+            tabControl1.Size = new Size(622, 584);
+            tabControl1.TabIndex = 16;
             // 
             // tabSkinSettings
             // 
-            this.tabSkinSettings.Controls.Add(this.label24);
-            this.tabSkinSettings.Controls.Add(this.txtTitleLabel);
-            this.tabSkinSettings.Controls.Add(this.btnSave);
-            this.tabSkinSettings.Controls.Add(this.label25);
-            this.tabSkinSettings.Controls.Add(this.txtMeridianTimeLabel);
-            this.tabSkinSettings.Controls.Add(this.label26);
-            this.tabSkinSettings.Controls.Add(this.txtMinuteLabel);
-            this.tabSkinSettings.Controls.Add(this.label27);
-            this.tabSkinSettings.Controls.Add(this.txtHourLabel);
-            this.tabSkinSettings.Controls.Add(this.label28);
-            this.tabSkinSettings.Controls.Add(this.txtDayLabel);
-            this.tabSkinSettings.Controls.Add(this.label22);
-            this.tabSkinSettings.Controls.Add(this.txtMonthLabel);
-            this.tabSkinSettings.Controls.Add(this.label23);
-            this.tabSkinSettings.Controls.Add(this.txtYearLabel);
-            this.tabSkinSettings.Controls.Add(this.label20);
-            this.tabSkinSettings.Controls.Add(this.txtPmLabel);
-            this.tabSkinSettings.Controls.Add(this.label21);
-            this.tabSkinSettings.Controls.Add(this.txtAmLabel);
-            this.tabSkinSettings.Controls.Add(this.label19);
-            this.tabSkinSettings.Controls.Add(this.txtOffLabel);
-            this.tabSkinSettings.Controls.Add(this.label18);
-            this.tabSkinSettings.Controls.Add(this.txtOnLabel);
-            this.tabSkinSettings.Controls.Add(this.label17);
-            this.tabSkinSettings.Controls.Add(this.txtSaveStatesUnsupported);
-            this.tabSkinSettings.Controls.Add(this.label16);
-            this.tabSkinSettings.Controls.Add(this.txtEmptyLabel);
-            this.tabSkinSettings.Controls.Add(this.label15);
-            this.tabSkinSettings.Controls.Add(this.txtRemoveLabel);
-            this.tabSkinSettings.Controls.Add(this.label14);
-            this.tabSkinSettings.Controls.Add(this.txtFavoriteLabel);
-            this.tabSkinSettings.Controls.Add(this.label13);
-            this.tabSkinSettings.Controls.Add(this.txtBackLabel);
-            this.tabSkinSettings.Controls.Add(this.label12);
-            this.tabSkinSettings.Controls.Add(this.txtOpenLabel);
-            this.tabSkinSettings.Controls.Add(this.label11);
-            this.tabSkinSettings.Controls.Add(this.txtNavigateLabel);
-            this.tabSkinSettings.Controls.Add(this.label10);
-            this.tabSkinSettings.Controls.Add(this.txtRtcLabel);
-            this.tabSkinSettings.Controls.Add(this.label9);
-            this.tabSkinSettings.Controls.Add(this.txtRetroarchLabel);
-            this.tabSkinSettings.Controls.Add(this.label8);
-            this.tabSkinSettings.Controls.Add(this.txtConsolesLabel);
-            this.tabSkinSettings.Controls.Add(this.label7);
-            this.tabSkinSettings.Controls.Add(this.txtFavoritesLabel);
-            this.tabSkinSettings.Controls.Add(this.recentLabel);
-            this.tabSkinSettings.Controls.Add(this.txtRecentLabel);
-            this.tabSkinSettings.Controls.Add(this.boolGuideButtonTextVisibility);
-            this.tabSkinSettings.Controls.Add(this.btnColourFavActive);
-            this.tabSkinSettings.Controls.Add(this.label6);
-            this.tabSkinSettings.Controls.Add(this.txtColourFavActive);
-            this.tabSkinSettings.Controls.Add(this.txtMargin);
-            this.tabSkinSettings.Controls.Add(this.boolMainMenuTextVisibility);
-            this.tabSkinSettings.Controls.Add(this.comboTextAlignment);
-            this.tabSkinSettings.Controls.Add(this.btnColorInactive);
-            this.tabSkinSettings.Controls.Add(this.label5);
-            this.tabSkinSettings.Controls.Add(this.label4);
-            this.tabSkinSettings.Controls.Add(this.txtColorInactive);
-            this.tabSkinSettings.Controls.Add(this.label3);
-            this.tabSkinSettings.Controls.Add(this.btnColorGuide);
-            this.tabSkinSettings.Controls.Add(this.txtColorActive);
-            this.tabSkinSettings.Controls.Add(this.label2);
-            this.tabSkinSettings.Controls.Add(this.txtColorGuide);
-            this.tabSkinSettings.Controls.Add(this.btnTextColourActivePicker);
-            this.tabSkinSettings.Controls.Add(this.label1);
-            this.tabSkinSettings.Location = new System.Drawing.Point(4, 24);
-            this.tabSkinSettings.Name = "tabSkinSettings";
-            this.tabSkinSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSkinSettings.Size = new System.Drawing.Size(614, 556);
-            this.tabSkinSettings.TabIndex = 0;
-            this.tabSkinSettings.Text = "Skin Settings";
-            this.tabSkinSettings.UseVisualStyleBackColor = true;
+            tabSkinSettings.Controls.Add(label24);
+            tabSkinSettings.Controls.Add(txtTitleLabel);
+            tabSkinSettings.Controls.Add(btnSave);
+            tabSkinSettings.Controls.Add(label25);
+            tabSkinSettings.Controls.Add(txtMeridianTimeLabel);
+            tabSkinSettings.Controls.Add(label26);
+            tabSkinSettings.Controls.Add(txtMinuteLabel);
+            tabSkinSettings.Controls.Add(label27);
+            tabSkinSettings.Controls.Add(txtHourLabel);
+            tabSkinSettings.Controls.Add(label28);
+            tabSkinSettings.Controls.Add(txtDayLabel);
+            tabSkinSettings.Controls.Add(label22);
+            tabSkinSettings.Controls.Add(txtMonthLabel);
+            tabSkinSettings.Controls.Add(label23);
+            tabSkinSettings.Controls.Add(txtYearLabel);
+            tabSkinSettings.Controls.Add(label20);
+            tabSkinSettings.Controls.Add(txtPmLabel);
+            tabSkinSettings.Controls.Add(label21);
+            tabSkinSettings.Controls.Add(txtAmLabel);
+            tabSkinSettings.Controls.Add(label19);
+            tabSkinSettings.Controls.Add(txtOffLabel);
+            tabSkinSettings.Controls.Add(label18);
+            tabSkinSettings.Controls.Add(txtOnLabel);
+            tabSkinSettings.Controls.Add(label17);
+            tabSkinSettings.Controls.Add(txtSaveStatesUnsupported);
+            tabSkinSettings.Controls.Add(label16);
+            tabSkinSettings.Controls.Add(txtEmptyLabel);
+            tabSkinSettings.Controls.Add(label15);
+            tabSkinSettings.Controls.Add(txtRemoveLabel);
+            tabSkinSettings.Controls.Add(label14);
+            tabSkinSettings.Controls.Add(txtFavoriteLabel);
+            tabSkinSettings.Controls.Add(label13);
+            tabSkinSettings.Controls.Add(txtBackLabel);
+            tabSkinSettings.Controls.Add(label12);
+            tabSkinSettings.Controls.Add(txtOpenLabel);
+            tabSkinSettings.Controls.Add(label11);
+            tabSkinSettings.Controls.Add(txtNavigateLabel);
+            tabSkinSettings.Controls.Add(label10);
+            tabSkinSettings.Controls.Add(txtRtcLabel);
+            tabSkinSettings.Controls.Add(label9);
+            tabSkinSettings.Controls.Add(txtRetroarchLabel);
+            tabSkinSettings.Controls.Add(label8);
+            tabSkinSettings.Controls.Add(txtConsolesLabel);
+            tabSkinSettings.Controls.Add(label7);
+            tabSkinSettings.Controls.Add(txtFavoritesLabel);
+            tabSkinSettings.Controls.Add(recentLabel);
+            tabSkinSettings.Controls.Add(txtRecentLabel);
+            tabSkinSettings.Controls.Add(boolGuideButtonTextVisibility);
+            tabSkinSettings.Controls.Add(btnColourFavActive);
+            tabSkinSettings.Controls.Add(label6);
+            tabSkinSettings.Controls.Add(txtColourFavActive);
+            tabSkinSettings.Controls.Add(txtMargin);
+            tabSkinSettings.Controls.Add(boolMainMenuTextVisibility);
+            tabSkinSettings.Controls.Add(comboTextAlignment);
+            tabSkinSettings.Controls.Add(btnColorInactive);
+            tabSkinSettings.Controls.Add(label5);
+            tabSkinSettings.Controls.Add(label4);
+            tabSkinSettings.Controls.Add(txtColorInactive);
+            tabSkinSettings.Controls.Add(label3);
+            tabSkinSettings.Controls.Add(btnColorGuide);
+            tabSkinSettings.Controls.Add(txtColorActive);
+            tabSkinSettings.Controls.Add(label2);
+            tabSkinSettings.Controls.Add(txtColorGuide);
+            tabSkinSettings.Controls.Add(btnTextColourActivePicker);
+            tabSkinSettings.Controls.Add(label1);
+            tabSkinSettings.Location = new Point(4, 24);
+            tabSkinSettings.Name = "tabSkinSettings";
+            tabSkinSettings.Padding = new Padding(3);
+            tabSkinSettings.Size = new Size(614, 556);
+            tabSkinSettings.TabIndex = 0;
+            tabSkinSettings.Text = "Skin Settings";
+            tabSkinSettings.UseVisualStyleBackColor = true;
             // 
             // label24
             // 
-            this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(407, 456);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(60, 15);
-            this.label24.TabIndex = 79;
-            this.label24.Text = "Title Label";
+            label24.AutoSize = true;
+            label24.Location = new Point(407, 456);
+            label24.Name = "label24";
+            label24.Size = new Size(60, 15);
+            label24.TabIndex = 79;
+            label24.Text = "Title Label";
             // 
             // txtTitleLabel
             // 
-            this.txtTitleLabel.Location = new System.Drawing.Point(407, 473);
-            this.txtTitleLabel.Name = "txtTitleLabel";
-            this.txtTitleLabel.Size = new System.Drawing.Size(200, 23);
-            this.txtTitleLabel.TabIndex = 78;
+            txtTitleLabel.Location = new Point(407, 473);
+            txtTitleLabel.Name = "txtTitleLabel";
+            txtTitleLabel.Size = new Size(200, 23);
+            txtTitleLabel.TabIndex = 78;
             // 
             // label25
             // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(407, 412);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(114, 15);
-            this.label25.TabIndex = 77;
-            this.label25.Text = "Meridian Time Label";
+            label25.AutoSize = true;
+            label25.Location = new Point(407, 412);
+            label25.Name = "label25";
+            label25.Size = new Size(114, 15);
+            label25.TabIndex = 77;
+            label25.Text = "Meridian Time Label";
             // 
             // txtMeridianTimeLabel
             // 
-            this.txtMeridianTimeLabel.Location = new System.Drawing.Point(407, 430);
-            this.txtMeridianTimeLabel.Name = "txtMeridianTimeLabel";
-            this.txtMeridianTimeLabel.Size = new System.Drawing.Size(200, 23);
-            this.txtMeridianTimeLabel.TabIndex = 76;
+            txtMeridianTimeLabel.Location = new Point(407, 430);
+            txtMeridianTimeLabel.Name = "txtMeridianTimeLabel";
+            txtMeridianTimeLabel.Size = new Size(200, 23);
+            txtMeridianTimeLabel.TabIndex = 76;
             // 
             // label26
             // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(407, 368);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(76, 15);
-            this.label26.TabIndex = 75;
-            this.label26.Text = "Minute Label";
+            label26.AutoSize = true;
+            label26.Location = new Point(407, 368);
+            label26.Name = "label26";
+            label26.Size = new Size(76, 15);
+            label26.TabIndex = 75;
+            label26.Text = "Minute Label";
             // 
             // txtMinuteLabel
             // 
-            this.txtMinuteLabel.Location = new System.Drawing.Point(407, 386);
-            this.txtMinuteLabel.Name = "txtMinuteLabel";
-            this.txtMinuteLabel.Size = new System.Drawing.Size(200, 23);
-            this.txtMinuteLabel.TabIndex = 74;
+            txtMinuteLabel.Location = new Point(407, 386);
+            txtMinuteLabel.Name = "txtMinuteLabel";
+            txtMinuteLabel.Size = new Size(200, 23);
+            txtMinuteLabel.TabIndex = 74;
             // 
             // label27
             // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(407, 326);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(65, 15);
-            this.label27.TabIndex = 73;
-            this.label27.Text = "Hour Label";
+            label27.AutoSize = true;
+            label27.Location = new Point(407, 326);
+            label27.Name = "label27";
+            label27.Size = new Size(65, 15);
+            label27.TabIndex = 73;
+            label27.Text = "Hour Label";
             // 
             // txtHourLabel
             // 
-            this.txtHourLabel.Location = new System.Drawing.Point(407, 341);
-            this.txtHourLabel.Name = "txtHourLabel";
-            this.txtHourLabel.Size = new System.Drawing.Size(200, 23);
-            this.txtHourLabel.TabIndex = 72;
+            txtHourLabel.Location = new Point(407, 341);
+            txtHourLabel.Name = "txtHourLabel";
+            txtHourLabel.Size = new Size(200, 23);
+            txtHourLabel.TabIndex = 72;
             // 
             // label28
             // 
-            this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(407, 280);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(58, 15);
-            this.label28.TabIndex = 71;
-            this.label28.Text = "Day Label";
+            label28.AutoSize = true;
+            label28.Location = new Point(407, 280);
+            label28.Name = "label28";
+            label28.Size = new Size(58, 15);
+            label28.TabIndex = 71;
+            label28.Text = "Day Label";
             // 
             // txtDayLabel
             // 
-            this.txtDayLabel.Location = new System.Drawing.Point(407, 297);
-            this.txtDayLabel.Name = "txtDayLabel";
-            this.txtDayLabel.Size = new System.Drawing.Size(200, 23);
-            this.txtDayLabel.TabIndex = 70;
+            txtDayLabel.Location = new Point(407, 297);
+            txtDayLabel.Name = "txtDayLabel";
+            txtDayLabel.Size = new Size(200, 23);
+            txtDayLabel.TabIndex = 70;
             // 
             // label22
             // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(407, 237);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(74, 15);
-            this.label22.TabIndex = 69;
-            this.label22.Text = "Month Label";
+            label22.AutoSize = true;
+            label22.Location = new Point(407, 237);
+            label22.Name = "label22";
+            label22.Size = new Size(74, 15);
+            label22.TabIndex = 69;
+            label22.Text = "Month Label";
             // 
             // txtMonthLabel
             // 
-            this.txtMonthLabel.Location = new System.Drawing.Point(407, 255);
-            this.txtMonthLabel.Name = "txtMonthLabel";
-            this.txtMonthLabel.Size = new System.Drawing.Size(200, 23);
-            this.txtMonthLabel.TabIndex = 68;
+            txtMonthLabel.Location = new Point(407, 255);
+            txtMonthLabel.Name = "txtMonthLabel";
+            txtMonthLabel.Size = new Size(200, 23);
+            txtMonthLabel.TabIndex = 68;
             // 
             // label23
             // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(407, 192);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(60, 15);
-            this.label23.TabIndex = 67;
-            this.label23.Text = "Year Label";
+            label23.AutoSize = true;
+            label23.Location = new Point(407, 192);
+            label23.Name = "label23";
+            label23.Size = new Size(60, 15);
+            label23.TabIndex = 67;
+            label23.Text = "Year Label";
             // 
             // txtYearLabel
             // 
-            this.txtYearLabel.Location = new System.Drawing.Point(407, 210);
-            this.txtYearLabel.Name = "txtYearLabel";
-            this.txtYearLabel.Size = new System.Drawing.Size(200, 23);
-            this.txtYearLabel.TabIndex = 66;
+            txtYearLabel.Location = new Point(407, 210);
+            txtYearLabel.Name = "txtYearLabel";
+            txtYearLabel.Size = new Size(200, 23);
+            txtYearLabel.TabIndex = 66;
             // 
             // label20
             // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(407, 148);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(56, 15);
-            this.label20.TabIndex = 65;
-            this.label20.Text = "PM Label";
+            label20.AutoSize = true;
+            label20.Location = new Point(407, 148);
+            label20.Name = "label20";
+            label20.Size = new Size(56, 15);
+            label20.TabIndex = 65;
+            label20.Text = "PM Label";
             // 
             // txtPmLabel
             // 
-            this.txtPmLabel.Location = new System.Drawing.Point(407, 166);
-            this.txtPmLabel.Name = "txtPmLabel";
-            this.txtPmLabel.Size = new System.Drawing.Size(200, 23);
-            this.txtPmLabel.TabIndex = 64;
+            txtPmLabel.Location = new Point(407, 166);
+            txtPmLabel.Name = "txtPmLabel";
+            txtPmLabel.Size = new Size(200, 23);
+            txtPmLabel.TabIndex = 64;
             // 
             // label21
             // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(407, 104);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(57, 15);
-            this.label21.TabIndex = 63;
-            this.label21.Text = "AM Label";
+            label21.AutoSize = true;
+            label21.Location = new Point(407, 104);
+            label21.Name = "label21";
+            label21.Size = new Size(57, 15);
+            label21.TabIndex = 63;
+            label21.Text = "AM Label";
             // 
             // txtAmLabel
             // 
-            this.txtAmLabel.Location = new System.Drawing.Point(407, 122);
-            this.txtAmLabel.Name = "txtAmLabel";
-            this.txtAmLabel.Size = new System.Drawing.Size(200, 23);
-            this.txtAmLabel.TabIndex = 62;
+            txtAmLabel.Location = new Point(407, 122);
+            txtAmLabel.Name = "txtAmLabel";
+            txtAmLabel.Size = new Size(200, 23);
+            txtAmLabel.TabIndex = 62;
             // 
             // label19
             // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(407, 60);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(55, 15);
-            this.label19.TabIndex = 61;
-            this.label19.Text = "Off Label";
+            label19.AutoSize = true;
+            label19.Location = new Point(407, 60);
+            label19.Name = "label19";
+            label19.Size = new Size(55, 15);
+            label19.TabIndex = 61;
+            label19.Text = "Off Label";
             // 
             // txtOffLabel
             // 
-            this.txtOffLabel.Location = new System.Drawing.Point(407, 78);
-            this.txtOffLabel.Name = "txtOffLabel";
-            this.txtOffLabel.Size = new System.Drawing.Size(200, 23);
-            this.txtOffLabel.TabIndex = 60;
+            txtOffLabel.Location = new Point(407, 78);
+            txtOffLabel.Name = "txtOffLabel";
+            txtOffLabel.Size = new Size(200, 23);
+            txtOffLabel.TabIndex = 60;
             // 
             // label18
             // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(407, 16);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(54, 15);
-            this.label18.TabIndex = 59;
-            this.label18.Text = "On Label";
+            label18.AutoSize = true;
+            label18.Location = new Point(407, 16);
+            label18.Name = "label18";
+            label18.Size = new Size(54, 15);
+            label18.TabIndex = 59;
+            label18.Text = "On Label";
             // 
             // txtOnLabel
             // 
-            this.txtOnLabel.Location = new System.Drawing.Point(407, 34);
-            this.txtOnLabel.Name = "txtOnLabel";
-            this.txtOnLabel.Size = new System.Drawing.Size(200, 23);
-            this.txtOnLabel.TabIndex = 58;
+            txtOnLabel.Location = new Point(407, 34);
+            txtOnLabel.Name = "txtOnLabel";
+            txtOnLabel.Size = new Size(200, 23);
+            txtOnLabel.TabIndex = 58;
             // 
             // label17
             // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(200, 499);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(168, 15);
-            this.label17.TabIndex = 57;
-            this.label17.Text = "Save States Unsupported Label";
+            label17.AutoSize = true;
+            label17.Location = new Point(200, 499);
+            label17.Name = "label17";
+            label17.Size = new Size(168, 15);
+            label17.TabIndex = 57;
+            label17.Text = "Save States Unsupported Label";
             // 
             // txtSaveStatesUnsupported
             // 
-            this.txtSaveStatesUnsupported.Location = new System.Drawing.Point(200, 517);
-            this.txtSaveStatesUnsupported.Name = "txtSaveStatesUnsupported";
-            this.txtSaveStatesUnsupported.Size = new System.Drawing.Size(200, 23);
-            this.txtSaveStatesUnsupported.TabIndex = 56;
+            txtSaveStatesUnsupported.Location = new Point(200, 517);
+            txtSaveStatesUnsupported.Name = "txtSaveStatesUnsupported";
+            txtSaveStatesUnsupported.Size = new Size(200, 23);
+            txtSaveStatesUnsupported.TabIndex = 56;
             // 
             // label16
             // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(200, 455);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(72, 15);
-            this.label16.TabIndex = 55;
-            this.label16.Text = "Empty Label";
+            label16.AutoSize = true;
+            label16.Location = new Point(200, 455);
+            label16.Name = "label16";
+            label16.Size = new Size(72, 15);
+            label16.TabIndex = 55;
+            label16.Text = "Empty Label";
             // 
             // txtEmptyLabel
             // 
-            this.txtEmptyLabel.Location = new System.Drawing.Point(200, 473);
-            this.txtEmptyLabel.Name = "txtEmptyLabel";
-            this.txtEmptyLabel.Size = new System.Drawing.Size(200, 23);
-            this.txtEmptyLabel.TabIndex = 54;
+            txtEmptyLabel.Location = new Point(200, 473);
+            txtEmptyLabel.Name = "txtEmptyLabel";
+            txtEmptyLabel.Size = new Size(200, 23);
+            txtEmptyLabel.TabIndex = 54;
             // 
             // label15
             // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(200, 411);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(81, 15);
-            this.label15.TabIndex = 53;
-            this.label15.Text = "Remove Label";
+            label15.AutoSize = true;
+            label15.Location = new Point(200, 411);
+            label15.Name = "label15";
+            label15.Size = new Size(81, 15);
+            label15.TabIndex = 53;
+            label15.Text = "Remove Label";
             // 
             // txtRemoveLabel
             // 
-            this.txtRemoveLabel.Location = new System.Drawing.Point(200, 429);
-            this.txtRemoveLabel.Name = "txtRemoveLabel";
-            this.txtRemoveLabel.Size = new System.Drawing.Size(200, 23);
-            this.txtRemoveLabel.TabIndex = 52;
+            txtRemoveLabel.Location = new Point(200, 429);
+            txtRemoveLabel.Name = "txtRemoveLabel";
+            txtRemoveLabel.Size = new Size(200, 23);
+            txtRemoveLabel.TabIndex = 52;
             // 
             // label14
             // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(200, 367);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(80, 15);
-            this.label14.TabIndex = 51;
-            this.label14.Text = "Favorite Label";
+            label14.AutoSize = true;
+            label14.Location = new Point(200, 367);
+            label14.Name = "label14";
+            label14.Size = new Size(80, 15);
+            label14.TabIndex = 51;
+            label14.Text = "Favorite Label";
             // 
             // txtFavoriteLabel
             // 
-            this.txtFavoriteLabel.Location = new System.Drawing.Point(200, 385);
-            this.txtFavoriteLabel.Name = "txtFavoriteLabel";
-            this.txtFavoriteLabel.Size = new System.Drawing.Size(200, 23);
-            this.txtFavoriteLabel.TabIndex = 50;
+            txtFavoriteLabel.Location = new Point(200, 385);
+            txtFavoriteLabel.Name = "txtFavoriteLabel";
+            txtFavoriteLabel.Size = new Size(200, 23);
+            txtFavoriteLabel.TabIndex = 50;
             // 
             // label13
             // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(200, 323);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(63, 15);
-            this.label13.TabIndex = 49;
-            this.label13.Text = "Back Label";
+            label13.AutoSize = true;
+            label13.Location = new Point(200, 323);
+            label13.Name = "label13";
+            label13.Size = new Size(63, 15);
+            label13.TabIndex = 49;
+            label13.Text = "Back Label";
             // 
             // txtBackLabel
             // 
-            this.txtBackLabel.Location = new System.Drawing.Point(200, 341);
-            this.txtBackLabel.Name = "txtBackLabel";
-            this.txtBackLabel.Size = new System.Drawing.Size(200, 23);
-            this.txtBackLabel.TabIndex = 48;
+            txtBackLabel.Location = new Point(200, 341);
+            txtBackLabel.Name = "txtBackLabel";
+            txtBackLabel.Size = new Size(200, 23);
+            txtBackLabel.TabIndex = 48;
             // 
             // label12
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(200, 279);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(67, 15);
-            this.label12.TabIndex = 47;
-            this.label12.Text = "Open Label";
+            label12.AutoSize = true;
+            label12.Location = new Point(200, 279);
+            label12.Name = "label12";
+            label12.Size = new Size(67, 15);
+            label12.TabIndex = 47;
+            label12.Text = "Open Label";
             // 
             // txtOpenLabel
             // 
-            this.txtOpenLabel.Location = new System.Drawing.Point(200, 297);
-            this.txtOpenLabel.Name = "txtOpenLabel";
-            this.txtOpenLabel.Size = new System.Drawing.Size(200, 23);
-            this.txtOpenLabel.TabIndex = 46;
+            txtOpenLabel.Location = new Point(200, 297);
+            txtOpenLabel.Name = "txtOpenLabel";
+            txtOpenLabel.Size = new Size(200, 23);
+            txtOpenLabel.TabIndex = 46;
             // 
             // label11
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(200, 235);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(85, 15);
-            this.label11.TabIndex = 45;
-            this.label11.Text = "Navigate Label";
+            label11.AutoSize = true;
+            label11.Location = new Point(200, 235);
+            label11.Name = "label11";
+            label11.Size = new Size(85, 15);
+            label11.TabIndex = 45;
+            label11.Text = "Navigate Label";
             // 
             // txtNavigateLabel
             // 
-            this.txtNavigateLabel.Location = new System.Drawing.Point(200, 253);
-            this.txtNavigateLabel.Name = "txtNavigateLabel";
-            this.txtNavigateLabel.Size = new System.Drawing.Size(200, 23);
-            this.txtNavigateLabel.TabIndex = 44;
+            txtNavigateLabel.Location = new Point(200, 253);
+            txtNavigateLabel.Name = "txtNavigateLabel";
+            txtNavigateLabel.Size = new Size(200, 23);
+            txtNavigateLabel.TabIndex = 44;
             // 
             // label10
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(200, 191);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(57, 15);
-            this.label10.TabIndex = 43;
-            this.label10.Text = "RTC Label";
+            label10.AutoSize = true;
+            label10.Location = new Point(200, 191);
+            label10.Name = "label10";
+            label10.Size = new Size(57, 15);
+            label10.TabIndex = 43;
+            label10.Text = "RTC Label";
             // 
             // txtRtcLabel
             // 
-            this.txtRtcLabel.Location = new System.Drawing.Point(200, 209);
-            this.txtRtcLabel.Name = "txtRtcLabel";
-            this.txtRtcLabel.Size = new System.Drawing.Size(200, 23);
-            this.txtRtcLabel.TabIndex = 42;
+            txtRtcLabel.Location = new Point(200, 209);
+            txtRtcLabel.Name = "txtRtcLabel";
+            txtRtcLabel.Size = new Size(200, 23);
+            txtRtcLabel.TabIndex = 42;
             // 
             // label9
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(200, 147);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(89, 15);
-            this.label9.TabIndex = 41;
-            this.label9.Text = "Retroarch Label";
+            label9.AutoSize = true;
+            label9.Location = new Point(200, 147);
+            label9.Name = "label9";
+            label9.Size = new Size(89, 15);
+            label9.TabIndex = 41;
+            label9.Text = "Retroarch Label";
             // 
             // txtRetroarchLabel
             // 
-            this.txtRetroarchLabel.Location = new System.Drawing.Point(200, 165);
-            this.txtRetroarchLabel.Name = "txtRetroarchLabel";
-            this.txtRetroarchLabel.Size = new System.Drawing.Size(200, 23);
-            this.txtRetroarchLabel.TabIndex = 40;
+            txtRetroarchLabel.Location = new Point(200, 165);
+            txtRetroarchLabel.Name = "txtRetroarchLabel";
+            txtRetroarchLabel.Size = new Size(200, 23);
+            txtRetroarchLabel.TabIndex = 40;
             // 
             // label8
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(200, 104);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(86, 15);
-            this.label8.TabIndex = 39;
-            this.label8.Text = "Consoles Label";
+            label8.AutoSize = true;
+            label8.Location = new Point(200, 104);
+            label8.Name = "label8";
+            label8.Size = new Size(86, 15);
+            label8.TabIndex = 39;
+            label8.Text = "Consoles Label";
             // 
             // txtConsolesLabel
             // 
-            this.txtConsolesLabel.Location = new System.Drawing.Point(200, 122);
-            this.txtConsolesLabel.Name = "txtConsolesLabel";
-            this.txtConsolesLabel.Size = new System.Drawing.Size(200, 23);
-            this.txtConsolesLabel.TabIndex = 38;
+            txtConsolesLabel.Location = new Point(200, 122);
+            txtConsolesLabel.Name = "txtConsolesLabel";
+            txtConsolesLabel.Size = new Size(200, 23);
+            txtConsolesLabel.TabIndex = 38;
             // 
             // label7
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(200, 60);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(85, 15);
-            this.label7.TabIndex = 37;
-            this.label7.Text = "Favorites Label";
+            label7.AutoSize = true;
+            label7.Location = new Point(200, 60);
+            label7.Name = "label7";
+            label7.Size = new Size(85, 15);
+            label7.TabIndex = 37;
+            label7.Text = "Favorites Label";
             // 
             // txtFavoritesLabel
             // 
-            this.txtFavoritesLabel.Location = new System.Drawing.Point(200, 78);
-            this.txtFavoritesLabel.Name = "txtFavoritesLabel";
-            this.txtFavoritesLabel.Size = new System.Drawing.Size(200, 23);
-            this.txtFavoritesLabel.TabIndex = 36;
+            txtFavoritesLabel.Location = new Point(200, 78);
+            txtFavoritesLabel.Name = "txtFavoritesLabel";
+            txtFavoritesLabel.Size = new Size(200, 23);
+            txtFavoritesLabel.TabIndex = 36;
             // 
             // recentLabel
             // 
-            this.recentLabel.AutoSize = true;
-            this.recentLabel.Location = new System.Drawing.Point(200, 16);
-            this.recentLabel.Name = "recentLabel";
-            this.recentLabel.Size = new System.Drawing.Size(74, 15);
-            this.recentLabel.TabIndex = 35;
-            this.recentLabel.Text = "Recent Label";
+            recentLabel.AutoSize = true;
+            recentLabel.Location = new Point(200, 16);
+            recentLabel.Name = "recentLabel";
+            recentLabel.Size = new Size(74, 15);
+            recentLabel.TabIndex = 35;
+            recentLabel.Text = "Recent Label";
             // 
             // txtRecentLabel
             // 
-            this.txtRecentLabel.Location = new System.Drawing.Point(200, 34);
-            this.txtRecentLabel.Name = "txtRecentLabel";
-            this.txtRecentLabel.Size = new System.Drawing.Size(200, 23);
-            this.txtRecentLabel.TabIndex = 34;
+            txtRecentLabel.Location = new Point(200, 34);
+            txtRecentLabel.Name = "txtRecentLabel";
+            txtRecentLabel.Size = new Size(200, 23);
+            txtRecentLabel.TabIndex = 34;
             // 
             // boolGuideButtonTextVisibility
             // 
-            this.boolGuideButtonTextVisibility.AutoSize = true;
-            this.boolGuideButtonTextVisibility.Location = new System.Drawing.Point(10, 341);
-            this.boolGuideButtonTextVisibility.Name = "boolGuideButtonTextVisibility";
-            this.boolGuideButtonTextVisibility.Size = new System.Drawing.Size(167, 19);
-            this.boolGuideButtonTextVisibility.TabIndex = 33;
-            this.boolGuideButtonTextVisibility.Text = "Guide Button Text Visibility";
-            this.boolGuideButtonTextVisibility.UseVisualStyleBackColor = true;
+            boolGuideButtonTextVisibility.AutoSize = true;
+            boolGuideButtonTextVisibility.Location = new Point(10, 341);
+            boolGuideButtonTextVisibility.Name = "boolGuideButtonTextVisibility";
+            boolGuideButtonTextVisibility.Size = new Size(167, 19);
+            boolGuideButtonTextVisibility.TabIndex = 33;
+            boolGuideButtonTextVisibility.Text = "Guide Button Text Visibility";
+            boolGuideButtonTextVisibility.UseVisualStyleBackColor = true;
             // 
             // btnColourFavActive
             // 
-            this.btnColourFavActive.Location = new System.Drawing.Point(137, 255);
-            this.btnColourFavActive.Name = "btnColourFavActive";
-            this.btnColourFavActive.Size = new System.Drawing.Size(21, 23);
-            this.btnColourFavActive.TabIndex = 32;
-            this.btnColourFavActive.UseVisualStyleBackColor = true;
-            this.btnColourFavActive.Click += new System.EventHandler(this.btnColourFavActive_Click);
+            btnColourFavActive.Location = new Point(137, 255);
+            btnColourFavActive.Name = "btnColourFavActive";
+            btnColourFavActive.Size = new Size(21, 23);
+            btnColourFavActive.TabIndex = 32;
+            btnColourFavActive.UseVisualStyleBackColor = true;
+            btnColourFavActive.Click += btnColourFavActive_Click;
             // 
             // label6
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(10, 237);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(124, 15);
-            this.label6.TabIndex = 31;
-            this.label6.Text = "Colour Favorite Active";
+            label6.AutoSize = true;
+            label6.Location = new Point(10, 237);
+            label6.Name = "label6";
+            label6.Size = new Size(124, 15);
+            label6.TabIndex = 31;
+            label6.Text = "Colour Favorite Active";
             // 
             // txtColourFavActive
             // 
-            this.txtColourFavActive.Location = new System.Drawing.Point(10, 255);
-            this.txtColourFavActive.Name = "txtColourFavActive";
-            this.txtColourFavActive.Size = new System.Drawing.Size(121, 23);
-            this.txtColourFavActive.TabIndex = 30;
+            txtColourFavActive.Location = new Point(10, 255);
+            txtColourFavActive.Name = "txtColourFavActive";
+            txtColourFavActive.Size = new Size(121, 23);
+            txtColourFavActive.TabIndex = 30;
             // 
             // txtMargin
             // 
-            this.txtMargin.Location = new System.Drawing.Point(10, 78);
-            this.txtMargin.Name = "txtMargin";
-            this.txtMargin.Size = new System.Drawing.Size(165, 23);
-            this.txtMargin.TabIndex = 27;
+            txtMargin.Location = new Point(10, 78);
+            txtMargin.Name = "txtMargin";
+            txtMargin.Size = new Size(165, 23);
+            txtMargin.TabIndex = 27;
             // 
             // boolMainMenuTextVisibility
             // 
-            this.boolMainMenuTextVisibility.AutoSize = true;
-            this.boolMainMenuTextVisibility.Location = new System.Drawing.Point(10, 297);
-            this.boolMainMenuTextVisibility.Name = "boolMainMenuTextVisibility";
-            this.boolMainMenuTextVisibility.Size = new System.Drawing.Size(158, 19);
-            this.boolMainMenuTextVisibility.TabIndex = 29;
-            this.boolMainMenuTextVisibility.Text = "Main Menu Text Visibility";
-            this.boolMainMenuTextVisibility.UseVisualStyleBackColor = true;
+            boolMainMenuTextVisibility.AutoSize = true;
+            boolMainMenuTextVisibility.Location = new Point(10, 297);
+            boolMainMenuTextVisibility.Name = "boolMainMenuTextVisibility";
+            boolMainMenuTextVisibility.Size = new Size(158, 19);
+            boolMainMenuTextVisibility.TabIndex = 29;
+            boolMainMenuTextVisibility.Text = "Main Menu Text Visibility";
+            boolMainMenuTextVisibility.UseVisualStyleBackColor = true;
             // 
             // comboTextAlignment
             // 
-            this.comboTextAlignment.FormattingEnabled = true;
-            this.comboTextAlignment.Items.AddRange(new object[] {
-            "left",
-            "center",
-            "right"});
-            this.comboTextAlignment.Location = new System.Drawing.Point(10, 34);
-            this.comboTextAlignment.Name = "comboTextAlignment";
-            this.comboTextAlignment.Size = new System.Drawing.Size(165, 23);
-            this.comboTextAlignment.TabIndex = 16;
+            comboTextAlignment.FormattingEnabled = true;
+            comboTextAlignment.Items.AddRange(new object[] { "left", "center", "right" });
+            comboTextAlignment.Location = new Point(10, 34);
+            comboTextAlignment.Name = "comboTextAlignment";
+            comboTextAlignment.Size = new Size(165, 23);
+            comboTextAlignment.TabIndex = 16;
             // 
             // btnColorInactive
             // 
-            this.btnColorInactive.Location = new System.Drawing.Point(137, 210);
-            this.btnColorInactive.Name = "btnColorInactive";
-            this.btnColorInactive.Size = new System.Drawing.Size(21, 23);
-            this.btnColorInactive.TabIndex = 26;
-            this.btnColorInactive.UseVisualStyleBackColor = true;
-            this.btnColorInactive.Click += new System.EventHandler(this.btnColorInactive_Click);
+            btnColorInactive.Location = new Point(137, 210);
+            btnColorInactive.Name = "btnColorInactive";
+            btnColorInactive.Size = new Size(21, 23);
+            btnColorInactive.TabIndex = 26;
+            btnColorInactive.UseVisualStyleBackColor = true;
+            btnColorInactive.Click += btnColorInactive_Click;
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(10, 60);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(124, 15);
-            this.label5.TabIndex = 28;
-            this.label5.Text = "Game List Text Margin";
+            label5.AutoSize = true;
+            label5.Location = new Point(10, 60);
+            label5.Name = "label5";
+            label5.Size = new Size(124, 15);
+            label5.TabIndex = 28;
+            label5.Text = "Game List Text Margin";
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(10, 192);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(81, 15);
-            this.label4.TabIndex = 25;
-            this.label4.Text = "Colour Inctive";
+            label4.AutoSize = true;
+            label4.Location = new Point(10, 192);
+            label4.Name = "label4";
+            label4.Size = new Size(81, 15);
+            label4.TabIndex = 25;
+            label4.Text = "Colour Inctive";
             // 
             // txtColorInactive
             // 
-            this.txtColorInactive.Location = new System.Drawing.Point(10, 210);
-            this.txtColorInactive.Name = "txtColorInactive";
-            this.txtColorInactive.Size = new System.Drawing.Size(121, 23);
-            this.txtColorInactive.TabIndex = 24;
+            txtColorInactive.Location = new Point(10, 210);
+            txtColorInactive.Name = "txtColorInactive";
+            txtColorInactive.Size = new Size(121, 23);
+            txtColorInactive.TabIndex = 24;
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(10, 104);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(77, 15);
-            this.label3.TabIndex = 22;
-            this.label3.Text = "Colour Guide";
+            label3.AutoSize = true;
+            label3.Location = new Point(10, 104);
+            label3.Name = "label3";
+            label3.Size = new Size(77, 15);
+            label3.TabIndex = 22;
+            label3.Text = "Colour Guide";
             // 
             // btnColorGuide
             // 
-            this.btnColorGuide.Location = new System.Drawing.Point(137, 122);
-            this.btnColorGuide.Name = "btnColorGuide";
-            this.btnColorGuide.Size = new System.Drawing.Size(21, 23);
-            this.btnColorGuide.TabIndex = 23;
-            this.btnColorGuide.UseVisualStyleBackColor = true;
-            this.btnColorGuide.Click += new System.EventHandler(this.btnColorGuide_Click);
+            btnColorGuide.Location = new Point(137, 122);
+            btnColorGuide.Name = "btnColorGuide";
+            btnColorGuide.Size = new Size(21, 23);
+            btnColorGuide.TabIndex = 23;
+            btnColorGuide.UseVisualStyleBackColor = true;
+            btnColorGuide.Click += btnColorGuide_Click;
             // 
             // txtColorActive
             // 
-            this.txtColorActive.Location = new System.Drawing.Point(10, 165);
-            this.txtColorActive.Name = "txtColorActive";
-            this.txtColorActive.Size = new System.Drawing.Size(121, 23);
-            this.txtColorActive.TabIndex = 18;
+            txtColorActive.Location = new Point(10, 165);
+            txtColorActive.Name = "txtColorActive";
+            txtColorActive.Size = new Size(121, 23);
+            txtColorActive.TabIndex = 18;
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(10, 148);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(79, 15);
-            this.label2.TabIndex = 19;
-            this.label2.Text = "Colour Active";
+            label2.AutoSize = true;
+            label2.Location = new Point(10, 148);
+            label2.Name = "label2";
+            label2.Size = new Size(79, 15);
+            label2.TabIndex = 19;
+            label2.Text = "Colour Active";
             // 
             // txtColorGuide
             // 
-            this.txtColorGuide.Location = new System.Drawing.Point(10, 122);
-            this.txtColorGuide.Name = "txtColorGuide";
-            this.txtColorGuide.Size = new System.Drawing.Size(121, 23);
-            this.txtColorGuide.TabIndex = 21;
+            txtColorGuide.Location = new Point(10, 122);
+            txtColorGuide.Name = "txtColorGuide";
+            txtColorGuide.Size = new Size(121, 23);
+            txtColorGuide.TabIndex = 21;
             // 
             // btnTextColourActivePicker
             // 
-            this.btnTextColourActivePicker.Location = new System.Drawing.Point(137, 165);
-            this.btnTextColourActivePicker.Name = "btnTextColourActivePicker";
-            this.btnTextColourActivePicker.Size = new System.Drawing.Size(21, 23);
-            this.btnTextColourActivePicker.TabIndex = 20;
-            this.btnTextColourActivePicker.UseVisualStyleBackColor = true;
-            this.btnTextColourActivePicker.Click += new System.EventHandler(this.btnTextColourActivePicker_Click);
+            btnTextColourActivePicker.Location = new Point(137, 165);
+            btnTextColourActivePicker.Name = "btnTextColourActivePicker";
+            btnTextColourActivePicker.Size = new Size(21, 23);
+            btnTextColourActivePicker.TabIndex = 20;
+            btnTextColourActivePicker.UseVisualStyleBackColor = true;
+            btnTextColourActivePicker.Click += btnTextColourActivePicker_Click;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(10, 16);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(142, 15);
-            this.label1.TabIndex = 17;
-            this.label1.Text = "Game List Text Alignment";
+            label1.AutoSize = true;
+            label1.Location = new Point(10, 16);
+            label1.Name = "label1";
+            label1.Size = new Size(142, 15);
+            label1.TabIndex = 17;
+            label1.Text = "Game List Text Alignment";
             // 
             // tabLangSettings
             // 
-            this.tabLangSettings.Controls.Add(this.comboBox1);
-            this.tabLangSettings.Location = new System.Drawing.Point(4, 24);
-            this.tabLangSettings.Name = "tabLangSettings";
-            this.tabLangSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabLangSettings.Size = new System.Drawing.Size(614, 556);
-            this.tabLangSettings.TabIndex = 2;
-            this.tabLangSettings.Text = "Language Settings";
-            this.tabLangSettings.UseVisualStyleBackColor = true;
+            tabLangSettings.Controls.Add(label56);
+            tabLangSettings.Controls.Add(txtLangTitleLabel);
+            tabLangSettings.Controls.Add(label55);
+            tabLangSettings.Controls.Add(txtLangMeridianLabel);
+            tabLangSettings.Controls.Add(label54);
+            tabLangSettings.Controls.Add(txtLangMinuteLabel);
+            tabLangSettings.Controls.Add(label49);
+            tabLangSettings.Controls.Add(textBox1);
+            tabLangSettings.Controls.Add(label51);
+            tabLangSettings.Controls.Add(txtLangDayLabel);
+            tabLangSettings.Controls.Add(label52);
+            tabLangSettings.Controls.Add(txtLangMonthLabel);
+            tabLangSettings.Controls.Add(label53);
+            tabLangSettings.Controls.Add(txtLangYearLabel);
+            tabLangSettings.Controls.Add(labLangPMLabel);
+            tabLangSettings.Controls.Add(txtLangPMLabel);
+            tabLangSettings.Controls.Add(label50);
+            tabLangSettings.Controls.Add(txtLangAMLabel);
+            tabLangSettings.Controls.Add(label48);
+            tabLangSettings.Controls.Add(txtLangOffLabel);
+            tabLangSettings.Controls.Add(label47);
+            tabLangSettings.Controls.Add(txtLangOnLabel);
+            tabLangSettings.Controls.Add(label46);
+            tabLangSettings.Controls.Add(txtLangSavestatesUnsupported);
+            tabLangSettings.Controls.Add(label45);
+            tabLangSettings.Controls.Add(txtLangEmptyLabel);
+            tabLangSettings.Controls.Add(label44);
+            tabLangSettings.Controls.Add(txtLangRemoveLabel);
+            tabLangSettings.Controls.Add(label43);
+            tabLangSettings.Controls.Add(txtLangFavoriteLabel);
+            tabLangSettings.Controls.Add(label42);
+            tabLangSettings.Controls.Add(txtLangBackLabel);
+            tabLangSettings.Controls.Add(label40);
+            tabLangSettings.Controls.Add(txtLangOpenLabel);
+            tabLangSettings.Controls.Add(label41);
+            tabLangSettings.Controls.Add(txtLangNavigateLabel);
+            tabLangSettings.Controls.Add(label38);
+            tabLangSettings.Controls.Add(txtLangLanguageLabel);
+            tabLangSettings.Controls.Add(label39);
+            tabLangSettings.Controls.Add(txtLangSettingsLabel);
+            tabLangSettings.Controls.Add(label36);
+            tabLangSettings.Controls.Add(txtLangRetroarchLabel);
+            tabLangSettings.Controls.Add(label37);
+            tabLangSettings.Controls.Add(txtLangConsoleLabel);
+            tabLangSettings.Controls.Add(label35);
+            tabLangSettings.Controls.Add(txtLangFavoritesLabel);
+            tabLangSettings.Controls.Add(label34);
+            tabLangSettings.Controls.Add(txtLangRecentLabel);
+            tabLangSettings.Controls.Add(label33);
+            tabLangSettings.Controls.Add(txtLangButtonGuideFontSize);
+            tabLangSettings.Controls.Add(label32);
+            tabLangSettings.Controls.Add(txtLangFontSize);
+            tabLangSettings.Controls.Add(label31);
+            tabLangSettings.Controls.Add(txtLangFont);
+            tabLangSettings.Controls.Add(label30);
+            tabLangSettings.Controls.Add(txtLangIsoCode);
+            tabLangSettings.Controls.Add(btnSaveLang);
+            tabLangSettings.Controls.Add(txtLangFileName);
+            tabLangSettings.Controls.Add(btnDeleteLangFile);
+            tabLangSettings.Controls.Add(label29);
+            tabLangSettings.Controls.Add(cbLangSettings);
+            tabLangSettings.Location = new Point(4, 24);
+            tabLangSettings.Name = "tabLangSettings";
+            tabLangSettings.Padding = new Padding(3);
+            tabLangSettings.Size = new Size(614, 556);
+            tabLangSettings.TabIndex = 2;
+            tabLangSettings.Text = "Language Settings";
+            tabLangSettings.UseVisualStyleBackColor = true;
             // 
-            // comboBox1
+            // label34
             // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(40, 25);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 23);
-            this.comboBox1.TabIndex = 0;
+            label34.AutoSize = true;
+            label34.Location = new Point(10, 113);
+            label34.Name = "label34";
+            label34.Size = new Size(74, 15);
+            label34.TabIndex = 45;
+            label34.Text = "Recent Label";
+            // 
+            // txtLangRecentLabel
+            // 
+            txtLangRecentLabel.Location = new Point(10, 131);
+            txtLangRecentLabel.Name = "txtLangRecentLabel";
+            txtLangRecentLabel.Size = new Size(200, 23);
+            txtLangRecentLabel.TabIndex = 44;
+            // 
+            // label33
+            // 
+            label33.AutoSize = true;
+            label33.Location = new Point(319, 69);
+            label33.Name = "label33";
+            label33.Size = new Size(88, 15);
+            label33.TabIndex = 43;
+            label33.Text = "Guide Font Size";
+            // 
+            // txtLangButtonGuideFontSize
+            // 
+            txtLangButtonGuideFontSize.Location = new Point(319, 87);
+            txtLangButtonGuideFontSize.Name = "txtLangButtonGuideFontSize";
+            txtLangButtonGuideFontSize.Size = new Size(97, 23);
+            txtLangButtonGuideFontSize.TabIndex = 42;
+            // 
+            // label32
+            // 
+            label32.AutoSize = true;
+            label32.Location = new Point(216, 69);
+            label32.Name = "label32";
+            label32.Size = new Size(54, 15);
+            label32.TabIndex = 41;
+            label32.Text = "Font Size";
+            label32.Click += label32_Click;
+            // 
+            // txtLangFontSize
+            // 
+            txtLangFontSize.Location = new Point(216, 87);
+            txtLangFontSize.Name = "txtLangFontSize";
+            txtLangFontSize.Size = new Size(97, 23);
+            txtLangFontSize.TabIndex = 40;
+            // 
+            // label31
+            // 
+            label31.AutoSize = true;
+            label31.Location = new Point(10, 69);
+            label31.Name = "label31";
+            label31.Size = new Size(31, 15);
+            label31.TabIndex = 39;
+            label31.Text = "Font";
+            // 
+            // txtLangFont
+            // 
+            txtLangFont.Location = new Point(10, 87);
+            txtLangFont.Name = "txtLangFont";
+            txtLangFont.Size = new Size(200, 23);
+            txtLangFont.TabIndex = 38;
+            // 
+            // label30
+            // 
+            label30.AutoSize = true;
+            label30.Location = new Point(422, 69);
+            label30.Name = "label30";
+            label30.Size = new Size(56, 15);
+            label30.TabIndex = 37;
+            label30.Text = "ISO Code";
+            // 
+            // txtLangIsoCode
+            // 
+            txtLangIsoCode.Location = new Point(422, 87);
+            txtLangIsoCode.Name = "txtLangIsoCode";
+            txtLangIsoCode.Size = new Size(183, 23);
+            txtLangIsoCode.TabIndex = 36;
+            // 
+            // btnSaveLang
+            // 
+            btnSaveLang.Location = new Point(530, 517);
+            btnSaveLang.Name = "btnSaveLang";
+            btnSaveLang.Size = new Size(75, 23);
+            btnSaveLang.TabIndex = 21;
+            btnSaveLang.Text = "Save";
+            btnSaveLang.UseVisualStyleBackColor = true;
+            btnSaveLang.Click += btnSaveLang_Click;
+            // 
+            // txtLangFileName
+            // 
+            txtLangFileName.Location = new Point(319, 33);
+            txtLangFileName.Name = "txtLangFileName";
+            txtLangFileName.Size = new Size(205, 23);
+            txtLangFileName.TabIndex = 20;
+            // 
+            // btnDeleteLangFile
+            // 
+            btnDeleteLangFile.Location = new Point(530, 33);
+            btnDeleteLangFile.Name = "btnDeleteLangFile";
+            btnDeleteLangFile.Size = new Size(75, 23);
+            btnDeleteLangFile.TabIndex = 19;
+            btnDeleteLangFile.Text = "Delete";
+            btnDeleteLangFile.UseVisualStyleBackColor = true;
+            btnDeleteLangFile.Click += btnDeleteLangFile_Click;
+            // 
+            // label29
+            // 
+            label29.AutoSize = true;
+            label29.Location = new Point(10, 16);
+            label29.Name = "label29";
+            label29.Size = new Size(125, 15);
+            label29.TabIndex = 18;
+            label29.Text = "Language Settings File";
+            // 
+            // cbLangSettings
+            // 
+            cbLangSettings.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbLangSettings.FormattingEnabled = true;
+            cbLangSettings.Location = new Point(10, 34);
+            cbLangSettings.Name = "cbLangSettings";
+            cbLangSettings.Size = new Size(303, 23);
+            cbLangSettings.TabIndex = 0;
+            cbLangSettings.SelectedIndexChanged += cbLangSettings_SelectedIndexChanged;
             // 
             // tabBootScreen
             // 
-            this.tabBootScreen.Controls.Add(this.btnUploadBootScreen);
-            this.tabBootScreen.Controls.Add(this.picBootScreen);
-            this.tabBootScreen.Location = new System.Drawing.Point(4, 24);
-            this.tabBootScreen.Name = "tabBootScreen";
-            this.tabBootScreen.Padding = new System.Windows.Forms.Padding(3);
-            this.tabBootScreen.Size = new System.Drawing.Size(614, 556);
-            this.tabBootScreen.TabIndex = 1;
-            this.tabBootScreen.Text = "Boot Screen";
-            this.tabBootScreen.UseVisualStyleBackColor = true;
+            tabBootScreen.Controls.Add(btnUploadBootScreen);
+            tabBootScreen.Controls.Add(picBootScreen);
+            tabBootScreen.Location = new Point(4, 24);
+            tabBootScreen.Name = "tabBootScreen";
+            tabBootScreen.Padding = new Padding(3);
+            tabBootScreen.Size = new Size(614, 556);
+            tabBootScreen.TabIndex = 1;
+            tabBootScreen.Text = "Boot Screen";
+            tabBootScreen.UseVisualStyleBackColor = true;
             // 
             // btnUploadBootScreen
             // 
-            this.btnUploadBootScreen.Location = new System.Drawing.Point(209, 477);
-            this.btnUploadBootScreen.Name = "btnUploadBootScreen";
-            this.btnUploadBootScreen.Size = new System.Drawing.Size(178, 23);
-            this.btnUploadBootScreen.TabIndex = 15;
-            this.btnUploadBootScreen.Text = "Upload New Boot Screen";
-            this.btnUploadBootScreen.UseVisualStyleBackColor = true;
-            this.btnUploadBootScreen.Click += new System.EventHandler(this.btnUploadBootScreen_Click);
+            btnUploadBootScreen.Location = new Point(209, 477);
+            btnUploadBootScreen.Name = "btnUploadBootScreen";
+            btnUploadBootScreen.Size = new Size(178, 23);
+            btnUploadBootScreen.TabIndex = 15;
+            btnUploadBootScreen.Text = "Upload New Boot Screen";
+            btnUploadBootScreen.UseVisualStyleBackColor = true;
+            btnUploadBootScreen.Click += btnUploadBootScreen_Click;
             // 
             // picBootScreen
             // 
-            this.picBootScreen.BackColor = System.Drawing.Color.Transparent;
-            this.picBootScreen.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.picBootScreen.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picBootScreen.Location = new System.Drawing.Point(36, 71);
-            this.picBootScreen.Name = "picBootScreen";
-            this.picBootScreen.Size = new System.Drawing.Size(533, 400);
-            this.picBootScreen.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picBootScreen.TabIndex = 14;
-            this.picBootScreen.TabStop = false;
+            picBootScreen.BackColor = Color.Transparent;
+            picBootScreen.BackgroundImageLayout = ImageLayout.None;
+            picBootScreen.BorderStyle = BorderStyle.FixedSingle;
+            picBootScreen.Location = new Point(36, 71);
+            picBootScreen.Name = "picBootScreen";
+            picBootScreen.Size = new Size(533, 400);
+            picBootScreen.SizeMode = PictureBoxSizeMode.StretchImage;
+            picBootScreen.TabIndex = 14;
+            picBootScreen.TabStop = false;
             // 
             // btnReboot
             // 
-            this.btnReboot.Location = new System.Drawing.Point(4, 590);
-            this.btnReboot.Name = "btnReboot";
-            this.btnReboot.Size = new System.Drawing.Size(131, 23);
-            this.btnReboot.TabIndex = 80;
-            this.btnReboot.Text = "Reboot";
-            this.btnReboot.UseVisualStyleBackColor = true;
-            this.btnReboot.Click += new System.EventHandler(this.btnReboot_Click);
+            btnReboot.Location = new Point(4, 590);
+            btnReboot.Name = "btnReboot";
+            btnReboot.Size = new Size(131, 23);
+            btnReboot.TabIndex = 80;
+            btnReboot.Text = "Reboot";
+            btnReboot.UseVisualStyleBackColor = true;
+            btnReboot.Click += btnReboot_Click;
+            // 
+            // label35
+            // 
+            label35.AutoSize = true;
+            label35.Location = new Point(11, 289);
+            label35.Name = "label35";
+            label35.Size = new Size(85, 15);
+            label35.TabIndex = 47;
+            label35.Text = "Favorites Label";
+            label35.Click += label35_Click;
+            // 
+            // txtLangFavoritesLabel
+            // 
+            txtLangFavoritesLabel.Location = new Point(11, 307);
+            txtLangFavoritesLabel.Name = "txtLangFavoritesLabel";
+            txtLangFavoritesLabel.Size = new Size(200, 23);
+            txtLangFavoritesLabel.TabIndex = 46;
+            // 
+            // label36
+            // 
+            label36.AutoSize = true;
+            label36.Location = new Point(11, 333);
+            label36.Name = "label36";
+            label36.Size = new Size(89, 15);
+            label36.TabIndex = 51;
+            label36.Text = "Retroarch Label";
+            // 
+            // txtLangRetroarchLabel
+            // 
+            txtLangRetroarchLabel.Location = new Point(11, 351);
+            txtLangRetroarchLabel.Name = "txtLangRetroarchLabel";
+            txtLangRetroarchLabel.Size = new Size(200, 23);
+            txtLangRetroarchLabel.TabIndex = 50;
+            // 
+            // label37
+            // 
+            label37.AutoSize = true;
+            label37.Location = new Point(10, 157);
+            label37.Name = "label37";
+            label37.Size = new Size(81, 15);
+            label37.TabIndex = 49;
+            label37.Text = "Console Label";
+            // 
+            // txtLangConsoleLabel
+            // 
+            txtLangConsoleLabel.Location = new Point(10, 175);
+            txtLangConsoleLabel.Name = "txtLangConsoleLabel";
+            txtLangConsoleLabel.Size = new Size(200, 23);
+            txtLangConsoleLabel.TabIndex = 48;
+            // 
+            // label38
+            // 
+            label38.AutoSize = true;
+            label38.Location = new Point(11, 377);
+            label38.Name = "label38";
+            label38.Size = new Size(90, 15);
+            label38.TabIndex = 55;
+            label38.Text = "Language Label";
+            // 
+            // txtLangLanguageLabel
+            // 
+            txtLangLanguageLabel.Location = new Point(11, 395);
+            txtLangLanguageLabel.Name = "txtLangLanguageLabel";
+            txtLangLanguageLabel.Size = new Size(200, 23);
+            txtLangLanguageLabel.TabIndex = 54;
+            // 
+            // label39
+            // 
+            label39.AutoSize = true;
+            label39.Location = new Point(10, 201);
+            label39.Name = "label39";
+            label39.Size = new Size(80, 15);
+            label39.TabIndex = 53;
+            label39.Text = "Settings Label";
+            // 
+            // txtLangSettingsLabel
+            // 
+            txtLangSettingsLabel.Location = new Point(10, 219);
+            txtLangSettingsLabel.Name = "txtLangSettingsLabel";
+            txtLangSettingsLabel.Size = new Size(200, 23);
+            txtLangSettingsLabel.TabIndex = 52;
+            // 
+            // label40
+            // 
+            label40.AutoSize = true;
+            label40.Location = new Point(216, 113);
+            label40.Name = "label40";
+            label40.Size = new Size(67, 15);
+            label40.TabIndex = 59;
+            label40.Text = "Open Label";
+            // 
+            // txtLangOpenLabel
+            // 
+            txtLangOpenLabel.Location = new Point(216, 131);
+            txtLangOpenLabel.Name = "txtLangOpenLabel";
+            txtLangOpenLabel.Size = new Size(200, 23);
+            txtLangOpenLabel.TabIndex = 58;
+            txtLangOpenLabel.TextChanged += txtLangOpenLabel_TextChanged;
+            // 
+            // label41
+            // 
+            label41.AutoSize = true;
+            label41.Location = new Point(11, 245);
+            label41.Name = "label41";
+            label41.Size = new Size(85, 15);
+            label41.TabIndex = 57;
+            label41.Text = "Navigate Label";
+            // 
+            // txtLangNavigateLabel
+            // 
+            txtLangNavigateLabel.Location = new Point(11, 263);
+            txtLangNavigateLabel.Name = "txtLangNavigateLabel";
+            txtLangNavigateLabel.Size = new Size(200, 23);
+            txtLangNavigateLabel.TabIndex = 56;
+            // 
+            // label42
+            // 
+            label42.AutoSize = true;
+            label42.Location = new Point(216, 157);
+            label42.Name = "label42";
+            label42.Size = new Size(63, 15);
+            label42.TabIndex = 61;
+            label42.Text = "Back Label";
+            // 
+            // txtLangBackLabel
+            // 
+            txtLangBackLabel.Location = new Point(216, 175);
+            txtLangBackLabel.Name = "txtLangBackLabel";
+            txtLangBackLabel.Size = new Size(200, 23);
+            txtLangBackLabel.TabIndex = 60;
+            // 
+            // label43
+            // 
+            label43.AutoSize = true;
+            label43.Location = new Point(11, 421);
+            label43.Name = "label43";
+            label43.Size = new Size(80, 15);
+            label43.TabIndex = 63;
+            label43.Text = "Favorite Label";
+            // 
+            // txtLangFavoriteLabel
+            // 
+            txtLangFavoriteLabel.Location = new Point(11, 439);
+            txtLangFavoriteLabel.Name = "txtLangFavoriteLabel";
+            txtLangFavoriteLabel.Size = new Size(200, 23);
+            txtLangFavoriteLabel.TabIndex = 62;
+            // 
+            // label44
+            // 
+            label44.AutoSize = true;
+            label44.Location = new Point(216, 201);
+            label44.Name = "label44";
+            label44.Size = new Size(81, 15);
+            label44.TabIndex = 65;
+            label44.Text = "Remove Label";
+            // 
+            // txtLangRemoveLabel
+            // 
+            txtLangRemoveLabel.Location = new Point(216, 219);
+            txtLangRemoveLabel.Name = "txtLangRemoveLabel";
+            txtLangRemoveLabel.Size = new Size(200, 23);
+            txtLangRemoveLabel.TabIndex = 64;
+            // 
+            // label45
+            // 
+            label45.AutoSize = true;
+            label45.Location = new Point(216, 245);
+            label45.Name = "label45";
+            label45.Size = new Size(72, 15);
+            label45.TabIndex = 67;
+            label45.Text = "Empty Label";
+            // 
+            // txtLangEmptyLabel
+            // 
+            txtLangEmptyLabel.Location = new Point(216, 263);
+            txtLangEmptyLabel.Name = "txtLangEmptyLabel";
+            txtLangEmptyLabel.Size = new Size(200, 23);
+            txtLangEmptyLabel.TabIndex = 66;
+            // 
+            // label46
+            // 
+            label46.AutoSize = true;
+            label46.Location = new Point(216, 289);
+            label46.Name = "label46";
+            label46.Size = new Size(168, 15);
+            label46.TabIndex = 69;
+            label46.Text = "Save States Unsupported Label";
+            // 
+            // txtLangSavestatesUnsupported
+            // 
+            txtLangSavestatesUnsupported.Location = new Point(216, 307);
+            txtLangSavestatesUnsupported.Name = "txtLangSavestatesUnsupported";
+            txtLangSavestatesUnsupported.Size = new Size(200, 23);
+            txtLangSavestatesUnsupported.TabIndex = 68;
+            // 
+            // label47
+            // 
+            label47.AutoSize = true;
+            label47.Location = new Point(216, 377);
+            label47.Name = "label47";
+            label47.Size = new Size(54, 15);
+            label47.TabIndex = 71;
+            label47.Text = "On Label";
+            // 
+            // txtLangOnLabel
+            // 
+            txtLangOnLabel.Location = new Point(216, 395);
+            txtLangOnLabel.Name = "txtLangOnLabel";
+            txtLangOnLabel.Size = new Size(200, 23);
+            txtLangOnLabel.TabIndex = 70;
+            // 
+            // label48
+            // 
+            label48.AutoSize = true;
+            label48.Location = new Point(216, 421);
+            label48.Name = "label48";
+            label48.Size = new Size(55, 15);
+            label48.TabIndex = 73;
+            label48.Text = "Off Label";
+            // 
+            // txtLangOffLabel
+            // 
+            txtLangOffLabel.Location = new Point(216, 439);
+            txtLangOffLabel.Name = "txtLangOffLabel";
+            txtLangOffLabel.Size = new Size(200, 23);
+            txtLangOffLabel.TabIndex = 72;
+            // 
+            // labLangPMLabel
+            // 
+            labLangPMLabel.AutoSize = true;
+            labLangPMLabel.Location = new Point(422, 157);
+            labLangPMLabel.Name = "labLangPMLabel";
+            labLangPMLabel.Size = new Size(56, 15);
+            labLangPMLabel.TabIndex = 77;
+            labLangPMLabel.Text = "PM Label";
+            // 
+            // txtLangPMLabel
+            // 
+            txtLangPMLabel.Location = new Point(422, 175);
+            txtLangPMLabel.Name = "txtLangPMLabel";
+            txtLangPMLabel.Size = new Size(183, 23);
+            txtLangPMLabel.TabIndex = 76;
+            // 
+            // label50
+            // 
+            label50.AutoSize = true;
+            label50.Location = new Point(422, 113);
+            label50.Name = "label50";
+            label50.Size = new Size(57, 15);
+            label50.TabIndex = 75;
+            label50.Text = "AM Label";
+            // 
+            // txtLangAMLabel
+            // 
+            txtLangAMLabel.Location = new Point(422, 131);
+            txtLangAMLabel.Name = "txtLangAMLabel";
+            txtLangAMLabel.Size = new Size(183, 23);
+            txtLangAMLabel.TabIndex = 74;
+            // 
+            // label49
+            // 
+            label49.AutoSize = true;
+            label49.Location = new Point(422, 333);
+            label49.Name = "label49";
+            label49.Size = new Size(65, 15);
+            label49.TabIndex = 85;
+            label49.Text = "Hour Label";
+            // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(422, 351);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(183, 23);
+            textBox1.TabIndex = 84;
+            // 
+            // label51
+            // 
+            label51.AutoSize = true;
+            label51.Location = new Point(422, 289);
+            label51.Name = "label51";
+            label51.Size = new Size(58, 15);
+            label51.TabIndex = 83;
+            label51.Text = "Day Label";
+            // 
+            // txtLangDayLabel
+            // 
+            txtLangDayLabel.Location = new Point(422, 307);
+            txtLangDayLabel.Name = "txtLangDayLabel";
+            txtLangDayLabel.Size = new Size(183, 23);
+            txtLangDayLabel.TabIndex = 82;
+            // 
+            // label52
+            // 
+            label52.AutoSize = true;
+            label52.Location = new Point(422, 245);
+            label52.Name = "label52";
+            label52.Size = new Size(74, 15);
+            label52.TabIndex = 81;
+            label52.Text = "Month Label";
+            // 
+            // txtLangMonthLabel
+            // 
+            txtLangMonthLabel.Location = new Point(422, 263);
+            txtLangMonthLabel.Name = "txtLangMonthLabel";
+            txtLangMonthLabel.Size = new Size(183, 23);
+            txtLangMonthLabel.TabIndex = 80;
+            // 
+            // label53
+            // 
+            label53.AutoSize = true;
+            label53.Location = new Point(422, 201);
+            label53.Name = "label53";
+            label53.Size = new Size(60, 15);
+            label53.TabIndex = 79;
+            label53.Text = "Year Label";
+            // 
+            // txtLangYearLabel
+            // 
+            txtLangYearLabel.Location = new Point(422, 219);
+            txtLangYearLabel.Name = "txtLangYearLabel";
+            txtLangYearLabel.Size = new Size(183, 23);
+            txtLangYearLabel.TabIndex = 78;
+            // 
+            // label54
+            // 
+            label54.AutoSize = true;
+            label54.Location = new Point(422, 377);
+            label54.Name = "label54";
+            label54.Size = new Size(76, 15);
+            label54.TabIndex = 87;
+            label54.Text = "Minute Label";
+            // 
+            // txtLangMinuteLabel
+            // 
+            txtLangMinuteLabel.Location = new Point(422, 395);
+            txtLangMinuteLabel.Name = "txtLangMinuteLabel";
+            txtLangMinuteLabel.Size = new Size(183, 23);
+            txtLangMinuteLabel.TabIndex = 86;
+            // 
+            // label55
+            // 
+            label55.AutoSize = true;
+            label55.Location = new Point(422, 421);
+            label55.Name = "label55";
+            label55.Size = new Size(114, 15);
+            label55.TabIndex = 89;
+            label55.Text = "Meridian Time Label";
+            // 
+            // txtLangMeridianLabel
+            // 
+            txtLangMeridianLabel.Location = new Point(422, 439);
+            txtLangMeridianLabel.Name = "txtLangMeridianLabel";
+            txtLangMeridianLabel.Size = new Size(183, 23);
+            txtLangMeridianLabel.TabIndex = 88;
+            // 
+            // label56
+            // 
+            label56.AutoSize = true;
+            label56.Location = new Point(216, 333);
+            label56.Name = "label56";
+            label56.Size = new Size(60, 15);
+            label56.TabIndex = 91;
+            label56.Text = "Title Label";
+            // 
+            // txtLangTitleLabel
+            // 
+            txtLangTitleLabel.Location = new Point(216, 351);
+            txtLangTitleLabel.Name = "txtLangTitleLabel";
+            txtLangTitleLabel.Size = new Size(200, 23);
+            txtLangTitleLabel.TabIndex = 90;
             // 
             // SkinSettingsForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(622, 621);
-            this.Controls.Add(this.btnReboot);
-            this.Controls.Add(this.tabControl1);
-            this.Controls.Add(this.btnCancel);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "SkinSettingsForm";
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Skin Settings";
-            this.tabControl1.ResumeLayout(false);
-            this.tabSkinSettings.ResumeLayout(false);
-            this.tabSkinSettings.PerformLayout();
-            this.tabLangSettings.ResumeLayout(false);
-            this.tabBootScreen.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picBootScreen)).EndInit();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            AutoSize = true;
+            ClientSize = new Size(622, 621);
+            Controls.Add(btnReboot);
+            Controls.Add(tabControl1);
+            Controls.Add(btnCancel);
+            FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            Name = "SkinSettingsForm";
+            ShowInTaskbar = false;
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Skin Settings";
+            tabControl1.ResumeLayout(false);
+            tabSkinSettings.ResumeLayout(false);
+            tabSkinSettings.PerformLayout();
+            tabLangSettings.ResumeLayout(false);
+            tabLangSettings.PerformLayout();
+            tabBootScreen.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)picBootScreen).EndInit();
+            ResumeLayout(false);
         }
 
         #endregion
@@ -905,6 +1510,66 @@
         private Button btnReboot;
         private Label label1;
         private TabPage tabLangSettings;
-        private ComboBox comboBox1;
+        private ComboBox cbLangSettings;
+        private Label label29;
+        private Button btnDeleteLangFile;
+        private Button btnSaveLang;
+        private TextBox txtLangFileName;
+        private Label label30;
+        private TextBox txtLangIsoCode;
+        private Label label31;
+        private TextBox txtLangFont;
+        private Label label33;
+        private TextBox txtLangButtonGuideFontSize;
+        private Label label32;
+        private TextBox txtLangFontSize;
+        private Label label34;
+        private TextBox txtLangRecentLabel;
+        private Label label35;
+        private TextBox txtLangFavoritesLabel;
+        private Label label42;
+        private TextBox txtLangBackLabel;
+        private Label label40;
+        private TextBox txtLangOpenLabel;
+        private Label label41;
+        private TextBox txtLangNavigateLabel;
+        private Label label38;
+        private TextBox txtLangLanguageLabel;
+        private Label label39;
+        private TextBox txtLangSettingsLabel;
+        private Label label36;
+        private TextBox txtLangRetroarchLabel;
+        private Label label37;
+        private TextBox txtLangConsoleLabel;
+        private Label label44;
+        private TextBox txtLangRemoveLabel;
+        private Label label43;
+        private TextBox txtLangFavoriteLabel;
+        private Label label46;
+        private TextBox txtLangSavestatesUnsupported;
+        private Label label45;
+        private TextBox txtLangEmptyLabel;
+        private Label labLangPMLabel;
+        private TextBox txtLangPMLabel;
+        private Label label50;
+        private TextBox txtLangAMLabel;
+        private Label label48;
+        private TextBox txtLangOffLabel;
+        private Label label47;
+        private TextBox txtLangOnLabel;
+        private Label label49;
+        private TextBox textBox1;
+        private Label label51;
+        private TextBox txtLangDayLabel;
+        private Label label52;
+        private TextBox txtLangMonthLabel;
+        private Label label53;
+        private TextBox txtLangYearLabel;
+        private Label label55;
+        private TextBox txtLangMeridianLabel;
+        private Label label54;
+        private TextBox txtLangMinuteLabel;
+        private Label label56;
+        private TextBox txtLangTitleLabel;
     }
 }
