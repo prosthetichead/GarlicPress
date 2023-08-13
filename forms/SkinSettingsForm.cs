@@ -235,6 +235,31 @@ namespace GarlicPress
             languageSettings.buttonguidefontsize = guideFontSize;
             languageSettings.recentlabel = txtLangRecentLabel.Text;
 
+            languageSettings.amlabel = txtLangAMLabel.Text;
+            languageSettings.backlabel = txtLangBackLabel.Text;
+            languageSettings.consoleslabel = txtLangConsoleLabel.Text;
+            languageSettings.daylabel = txtLangDayLabel.Text;
+            languageSettings.emptylabel = txtLangEmptyLabel.Text;
+            languageSettings.favoritelabel = txtLangFavoriteLabel.Text;
+            languageSettings.favoriteslabel = txtLangFavoritesLabel.Text;
+            languageSettings.languagelabel = txtLangLanguageLabel.Text;
+            languageSettings.meridiantimelabel = txtLangMeridianLabel.Text;
+            languageSettings.minutelabel = txtLangMinuteLabel.Text;
+            languageSettings.monthlabel = txtLangMonthLabel.Text;
+            languageSettings.navigatelabel = txtLangNavigateLabel.Text;
+            languageSettings.offlabel = txtLangOffLabel.Text;
+            languageSettings.onlabel = txtLangOnLabel.Text;
+            languageSettings.openlabel = txtLangOpenLabel.Text;
+            languageSettings.pmlabel = txtLangPMLabel.Text;
+            languageSettings.recentlabel = txtLangRecentLabel.Text;
+            languageSettings.removelabel = txtLangRemoveLabel.Text;
+            languageSettings.retroarchlabel = txtLangRetroarchLabel.Text;
+            languageSettings.savestatesunsupported = txtLangSavestatesUnsupported.Text;
+            languageSettings.settingslabel = txtLangSettingsLabel.Text;
+            languageSettings.titlelabel = txtLangTitleLabel.Text;
+            languageSettings.yearlabel = txtLangYearLabel.Text;
+            languageSettings.hourlabel = txtLangHourLabel.Text;
+
             GarlicSkin.SaveLangFile(txtLangFileName.Text, languageSettings);
 
             var newKeypair = new KeyValuePair<string, GarlicLanguageSettings>(txtLangFileName.Text.ToLower(), languageSettings);
@@ -257,23 +282,33 @@ namespace GarlicPress
             txtLangIsoCode.Text = LangKeyPair.Value.isocode;
             txtLangFont.Text = LangKeyPair.Value.font;
             txtLangFontSize.Text = LangKeyPair.Value.fontsize.ToString();
+            txtLangAMLabel.Text = LangKeyPair.Value.amlabel;
+            txtLangBackLabel.Text = LangKeyPair.Value.backlabel;
             txtLangButtonGuideFontSize.Text = LangKeyPair.Value.buttonguidefontsize.ToString();
+            txtLangConsoleLabel.Text = LangKeyPair.Value.consoleslabel;
+            txtLangDayLabel.Text = LangKeyPair.Value.daylabel;
+            txtLangEmptyLabel.Text = LangKeyPair.Value.emptylabel;
+            txtLangFavoriteLabel.Text = LangKeyPair.Value.favoritelabel;
+            txtLangFavoritesLabel.Text = LangKeyPair.Value.favoriteslabel;
+            txtLangLanguageLabel.Text = LangKeyPair.Value.languagelabel;
+            txtLangMeridianLabel.Text = LangKeyPair.Value.meridiantimelabel;
+            txtLangMinuteLabel.Text = LangKeyPair.Value.minutelabel;
+            txtLangMonthLabel.Text = LangKeyPair.Value.monthlabel;
+            txtLangNavigateLabel.Text = LangKeyPair.Value.navigatelabel;
+            txtLangOffLabel.Text = LangKeyPair.Value.offlabel;
+            txtLangOnLabel.Text = LangKeyPair.Value.onlabel;
+            txtLangOpenLabel.Text = LangKeyPair.Value.openlabel;
+            txtLangPMLabel.Text = LangKeyPair.Value.pmlabel;
             txtLangRecentLabel.Text = LangKeyPair.Value.recentlabel;
-        }
-
-        private void label32_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label35_Click(object sender, EventArgs e)
-        {
+            txtLangRemoveLabel.Text = LangKeyPair.Value.removelabel;
+            txtLangRetroarchLabel.Text = LangKeyPair.Value.retroarchlabel;
+            txtLangSavestatesUnsupported.Text = LangKeyPair.Value.savestatesunsupported;
+            txtLangSettingsLabel.Text = LangKeyPair.Value.settingslabel;
+            txtLangTitleLabel.Text = LangKeyPair.Value.titlelabel;
+            txtLangYearLabel.Text = LangKeyPair.Value.yearlabel;
+            txtLangHourLabel.Text = LangKeyPair.Value.hourlabel;
 
         }
 
-        private void txtLangOpenLabel_TextChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }

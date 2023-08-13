@@ -98,6 +98,52 @@
             btnTextColourActivePicker = new Button();
             label1 = new Label();
             tabLangSettings = new TabPage();
+            label56 = new Label();
+            txtLangTitleLabel = new TextBox();
+            label55 = new Label();
+            txtLangMeridianLabel = new TextBox();
+            label54 = new Label();
+            txtLangMinuteLabel = new TextBox();
+            label49 = new Label();
+            txtLangHourLabel = new TextBox();
+            label51 = new Label();
+            txtLangDayLabel = new TextBox();
+            label52 = new Label();
+            txtLangMonthLabel = new TextBox();
+            label53 = new Label();
+            txtLangYearLabel = new TextBox();
+            labLangPMLabel = new Label();
+            txtLangPMLabel = new TextBox();
+            label50 = new Label();
+            txtLangAMLabel = new TextBox();
+            label48 = new Label();
+            txtLangOffLabel = new TextBox();
+            label47 = new Label();
+            txtLangOnLabel = new TextBox();
+            label46 = new Label();
+            txtLangSavestatesUnsupported = new TextBox();
+            label45 = new Label();
+            txtLangEmptyLabel = new TextBox();
+            label44 = new Label();
+            txtLangRemoveLabel = new TextBox();
+            label43 = new Label();
+            txtLangFavoriteLabel = new TextBox();
+            label42 = new Label();
+            txtLangBackLabel = new TextBox();
+            label40 = new Label();
+            txtLangOpenLabel = new TextBox();
+            label41 = new Label();
+            txtLangNavigateLabel = new TextBox();
+            label38 = new Label();
+            txtLangLanguageLabel = new TextBox();
+            label39 = new Label();
+            txtLangSettingsLabel = new TextBox();
+            label36 = new Label();
+            txtLangRetroarchLabel = new TextBox();
+            label37 = new Label();
+            txtLangConsoleLabel = new TextBox();
+            label35 = new Label();
+            txtLangFavoritesLabel = new TextBox();
             label34 = new Label();
             txtLangRecentLabel = new TextBox();
             label33 = new Label();
@@ -117,52 +163,6 @@
             btnUploadBootScreen = new Button();
             picBootScreen = new PictureBox();
             btnReboot = new Button();
-            label35 = new Label();
-            txtLangFavoritesLabel = new TextBox();
-            label36 = new Label();
-            txtLangRetroarchLabel = new TextBox();
-            label37 = new Label();
-            txtLangConsoleLabel = new TextBox();
-            label38 = new Label();
-            txtLangLanguageLabel = new TextBox();
-            label39 = new Label();
-            txtLangSettingsLabel = new TextBox();
-            label40 = new Label();
-            txtLangOpenLabel = new TextBox();
-            label41 = new Label();
-            txtLangNavigateLabel = new TextBox();
-            label42 = new Label();
-            txtLangBackLabel = new TextBox();
-            label43 = new Label();
-            txtLangFavoriteLabel = new TextBox();
-            label44 = new Label();
-            txtLangRemoveLabel = new TextBox();
-            label45 = new Label();
-            txtLangEmptyLabel = new TextBox();
-            label46 = new Label();
-            txtLangSavestatesUnsupported = new TextBox();
-            label47 = new Label();
-            txtLangOnLabel = new TextBox();
-            label48 = new Label();
-            txtLangOffLabel = new TextBox();
-            labLangPMLabel = new Label();
-            txtLangPMLabel = new TextBox();
-            label50 = new Label();
-            txtLangAMLabel = new TextBox();
-            label49 = new Label();
-            textBox1 = new TextBox();
-            label51 = new Label();
-            txtLangDayLabel = new TextBox();
-            label52 = new Label();
-            txtLangMonthLabel = new TextBox();
-            label53 = new Label();
-            txtLangYearLabel = new TextBox();
-            label54 = new Label();
-            txtLangMinuteLabel = new TextBox();
-            label55 = new Label();
-            txtLangMeridianLabel = new TextBox();
-            label56 = new Label();
-            txtLangTitleLabel = new TextBox();
             tabControl1.SuspendLayout();
             tabSkinSettings.SuspendLayout();
             tabLangSettings.SuspendLayout();
@@ -808,7 +808,7 @@
             tabLangSettings.Controls.Add(label54);
             tabLangSettings.Controls.Add(txtLangMinuteLabel);
             tabLangSettings.Controls.Add(label49);
-            tabLangSettings.Controls.Add(textBox1);
+            tabLangSettings.Controls.Add(txtLangHourLabel);
             tabLangSettings.Controls.Add(label51);
             tabLangSettings.Controls.Add(txtLangDayLabel);
             tabLangSettings.Controls.Add(label52);
@@ -870,6 +870,374 @@
             tabLangSettings.Text = "Language Settings";
             tabLangSettings.UseVisualStyleBackColor = true;
             // 
+            // label56
+            // 
+            label56.AutoSize = true;
+            label56.Location = new Point(216, 333);
+            label56.Name = "label56";
+            label56.Size = new Size(60, 15);
+            label56.TabIndex = 91;
+            label56.Text = "Title Label";
+            // 
+            // txtLangTitleLabel
+            // 
+            txtLangTitleLabel.Location = new Point(216, 351);
+            txtLangTitleLabel.Name = "txtLangTitleLabel";
+            txtLangTitleLabel.Size = new Size(200, 23);
+            txtLangTitleLabel.TabIndex = 90;
+            // 
+            // label55
+            // 
+            label55.AutoSize = true;
+            label55.Location = new Point(422, 421);
+            label55.Name = "label55";
+            label55.Size = new Size(114, 15);
+            label55.TabIndex = 89;
+            label55.Text = "Meridian Time Label";
+            // 
+            // txtLangMeridianLabel
+            // 
+            txtLangMeridianLabel.Location = new Point(422, 439);
+            txtLangMeridianLabel.Name = "txtLangMeridianLabel";
+            txtLangMeridianLabel.Size = new Size(183, 23);
+            txtLangMeridianLabel.TabIndex = 88;
+            // 
+            // label54
+            // 
+            label54.AutoSize = true;
+            label54.Location = new Point(422, 377);
+            label54.Name = "label54";
+            label54.Size = new Size(76, 15);
+            label54.TabIndex = 87;
+            label54.Text = "Minute Label";
+            // 
+            // txtLangMinuteLabel
+            // 
+            txtLangMinuteLabel.Location = new Point(422, 395);
+            txtLangMinuteLabel.Name = "txtLangMinuteLabel";
+            txtLangMinuteLabel.Size = new Size(183, 23);
+            txtLangMinuteLabel.TabIndex = 86;
+            // 
+            // label49
+            // 
+            label49.AutoSize = true;
+            label49.Location = new Point(422, 333);
+            label49.Name = "label49";
+            label49.Size = new Size(65, 15);
+            label49.TabIndex = 85;
+            label49.Text = "Hour Label";
+            // 
+            // txtLangHourLabel
+            // 
+            txtLangHourLabel.Location = new Point(422, 351);
+            txtLangHourLabel.Name = "txtLangHourLabel";
+            txtLangHourLabel.Size = new Size(183, 23);
+            txtLangHourLabel.TabIndex = 84;
+            // 
+            // label51
+            // 
+            label51.AutoSize = true;
+            label51.Location = new Point(422, 289);
+            label51.Name = "label51";
+            label51.Size = new Size(58, 15);
+            label51.TabIndex = 83;
+            label51.Text = "Day Label";
+            // 
+            // txtLangDayLabel
+            // 
+            txtLangDayLabel.Location = new Point(422, 307);
+            txtLangDayLabel.Name = "txtLangDayLabel";
+            txtLangDayLabel.Size = new Size(183, 23);
+            txtLangDayLabel.TabIndex = 82;
+            // 
+            // label52
+            // 
+            label52.AutoSize = true;
+            label52.Location = new Point(422, 245);
+            label52.Name = "label52";
+            label52.Size = new Size(74, 15);
+            label52.TabIndex = 81;
+            label52.Text = "Month Label";
+            // 
+            // txtLangMonthLabel
+            // 
+            txtLangMonthLabel.Location = new Point(422, 263);
+            txtLangMonthLabel.Name = "txtLangMonthLabel";
+            txtLangMonthLabel.Size = new Size(183, 23);
+            txtLangMonthLabel.TabIndex = 80;
+            // 
+            // label53
+            // 
+            label53.AutoSize = true;
+            label53.Location = new Point(422, 201);
+            label53.Name = "label53";
+            label53.Size = new Size(60, 15);
+            label53.TabIndex = 79;
+            label53.Text = "Year Label";
+            // 
+            // txtLangYearLabel
+            // 
+            txtLangYearLabel.Location = new Point(422, 219);
+            txtLangYearLabel.Name = "txtLangYearLabel";
+            txtLangYearLabel.Size = new Size(183, 23);
+            txtLangYearLabel.TabIndex = 78;
+            // 
+            // labLangPMLabel
+            // 
+            labLangPMLabel.AutoSize = true;
+            labLangPMLabel.Location = new Point(422, 157);
+            labLangPMLabel.Name = "labLangPMLabel";
+            labLangPMLabel.Size = new Size(56, 15);
+            labLangPMLabel.TabIndex = 77;
+            labLangPMLabel.Text = "PM Label";
+            // 
+            // txtLangPMLabel
+            // 
+            txtLangPMLabel.Location = new Point(422, 175);
+            txtLangPMLabel.Name = "txtLangPMLabel";
+            txtLangPMLabel.Size = new Size(183, 23);
+            txtLangPMLabel.TabIndex = 76;
+            // 
+            // label50
+            // 
+            label50.AutoSize = true;
+            label50.Location = new Point(422, 113);
+            label50.Name = "label50";
+            label50.Size = new Size(57, 15);
+            label50.TabIndex = 75;
+            label50.Text = "AM Label";
+            // 
+            // txtLangAMLabel
+            // 
+            txtLangAMLabel.Location = new Point(422, 131);
+            txtLangAMLabel.Name = "txtLangAMLabel";
+            txtLangAMLabel.Size = new Size(183, 23);
+            txtLangAMLabel.TabIndex = 74;
+            // 
+            // label48
+            // 
+            label48.AutoSize = true;
+            label48.Location = new Point(216, 421);
+            label48.Name = "label48";
+            label48.Size = new Size(55, 15);
+            label48.TabIndex = 73;
+            label48.Text = "Off Label";
+            // 
+            // txtLangOffLabel
+            // 
+            txtLangOffLabel.Location = new Point(216, 439);
+            txtLangOffLabel.Name = "txtLangOffLabel";
+            txtLangOffLabel.Size = new Size(200, 23);
+            txtLangOffLabel.TabIndex = 72;
+            // 
+            // label47
+            // 
+            label47.AutoSize = true;
+            label47.Location = new Point(216, 377);
+            label47.Name = "label47";
+            label47.Size = new Size(54, 15);
+            label47.TabIndex = 71;
+            label47.Text = "On Label";
+            // 
+            // txtLangOnLabel
+            // 
+            txtLangOnLabel.Location = new Point(216, 395);
+            txtLangOnLabel.Name = "txtLangOnLabel";
+            txtLangOnLabel.Size = new Size(200, 23);
+            txtLangOnLabel.TabIndex = 70;
+            // 
+            // label46
+            // 
+            label46.AutoSize = true;
+            label46.Location = new Point(216, 289);
+            label46.Name = "label46";
+            label46.Size = new Size(168, 15);
+            label46.TabIndex = 69;
+            label46.Text = "Save States Unsupported Label";
+            // 
+            // txtLangSavestatesUnsupported
+            // 
+            txtLangSavestatesUnsupported.Location = new Point(216, 307);
+            txtLangSavestatesUnsupported.Name = "txtLangSavestatesUnsupported";
+            txtLangSavestatesUnsupported.Size = new Size(200, 23);
+            txtLangSavestatesUnsupported.TabIndex = 68;
+            // 
+            // label45
+            // 
+            label45.AutoSize = true;
+            label45.Location = new Point(216, 245);
+            label45.Name = "label45";
+            label45.Size = new Size(72, 15);
+            label45.TabIndex = 67;
+            label45.Text = "Empty Label";
+            // 
+            // txtLangEmptyLabel
+            // 
+            txtLangEmptyLabel.Location = new Point(216, 263);
+            txtLangEmptyLabel.Name = "txtLangEmptyLabel";
+            txtLangEmptyLabel.Size = new Size(200, 23);
+            txtLangEmptyLabel.TabIndex = 66;
+            // 
+            // label44
+            // 
+            label44.AutoSize = true;
+            label44.Location = new Point(216, 201);
+            label44.Name = "label44";
+            label44.Size = new Size(81, 15);
+            label44.TabIndex = 65;
+            label44.Text = "Remove Label";
+            // 
+            // txtLangRemoveLabel
+            // 
+            txtLangRemoveLabel.Location = new Point(216, 219);
+            txtLangRemoveLabel.Name = "txtLangRemoveLabel";
+            txtLangRemoveLabel.Size = new Size(200, 23);
+            txtLangRemoveLabel.TabIndex = 64;
+            // 
+            // label43
+            // 
+            label43.AutoSize = true;
+            label43.Location = new Point(11, 421);
+            label43.Name = "label43";
+            label43.Size = new Size(80, 15);
+            label43.TabIndex = 63;
+            label43.Text = "Favorite Label";
+            // 
+            // txtLangFavoriteLabel
+            // 
+            txtLangFavoriteLabel.Location = new Point(11, 439);
+            txtLangFavoriteLabel.Name = "txtLangFavoriteLabel";
+            txtLangFavoriteLabel.Size = new Size(200, 23);
+            txtLangFavoriteLabel.TabIndex = 62;
+            // 
+            // label42
+            // 
+            label42.AutoSize = true;
+            label42.Location = new Point(216, 157);
+            label42.Name = "label42";
+            label42.Size = new Size(63, 15);
+            label42.TabIndex = 61;
+            label42.Text = "Back Label";
+            // 
+            // txtLangBackLabel
+            // 
+            txtLangBackLabel.Location = new Point(216, 175);
+            txtLangBackLabel.Name = "txtLangBackLabel";
+            txtLangBackLabel.Size = new Size(200, 23);
+            txtLangBackLabel.TabIndex = 60;
+            // 
+            // label40
+            // 
+            label40.AutoSize = true;
+            label40.Location = new Point(216, 113);
+            label40.Name = "label40";
+            label40.Size = new Size(67, 15);
+            label40.TabIndex = 59;
+            label40.Text = "Open Label";
+            // 
+            // txtLangOpenLabel
+            // 
+            txtLangOpenLabel.Location = new Point(216, 131);
+            txtLangOpenLabel.Name = "txtLangOpenLabel";
+            txtLangOpenLabel.Size = new Size(200, 23);
+            txtLangOpenLabel.TabIndex = 58;
+            // 
+            // label41
+            // 
+            label41.AutoSize = true;
+            label41.Location = new Point(11, 245);
+            label41.Name = "label41";
+            label41.Size = new Size(85, 15);
+            label41.TabIndex = 57;
+            label41.Text = "Navigate Label";
+            // 
+            // txtLangNavigateLabel
+            // 
+            txtLangNavigateLabel.Location = new Point(11, 263);
+            txtLangNavigateLabel.Name = "txtLangNavigateLabel";
+            txtLangNavigateLabel.Size = new Size(200, 23);
+            txtLangNavigateLabel.TabIndex = 56;
+            // 
+            // label38
+            // 
+            label38.AutoSize = true;
+            label38.Location = new Point(11, 377);
+            label38.Name = "label38";
+            label38.Size = new Size(90, 15);
+            label38.TabIndex = 55;
+            label38.Text = "Language Label";
+            // 
+            // txtLangLanguageLabel
+            // 
+            txtLangLanguageLabel.Location = new Point(11, 395);
+            txtLangLanguageLabel.Name = "txtLangLanguageLabel";
+            txtLangLanguageLabel.Size = new Size(200, 23);
+            txtLangLanguageLabel.TabIndex = 54;
+            // 
+            // label39
+            // 
+            label39.AutoSize = true;
+            label39.Location = new Point(10, 201);
+            label39.Name = "label39";
+            label39.Size = new Size(80, 15);
+            label39.TabIndex = 53;
+            label39.Text = "Settings Label";
+            // 
+            // txtLangSettingsLabel
+            // 
+            txtLangSettingsLabel.Location = new Point(10, 219);
+            txtLangSettingsLabel.Name = "txtLangSettingsLabel";
+            txtLangSettingsLabel.Size = new Size(200, 23);
+            txtLangSettingsLabel.TabIndex = 52;
+            // 
+            // label36
+            // 
+            label36.AutoSize = true;
+            label36.Location = new Point(11, 333);
+            label36.Name = "label36";
+            label36.Size = new Size(89, 15);
+            label36.TabIndex = 51;
+            label36.Text = "Retroarch Label";
+            // 
+            // txtLangRetroarchLabel
+            // 
+            txtLangRetroarchLabel.Location = new Point(11, 351);
+            txtLangRetroarchLabel.Name = "txtLangRetroarchLabel";
+            txtLangRetroarchLabel.Size = new Size(200, 23);
+            txtLangRetroarchLabel.TabIndex = 50;
+            // 
+            // label37
+            // 
+            label37.AutoSize = true;
+            label37.Location = new Point(10, 157);
+            label37.Name = "label37";
+            label37.Size = new Size(81, 15);
+            label37.TabIndex = 49;
+            label37.Text = "Console Label";
+            // 
+            // txtLangConsoleLabel
+            // 
+            txtLangConsoleLabel.Location = new Point(10, 175);
+            txtLangConsoleLabel.Name = "txtLangConsoleLabel";
+            txtLangConsoleLabel.Size = new Size(200, 23);
+            txtLangConsoleLabel.TabIndex = 48;
+            // 
+            // label35
+            // 
+            label35.AutoSize = true;
+            label35.Location = new Point(11, 289);
+            label35.Name = "label35";
+            label35.Size = new Size(85, 15);
+            label35.TabIndex = 47;
+            label35.Text = "Favorites Label";
+            // 
+            // txtLangFavoritesLabel
+            // 
+            txtLangFavoritesLabel.Location = new Point(11, 307);
+            txtLangFavoritesLabel.Name = "txtLangFavoritesLabel";
+            txtLangFavoritesLabel.Size = new Size(200, 23);
+            txtLangFavoritesLabel.TabIndex = 46;
+            // 
             // label34
             // 
             label34.AutoSize = true;
@@ -910,7 +1278,6 @@
             label32.Size = new Size(54, 15);
             label32.TabIndex = 41;
             label32.Text = "Font Size";
-            label32.Click += label32_Click;
             // 
             // txtLangFontSize
             // 
@@ -1040,376 +1407,6 @@
             btnReboot.Text = "Reboot";
             btnReboot.UseVisualStyleBackColor = true;
             btnReboot.Click += btnReboot_Click;
-            // 
-            // label35
-            // 
-            label35.AutoSize = true;
-            label35.Location = new Point(11, 289);
-            label35.Name = "label35";
-            label35.Size = new Size(85, 15);
-            label35.TabIndex = 47;
-            label35.Text = "Favorites Label";
-            label35.Click += label35_Click;
-            // 
-            // txtLangFavoritesLabel
-            // 
-            txtLangFavoritesLabel.Location = new Point(11, 307);
-            txtLangFavoritesLabel.Name = "txtLangFavoritesLabel";
-            txtLangFavoritesLabel.Size = new Size(200, 23);
-            txtLangFavoritesLabel.TabIndex = 46;
-            // 
-            // label36
-            // 
-            label36.AutoSize = true;
-            label36.Location = new Point(11, 333);
-            label36.Name = "label36";
-            label36.Size = new Size(89, 15);
-            label36.TabIndex = 51;
-            label36.Text = "Retroarch Label";
-            // 
-            // txtLangRetroarchLabel
-            // 
-            txtLangRetroarchLabel.Location = new Point(11, 351);
-            txtLangRetroarchLabel.Name = "txtLangRetroarchLabel";
-            txtLangRetroarchLabel.Size = new Size(200, 23);
-            txtLangRetroarchLabel.TabIndex = 50;
-            // 
-            // label37
-            // 
-            label37.AutoSize = true;
-            label37.Location = new Point(10, 157);
-            label37.Name = "label37";
-            label37.Size = new Size(81, 15);
-            label37.TabIndex = 49;
-            label37.Text = "Console Label";
-            // 
-            // txtLangConsoleLabel
-            // 
-            txtLangConsoleLabel.Location = new Point(10, 175);
-            txtLangConsoleLabel.Name = "txtLangConsoleLabel";
-            txtLangConsoleLabel.Size = new Size(200, 23);
-            txtLangConsoleLabel.TabIndex = 48;
-            // 
-            // label38
-            // 
-            label38.AutoSize = true;
-            label38.Location = new Point(11, 377);
-            label38.Name = "label38";
-            label38.Size = new Size(90, 15);
-            label38.TabIndex = 55;
-            label38.Text = "Language Label";
-            // 
-            // txtLangLanguageLabel
-            // 
-            txtLangLanguageLabel.Location = new Point(11, 395);
-            txtLangLanguageLabel.Name = "txtLangLanguageLabel";
-            txtLangLanguageLabel.Size = new Size(200, 23);
-            txtLangLanguageLabel.TabIndex = 54;
-            // 
-            // label39
-            // 
-            label39.AutoSize = true;
-            label39.Location = new Point(10, 201);
-            label39.Name = "label39";
-            label39.Size = new Size(80, 15);
-            label39.TabIndex = 53;
-            label39.Text = "Settings Label";
-            // 
-            // txtLangSettingsLabel
-            // 
-            txtLangSettingsLabel.Location = new Point(10, 219);
-            txtLangSettingsLabel.Name = "txtLangSettingsLabel";
-            txtLangSettingsLabel.Size = new Size(200, 23);
-            txtLangSettingsLabel.TabIndex = 52;
-            // 
-            // label40
-            // 
-            label40.AutoSize = true;
-            label40.Location = new Point(216, 113);
-            label40.Name = "label40";
-            label40.Size = new Size(67, 15);
-            label40.TabIndex = 59;
-            label40.Text = "Open Label";
-            // 
-            // txtLangOpenLabel
-            // 
-            txtLangOpenLabel.Location = new Point(216, 131);
-            txtLangOpenLabel.Name = "txtLangOpenLabel";
-            txtLangOpenLabel.Size = new Size(200, 23);
-            txtLangOpenLabel.TabIndex = 58;
-            txtLangOpenLabel.TextChanged += txtLangOpenLabel_TextChanged;
-            // 
-            // label41
-            // 
-            label41.AutoSize = true;
-            label41.Location = new Point(11, 245);
-            label41.Name = "label41";
-            label41.Size = new Size(85, 15);
-            label41.TabIndex = 57;
-            label41.Text = "Navigate Label";
-            // 
-            // txtLangNavigateLabel
-            // 
-            txtLangNavigateLabel.Location = new Point(11, 263);
-            txtLangNavigateLabel.Name = "txtLangNavigateLabel";
-            txtLangNavigateLabel.Size = new Size(200, 23);
-            txtLangNavigateLabel.TabIndex = 56;
-            // 
-            // label42
-            // 
-            label42.AutoSize = true;
-            label42.Location = new Point(216, 157);
-            label42.Name = "label42";
-            label42.Size = new Size(63, 15);
-            label42.TabIndex = 61;
-            label42.Text = "Back Label";
-            // 
-            // txtLangBackLabel
-            // 
-            txtLangBackLabel.Location = new Point(216, 175);
-            txtLangBackLabel.Name = "txtLangBackLabel";
-            txtLangBackLabel.Size = new Size(200, 23);
-            txtLangBackLabel.TabIndex = 60;
-            // 
-            // label43
-            // 
-            label43.AutoSize = true;
-            label43.Location = new Point(11, 421);
-            label43.Name = "label43";
-            label43.Size = new Size(80, 15);
-            label43.TabIndex = 63;
-            label43.Text = "Favorite Label";
-            // 
-            // txtLangFavoriteLabel
-            // 
-            txtLangFavoriteLabel.Location = new Point(11, 439);
-            txtLangFavoriteLabel.Name = "txtLangFavoriteLabel";
-            txtLangFavoriteLabel.Size = new Size(200, 23);
-            txtLangFavoriteLabel.TabIndex = 62;
-            // 
-            // label44
-            // 
-            label44.AutoSize = true;
-            label44.Location = new Point(216, 201);
-            label44.Name = "label44";
-            label44.Size = new Size(81, 15);
-            label44.TabIndex = 65;
-            label44.Text = "Remove Label";
-            // 
-            // txtLangRemoveLabel
-            // 
-            txtLangRemoveLabel.Location = new Point(216, 219);
-            txtLangRemoveLabel.Name = "txtLangRemoveLabel";
-            txtLangRemoveLabel.Size = new Size(200, 23);
-            txtLangRemoveLabel.TabIndex = 64;
-            // 
-            // label45
-            // 
-            label45.AutoSize = true;
-            label45.Location = new Point(216, 245);
-            label45.Name = "label45";
-            label45.Size = new Size(72, 15);
-            label45.TabIndex = 67;
-            label45.Text = "Empty Label";
-            // 
-            // txtLangEmptyLabel
-            // 
-            txtLangEmptyLabel.Location = new Point(216, 263);
-            txtLangEmptyLabel.Name = "txtLangEmptyLabel";
-            txtLangEmptyLabel.Size = new Size(200, 23);
-            txtLangEmptyLabel.TabIndex = 66;
-            // 
-            // label46
-            // 
-            label46.AutoSize = true;
-            label46.Location = new Point(216, 289);
-            label46.Name = "label46";
-            label46.Size = new Size(168, 15);
-            label46.TabIndex = 69;
-            label46.Text = "Save States Unsupported Label";
-            // 
-            // txtLangSavestatesUnsupported
-            // 
-            txtLangSavestatesUnsupported.Location = new Point(216, 307);
-            txtLangSavestatesUnsupported.Name = "txtLangSavestatesUnsupported";
-            txtLangSavestatesUnsupported.Size = new Size(200, 23);
-            txtLangSavestatesUnsupported.TabIndex = 68;
-            // 
-            // label47
-            // 
-            label47.AutoSize = true;
-            label47.Location = new Point(216, 377);
-            label47.Name = "label47";
-            label47.Size = new Size(54, 15);
-            label47.TabIndex = 71;
-            label47.Text = "On Label";
-            // 
-            // txtLangOnLabel
-            // 
-            txtLangOnLabel.Location = new Point(216, 395);
-            txtLangOnLabel.Name = "txtLangOnLabel";
-            txtLangOnLabel.Size = new Size(200, 23);
-            txtLangOnLabel.TabIndex = 70;
-            // 
-            // label48
-            // 
-            label48.AutoSize = true;
-            label48.Location = new Point(216, 421);
-            label48.Name = "label48";
-            label48.Size = new Size(55, 15);
-            label48.TabIndex = 73;
-            label48.Text = "Off Label";
-            // 
-            // txtLangOffLabel
-            // 
-            txtLangOffLabel.Location = new Point(216, 439);
-            txtLangOffLabel.Name = "txtLangOffLabel";
-            txtLangOffLabel.Size = new Size(200, 23);
-            txtLangOffLabel.TabIndex = 72;
-            // 
-            // labLangPMLabel
-            // 
-            labLangPMLabel.AutoSize = true;
-            labLangPMLabel.Location = new Point(422, 157);
-            labLangPMLabel.Name = "labLangPMLabel";
-            labLangPMLabel.Size = new Size(56, 15);
-            labLangPMLabel.TabIndex = 77;
-            labLangPMLabel.Text = "PM Label";
-            // 
-            // txtLangPMLabel
-            // 
-            txtLangPMLabel.Location = new Point(422, 175);
-            txtLangPMLabel.Name = "txtLangPMLabel";
-            txtLangPMLabel.Size = new Size(183, 23);
-            txtLangPMLabel.TabIndex = 76;
-            // 
-            // label50
-            // 
-            label50.AutoSize = true;
-            label50.Location = new Point(422, 113);
-            label50.Name = "label50";
-            label50.Size = new Size(57, 15);
-            label50.TabIndex = 75;
-            label50.Text = "AM Label";
-            // 
-            // txtLangAMLabel
-            // 
-            txtLangAMLabel.Location = new Point(422, 131);
-            txtLangAMLabel.Name = "txtLangAMLabel";
-            txtLangAMLabel.Size = new Size(183, 23);
-            txtLangAMLabel.TabIndex = 74;
-            // 
-            // label49
-            // 
-            label49.AutoSize = true;
-            label49.Location = new Point(422, 333);
-            label49.Name = "label49";
-            label49.Size = new Size(65, 15);
-            label49.TabIndex = 85;
-            label49.Text = "Hour Label";
-            // 
-            // textBox1
-            // 
-            textBox1.Location = new Point(422, 351);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(183, 23);
-            textBox1.TabIndex = 84;
-            // 
-            // label51
-            // 
-            label51.AutoSize = true;
-            label51.Location = new Point(422, 289);
-            label51.Name = "label51";
-            label51.Size = new Size(58, 15);
-            label51.TabIndex = 83;
-            label51.Text = "Day Label";
-            // 
-            // txtLangDayLabel
-            // 
-            txtLangDayLabel.Location = new Point(422, 307);
-            txtLangDayLabel.Name = "txtLangDayLabel";
-            txtLangDayLabel.Size = new Size(183, 23);
-            txtLangDayLabel.TabIndex = 82;
-            // 
-            // label52
-            // 
-            label52.AutoSize = true;
-            label52.Location = new Point(422, 245);
-            label52.Name = "label52";
-            label52.Size = new Size(74, 15);
-            label52.TabIndex = 81;
-            label52.Text = "Month Label";
-            // 
-            // txtLangMonthLabel
-            // 
-            txtLangMonthLabel.Location = new Point(422, 263);
-            txtLangMonthLabel.Name = "txtLangMonthLabel";
-            txtLangMonthLabel.Size = new Size(183, 23);
-            txtLangMonthLabel.TabIndex = 80;
-            // 
-            // label53
-            // 
-            label53.AutoSize = true;
-            label53.Location = new Point(422, 201);
-            label53.Name = "label53";
-            label53.Size = new Size(60, 15);
-            label53.TabIndex = 79;
-            label53.Text = "Year Label";
-            // 
-            // txtLangYearLabel
-            // 
-            txtLangYearLabel.Location = new Point(422, 219);
-            txtLangYearLabel.Name = "txtLangYearLabel";
-            txtLangYearLabel.Size = new Size(183, 23);
-            txtLangYearLabel.TabIndex = 78;
-            // 
-            // label54
-            // 
-            label54.AutoSize = true;
-            label54.Location = new Point(422, 377);
-            label54.Name = "label54";
-            label54.Size = new Size(76, 15);
-            label54.TabIndex = 87;
-            label54.Text = "Minute Label";
-            // 
-            // txtLangMinuteLabel
-            // 
-            txtLangMinuteLabel.Location = new Point(422, 395);
-            txtLangMinuteLabel.Name = "txtLangMinuteLabel";
-            txtLangMinuteLabel.Size = new Size(183, 23);
-            txtLangMinuteLabel.TabIndex = 86;
-            // 
-            // label55
-            // 
-            label55.AutoSize = true;
-            label55.Location = new Point(422, 421);
-            label55.Name = "label55";
-            label55.Size = new Size(114, 15);
-            label55.TabIndex = 89;
-            label55.Text = "Meridian Time Label";
-            // 
-            // txtLangMeridianLabel
-            // 
-            txtLangMeridianLabel.Location = new Point(422, 439);
-            txtLangMeridianLabel.Name = "txtLangMeridianLabel";
-            txtLangMeridianLabel.Size = new Size(183, 23);
-            txtLangMeridianLabel.TabIndex = 88;
-            // 
-            // label56
-            // 
-            label56.AutoSize = true;
-            label56.Location = new Point(216, 333);
-            label56.Name = "label56";
-            label56.Size = new Size(60, 15);
-            label56.TabIndex = 91;
-            label56.Text = "Title Label";
-            // 
-            // txtLangTitleLabel
-            // 
-            txtLangTitleLabel.Location = new Point(216, 351);
-            txtLangTitleLabel.Name = "txtLangTitleLabel";
-            txtLangTitleLabel.Size = new Size(200, 23);
-            txtLangTitleLabel.TabIndex = 90;
             // 
             // SkinSettingsForm
             // 
@@ -1558,7 +1555,7 @@
         private Label label47;
         private TextBox txtLangOnLabel;
         private Label label49;
-        private TextBox textBox1;
+        private TextBox txtLangHourLabel;
         private Label label51;
         private TextBox txtLangDayLabel;
         private Label label52;

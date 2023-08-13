@@ -56,7 +56,7 @@ namespace GarlicPress
             }
             else
             {
-                languageSettingsDictonary.Add(langFileName.ToLower(), langSetting);
+                languageSettingsDictonary.Add(langFileName, langSetting);
             }
         }
 
@@ -72,7 +72,7 @@ namespace GarlicPress
                     {
                         var langSettingsJSON = ADBConnection.ReadTextFile($"/mnt/mmc/CFW/lang/{item.Path}");
                         var langSettings = JsonSerializer.Deserialize<GarlicLanguageSettings>(langSettingsJSON);
-                        languageSettingsDictonary.Add(item.Path.ToLower(), langSettings);
+                        languageSettingsDictonary.Add(item.Path, langSettings);
                     }
                     catch (Exception ex)
                     {
