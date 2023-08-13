@@ -51,7 +51,7 @@ namespace GarlicPress.forms
         {
             ArtUpdateRunning = true;
             btnGo.Enabled = false;
-            
+
             btnCancel.Visible = true;
             btnGo.Visible = false;
             btnClearCompleted.Visible = false;
@@ -77,13 +77,13 @@ namespace GarlicPress.forms
 
             tabOptions.Enabled = true;
         }
-        
+
         private void log(string message, string type = "")
         {
             Color color = Color.LimeGreen;
             if (type == "error")
                 color = Color.OrangeRed;
-            if(type == "warn")
+            if (type == "warn")
                 color = Color.Yellow;
 
             txtLog.SelectionColor = color;
@@ -93,18 +93,17 @@ namespace GarlicPress.forms
         private void log(string message, Color color, bool newline = true)
         {
             txtLog.HideSelection = false;
-            txtLog.SelectionColor = color;            
+            txtLog.SelectionColor = color;
             txtLog.AppendText(message);
-            if(newline)
+            if (newline)
                 txtLog.AppendText("\n");
 
-            txtLog.
-            Refresh();
+            txtLog.Refresh();
         }
-        
+
         private async void btnGo_Click(object sender, EventArgs e)
         {
-            if (!ArtUpdateRunning) 
+            if (!ArtUpdateRunning)
             {
 
                 StartArtUpdate();
@@ -123,17 +122,17 @@ namespace GarlicPress.forms
                             var bitmap = await GameMediaGeneration.GenerateGameMedia(game);
                             if (bitmap != null && !CancelArtRun)
                             {
-                                ImgArtPreview.Image = GameMediaGeneration.OverlayImageWithSkinBackground( bitmap );
+                                ImgArtPreview.Image = GameMediaGeneration.OverlayImageWithSkinBackground(bitmap);
                                 log("Game Art Generation Complete");
                                 bitmap.Save("assets/temp/gameart-up.png", ImageFormat.Png);
                                 bitmap.Dispose();
                                 log("Uploading Game Art to Device");
-                                Progress<int> progress = new Progress<int>( p => { log(".."+p.ToString()+"%", Color.Orange, false); });
-                                await GarlicADBConnection.UploadFileAsync("assets/temp/gameart-up.png", item.imgPath, progress, CancellationToken.None);
+                                Progress<int> progress = new Progress<int>(p => { log(".." + p.ToString() + "%", Color.Orange, false); });
+                                await ADBConnection.UploadFileAsync("assets/temp/gameart-up.png", item.imgPath, progress, CancellationToken.None);
                                 log("");
-                                item.status = "Complete";                                
+                                item.status = "Complete";
                             }
-                            else if(bitmap == null)
+                            else if (bitmap == null)
                             {
                                 item.status = "FAIL";
                                 log("Error : Null bitmap generating game art", "error");
@@ -142,7 +141,7 @@ namespace GarlicPress.forms
                         else if (game != null)
                         {
                             item.status = "Retry";
-                            log("Game not Found : " + game.statusMessage, "warn");                            
+                            log("Game not Found : " + game.statusMessage, "warn");
                         }
                         else
                         {
@@ -151,7 +150,7 @@ namespace GarlicPress.forms
                         }
                     }
                     else
-                    {                        
+                    {
                         CancelArtRun = false;
                         break;
                     }
@@ -166,7 +165,7 @@ namespace GarlicPress.forms
         {
             if (ArtUpdateRunning)
             {
-                e.Cancel = true;                
+                e.Cancel = true;
             }
         }
 
@@ -182,10 +181,10 @@ namespace GarlicPress.forms
         private void btnClearCompleted_Click(object sender, EventArgs e)
         {
             var rowsToRemove = searchItems.Where(w => w.status == "Complete").ToList();
-            foreach(var row in rowsToRemove)
+            foreach (var row in rowsToRemove)
             {
                 searchItems.Remove(row);
-            } 
+            }
         }
 
         private void btnClose_Click(object sender, EventArgs e)

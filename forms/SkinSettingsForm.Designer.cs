@@ -96,19 +96,16 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtColorGuide = new System.Windows.Forms.TextBox();
             this.btnTextColourActivePicker = new System.Windows.Forms.Button();
-            this.tabLanguage = new System.Windows.Forms.TabPage();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label29 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.tabLangSettings = new System.Windows.Forms.TabPage();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.tabFonts = new System.Windows.Forms.TabPage();
             this.tabBootScreen = new System.Windows.Forms.TabPage();
             this.btnUploadBootScreen = new System.Windows.Forms.Button();
             this.picBootScreen = new System.Windows.Forms.PictureBox();
-            this.button2 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.btnReboot = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabSkinSettings.SuspendLayout();
-            this.tabLanguage.SuspendLayout();
+            this.tabLangSettings.SuspendLayout();
             this.tabBootScreen.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picBootScreen)).BeginInit();
             this.SuspendLayout();
@@ -136,8 +133,7 @@
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabSkinSettings);
-            this.tabControl1.Controls.Add(this.tabLanguage);
-            this.tabControl1.Controls.Add(this.tabFonts);
+            this.tabControl1.Controls.Add(this.tabLangSettings);
             this.tabControl1.Controls.Add(this.tabBootScreen);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
@@ -737,52 +733,34 @@
             this.btnTextColourActivePicker.UseVisualStyleBackColor = true;
             this.btnTextColourActivePicker.Click += new System.EventHandler(this.btnTextColourActivePicker_Click);
             // 
-            // tabLanguage
+            // label1
             // 
-            this.tabLanguage.Controls.Add(this.textBox1);
-            this.tabLanguage.Controls.Add(this.label29);
-            this.tabLanguage.Controls.Add(this.comboBox1);
-            this.tabLanguage.Location = new System.Drawing.Point(4, 24);
-            this.tabLanguage.Name = "tabLanguage";
-            this.tabLanguage.Padding = new System.Windows.Forms.Padding(3);
-            this.tabLanguage.Size = new System.Drawing.Size(614, 556);
-            this.tabLanguage.TabIndex = 2;
-            this.tabLanguage.Text = "Language Settings";
-            this.tabLanguage.UseVisualStyleBackColor = true;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(10, 16);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(142, 15);
+            this.label1.TabIndex = 17;
+            this.label1.Text = "Game List Text Alignment";
             // 
-            // textBox1
+            // tabLangSettings
             // 
-            this.textBox1.Location = new System.Drawing.Point(188, 34);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(158, 23);
-            this.textBox1.TabIndex = 2;
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(8, 16);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(59, 15);
-            this.label29.TabIndex = 1;
-            this.label29.Text = "Language";
+            this.tabLangSettings.Controls.Add(this.comboBox1);
+            this.tabLangSettings.Location = new System.Drawing.Point(4, 24);
+            this.tabLangSettings.Name = "tabLangSettings";
+            this.tabLangSettings.Padding = new System.Windows.Forms.Padding(3);
+            this.tabLangSettings.Size = new System.Drawing.Size(614, 556);
+            this.tabLangSettings.TabIndex = 2;
+            this.tabLangSettings.Text = "Language Settings";
+            this.tabLangSettings.UseVisualStyleBackColor = true;
             // 
             // comboBox1
             // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(8, 34);
+            this.comboBox1.Location = new System.Drawing.Point(40, 25);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(174, 23);
+            this.comboBox1.Size = new System.Drawing.Size(121, 23);
             this.comboBox1.TabIndex = 0;
-            // 
-            // tabFonts
-            // 
-            this.tabFonts.Location = new System.Drawing.Point(4, 24);
-            this.tabFonts.Name = "tabFonts";
-            this.tabFonts.Padding = new System.Windows.Forms.Padding(3);
-            this.tabFonts.Size = new System.Drawing.Size(614, 556);
-            this.tabFonts.TabIndex = 3;
-            this.tabFonts.Text = "Fonts";
-            this.tabFonts.UseVisualStyleBackColor = true;
             // 
             // tabBootScreen
             // 
@@ -798,7 +776,7 @@
             // 
             // btnUploadBootScreen
             // 
-            this.btnUploadBootScreen.Location = new System.Drawing.Point(36, 477);
+            this.btnUploadBootScreen.Location = new System.Drawing.Point(209, 477);
             this.btnUploadBootScreen.Name = "btnUploadBootScreen";
             this.btnUploadBootScreen.Size = new System.Drawing.Size(178, 23);
             this.btnUploadBootScreen.TabIndex = 15;
@@ -818,23 +796,15 @@
             this.picBootScreen.TabIndex = 14;
             this.picBootScreen.TabStop = false;
             // 
-            // button2
+            // btnReboot
             // 
-            this.button2.Location = new System.Drawing.Point(4, 590);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(131, 23);
-            this.button2.TabIndex = 80;
-            this.button2.Text = "Reboot";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(10, 16);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(142, 15);
-            this.label1.TabIndex = 17;
-            this.label1.Text = "Game List Text Alignment";
+            this.btnReboot.Location = new System.Drawing.Point(4, 590);
+            this.btnReboot.Name = "btnReboot";
+            this.btnReboot.Size = new System.Drawing.Size(131, 23);
+            this.btnReboot.TabIndex = 80;
+            this.btnReboot.Text = "Reboot";
+            this.btnReboot.UseVisualStyleBackColor = true;
+            this.btnReboot.Click += new System.EventHandler(this.btnReboot_Click);
             // 
             // SkinSettingsForm
             // 
@@ -842,7 +812,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(622, 621);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.btnReboot);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.btnCancel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -853,8 +823,7 @@
             this.tabControl1.ResumeLayout(false);
             this.tabSkinSettings.ResumeLayout(false);
             this.tabSkinSettings.PerformLayout();
-            this.tabLanguage.ResumeLayout(false);
-            this.tabLanguage.PerformLayout();
+            this.tabLangSettings.ResumeLayout(false);
             this.tabBootScreen.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picBootScreen)).EndInit();
             this.ResumeLayout(false);
@@ -933,12 +902,9 @@
         private TextBox txtHourLabel;
         private Label label28;
         private TextBox txtDayLabel;
-        private TabPage tabLanguage;
-        private TabPage tabFonts;
-        private ComboBox comboBox1;
-        private TextBox textBox1;
-        private Label label29;
-        private Button button2;
+        private Button btnReboot;
         private Label label1;
+        private TabPage tabLangSettings;
+        private ComboBox comboBox1;
     }
 }

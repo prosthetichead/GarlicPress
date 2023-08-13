@@ -22,7 +22,7 @@ namespace GarlicPress
             InitializeComponent();
 
             //Get skin settings
-            skinSettings = GarlicADBConnection.skinSettings;
+            skinSettings = GarlicSkin.skinSettings;
             Task.Run( ()=> DownloadBootScreenPreview() );
 
             comboTextAlignment.SelectedItem = skinSettings.textalignment;
@@ -110,18 +110,9 @@ namespace GarlicPress
 
             int intTextMargin = 0;
             int.TryParse(txtMargin.Text, out intTextMargin);
-            skinSettings.textmargin = intTextMargin;
-            //save the new json and push it to the device.
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true,                
-            };
-            string json = JsonSerializer.Serialize(skinSettings, options);
-            File.WriteAllText("assets/skin/settings.json", json);
-            GarlicADBConnection.UploadFile("assets/skin/settings.json", "/mnt/mmc/CFW/skin/settings.json");
-            GarlicADBConnection.client.Reboot(GarlicADBConnection.device);
-
-            Close();
+            skinSettings.textmargin = intTextMargin;   
+            
+            GarlicSkin.WriteSkinSettings(skinSettings);
         }
 
         private void btnTextColourActivePicker_Click(object sender, EventArgs e)
@@ -151,7 +142,7 @@ namespace GarlicPress
         private async Task DownloadBootScreenPreview()
         {
             Directory.CreateDirectory("assets/bootScreen");
-            GarlicADBConnection.DownloadFile("/misc/boot_logo.bmp.gz", "assets/bootScreen/boot_logo.bmp.gz");
+            ADBConnection.DownloadFile("/misc/boot_logo.bmp.gz", "assets/bootScreen/boot_logo.bmp.gz");
 
             GzipDecompress(new FileInfo("assets/bootScreen/boot_logo.bmp.gz"));
 
@@ -190,12 +181,17 @@ namespace GarlicPress
             {
                 string fileName = openFileDialog.FileName;
 
-                GarlicADBConnection.ExecuteCommand("mount -o remount,rw /misc");
-                GarlicADBConnection.UploadFile(fileName, "/misc/boot_logo.bmp.gz");
-                GarlicADBConnection.ExecuteCommand("mount -o remount,ro /misc");
+                ADBConnection.ExecuteCommand("mount -o remount,rw /misc");
+                ADBConnection.UploadFile(fileName, "/misc/boot_logo.bmp.gz");
+                ADBConnection.ExecuteCommand("mount -o remount,ro /misc");
 
                 DownloadBootScreenPreview();
             }
+        }
+
+        private void btnReboot_Click(object sender, EventArgs e)
+        {
+            ADBConnection.client.Reboot(ADBConnection.device);
         }
     }
 }
