@@ -101,7 +101,7 @@ namespace GarlicPress
                     notifyIcon.Text = "GarlicPress : RG35xx Connected";
                     
                     //get skin files
-                    GarlicADBConnection.DownloadFile("/mnt/mmc/CFW/skin/background.png", "assets/background.png");
+                    GarlicADBConnection.DownloadFile("/mnt/mmc/CFW/skin/background.png", "assets/skin/background.png");
                     GarlicADBConnection.DownloadFile("/mnt/mmc/CFW/skin/settings.json", "assets/skinSettings.json"); //cat /mnt/mmc/cfw/skin/settings.json
 
                     GarlicADBConnection.ReadSkinSettings();
