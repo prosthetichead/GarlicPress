@@ -67,54 +67,78 @@ namespace GarlicPress
             comboSystems.BindingContext = this.BindingContext;
 
             ADBConnection.StartADBServer();
-
-            ConnectToDevice();
+            CheckConnection();
         }
 
-
-        private void ConnectToDevice()
+        //Detect the USB Device Changes
+        //if a USB Device Change happens fire off the connect method.
+        private enum WM_DEVICECHANGE
         {
-            if (AdbServer.Instance.GetStatus().IsRunning)
+            // full list: https://learn.microsoft.com/en-us/windows/win32/devio/wm-devicechange
+            DBT_DEVICEARRIVAL = 0x8000,             // A device or piece of media has been inserted and is now available.
+            DBT_DEVICEREMOVECOMPLETE = 0x8004,      // A device or piece of media has been removed.
+            DBT_DEVNODES_CHANGED = 0x0007,          // A device or piece of media has been inserted or removed.
+        }
+        private int WmDevicechange = 0x0219; // device change event   
+        protected override void WndProc(ref Message m)
+        {
+            base.WndProc(ref m);        //This allows window default behavior of base class to be executed
+
+            if (m.Msg == WmDevicechange)
             {
-                var connect = ADBConnection.ConnectToDevice();
-
-                if (connect)
+                switch ((WM_DEVICECHANGE)m.WParam)
                 {
-                    toolStripDeviceStatus.ForeColor = Color.Green;
-                    toolStripDeviceStatus.Text = "RG35xx";
-                    notifyIcon.Icon = Properties.Resources.garlicConnect;
-                    this.Icon = Properties.Resources.garlicConnect;
-                    notifyIcon.Text = "GarlicPress : RG35xx Connected";
-
-                    //load all the skin info
-                    GarlicSkin.ReadSkinFromDevice();
-
-                    //LETS GO We are Connected
-                    RefreshBrowserFiles();
+                    case WM_DEVICECHANGE.DBT_DEVICEREMOVECOMPLETE:
+                        DebugLog.Write("a usb device has been disconected", Color.RebeccaPurple);
+                        break;
+                    case WM_DEVICECHANGE.DBT_DEVICEARRIVAL:
+                        DebugLog.Write("a usb device has conected", Color.RebeccaPurple);                        
+                        break;
+                    case WM_DEVICECHANGE.DBT_DEVNODES_CHANGED:
+                        DebugLog.Write("a usb device has changed", Color.RebeccaPurple);
+                        break;
+                    default:
+                        DebugLog.Write($"a usb event of code {m.WParam.ToString()} happened", Color.RebeccaPurple);                        
+                        break;
                 }
-                else
-                {
-                    picGame.Image = null;
-                    picGame.ImageLocation = null;
-                    fileListBox.DataSource = null;
-                    toolStripDeviceStatus.ForeColor = Color.Red;
-                    toolStripDeviceStatus.Text = "No Device";
-                    notifyIcon.Icon = Properties.Resources.garlicDisconnect;
-                    this.Icon = Properties.Resources.garlicDisconnect;
-                    notifyIcon.Text = "GarlicPress : No Device";
-                }
+                CheckConnection();
             }
-            else
+        }
+
+        private void CheckConnection()
+        {
+            var deviceConnected = ADBConnection.deviceConnected;
+            var connect = ADBConnection.ConnectToDevice();
+            if(deviceConnected && connect) 
             {
+                DebugLog.Write("Device Already Connected");
+            }
+            else if(!deviceConnected && connect)
+            {
+                DebugLog.Write("Device Connected");
+
+                toolStripDeviceStatus.ForeColor = Color.Green;
+                toolStripDeviceStatus.Text = "RG35xx";
+                notifyIcon.Icon = Properties.Resources.garlicConnect;
+                this.Icon = Properties.Resources.garlicConnect;
+                notifyIcon.Text = "GarlicPress : RG35xx Connected";
+
+                //LETS GO We are Connected
+                GarlicSkin.ReadSkinFromDevice();
+                RefreshBrowserFiles();
+            }
+            else if (!connect)
+            {
+                DebugLog.Write("Device Disconected");
+
                 picGame.Image = null;
                 picGame.ImageLocation = null;
                 fileListBox.DataSource = null;
-                toolStripDeviceStatus.Text = "ADB Error";
-                notifyIcon.Text = "GarlicPress : ADB Error";
                 toolStripDeviceStatus.ForeColor = Color.Red;
+                toolStripDeviceStatus.Text = "No Device";
                 notifyIcon.Icon = Properties.Resources.garlicDisconnect;
                 this.Icon = Properties.Resources.garlicDisconnect;
-                statusStrip.Refresh();
+                notifyIcon.Text = "GarlicPress : No Device";
             }
         }
 
@@ -159,34 +183,6 @@ namespace GarlicPress
                     overlayImage.Dispose();
                 }
                 picGame.Refresh();
-            }
-        }
-
-        //Detect the USB Device Changes
-        //if a USB Device Change happens fire off the connect method.
-        private enum WM_DEVICECHANGE
-        {
-            // full list: https://learn.microsoft.com/en-us/windows/win32/devio/wm-devicechange
-            DBT_DEVICEARRIVAL = 0x8000,             // A device or piece of media has been inserted and is now available.
-            DBT_DEVICEREMOVECOMPLETE = 0x8004,      // A device or piece of media has been removed.
-        }
-        private int WmDevicechange = 0x0219; // device change event   
-
-        protected override void WndProc(ref Message m)
-        {
-            base.WndProc(ref m);        //This allows window default behavior of base class to be executed
-
-            if (m.Msg == WmDevicechange)
-            {
-                switch ((WM_DEVICECHANGE)m.WParam)
-                {
-                    case WM_DEVICECHANGE.DBT_DEVICEREMOVECOMPLETE:
-                        ConnectToDevice();
-                        break;
-                    case WM_DEVICECHANGE.DBT_DEVICEARRIVAL:
-                        ConnectToDevice();
-                        break;
-                }
             }
         }
 
@@ -368,6 +364,7 @@ namespace GarlicPress
 
         private void btnUpdateSelectedArt_Click(object sender, EventArgs e)
         {
+            var selectedIndex = fileListBox.SelectedIndex;
             var selectedFiles = fileListBox.SelectedItems.Cast<FileStatistics>();
             var system = (GarlicSystem)comboSystems.SelectedItem;
             var drive = (GarlicDrive)comboDrive.SelectedItem;
@@ -383,7 +380,8 @@ namespace GarlicPress
             {
                 GameArtUpdateForm gameArtUpdateForm = new GameArtUpdateForm(searchItems);
                 gameArtUpdateForm.ShowDialog();
-                RefreshBrowserFiles();
+
+                RefreshBrowserFiles(selectedIndex);
             }
         }
 

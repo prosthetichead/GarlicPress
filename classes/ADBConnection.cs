@@ -19,6 +19,7 @@ namespace GarlicPress
         public static AdbClient client;
         public static DeviceData device;
 
+        
         public static void StartADBServer()
         {
             DebugLog.Write("Atempting to Start ADB Server");
@@ -50,17 +51,13 @@ namespace GarlicPress
 
         public static bool ConnectToDevice()
         {
-            DebugLog.Write("Atempting to Connect to Device");
+            bool isConnected = false;
 
             if (AdbServer.Instance.GetStatus().IsRunning)
             {
-                DebugLog.Write("AdbServer is Running looking for \"q88_hd\" \"ToyCloud\" ");
-
                 Thread.Sleep(1000);
                 client = new AdbClient();
                 var devices = client.GetDevices();
-                deviceConnected = false;
-
                 foreach (var d in devices)
                 {
                     DebugLog.Write($"AdbServer found Device. Name: {d.Name} Model: {d.Model}");
@@ -68,26 +65,15 @@ namespace GarlicPress
                     if (d.Name == "q88_hd" && d.Model == "ToyCloud")
                     {
                         device = d;
-                        deviceConnected = true;
+                        isConnected = true;
                         break;
                     }
                 }
+            }
+            deviceConnected = isConnected;
 
-                if (deviceConnected)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                DebugLog.Write($"AdbServer is not Running");                
-                return false;
-            }
-        }
+            return deviceConnected;
+        }        
 
         public static string ReadTextFile(string readPath)
         {
