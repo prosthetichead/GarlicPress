@@ -126,8 +126,11 @@ namespace GarlicPress.forms
                             {
                                 ImgArtPreview.Image = GameMediaGeneration.OverlayImageWithSkinBackground( bitmap );
                                 log("Game Art Generation Complete");
+
+                                Directory.CreateDirectory("assets/temp");
                                 bitmap.Save("assets/temp/gameart-up.png", ImageFormat.Png);
                                 bitmap.Dispose();
+                                
                                 log("Uploading Game Art to Device");
                                 Progress<int> progress = new Progress<int>( p => { log(".."+p.ToString()+"%", Color.Orange, false); });
                                 await GarlicADBConnection.UploadFileAsync("assets/temp/gameart-up.png", item.imgPath, progress, CancellationToken.None);
