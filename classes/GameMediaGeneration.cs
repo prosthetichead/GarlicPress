@@ -13,7 +13,7 @@ namespace GarlicPress
 {
     internal static class GameMediaGeneration
     {
-        public static List<MediaLayer> MediaLayers { get { return mediaLayout.OrderBy(o=>o.order).ToList() ; } set { mediaLayout = value; } }
+        public static List<MediaLayer> MediaLayers { get { return mediaLayout.OrderBy(o => o.order).ToList(); } set { mediaLayout = value; } }
         private static List<MediaLayer> mediaLayout;
         private static string jsonPath = "assets/mediaLayout.json";
 
@@ -29,7 +29,7 @@ namespace GarlicPress
         {
             try
             {
-                
+
 
                 if (File.Exists("mediaLayout.json"))
                 {
@@ -39,7 +39,7 @@ namespace GarlicPress
                 }
                 if (File.Exists(jsonPath))
                 {
-                    string mediaLayoutJson = File.ReadAllText(jsonPath);                    
+                    string mediaLayoutJson = File.ReadAllText(jsonPath);
                     mediaLayout = JsonSerializer.Deserialize<List<MediaLayer>>(mediaLayoutJson);
                 }
                 else
@@ -61,7 +61,7 @@ namespace GarlicPress
 
         public static void SaveMediaLayoutJson()
         {
-            string mediaLayoutJson = JsonSerializer.Serialize(mediaLayout.OrderBy(o => o.order) );
+            string mediaLayoutJson = JsonSerializer.Serialize(mediaLayout.OrderBy(o => o.order));
             File.WriteAllText(jsonPath, mediaLayoutJson);
         }
 
@@ -72,15 +72,23 @@ namespace GarlicPress
             var overlayImage = imageToOverlay;
             var textImage = (Bitmap)Image.FromFile(@"assets/SampleTextCenter.png");
             int txtMargin = 0;
-            if (GarlicADBConnection.skinSettings.textalignment == "right")
+            if (GarlicADBConnection.skinSettings is not null)
             {
-                textImage = (Bitmap)Image.FromFile(@"assets/SampleTextRight.png");
-                txtMargin = GarlicADBConnection.skinSettings.textmargin * -1;
+                if (GarlicADBConnection.skinSettings.textalignment == "right")
+                {
+                    textImage = (Bitmap)Image.FromFile(@"assets/SampleTextRight.png");
+                    txtMargin = GarlicADBConnection.skinSettings.textmargin * -1;
+                }
+                else if (GarlicADBConnection.skinSettings.textalignment == "left")
+                {
+                    textImage = (Bitmap)Image.FromFile(@"assets/SampleTextLeft.png");
+                    txtMargin = GarlicADBConnection.skinSettings.textmargin;
+                }
             }
-            else if (GarlicADBConnection.skinSettings.textalignment == "left")
+            else
             {
                 textImage = (Bitmap)Image.FromFile(@"assets/SampleTextLeft.png");
-                txtMargin = GarlicADBConnection.skinSettings.textmargin;
+                txtMargin = 350;
             }
 
             var finalImage = new Bitmap(640, 480, PixelFormat.Format32bppArgb);
@@ -93,7 +101,7 @@ namespace GarlicPress
 
             graphics.DrawImage(baseImage, 0, 0, 640, 480);
             graphics.DrawImage(overlayImage, 0, 0, 640, 480);
-            if (GarlicADBConnection.validSkinSettings)
+            if (GarlicADBConnection.validSkinSettings || GarlicADBConnection.skinSettings is null)
             {
                 graphics.DrawImage(textImage, txtMargin, 0, 640, 480);
             }
@@ -103,18 +111,18 @@ namespace GarlicPress
             return finalImage;
         }
 
-        public static async Task<Bitmap?> GenerateGameMedia(GameResponse game )
+        public static async Task<Bitmap?> GenerateGameMedia(GameResponse game)
         {
             var finalImage = new Bitmap(640, 480, PixelFormat.Format32bppArgb);
             var graphics = Graphics.FromImage(finalImage);
             graphics.CompositingMode = CompositingMode.SourceOver;
-            
-            if(game.status == "error")
+
+            if (game.status == "error")
             {
                 return null;
             }
-            foreach (var layer in mediaLayout.OrderBy(o=>o.order) )
-            {                
+            foreach (var layer in mediaLayout.OrderBy(o => o.order))
+            {
                 var filename = await ScreenScraper.DownloadMedia(game, layer.mediaType);
                 if (!string.IsNullOrEmpty(filename))
                 {
@@ -131,7 +139,7 @@ namespace GarlicPress
                     else
                     {
                         graphics.DrawImage(baseImage, layer.x, layer.y, baseImage.Width, baseImage.Height);
-                    }                    
+                    }
                     baseImage.Dispose();
                     File.Delete(filename); //clean up the old temp image
                 }

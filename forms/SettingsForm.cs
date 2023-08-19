@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GarlicPress.forms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,7 @@ namespace GarlicPress
     {
 
         BindingList<MediaLayer> tempMediaLayout;
+        PreviewForm? previewForm;
 
         public SettingsForm()
         {
@@ -35,7 +37,7 @@ namespace GarlicPress
             gridColMediaType.ValueMember = "value";
 
             tempMediaLayout = new BindingList<MediaLayer>();
-            foreach(MediaLayer layer in GameMediaGeneration.MediaLayers)
+            foreach (MediaLayer layer in GameMediaGeneration.MediaLayers)
                 tempMediaLayout.Add(layer);
 
             txtSSUsername.Text = Properties.Settings.Default.ssUsername;
@@ -49,21 +51,22 @@ namespace GarlicPress
 
             GridMediaLayout.DataSource = tempMediaLayout;
         }
-        
+
         private void btnDeleteLayer_Click(object sender, EventArgs e)
         {
             var selectedRows = GridMediaLayout.SelectedRows;
-            foreach(DataGridViewRow row in selectedRows)
+            foreach (DataGridViewRow row in selectedRows)
             {
                 MediaLayer rowData = (MediaLayer)row.DataBoundItem;
                 tempMediaLayout.Remove(rowData);
             }
+            GameMediaGeneration.MediaLayers = tempMediaLayout.ToList<MediaLayer>();
         }
 
         private void btnAddLayer_Click(object sender, EventArgs e)
         {
-            tempMediaLayout.Add(new MediaLayer() { order=tempMediaLayout.Count()+1 });
-
+            tempMediaLayout.Add(new MediaLayer() { order = tempMediaLayout.Count() + 1 });
+            GameMediaGeneration.MediaLayers = tempMediaLayout.ToList<MediaLayer>();
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -94,7 +97,7 @@ namespace GarlicPress
                     MessageBox.Show("This column accepts whole numbers only.");
                 }
             }
-            else if(e.ColumnIndex == 1)
+            else if (e.ColumnIndex == 1)
             {
                 float f;
                 if (!float.TryParse(Convert.ToString(e.FormattedValue), out f) || f < 0)
@@ -108,6 +111,17 @@ namespace GarlicPress
         private void btnCancel_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void btnShowPreview_Click(object sender, EventArgs e)
+        {
+            previewForm = new();
+            previewForm.Show();
+        }
+
+        private void SettingsForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            previewForm?.Close();
         }
     }
 }
