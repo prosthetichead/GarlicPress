@@ -163,6 +163,9 @@
             btnUploadBootScreen = new Button();
             picBootScreen = new PictureBox();
             btnReboot = new Button();
+            cbLangFont = new ComboBox();
+            btnUploadFont = new Button();
+            btnDeleteFont = new Button();
             tabControl1.SuspendLayout();
             tabSkinSettings.SuspendLayout();
             tabLangSettings.SuspendLayout();
@@ -801,6 +804,9 @@
             // 
             // tabLangSettings
             // 
+            tabLangSettings.Controls.Add(btnDeleteFont);
+            tabLangSettings.Controls.Add(btnUploadFont);
+            tabLangSettings.Controls.Add(cbLangFont);
             tabLangSettings.Controls.Add(label56);
             tabLangSettings.Controls.Add(txtLangTitleLabel);
             tabLangSettings.Controls.Add(label55);
@@ -889,7 +895,7 @@
             // label55
             // 
             label55.AutoSize = true;
-            label55.Location = new Point(422, 421);
+            label55.Location = new Point(422, 465);
             label55.Name = "label55";
             label55.Size = new Size(114, 15);
             label55.TabIndex = 89;
@@ -897,7 +903,7 @@
             // 
             // txtLangMeridianLabel
             // 
-            txtLangMeridianLabel.Location = new Point(422, 439);
+            txtLangMeridianLabel.Location = new Point(422, 483);
             txtLangMeridianLabel.Name = "txtLangMeridianLabel";
             txtLangMeridianLabel.Size = new Size(183, 23);
             txtLangMeridianLabel.TabIndex = 88;
@@ -905,7 +911,7 @@
             // label54
             // 
             label54.AutoSize = true;
-            label54.Location = new Point(422, 377);
+            label54.Location = new Point(422, 421);
             label54.Name = "label54";
             label54.Size = new Size(76, 15);
             label54.TabIndex = 87;
@@ -913,7 +919,7 @@
             // 
             // txtLangMinuteLabel
             // 
-            txtLangMinuteLabel.Location = new Point(422, 395);
+            txtLangMinuteLabel.Location = new Point(422, 439);
             txtLangMinuteLabel.Name = "txtLangMinuteLabel";
             txtLangMinuteLabel.Size = new Size(183, 23);
             txtLangMinuteLabel.TabIndex = 86;
@@ -921,7 +927,7 @@
             // label49
             // 
             label49.AutoSize = true;
-            label49.Location = new Point(422, 333);
+            label49.Location = new Point(422, 377);
             label49.Name = "label49";
             label49.Size = new Size(65, 15);
             label49.TabIndex = 85;
@@ -929,7 +935,7 @@
             // 
             // txtLangHourLabel
             // 
-            txtLangHourLabel.Location = new Point(422, 351);
+            txtLangHourLabel.Location = new Point(422, 395);
             txtLangHourLabel.Name = "txtLangHourLabel";
             txtLangHourLabel.Size = new Size(183, 23);
             txtLangHourLabel.TabIndex = 84;
@@ -937,7 +943,7 @@
             // label51
             // 
             label51.AutoSize = true;
-            label51.Location = new Point(422, 289);
+            label51.Location = new Point(422, 333);
             label51.Name = "label51";
             label51.Size = new Size(58, 15);
             label51.TabIndex = 83;
@@ -945,7 +951,7 @@
             // 
             // txtLangDayLabel
             // 
-            txtLangDayLabel.Location = new Point(422, 307);
+            txtLangDayLabel.Location = new Point(422, 351);
             txtLangDayLabel.Name = "txtLangDayLabel";
             txtLangDayLabel.Size = new Size(183, 23);
             txtLangDayLabel.TabIndex = 82;
@@ -953,7 +959,7 @@
             // label52
             // 
             label52.AutoSize = true;
-            label52.Location = new Point(422, 245);
+            label52.Location = new Point(422, 289);
             label52.Name = "label52";
             label52.Size = new Size(74, 15);
             label52.TabIndex = 81;
@@ -961,7 +967,7 @@
             // 
             // txtLangMonthLabel
             // 
-            txtLangMonthLabel.Location = new Point(422, 263);
+            txtLangMonthLabel.Location = new Point(422, 307);
             txtLangMonthLabel.Name = "txtLangMonthLabel";
             txtLangMonthLabel.Size = new Size(183, 23);
             txtLangMonthLabel.TabIndex = 80;
@@ -969,7 +975,7 @@
             // label53
             // 
             label53.AutoSize = true;
-            label53.Location = new Point(422, 201);
+            label53.Location = new Point(422, 245);
             label53.Name = "label53";
             label53.Size = new Size(60, 15);
             label53.TabIndex = 79;
@@ -977,7 +983,7 @@
             // 
             // txtLangYearLabel
             // 
-            txtLangYearLabel.Location = new Point(422, 219);
+            txtLangYearLabel.Location = new Point(422, 263);
             txtLangYearLabel.Name = "txtLangYearLabel";
             txtLangYearLabel.Size = new Size(183, 23);
             txtLangYearLabel.TabIndex = 78;
@@ -985,7 +991,7 @@
             // labLangPMLabel
             // 
             labLangPMLabel.AutoSize = true;
-            labLangPMLabel.Location = new Point(422, 157);
+            labLangPMLabel.Location = new Point(422, 201);
             labLangPMLabel.Name = "labLangPMLabel";
             labLangPMLabel.Size = new Size(56, 15);
             labLangPMLabel.TabIndex = 77;
@@ -993,7 +999,7 @@
             // 
             // txtLangPMLabel
             // 
-            txtLangPMLabel.Location = new Point(422, 175);
+            txtLangPMLabel.Location = new Point(422, 219);
             txtLangPMLabel.Name = "txtLangPMLabel";
             txtLangPMLabel.Size = new Size(183, 23);
             txtLangPMLabel.TabIndex = 76;
@@ -1001,7 +1007,7 @@
             // label50
             // 
             label50.AutoSize = true;
-            label50.Location = new Point(422, 113);
+            label50.Location = new Point(422, 157);
             label50.Name = "label50";
             label50.Size = new Size(57, 15);
             label50.TabIndex = 75;
@@ -1009,7 +1015,7 @@
             // 
             // txtLangAMLabel
             // 
-            txtLangAMLabel.Location = new Point(422, 131);
+            txtLangAMLabel.Location = new Point(422, 175);
             txtLangAMLabel.Name = "txtLangAMLabel";
             txtLangAMLabel.Size = new Size(183, 23);
             txtLangAMLabel.TabIndex = 74;
@@ -1097,7 +1103,7 @@
             // label43
             // 
             label43.AutoSize = true;
-            label43.Location = new Point(11, 421);
+            label43.Location = new Point(10, 465);
             label43.Name = "label43";
             label43.Size = new Size(80, 15);
             label43.TabIndex = 63;
@@ -1105,7 +1111,7 @@
             // 
             // txtLangFavoriteLabel
             // 
-            txtLangFavoriteLabel.Location = new Point(11, 439);
+            txtLangFavoriteLabel.Location = new Point(10, 483);
             txtLangFavoriteLabel.Name = "txtLangFavoriteLabel";
             txtLangFavoriteLabel.Size = new Size(200, 23);
             txtLangFavoriteLabel.TabIndex = 62;
@@ -1129,7 +1135,7 @@
             // label40
             // 
             label40.AutoSize = true;
-            label40.Location = new Point(216, 113);
+            label40.Location = new Point(216, 465);
             label40.Name = "label40";
             label40.Size = new Size(67, 15);
             label40.TabIndex = 59;
@@ -1137,7 +1143,7 @@
             // 
             // txtLangOpenLabel
             // 
-            txtLangOpenLabel.Location = new Point(216, 131);
+            txtLangOpenLabel.Location = new Point(216, 483);
             txtLangOpenLabel.Name = "txtLangOpenLabel";
             txtLangOpenLabel.Size = new Size(200, 23);
             txtLangOpenLabel.TabIndex = 58;
@@ -1145,7 +1151,7 @@
             // label41
             // 
             label41.AutoSize = true;
-            label41.Location = new Point(11, 245);
+            label41.Location = new Point(10, 289);
             label41.Name = "label41";
             label41.Size = new Size(85, 15);
             label41.TabIndex = 57;
@@ -1153,7 +1159,7 @@
             // 
             // txtLangNavigateLabel
             // 
-            txtLangNavigateLabel.Location = new Point(11, 263);
+            txtLangNavigateLabel.Location = new Point(10, 307);
             txtLangNavigateLabel.Name = "txtLangNavigateLabel";
             txtLangNavigateLabel.Size = new Size(200, 23);
             txtLangNavigateLabel.TabIndex = 56;
@@ -1161,7 +1167,7 @@
             // label38
             // 
             label38.AutoSize = true;
-            label38.Location = new Point(11, 377);
+            label38.Location = new Point(10, 421);
             label38.Name = "label38";
             label38.Size = new Size(90, 15);
             label38.TabIndex = 55;
@@ -1169,7 +1175,7 @@
             // 
             // txtLangLanguageLabel
             // 
-            txtLangLanguageLabel.Location = new Point(11, 395);
+            txtLangLanguageLabel.Location = new Point(10, 439);
             txtLangLanguageLabel.Name = "txtLangLanguageLabel";
             txtLangLanguageLabel.Size = new Size(200, 23);
             txtLangLanguageLabel.TabIndex = 54;
@@ -1177,7 +1183,7 @@
             // label39
             // 
             label39.AutoSize = true;
-            label39.Location = new Point(10, 201);
+            label39.Location = new Point(9, 245);
             label39.Name = "label39";
             label39.Size = new Size(80, 15);
             label39.TabIndex = 53;
@@ -1185,7 +1191,7 @@
             // 
             // txtLangSettingsLabel
             // 
-            txtLangSettingsLabel.Location = new Point(10, 219);
+            txtLangSettingsLabel.Location = new Point(9, 263);
             txtLangSettingsLabel.Name = "txtLangSettingsLabel";
             txtLangSettingsLabel.Size = new Size(200, 23);
             txtLangSettingsLabel.TabIndex = 52;
@@ -1193,7 +1199,7 @@
             // label36
             // 
             label36.AutoSize = true;
-            label36.Location = new Point(11, 333);
+            label36.Location = new Point(10, 377);
             label36.Name = "label36";
             label36.Size = new Size(89, 15);
             label36.TabIndex = 51;
@@ -1201,7 +1207,7 @@
             // 
             // txtLangRetroarchLabel
             // 
-            txtLangRetroarchLabel.Location = new Point(11, 351);
+            txtLangRetroarchLabel.Location = new Point(10, 395);
             txtLangRetroarchLabel.Name = "txtLangRetroarchLabel";
             txtLangRetroarchLabel.Size = new Size(200, 23);
             txtLangRetroarchLabel.TabIndex = 50;
@@ -1209,7 +1215,7 @@
             // label37
             // 
             label37.AutoSize = true;
-            label37.Location = new Point(10, 157);
+            label37.Location = new Point(9, 201);
             label37.Name = "label37";
             label37.Size = new Size(81, 15);
             label37.TabIndex = 49;
@@ -1217,7 +1223,7 @@
             // 
             // txtLangConsoleLabel
             // 
-            txtLangConsoleLabel.Location = new Point(10, 175);
+            txtLangConsoleLabel.Location = new Point(9, 219);
             txtLangConsoleLabel.Name = "txtLangConsoleLabel";
             txtLangConsoleLabel.Size = new Size(200, 23);
             txtLangConsoleLabel.TabIndex = 48;
@@ -1225,7 +1231,7 @@
             // label35
             // 
             label35.AutoSize = true;
-            label35.Location = new Point(11, 289);
+            label35.Location = new Point(10, 333);
             label35.Name = "label35";
             label35.Size = new Size(85, 15);
             label35.TabIndex = 47;
@@ -1233,7 +1239,7 @@
             // 
             // txtLangFavoritesLabel
             // 
-            txtLangFavoritesLabel.Location = new Point(11, 307);
+            txtLangFavoritesLabel.Location = new Point(10, 351);
             txtLangFavoritesLabel.Name = "txtLangFavoritesLabel";
             txtLangFavoritesLabel.Size = new Size(200, 23);
             txtLangFavoritesLabel.TabIndex = 46;
@@ -1241,7 +1247,7 @@
             // label34
             // 
             label34.AutoSize = true;
-            label34.Location = new Point(10, 113);
+            label34.Location = new Point(9, 157);
             label34.Name = "label34";
             label34.Size = new Size(74, 15);
             label34.TabIndex = 45;
@@ -1249,7 +1255,7 @@
             // 
             // txtLangRecentLabel
             // 
-            txtLangRecentLabel.Location = new Point(10, 131);
+            txtLangRecentLabel.Location = new Point(9, 175);
             txtLangRecentLabel.Name = "txtLangRecentLabel";
             txtLangRecentLabel.Size = new Size(200, 23);
             txtLangRecentLabel.TabIndex = 44;
@@ -1257,7 +1263,7 @@
             // label33
             // 
             label33.AutoSize = true;
-            label33.Location = new Point(319, 69);
+            label33.Location = new Point(112, 113);
             label33.Name = "label33";
             label33.Size = new Size(88, 15);
             label33.TabIndex = 43;
@@ -1265,15 +1271,16 @@
             // 
             // txtLangButtonGuideFontSize
             // 
-            txtLangButtonGuideFontSize.Location = new Point(319, 87);
+            txtLangButtonGuideFontSize.Location = new Point(112, 131);
             txtLangButtonGuideFontSize.Name = "txtLangButtonGuideFontSize";
             txtLangButtonGuideFontSize.Size = new Size(97, 23);
             txtLangButtonGuideFontSize.TabIndex = 42;
+            txtLangButtonGuideFontSize.TextChanged += txtLangButtonGuideFontSize_TextChanged;
             // 
             // label32
             // 
             label32.AutoSize = true;
-            label32.Location = new Point(216, 69);
+            label32.Location = new Point(10, 113);
             label32.Name = "label32";
             label32.Size = new Size(54, 15);
             label32.TabIndex = 41;
@@ -1281,10 +1288,11 @@
             // 
             // txtLangFontSize
             // 
-            txtLangFontSize.Location = new Point(216, 87);
+            txtLangFontSize.Location = new Point(10, 131);
             txtLangFontSize.Name = "txtLangFontSize";
-            txtLangFontSize.Size = new Size(97, 23);
+            txtLangFontSize.Size = new Size(96, 23);
             txtLangFontSize.TabIndex = 40;
+            txtLangFontSize.TextChanged += txtLangFontSize_TextChanged;
             // 
             // label31
             // 
@@ -1297,7 +1305,7 @@
             // 
             // txtLangFont
             // 
-            txtLangFont.Location = new Point(10, 87);
+            txtLangFont.Location = new Point(216, 517);
             txtLangFont.Name = "txtLangFont";
             txtLangFont.Size = new Size(200, 23);
             txtLangFont.TabIndex = 38;
@@ -1305,7 +1313,7 @@
             // label30
             // 
             label30.AutoSize = true;
-            label30.Location = new Point(422, 69);
+            label30.Location = new Point(216, 113);
             label30.Name = "label30";
             label30.Size = new Size(56, 15);
             label30.TabIndex = 37;
@@ -1313,9 +1321,9 @@
             // 
             // txtLangIsoCode
             // 
-            txtLangIsoCode.Location = new Point(422, 87);
+            txtLangIsoCode.Location = new Point(216, 131);
             txtLangIsoCode.Name = "txtLangIsoCode";
-            txtLangIsoCode.Size = new Size(183, 23);
+            txtLangIsoCode.Size = new Size(200, 23);
             txtLangIsoCode.TabIndex = 36;
             // 
             // btnSaveLang
@@ -1407,6 +1415,33 @@
             btnReboot.Text = "Reboot";
             btnReboot.UseVisualStyleBackColor = true;
             btnReboot.Click += btnReboot_Click;
+            // 
+            // cbLangFont
+            // 
+            cbLangFont.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbLangFont.FormattingEnabled = true;
+            cbLangFont.Location = new Point(10, 87);
+            cbLangFont.Name = "cbLangFont";
+            cbLangFont.Size = new Size(200, 23);
+            cbLangFont.TabIndex = 92;
+            // 
+            // btnUploadFont
+            // 
+            btnUploadFont.Location = new Point(216, 86);
+            btnUploadFont.Name = "btnUploadFont";
+            btnUploadFont.Size = new Size(81, 23);
+            btnUploadFont.TabIndex = 93;
+            btnUploadFont.Text = "Upload Font";
+            btnUploadFont.UseVisualStyleBackColor = true;
+            // 
+            // btnDeleteFont
+            // 
+            btnDeleteFont.Location = new Point(303, 86);
+            btnDeleteFont.Name = "btnDeleteFont";
+            btnDeleteFont.Size = new Size(81, 23);
+            btnDeleteFont.TabIndex = 94;
+            btnDeleteFont.Text = "Delete Font";
+            btnDeleteFont.UseVisualStyleBackColor = true;
             // 
             // SkinSettingsForm
             // 
@@ -1568,5 +1603,8 @@
         private TextBox txtLangMinuteLabel;
         private Label label56;
         private TextBox txtLangTitleLabel;
+        private Button btnDeleteFont;
+        private Button btnUploadFont;
+        private ComboBox cbLangFont;
     }
 }

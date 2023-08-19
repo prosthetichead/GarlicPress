@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace GarlicPress
 {
     internal static class GarlicSkin
-    {
+    {       
 
         public static GarlicSkinSettings skinSettings;
         public static Dictionary<string, GarlicLanguageSettings> languageSettingsDictonary;
@@ -45,14 +45,15 @@ namespace GarlicPress
 
         public static void SaveLangFile(string langFileName, GarlicLanguageSettings langSetting)
         {
+            
             var langSettingsJSON = JsonSerializer.Serialize(langSetting, jsonOptions);
             File.WriteAllText("assets/lang/" + langFileName, langSettingsJSON) ;
             ADBConnection.UploadFile("assets/lang/" + langFileName, "/mnt/mmc/CFW/lang/" + langFileName);
 
 
-            if (languageSettingsDictonary.ContainsKey(langFileName.ToLower()))
+            if (languageSettingsDictonary.ContainsKey(langFileName))
             {
-                languageSettingsDictonary[langFileName.ToLower()] = langSetting;
+                languageSettingsDictonary[langFileName] = langSetting;
             }
             else
             {

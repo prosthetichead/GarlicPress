@@ -17,10 +17,23 @@ namespace GarlicPress
     {
         GarlicSkinSettings skinSettings;
         BindingList<KeyValuePair<string, GarlicLanguageSettings>> languageSettingsList;
+        BindingList<string> fonts;
 
         public SkinSettingsForm()
         {
             InitializeComponent();
+
+            //get font info
+            fonts = new BindingList<string>();
+            List<FileStatistics> fontList = ADBConnection.GetDirectoryListing("/mnt/mmc/CFW/font");
+            foreach (var font in fontList)
+            {
+                if (font.Path != "." && font.Path != "..")
+                {
+                    fonts.Add(font.Path);
+                }
+            }
+            cbLangFont.DataSource = fonts;
 
             //Get skin settings
             skinSettings = GarlicSkin.skinSettings;
@@ -32,6 +45,8 @@ namespace GarlicPress
             cbLangSettings.ValueMember = "Value";
             cbLangSettings.DisplayMember = "Key";
             cbLangSettings.DataSource = languageSettingsList;
+
+
 
             DownloadBootScreenPreview();
 
@@ -68,6 +83,8 @@ namespace GarlicPress
             txtMinuteLabel.Text = skinSettings.minutelabel;
             txtMeridianTimeLabel.Text = skinSettings.meridiantimelabel;
             txtTitleLabel.Text = skinSettings.titlelabel;
+
+            cbLangSettings.SelectedIndex = 0;
         }
 
         private void GetColor(TextBox txtBox)
@@ -226,7 +243,7 @@ namespace GarlicPress
             GarlicLanguageSettings languageSettings = new GarlicLanguageSettings();
 
             languageSettings.isocode = txtLangIsoCode.Text;
-            languageSettings.font = txtLangFont.Text;
+            languageSettings.font = (string)cbLangFont.SelectedItem;
             int fontSize = 28;
             int.TryParse(txtLangFontSize.Text, out fontSize);
             languageSettings.fontsize = fontSize;
@@ -262,7 +279,7 @@ namespace GarlicPress
 
             GarlicSkin.SaveLangFile(txtLangFileName.Text, languageSettings);
 
-            var newKeypair = new KeyValuePair<string, GarlicLanguageSettings>(txtLangFileName.Text.ToLower(), languageSettings);
+            var newKeypair = new KeyValuePair<string, GarlicLanguageSettings>(txtLangFileName.Text, languageSettings);
             if (languageSettingsList.Any(a => a.Key == newKeypair.Key))
             {
                 var keypair = languageSettingsList.Where(a => a.Key == newKeypair.Key).First();
@@ -278,9 +295,14 @@ namespace GarlicPress
         private void cbLangSettings_SelectedIndexChanged(object sender, EventArgs e)
         {
             var LangKeyPair = (KeyValuePair<string, GarlicLanguageSettings>)cbLangSettings.SelectedItem;
+
+            if(fonts!=null && fonts.Contains(LangKeyPair.Value.font))
+                cbLangFont.SelectedItem = LangKeyPair.Value.font;
+            else
+                cbLangFont.SelectedIndex = 0;
+
             txtLangFileName.Text = LangKeyPair.Key;
             txtLangIsoCode.Text = LangKeyPair.Value.isocode;
-            txtLangFont.Text = LangKeyPair.Value.font;
             txtLangFontSize.Text = LangKeyPair.Value.fontsize.ToString();
             txtLangAMLabel.Text = LangKeyPair.Value.amlabel;
             txtLangBackLabel.Text = LangKeyPair.Value.backlabel;
@@ -310,5 +332,13 @@ namespace GarlicPress
 
         }
 
+        private void txtLangButtonGuideFontSize_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtLangFontSize_TextChanged(object sender, EventArgs e)
+        {
+        }
     }
 }
