@@ -78,7 +78,28 @@ namespace GarlicPress
                 if (medias.Count() > 0)
                 {
                     var media = medias.First();
-                    string mediaDownloadPath = "assets/" + mediaType + "." + media.format;
+
+                    //Find the first media that matches the region order
+                    foreach (var region in ssRegionOrder)
+                    {
+                        if (medias.FirstOrDefault(x => x.region == region) is Media regionMedia)
+                        {
+                            media = regionMedia;
+                            break;
+                        }
+                    }
+
+                    Directory.CreateDirectory("assets/temp");
+
+                    string mediaDownloadPath = "assets/temp/" + game.response.jeu.id + mediaType + "." + media.format;
+                    
+                    
+                    if (File.Exists(mediaDownloadPath))
+                    {
+                        return mediaDownloadPath;
+                    }
+
+
                     using (var s = await httpClient.GetStreamAsync(new Uri(media.url)))
                     {
                         using (var fs = new FileStream(mediaDownloadPath, FileMode.Create))

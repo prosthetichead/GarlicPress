@@ -28,7 +28,7 @@ namespace GarlicPress
 
         private void sendCommand()
         {
-            var results = GarlicADBConnection.ExecuteCommand(txtCommand.Text);
+            var results = ADBConnection.ExecuteCommand(txtCommand.Text);
             txtOutput.Text = results;
         }
 

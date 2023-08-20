@@ -18,7 +18,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="ssRegionOrder" Type="System.String" Scope="User">
-      <Value Profile="(Default)">us,wor,jp</Value>
+      <Value Profile="(Default)">us,wor,eu,jp</Value>
     </Setting>
     <Setting Name="settingsUpgradeRequired" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -30,6 +30,9 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="warningBeforeDelete" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="cleanTempOnExit" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>

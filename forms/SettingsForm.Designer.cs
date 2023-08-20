@@ -113,6 +113,7 @@
             // 
             // btnSave
             // 
+            btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             btnSave.Location = new Point(578, 407);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(123, 31);
@@ -223,6 +224,7 @@
             // 
             // btnCancel
             // 
+            btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             btnCancel.Location = new Point(707, 407);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(81, 31);

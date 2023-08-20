@@ -1,0 +1,227 @@
+﻿@using GarlicPress.forms;
+@inject IJSRuntime JsRuntime
+@inject EditMediaLayersForm editMediaLayersForm
+@implements IDisposable
+
+<style>
+    label {
+        font-family: 'GarlicFont';
+    }
+
+</style>
+
+<div class="grid grid-cols-3 gap-2 bg-gray-800 h-screen p-2">
+    <div>
+        <label for="drive" class="block text-lg font-medium text-white"><b>Drive</b></label>
+        <select id="drive" @bind="SelectedDriveValue" @bind:after="(() => SelectedDrive = GarlicDrive.GetGarlicDrives().FirstOrDefault(x => x.name == SelectedDriveValue))"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+            @foreach (var drive in GarlicDrive.GetGarlicDrives())
+            {
+                <option value="@drive.name">@drive.name</option>
+            }
+        </select>
+    </div>
+    <div>
+        <label for="System" class="block text-lg font-medium text-white"><b>System</b></label>
+        <select id="System" @bind="SelectedSystemValue" @bind:after="(() => { SelectedSystem = GarlicSystem.GetAllSystems().FirstOrDefault(x => x.name == SelectedSystemValue); UpdateGames();})"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+            @foreach (var system in GarlicSystem.GetAllSystems())
+            {
+                <option value="@system.name">@system.name</option>
+            }
+        </select>
+    </div>
+    <div>
+        <label for="Game" class="block text-lg font-medium text-white"><b>Game</b></label>
+        @if (Games.Any())
+        {
+            <select id="Game" @bind="SelectedGame" @bind:after="(async () => { await UpdateGameArt(); })"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                @foreach (var game in Games)
+                {
+                    <option value="@game">@game</option>
+                }
+            </select>
+        }
+        else
+        {
+            <input id="Game" type="text" @bind="SelectedGame" @bind:after="(async () => { await UpdateGameArt(); })"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+        }
+    </div>
+
+    <div class="col-span-3 flex justify-center items-center">
+        <canvas width="640" height="480" id="@canvasId"></canvas>
+    </div>
+    <div class="col-span-1">
+        <button class="px-5 py-2.5 text-center bg-blue-500 hover:bg-blue-300 rounded m-2 py-2 text-white" @onclick="() => { GameMediaGeneration.SaveMediaLayoutJson(); editMediaLayersForm.Close(); }"><b>Save</b></button>
+    </div>
+</div>
+
+@code {
+    string canvasId = $"canvas-{Guid.NewGuid()}";
+    IJSObjectReference? module;
+    DotNetObjectReference<MediaGenerationEditor>? objRef;
+
+    bool ArtUpdateRunning;
+
+    string SelectedImgPath { get { return SelectedDrive?.path + "/Roms/" + SelectedSystem?.folder + "/Imgs/"; } }
+    string SelectedRomPath { get { return SelectedDrive?.romPath + "/" + SelectedSystem?.folder; } }
+    GarlicDrive? SelectedDrive { get; set; }
+    string? SelectedDriveValue { get; set; }
+    GarlicSystem? SelectedSystem { get; set; }
+    string? SelectedSystemValue { get; set; }
+
+    List<string> Games = new();
+    string SelectedGame = "";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            objRef = DotNetObjectReference.Create(this);
+            module = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./components/MediaGenerationEditor.razor.js");
+            await module.InvokeVoidAsync("BlazorFabric.createCanvas", canvasId, objRef);
+            await module.InvokeVoidAsync("BlazorFabric.setupImageLocationUpdatedCallback");
+        }
+    }
+
+    struct imageDetails
+    {
+        public Guid id { get; set; }
+        public int left { get; set; }
+        public int top { get; set; }
+        public int angle { get; set; }
+        public int scale { get; set; }
+    }
+
+    [JSInvokable]
+    public void NotifyImageLocationUpdated(string imageDetails)
+    {
+        var details = JsonSerializer.Deserialize<imageDetails>(imageDetails);
+
+        if (GameMediaGeneration.MediaLayers.FirstOrDefault(x => x.id == details.id) is MediaLayer layer)
+        {
+            layer.x = details.left;
+            layer.y = details.top;
+            layer.resizePercent = details.scale;
+        }
+        StateHasChanged();
+    }
+
+    void UpdateGames()
+    {
+        if (ADBConnection.deviceConnected)
+        {
+            var list = ADBConnection.GetDirectoryListing(SelectedRomPath);
+            Games = list.Where(w => w.Path != "." && w.Path != ".." && w.Path != "Imgs").OrderBy(o => o.Path).Select(x => x.Path).ToList();
+        }
+    }
+
+    async Task UpdateGameArt()
+    {
+        if (!ArtUpdateRunning && SelectedSystem is not null && module is not null)
+        {
+            ArtUpdateRunning = true;
+            await module.InvokeVoidAsync("BlazorFabric.clearCanvas");
+
+            var baseImage = (Bitmap)Image.FromFile(@"assets/skin/background.png");
+            await module.InvokeVoidAsync("BlazorFabric.addBackgroundImage", "data:image/png;base64," + BitmapToBase64(baseImage));
+
+            await AddText();
+
+            GameResponse game = await ScreenScraper.GetGameData(SelectedSystem, SelectedGame, SearchType.GameName);
+            if (game != null && game.status != "error")
+            {
+                foreach (var gameMedia in await GameMediaGeneration.GetGameMedia(game) ?? new List<(Bitmap?, MediaLayer)>())
+                {
+                    await UpdateCanvas(gameMedia.bitmap, gameMedia.layer);
+                }
+            }
+            else if (game != null)
+            {
+                MessageBox.Show("Game not Found : " + game.statusMessage, "warn");
+            }
+            else
+            {
+                MessageBox.Show("Error : null GameResponse! " + SelectedGame ?? "", "error");
+            }
+
+            ArtUpdateRunning = false;
+        }
+    }
+
+    async Task AddText()
+    {
+        if (module is not null)
+        {
+            if (Games.Any())
+            {
+                var indexof = Games.IndexOf(SelectedGame);
+
+                int cindex = 0;
+                foreach (var game in GetSurroundingStrings(Games, indexof))
+                {
+                    await module.InvokeVoidAsync("BlazorFabric.addText", game, GarlicSkin.skinSettings.textmargin, 100 + (cindex++ * 30), GarlicSkin.skinSettings.colorguide, "red", "GarlicFont");
+                }
+            }
+            else
+            {
+                for (int i = 0; i < 9; i++)
+                {
+                    await module.InvokeVoidAsync("BlazorFabric.addText", SelectedGame, 340, 100 + (i * 30), "white", "red", "GarlicFont");
+                }
+            }
+        }
+    }
+
+    public static List<string> GetSurroundingStrings(List<string> source, int index)
+    {
+        int start = Math.Max(0, index - 4); // Ensure we don't go below 0
+        int count = 9;
+
+        // If we're near the start of the list, adjust count to get more elements after index
+        if (start < index - 4)
+        {
+            count += (index - 4) - start;
+        }
+
+        // If we're near the end of the list, adjust count to stay within bounds
+        if (start + count > source.Count)
+        {
+            count = source.Count - start;
+        }
+
+        return source.Skip(start).Take(count).ToList();
+    }
+
+
+    async Task UpdateCanvas(Bitmap? bitmap, MediaLayer layer)
+    {
+        if (bitmap is not null && module is not null)
+        {
+            await module.InvokeVoidAsync("BlazorFabric.addImage", "data:image/png;base64," + BitmapToBase64(bitmap), layer.id, layer.x, layer.y, layer.resizePercent / 100);
+        }
+    }
+
+    string BitmapToBase64(Bitmap bitmap)
+    {
+        using (MemoryStream memoryStream = new MemoryStream())
+        {
+            // Convert Bitmap to byte[]
+            bitmap.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
+            byte[] bitmapBytes = memoryStream.ToArray();
+
+            // Convert byte[] to Base64 String
+            string base64String = Convert.ToBase64String(bitmapBytes);
+
+            return base64String;
+        }
+    }
+
+    public void Dispose()
+    {
+        module?.DisposeAsync();
+        objRef?.Dispose();
+    }
+}

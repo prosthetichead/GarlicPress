@@ -13,73 +13,71 @@ using System.Windows.Forms;
 
 namespace GarlicPress
 {
-    internal static class GarlicADBConnection
+    internal static class ADBConnection
     {
         public static bool deviceConnected;
         public static AdbClient client;
         public static DeviceData device;
 
-        public static GarlicSkinSettings skinSettings;
-        public static bool validSkinSettings;
-
-        public static void ReadSkinSettings()
+        
+        public static void StartADBServer()
         {
-            //read skin file get text position
-            string json = File.ReadAllText(@"assets/skinSettings.json");
-            try
+            DebugLog.Write("Atempting to Start ADB Server");
+
+            if (!AdbServer.Instance.GetStatus().IsRunning)
             {
-                skinSettings = JsonSerializer.Deserialize<GarlicSkinSettings>(json);
-                validSkinSettings = true;
+                var server = new AdbServer();
+                try
+                {
+                    StartServerResult result = server.StartServer(@"adb.exe", true);
+                    if (result != StartServerResult.Started)
+                    {
+                        DebugLog.Write($"Can't start adb server " + result, Color.OrangeRed);
+                        MessageBox.Show("Can't start adb server", "Oh No", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    DebugLog.Write($"Error Starting ADB Server: {ex.Message}",Color.OrangeRed);
+                    MessageBox.Show("Error: " + ex.Message, "Oh No",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-            catch (Exception ex)
+            else
             {
-                skinSettings = new GarlicSkinSettings();
-                validSkinSettings = false;
-                MessageBox.Show("CFW/skin/settings.json skin settings can not be loaded. \n\n Preview will not display text position \n skin settings tool will not function. \n\n Please report the skin you are using to issues link in About \n\n Error Text : \n " + ex.Message, "Error Reading Skin Settings Json on Device", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DebugLog.Write("ADB Server Already Running");
             }
-        }
-
-        public static string GetImgPath(GarlicDrive drive, GarlicSystem system)
-        {
-            return GetSystemPath(drive, system) + "/Imgs";
-        }
-
-        public static string GetSystemPath(GarlicDrive drive, GarlicSystem system)
-        {
-            return drive.romPath + "/" + system.folder;
         }
 
         public static bool ConnectToDevice()
         {
+            bool isConnected = false;
+
             if (AdbServer.Instance.GetStatus().IsRunning)
             {
                 Thread.Sleep(1000);
                 client = new AdbClient();
                 var devices = client.GetDevices();
-                deviceConnected = false;
-
                 foreach (var d in devices)
                 {
+                    DebugLog.Write($"AdbServer found Device. Name: {d.Name} Model: {d.Model}");
+
                     if (d.Name == "q88_hd" && d.Model == "ToyCloud")
                     {
                         device = d;
-                        deviceConnected = true;
+                        isConnected = true;
+                        break;
                     }
                 }
+            }
+            deviceConnected = isConnected;
 
-                if (deviceConnected)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
+            return deviceConnected;
+        }        
+
+        public static string ReadTextFile(string readPath)
+        {
+            return ExecuteCommand($"cat \"{readPath}\"");
         }
 
         public static List<FileStatistics> GetDirectoryListing(string path)
@@ -102,14 +100,26 @@ namespace GarlicPress
         {
             if (deviceConnected)
             {
+
+                DebugLog.Write($"Async Uploading File {readPath} to {writePath}");
+
                 using (SyncService service = new SyncService(new AdbSocket(client.EndPoint), device))
                 {
                     using (Stream stream = File.OpenRead(readPath))
                     {
-                        await Task.Run(() =>
-                            service.Push(stream, writePath, 777, new DateTimeOffset(DateTime.Now), progress, cancellationToken)
-                        );
-                        return true;
+                        try
+                        {
+                            await Task.Run(() =>
+                                service.Push(stream, writePath, 777, new DateTimeOffset(DateTime.Now), progress, cancellationToken)
+                            );
+                            DebugLog.Write($"Async Upload Complete");
+                            return true;
+                        }
+                        catch (Exception ex)
+                        {
+                            DebugLog.Write($"Error : {ex.Message}", Color.OrangeRed);
+                            return false;
+                        }
                     }
                 }
             }
@@ -121,6 +131,8 @@ namespace GarlicPress
             Progress<int> progress = new Progress<int>();
             if (deviceConnected)
             {
+                DebugLog.Write($"Uploading File {readPath} to {writePath}");
+
                 using (SyncService service = new SyncService(new AdbSocket(client.EndPoint), device))
                 {
                     using (Stream stream = File.OpenRead(readPath))
@@ -128,10 +140,12 @@ namespace GarlicPress
                         try
                         {
                             service.Push(stream, writePath, 777, new DateTimeOffset(DateTime.Now), progress, CancellationToken.None);
+                            DebugLog.Write($"Async Upload Complete");
                             return true;
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
+                            DebugLog.Write($"Error : {ex.Message}", Color.OrangeRed);
                             return false;
                         }
                     }
@@ -147,6 +161,7 @@ namespace GarlicPress
             {
                 try
                 {
+                    DebugLog.Write($"Downloading File {readPath} to {writePath}");
 
                     new FileInfo(writePath).Directory?.Create();
 
@@ -155,13 +170,14 @@ namespace GarlicPress
                         using (Stream stream = File.Create(writePath))
                         {               
                             service.Pull(readPath, stream, progress, CancellationToken.None);
+                            DebugLog.Write($"Download Complete");
                             return true;
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    //MessageBox.Show($"Error Downloading File {readPath} to {writePath} \n " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    DebugLog.Write($"Error {ex.GetType()} :  {ex.Message}", Color.OrangeRed);
                     return false;
                 }
             }
@@ -170,12 +186,15 @@ namespace GarlicPress
 
         public static bool DownloadDirectory(string readPath, string writePath)
         {
+            
+            Directory.CreateDirectory(writePath);
+
             //check if readpath is a Directory
             var pathType = DevicePathType(readPath);
 
             if (pathType == "dir")
             {
-                
+                                
                 //list the directory and start writing files to the writePath
                 using (SyncService service = new SyncService(new AdbSocket(client.EndPoint), device))
                 {
@@ -196,7 +215,6 @@ namespace GarlicPress
                     }
                 }
             }
-
             return false;
         }
 
@@ -226,11 +244,16 @@ namespace GarlicPress
             if (deviceConnected)
             {
                 ConsoleOutputReceiver receiver = new ConsoleOutputReceiver();
-                client.ExecuteRemoteCommand($"rm -r {path}" , device, receiver);
+                client.ExecuteRemoteCommand($"rm -r \"{path}\" " , device, receiver);
 
                 return receiver.ToString().Trim();
             }
             return "device not connected";
+        }        
+
+        public static void SetBacklight(int bightness)
+        {
+            ExecuteCommand("echo " + bightness + " > /sys/devices/backlight.2/backlight/backlight.2/brightness");
         }
 
         public static string RenameFile(string path, string newPath)
@@ -239,7 +262,11 @@ namespace GarlicPress
             {
                 ConsoleOutputReceiver receiver = new ConsoleOutputReceiver();
                 client.ExecuteRemoteCommand($"mv {path} {newPath}", device, receiver);
+               
+
                 return receiver.ToString().Trim();
+
+
             }
             return "device not connected";
         }

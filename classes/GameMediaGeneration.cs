@@ -8,6 +8,8 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
+using Image = System.Drawing.Image;
 
 namespace GarlicPress
 {
@@ -72,17 +74,17 @@ namespace GarlicPress
             var overlayImage = imageToOverlay;
             var textImage = (Bitmap)Image.FromFile(@"assets/SampleTextCenter.png");
             int txtMargin = 0;
-            if (GarlicADBConnection.skinSettings is not null)
+            if (GarlicSkin.skinSettings is not null)
             {
-                if (GarlicADBConnection.skinSettings.textalignment == "right")
+                if (GarlicSkin.skinSettings.textalignment == "right")
                 {
                     textImage = (Bitmap)Image.FromFile(@"assets/SampleTextRight.png");
-                    txtMargin = GarlicADBConnection.skinSettings.textmargin * -1;
+                    txtMargin = GarlicSkin.skinSettings.textmargin * -1;
                 }
-                else if (GarlicADBConnection.skinSettings.textalignment == "left")
+                else if (GarlicSkin.skinSettings.textalignment == "left")
                 {
                     textImage = (Bitmap)Image.FromFile(@"assets/SampleTextLeft.png");
-                    txtMargin = GarlicADBConnection.skinSettings.textmargin;
+                    txtMargin = GarlicSkin.skinSettings.textmargin;
                 }
             }
             else
@@ -101,7 +103,7 @@ namespace GarlicPress
 
             graphics.DrawImage(baseImage, 0, 0, 640, 480);
             graphics.DrawImage(overlayImage, 0, 0, 640, 480);
-            if (GarlicADBConnection.validSkinSettings || GarlicADBConnection.skinSettings is null)
+            if (GarlicSkin.validSkinSettings || GarlicSkin.skinSettings is null)
             {
                 graphics.DrawImage(textImage, txtMargin, 0, 640, 480);
             }
@@ -141,10 +143,31 @@ namespace GarlicPress
                         graphics.DrawImage(baseImage, layer.x, layer.y, baseImage.Width, baseImage.Height);
                     }
                     baseImage.Dispose();
-                    File.Delete(filename); //clean up the old temp image
+                    //File.Delete(filename); //clean up the old temp image
                 }
             }
             return finalImage;
+        }
+
+        public static async Task<List<(Bitmap? bitmap, MediaLayer layer)>?> GetGameMedia(GameResponse game)
+        {
+            var mediaList = new List<(Bitmap?,MediaLayer)>();
+
+            if (game.status == "error")
+            {
+                return null;
+            }
+
+            foreach (var layer in mediaLayout.OrderBy(o => o.order))
+            {
+                var filename = await ScreenScraper.DownloadMedia(game, layer.mediaType);
+                if (!string.IsNullOrEmpty(filename))
+                {
+                    mediaList.Add(((Bitmap)Image.FromFile(filename), layer));
+                }
+            }
+
+            return mediaList;
         }
     }
 }

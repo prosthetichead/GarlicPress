@@ -16,7 +16,7 @@ namespace GarlicPress
     {
 
         BindingList<MediaLayer> tempMediaLayout;
-        PreviewForm? previewForm;
+        EditMediaLayersForm? previewForm;
 
         public SettingsForm()
         {
@@ -116,6 +116,14 @@ namespace GarlicPress
         private void btnShowPreview_Click(object sender, EventArgs e)
         {
             previewForm = new();
+            previewForm.FormClosing += (s, e) => 
+            {
+                tempMediaLayout.Clear();
+                foreach (MediaLayer layer in GameMediaGeneration.MediaLayers)
+                    tempMediaLayout.Add(layer);
+                GridMediaLayout.DataSource = tempMediaLayout;
+            };
+
             previewForm.Show();
         }
 
