@@ -121,6 +121,7 @@ namespace GarlicPress
 
         private void SettingsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            GameMediaGeneration.LoadMediaLayoutJson();
             previewForm?.Close();
         }
     }
