@@ -12,7 +12,7 @@ namespace GarlicPress
     {       
 
         public static GarlicSkinSettings skinSettings;
-        public static Dictionary<string, GarlicLanguageSettings> languageSettingsDictonary;
+        public static List<GarlicLanguageSettingsFile> languageFiles;
         public static bool validSkinSettings;
 
         static JsonSerializerOptions jsonOptions = new JsonSerializerOptions
@@ -37,10 +37,10 @@ namespace GarlicPress
             }
         }
 
-        public static void DeleteLangFile(string langFileName)
+        public static void DeleteLangFile(string fileKey, string fileName)
         {
-            languageSettingsDictonary.Remove( langFileName.ToLower() );
-            ADBConnection.DeleteFile("/mnt/mmc/CFW/lang/"+langFileName);
+            ADBConnection.DeleteFile("/mnt/mmc/CFW/lang/" + fileName);
+            languageFiles.RemoveAll(o=> o.fileKey == fileKey);
         }
 
         public static void SaveLangFile(string langFileName, GarlicLanguageSettings langSetting)

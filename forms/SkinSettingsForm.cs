@@ -296,7 +296,7 @@ namespace GarlicPress
         {
             var LangKeyPair = (KeyValuePair<string, GarlicLanguageSettings>)cbLangSettings.SelectedItem;
 
-            if(fonts!=null && fonts.Contains(LangKeyPair.Value.font))
+            if (fonts != null && fonts.Contains(LangKeyPair.Value.font))
                 cbLangFont.SelectedItem = LangKeyPair.Value.font;
             else
                 cbLangFont.SelectedIndex = 0;

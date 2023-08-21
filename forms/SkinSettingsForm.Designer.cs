@@ -98,6 +98,9 @@
             btnTextColourActivePicker = new Button();
             label1 = new Label();
             tabLangSettings = new TabPage();
+            btnDeleteFont = new Button();
+            btnUploadFont = new Button();
+            cbLangFont = new ComboBox();
             label56 = new Label();
             txtLangTitleLabel = new TextBox();
             label55 = new Label();
@@ -151,7 +154,6 @@
             label32 = new Label();
             txtLangFontSize = new TextBox();
             label31 = new Label();
-            txtLangFont = new TextBox();
             label30 = new Label();
             txtLangIsoCode = new TextBox();
             btnSaveLang = new Button();
@@ -163,9 +165,6 @@
             btnUploadBootScreen = new Button();
             picBootScreen = new PictureBox();
             btnReboot = new Button();
-            cbLangFont = new ComboBox();
-            btnUploadFont = new Button();
-            btnDeleteFont = new Button();
             tabControl1.SuspendLayout();
             tabSkinSettings.SuspendLayout();
             tabLangSettings.SuspendLayout();
@@ -860,7 +859,6 @@
             tabLangSettings.Controls.Add(label32);
             tabLangSettings.Controls.Add(txtLangFontSize);
             tabLangSettings.Controls.Add(label31);
-            tabLangSettings.Controls.Add(txtLangFont);
             tabLangSettings.Controls.Add(label30);
             tabLangSettings.Controls.Add(txtLangIsoCode);
             tabLangSettings.Controls.Add(btnSaveLang);
@@ -875,6 +873,33 @@
             tabLangSettings.TabIndex = 2;
             tabLangSettings.Text = "Language Settings";
             tabLangSettings.UseVisualStyleBackColor = true;
+            // 
+            // btnDeleteFont
+            // 
+            btnDeleteFont.Location = new Point(303, 86);
+            btnDeleteFont.Name = "btnDeleteFont";
+            btnDeleteFont.Size = new Size(81, 23);
+            btnDeleteFont.TabIndex = 94;
+            btnDeleteFont.Text = "Delete Font";
+            btnDeleteFont.UseVisualStyleBackColor = true;
+            // 
+            // btnUploadFont
+            // 
+            btnUploadFont.Location = new Point(216, 86);
+            btnUploadFont.Name = "btnUploadFont";
+            btnUploadFont.Size = new Size(81, 23);
+            btnUploadFont.TabIndex = 93;
+            btnUploadFont.Text = "Upload Font";
+            btnUploadFont.UseVisualStyleBackColor = true;
+            // 
+            // cbLangFont
+            // 
+            cbLangFont.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbLangFont.FormattingEnabled = true;
+            cbLangFont.Location = new Point(10, 87);
+            cbLangFont.Name = "cbLangFont";
+            cbLangFont.Size = new Size(200, 23);
+            cbLangFont.TabIndex = 92;
             // 
             // label56
             // 
@@ -1303,13 +1328,6 @@
             label31.TabIndex = 39;
             label31.Text = "Font";
             // 
-            // txtLangFont
-            // 
-            txtLangFont.Location = new Point(216, 517);
-            txtLangFont.Name = "txtLangFont";
-            txtLangFont.Size = new Size(200, 23);
-            txtLangFont.TabIndex = 38;
-            // 
             // label30
             // 
             label30.AutoSize = true;
@@ -1415,33 +1433,6 @@
             btnReboot.Text = "Reboot";
             btnReboot.UseVisualStyleBackColor = true;
             btnReboot.Click += btnReboot_Click;
-            // 
-            // cbLangFont
-            // 
-            cbLangFont.DropDownStyle = ComboBoxStyle.DropDownList;
-            cbLangFont.FormattingEnabled = true;
-            cbLangFont.Location = new Point(10, 87);
-            cbLangFont.Name = "cbLangFont";
-            cbLangFont.Size = new Size(200, 23);
-            cbLangFont.TabIndex = 92;
-            // 
-            // btnUploadFont
-            // 
-            btnUploadFont.Location = new Point(216, 86);
-            btnUploadFont.Name = "btnUploadFont";
-            btnUploadFont.Size = new Size(81, 23);
-            btnUploadFont.TabIndex = 93;
-            btnUploadFont.Text = "Upload Font";
-            btnUploadFont.UseVisualStyleBackColor = true;
-            // 
-            // btnDeleteFont
-            // 
-            btnDeleteFont.Location = new Point(303, 86);
-            btnDeleteFont.Name = "btnDeleteFont";
-            btnDeleteFont.Size = new Size(81, 23);
-            btnDeleteFont.TabIndex = 94;
-            btnDeleteFont.Text = "Delete Font";
-            btnDeleteFont.UseVisualStyleBackColor = true;
             // 
             // SkinSettingsForm
             // 
@@ -1550,7 +1541,6 @@
         private Label label30;
         private TextBox txtLangIsoCode;
         private Label label31;
-        private TextBox txtLangFont;
         private Label label33;
         private TextBox txtLangButtonGuideFontSize;
         private Label label32;

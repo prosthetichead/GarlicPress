@@ -144,6 +144,19 @@ namespace GarlicPress
         }
     }
 
+    public class GarlicLanguageSettingsFile
+    {
+        public string fileKey { get; set; }
+        public string fileName { get; set; }
+        public GarlicLanguageSettings garlicLanguageSettings { get; set; }
+
+        public GarlicLanguageSettingsFile(string fileName, GarlicLanguageSettings garlicLanguageSettings)
+        {
+            this.fileName = fileName;
+            this.fileKey = fileName.ToLower();
+            this.garlicLanguageSettings = garlicLanguageSettings;
+        }
+    }
 
     public class GarlicLanguageSettings
     {
