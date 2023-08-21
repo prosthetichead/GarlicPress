@@ -72,17 +72,17 @@ namespace GarlicPress
             var overlayImage = imageToOverlay;
             var textImage = (Bitmap)Image.FromFile(@"assets/SampleTextCenter.png");
             int txtMargin = 0;
-            if (GarlicADBConnection.skinSettings is not null)
+            if (GarlicSkin.skinSettings is not null)
             {
-                if (GarlicADBConnection.skinSettings.textalignment == "right")
+                if (GarlicSkin.skinSettings.textalignment == "right")
                 {
                     textImage = (Bitmap)Image.FromFile(@"assets/SampleTextRight.png");
-                    txtMargin = GarlicADBConnection.skinSettings.textmargin * -1;
+                    txtMargin = GarlicSkin.skinSettings.textmargin * -1;
                 }
-                else if (GarlicADBConnection.skinSettings.textalignment == "left")
+                else if (GarlicSkin.skinSettings.textalignment == "left")
                 {
                     textImage = (Bitmap)Image.FromFile(@"assets/SampleTextLeft.png");
-                    txtMargin = GarlicADBConnection.skinSettings.textmargin;
+                    txtMargin = GarlicSkin.skinSettings.textmargin;
                 }
             }
             else
@@ -101,7 +101,7 @@ namespace GarlicPress
 
             graphics.DrawImage(baseImage, 0, 0, 640, 480);
             graphics.DrawImage(overlayImage, 0, 0, 640, 480);
-            if (GarlicADBConnection.validSkinSettings || GarlicADBConnection.skinSettings is null)
+            if (GarlicSkin.validSkinSettings || GarlicSkin.skinSettings is null)
             {
                 graphics.DrawImage(textImage, txtMargin, 0, 640, 480);
             }

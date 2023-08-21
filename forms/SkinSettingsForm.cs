@@ -16,7 +16,7 @@ namespace GarlicPress
     public partial class SkinSettingsForm : Form
     {
         GarlicSkinSettings skinSettings;
-        BindingList<KeyValuePair<string, GarlicLanguageSettings>> languageSettingsList;
+        BindingList<GarlicLanguageSettingsFile> languageSettingsList;
         BindingList<string> fonts;
 
         public SkinSettingsForm()
@@ -37,8 +37,8 @@ namespace GarlicPress
 
             //Get skin settings
             skinSettings = GarlicSkin.skinSettings;
-            languageSettingsList = new BindingList<KeyValuePair<string, GarlicLanguageSettings>>();
-            foreach (var lang in GarlicSkin.languageSettingsDictonary)
+            languageSettingsList = new BindingList<GarlicLanguageSettingsFile>();
+            foreach (var lang in GarlicSkin.languageFiles)
             {
                 languageSettingsList.Add(lang);
             }
@@ -228,7 +228,7 @@ namespace GarlicPress
                 var selectedIndex = cbLangSettings.SelectedIndex;
                 var lang = (KeyValuePair<string, GarlicLanguageSettings>)cbLangSettings.SelectedItem;
 
-                GarlicSkin.DeleteLangFile(lang.Key);
+                //GarlicSkin.DeleteLangFile(lang.Key);
 
                 languageSettingsList.RemoveAt(selectedIndex);
             }
@@ -279,17 +279,7 @@ namespace GarlicPress
 
             GarlicSkin.SaveLangFile(txtLangFileName.Text, languageSettings);
 
-            var newKeypair = new KeyValuePair<string, GarlicLanguageSettings>(txtLangFileName.Text, languageSettings);
-            if (languageSettingsList.Any(a => a.Key == newKeypair.Key))
-            {
-                var keypair = languageSettingsList.Where(a => a.Key == newKeypair.Key).First();
-                var index = languageSettingsList.IndexOf(keypair);
-                languageSettingsList[index] = newKeypair;
-            }
-            else
-            {
-                languageSettingsList.Add(newKeypair);
-            }
+            
         }
 
         private void cbLangSettings_SelectedIndexChanged(object sender, EventArgs e)
