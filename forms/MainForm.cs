@@ -29,13 +29,18 @@ namespace GarlicPress
 
         FileStatistics currentSelectedItem;
 
+        DebugLogForm debugLogForm;
+
         public MainForm()
         {
             InitializeComponent();
 
+            debugLogForm = new DebugLogForm();
+            DebugLog.Write("Log Started", Color.LightPink);
+
             //check version
             var updateInfo = Updater.GetUpdateInfo();
-            if(updateInfo.versionComparison > 0)
+            if (updateInfo.versionComparison > 0)
             {
                 txtUpdate.Visible = true;
             }
@@ -55,91 +60,93 @@ namespace GarlicPress
             comboDrive.DisplayMember = "name";
             comboDrive.ValueMember = "path";
             comboDrive.BindingContext = this.BindingContext;
-            
 
             comboSystems.DataSource = GarlicSystem.GetAllSystems();
             comboSystems.DisplayMember = "name";
             comboSystems.ValueMember = "folder";
             comboSystems.BindingContext = this.BindingContext;
 
-            
-
-            if (!AdbServer.Instance.GetStatus().IsRunning)
-            {
-                var server = new AdbServer();
-                try
-                {
-                    StartServerResult result = server.StartServer(@"adb.exe", true);
-                    if (result != StartServerResult.Started)
-                    {
-                        MessageBox.Show("Can't start adb server", "Oh No", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: " + ex.Message, "Oh No",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-
-            ConnectToDevice();
+            ADBConnection.StartADBServer();
+            CheckConnection();
         }
 
-
-        private void ConnectToDevice()
+        //Detect the USB Device Changes
+        //if a USB Device Change happens fire off the connect method.
+        private enum WM_DEVICECHANGE
         {
-            if (AdbServer.Instance.GetStatus().IsRunning)
+            // full list: https://learn.microsoft.com/en-us/windows/win32/devio/wm-devicechange
+            DBT_DEVICEARRIVAL = 0x8000,             // A device or piece of media has been inserted and is now available.
+            DBT_DEVICEREMOVECOMPLETE = 0x8004,      // A device or piece of media has been removed.
+            DBT_DEVNODES_CHANGED = 0x0007,          // A device or piece of media has been inserted or removed.
+        }
+        private int WmDevicechange = 0x0219; // device change event   
+        protected override void WndProc(ref Message m)
+        {
+            base.WndProc(ref m);        //This allows window default behavior of base class to be executed
+
+            if (m.Msg == WmDevicechange)
             {
-                var connect = GarlicADBConnection.ConnectToDevice();
-
-                if (connect)
+                switch ((WM_DEVICECHANGE)m.WParam)
                 {
-                    toolStripDeviceStatus.ForeColor = Color.Green;
-                    toolStripDeviceStatus.Text = "RG35xx";
-                    notifyIcon.Icon = Properties.Resources.garlicConnect;
-                    this.Icon = Properties.Resources.garlicConnect;
-                    notifyIcon.Text = "GarlicPress : RG35xx Connected";
-                    
-                    //get skin files
-                    GarlicADBConnection.DownloadFile("/mnt/mmc/CFW/skin/background.png", "assets/skin/background.png");
-                    GarlicADBConnection.DownloadFile("/mnt/mmc/CFW/skin/settings.json", "assets/skinSettings.json"); //cat /mnt/mmc/cfw/skin/settings.json
-
-                    GarlicADBConnection.ReadSkinSettings();
-
-                    //LETS GO We are Connected
-                    RefreshBrowserFiles();
+                    case WM_DEVICECHANGE.DBT_DEVICEREMOVECOMPLETE:
+                        DebugLog.Write("a usb device has been disconected", Color.RebeccaPurple);
+                        break;
+                    case WM_DEVICECHANGE.DBT_DEVICEARRIVAL:
+                        DebugLog.Write("a usb device has conected", Color.RebeccaPurple);                        
+                        break;
+                    case WM_DEVICECHANGE.DBT_DEVNODES_CHANGED:
+                        DebugLog.Write("a usb device has changed", Color.RebeccaPurple);
+                        break;
+                    default:
+                        DebugLog.Write($"a usb event of code {m.WParam.ToString()} happened", Color.RebeccaPurple);                        
+                        break;
                 }
-                else
-                {
-                    picGame.Image = null;
-                    picGame.ImageLocation = null;
-                    fileListBox.DataSource = null;
-                    toolStripDeviceStatus.ForeColor = Color.Red;
-                    toolStripDeviceStatus.Text = "No Device";
-                    notifyIcon.Icon = Properties.Resources.garlicDisconnect;
-                    this.Icon = Properties.Resources.garlicDisconnect;
-                    notifyIcon.Text = "GarlicPress : No Device";
-                }
+                CheckConnection();
             }
-            else
+        }
+
+        private void CheckConnection()
+        {
+            var deviceConnected = ADBConnection.deviceConnected;
+            var connect = ADBConnection.ConnectToDevice();
+            if(deviceConnected && connect) 
             {
+                DebugLog.Write("Device Already Connected");
+            }
+            else if(!deviceConnected && connect)
+            {
+                DebugLog.Write("Device Connected");
+
+                toolStripDeviceStatus.ForeColor = Color.Green;
+                toolStripDeviceStatus.Text = "RG35xx";
+                notifyIcon.Icon = Properties.Resources.garlicConnect;
+                this.Icon = Properties.Resources.garlicConnect;
+                notifyIcon.Text = "GarlicPress : RG35xx Connected";
+
+                //LETS GO We are Connected
+                GarlicSkin.ReadSkinFromDevice();
+                RefreshBrowserFiles();
+            }
+            else if (!connect)
+            {
+                DebugLog.Write("Device Disconected");
+
                 picGame.Image = null;
                 picGame.ImageLocation = null;
                 fileListBox.DataSource = null;
-                toolStripDeviceStatus.Text = "ADB Error";
-                notifyIcon.Text = "GarlicPress : ADB Error";
                 toolStripDeviceStatus.ForeColor = Color.Red;
+                toolStripDeviceStatus.Text = "No Device";
                 notifyIcon.Icon = Properties.Resources.garlicDisconnect;
                 this.Icon = Properties.Resources.garlicDisconnect;
-                statusStrip.Refresh();
+                notifyIcon.Text = "GarlicPress : No Device";
             }
         }
 
         private void RefreshBrowserFiles(int index = 0)
         {
-            if (GarlicADBConnection.deviceConnected)
+            if (ADBConnection.deviceConnected)
             {
-                var list = GarlicADBConnection.GetDirectoryListing(SelectedRomPath);
+                var list = ADBConnection.GetDirectoryListing(SelectedRomPath);
                 var files = list.Where(w => w.Path != "." && w.Path != ".." && w.Path != "Imgs").OrderBy(o => o.Path).ToList();
                 fileListBox.ClearSelected();
                 fileListBox.DataSource = files;
@@ -154,7 +161,7 @@ namespace GarlicPress
         private void fileListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             var item = (FileStatistics)fileListBox.SelectedItem;
-            
+
             if (item != null && item != currentSelectedItem)
             {
                 currentSelectedItem = item;
@@ -162,7 +169,7 @@ namespace GarlicPress
 
                 //get img file if one exists
                 string imgFile = Path.ChangeExtension(item.Path, ".png");
-                if ( GarlicADBConnection.DownloadFile( SelectedImgPath + imgFile, "assets/temp/gameart-down.png") )
+                if (ADBConnection.DownloadFile(SelectedImgPath + imgFile, "assets/temp/gameart-down.png"))
                 {
                     Bitmap overlayImage = (Bitmap)Image.FromFile(@"assets/temp/gameart-down.png");
                     picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage);
@@ -173,37 +180,9 @@ namespace GarlicPress
                 {
                     Bitmap overlayImage = (Bitmap)Image.FromFile(@"assets/skin/background.png");
                     picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage);
-                    overlayImage.Dispose();                   
+                    overlayImage.Dispose();
                 }
                 picGame.Refresh();
-            }
-        }
-
-        //Detect the USB Device Changes
-        //if a USB Device Change happens fire off the connect method.
-        private enum WM_DEVICECHANGE
-        {
-            // full list: https://learn.microsoft.com/en-us/windows/win32/devio/wm-devicechange
-            DBT_DEVICEARRIVAL = 0x8000,             // A device or piece of media has been inserted and is now available.
-            DBT_DEVICEREMOVECOMPLETE = 0x8004,      // A device or piece of media has been removed.
-        }
-        private int WmDevicechange = 0x0219; // device change event   
-
-        protected override void WndProc(ref Message m)
-        {
-            base.WndProc(ref m);        //This allows window default behavior of base class to be executed
-
-            if (m.Msg == WmDevicechange)
-            {
-                switch ((WM_DEVICECHANGE)m.WParam)
-                {
-                    case WM_DEVICECHANGE.DBT_DEVICEREMOVECOMPLETE:
-                        ConnectToDevice();
-                        break;
-                    case WM_DEVICECHANGE.DBT_DEVICEARRIVAL:
-                        ConnectToDevice();
-                        break;
-                }
             }
         }
 
@@ -242,7 +221,7 @@ namespace GarlicPress
 
         private void miConsole_Click(object sender, EventArgs e)
         {
-            if (GarlicADBConnection.deviceConnected)
+            if (ADBConnection.deviceConnected)
             {
                 ConsoleForm consoleForm = new ConsoleForm();
                 consoleForm.ShowDialog();
@@ -269,7 +248,7 @@ namespace GarlicPress
 
         private void MainForm_DragDropEnter(object sender, DragEventArgs e)
         {
-           
+
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 e.Effect = DragDropEffects.Copy;
 
@@ -282,10 +261,10 @@ namespace GarlicPress
             foreach (string file in files)
             {
                 FileAttributes attr = File.GetAttributes(file);
-                if(attr != FileAttributes.Directory)
+                if (attr != FileAttributes.Directory)
                 {
                     txtCurrentTask.Text = "uploading " + file + " for system " + system.name + " to SD " + comboDrive.SelectedIndex + 1;
-                    GarlicADBConnection.UploadFile(file, SelectedRomPath + "/" + Path.GetFileName(file));
+                    ADBConnection.UploadFile(file, SelectedRomPath + "/" + Path.GetFileName(file));
                 }
                 else
                 {
@@ -298,20 +277,21 @@ namespace GarlicPress
 
         private void miSkinSettings_Click(object sender, EventArgs e)
         {
-            if (GarlicADBConnection.validSkinSettings)
+            if (ADBConnection.deviceConnected)
             {
-                if (GarlicADBConnection.deviceConnected)
+                if (GarlicSkin.validSkinSettings)
                 {
-                    SkinSettingsForm skinSettingsForm = new SkinSettingsForm(GarlicADBConnection.skinSettings);
+
+                    SkinSettingsForm skinSettingsForm = new SkinSettingsForm();
                     skinSettingsForm.ShowDialog();
                 }
                 else
-                    MessageBox.Show("No Device Connected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                {
+                    MessageBox.Show("Skin Settings load was invalid can not open skin settings", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             else
-            {
-                MessageBox.Show("Skin Settings load was invalid can not open skin settings", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+                MessageBox.Show("No Device Connected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void fileListBox_KeyDown(object sender, KeyEventArgs e)
@@ -335,21 +315,21 @@ namespace GarlicPress
 
                 bool deleteFiles = true;
                 if (Properties.Settings.Default.warningBeforeDelete)
-                {                    
+                {
                     var result = MessageBox.Show("Delete " + fileListBox.SelectedItems.Count + " Selected files from the device?", "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
                     if (result == DialogResult.No)
                         deleteFiles = false;
                 }
 
-                if(deleteFiles)
+                if (deleteFiles)
                 {
                     foreach (FileStatistics item in fileListBox.SelectedItems.Cast<FileStatistics>())
                     {
                         var fullPath = "\"" + SelectedRomPath + "/" + item.Path + "\"";
                         string imgFile = Path.ChangeExtension(item.Path, ".png");
                         var fullImgPath = "\"" + SelectedImgPath + imgFile + "\"";
-                        GarlicADBConnection.DeleteFile(fullPath);
-                        GarlicADBConnection.DeleteFile(fullImgPath);
+                        ADBConnection.DeleteFile(fullPath);
+                        ADBConnection.DeleteFile(fullImgPath);
                         txtCurrentTask.Text = item.Path + " Deleted ";
                         Refresh();
 
@@ -363,7 +343,7 @@ namespace GarlicPress
                 }
             }
         }
-               
+
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -385,6 +365,7 @@ namespace GarlicPress
 
         private void btnUpdateSelectedArt_Click(object sender, EventArgs e)
         {
+            var selectedIndex = fileListBox.SelectedIndex;
             var selectedFiles = fileListBox.SelectedItems.Cast<FileStatistics>();
             var system = (GarlicSystem)comboSystems.SelectedItem;
             var drive = (GarlicDrive)comboDrive.SelectedItem;
@@ -396,17 +377,18 @@ namespace GarlicPress
                 searchItems.Add(ggas);
             }
 
-            if(searchItems.Count > 0)
+            if (searchItems.Count > 0)
             {
                 GameArtUpdateForm gameArtUpdateForm = new GameArtUpdateForm(searchItems);
                 gameArtUpdateForm.ShowDialog();
-                RefreshBrowserFiles();
+
+                RefreshBrowserFiles(selectedIndex);
             }
         }
 
         private void miBackupSaves_Click(object sender, EventArgs e)
         {
-            if (GarlicADBConnection.deviceConnected)
+            if (ADBConnection.deviceConnected)
             {
                 var backupDir = Properties.Settings.Default.saveBackupPath;
 
@@ -419,38 +401,38 @@ namespace GarlicPress
 
                     txtCurrentTask.Text = "Backing up Saves on SD Card " + drive.number + " to " + backupPath;
 
-                    GarlicADBConnection.DownloadDirectory(readPath, backupPath);
+                    ADBConnection.DownloadDirectory(readPath, backupPath);
                 }
             }
         }
 
         private void btnRename_Click(object sender, EventArgs e)
         {
-            string newFileName = txtFileName.Text;  
+            string newFileName = txtFileName.Text;
             var item = (FileStatistics)fileListBox.SelectedItem;
             var index = fileListBox.SelectedIndex;
 
             var invalidChars = new string(Path.GetInvalidFileNameChars());
             Regex regFixFileName = new Regex("[" + Regex.Escape(invalidChars) + "]");
             if (!regFixFileName.IsMatch(newFileName) && item != null)
-            {                
+            {
                 var fullPath = "\"" + SelectedRomPath + "/" + item.Path + "\"";
                 var newFullPath = "\"" + SelectedRomPath + "/" + newFileName + "\"";
                 string imgFile = Path.ChangeExtension(item.Path, ".png");
                 string newImgFile = Path.ChangeExtension(newFileName, ".png");
                 var fullImgPath = "\"" + SelectedImgPath + imgFile + "\"";
                 var newFullImgPath = "\"" + SelectedImgPath + newImgFile + "\"";
-                GarlicADBConnection.RenameFile(fullPath, newFullPath);
-                GarlicADBConnection.RenameFile(fullImgPath, newFullImgPath);
+                ADBConnection.RenameFile(fullPath, newFullPath);
+                ADBConnection.RenameFile(fullImgPath, newFullImgPath);
                 txtCurrentTask.Text = item.Path + " Renamed to " + newFileName;
-                Refresh();                
+                Refresh();
             }
             RefreshBrowserFiles(index);
         }
 
         private void btnSelectAll_Click(object sender, EventArgs e)
         {
-            
+
             fileListBox.BeginUpdate();
             //fileListBox.SelectionMode = SelectionMode.MultiSimple;
             for (int i = 0; i < fileListBox.Items.Count; i++)
@@ -462,29 +444,35 @@ namespace GarlicPress
 
         private void miUpdateAllArt_Click(object sender, EventArgs e)
         {
-            List<GarlicGameArtSearch> searchItems = new List<GarlicGameArtSearch>();
-
-            foreach (var drive in comboDrive.Items.Cast<GarlicDrive>())
+            if (ADBConnection.deviceConnected)
             {
-                foreach (var system in comboSystems.Items.Cast<GarlicSystem>())
+                List<GarlicGameArtSearch> searchItems = new List<GarlicGameArtSearch>();
+
+                foreach (var drive in comboDrive.Items.Cast<GarlicDrive>())
                 {
-                    //get items from the drive system combo
-                    var list = GarlicADBConnection.GetDirectoryListing(drive.romPath + "/" + system.folder);
-                    var files = list.Where(w => w.Path != "." && w.Path != ".." && w.Path != "Imgs").OrderBy(o => o.Path).ToList();
-                    foreach(var item in files)
+                    foreach (var system in comboSystems.Items.Cast<GarlicSystem>())
                     {
-                        GarlicGameArtSearch ggas = new GarlicGameArtSearch(system, drive, SearchType.GameName, item.Path);
-                        searchItems.Add(ggas);
+                        //get items from the drive system combo
+                        var list = ADBConnection.GetDirectoryListing(drive.romPath + "/" + system.folder);
+                        var files = list.Where(w => w.Path != "." && w.Path != ".." && w.Path != "Imgs").OrderBy(o => o.Path).ToList();
+                        foreach (var item in files)
+                        {
+                            GarlicGameArtSearch ggas = new GarlicGameArtSearch(system, drive, SearchType.GameName, item.Path);
+                            searchItems.Add(ggas);
+                        }
                     }
                 }
-            }
-            if (searchItems.Count > 0)
-            {
-                GameArtUpdateForm gameArtUpdateForm = new GameArtUpdateForm(searchItems);
-                gameArtUpdateForm.ShowDialog();
+                if (searchItems.Count > 0)
+                {
+                    GameArtUpdateForm gameArtUpdateForm = new GameArtUpdateForm(searchItems);
+                    gameArtUpdateForm.ShowDialog();
+                }
             }
         }
 
-
+        private void miShowDebugLog_Click(object sender, EventArgs e)
+        {
+            debugLogForm.Show();
+        }
     }
 }

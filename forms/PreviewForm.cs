@@ -41,9 +41,9 @@ public partial class PreviewForm : Form
 
     private void comboSystems_SelectedIndexChanged(object sender, EventArgs e)
     {
-        if (GarlicADBConnection.deviceConnected)
+        if (ADBConnection.deviceConnected)
         {
-            var list = GarlicADBConnection.GetDirectoryListing(SelectedRomPath);
+            var list = ADBConnection.GetDirectoryListing(SelectedRomPath);
             var files = list.Where(w => w.Path != "." && w.Path != ".." && w.Path != "Imgs").OrderBy(o => o.Path).Select(x => x.Path).ToList();
             comboGames.DataSource = files;
         }

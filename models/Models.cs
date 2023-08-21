@@ -41,8 +41,8 @@ namespace GarlicPress
         public string folder { get; set; }
         public List<string> extensions { get; set; }
         public string ss_systemeid { get; set; }  //
-        public string ss_romtype { get; set; }  
-        public GarlicSystem(string name, string folder,  string ss_systemeid, string ss_romtype, List<string> extensions)
+        public string ss_romtype { get; set; }
+        public GarlicSystem(string name, string folder, string ss_systemeid, string ss_romtype, List<string> extensions)
         {
             this.name = name;
             this.folder = folder;
@@ -58,7 +58,7 @@ namespace GarlicPress
             { //https://github.com/OnionUI/Onion/wiki/Emulators#rom-folders---quick-reference
                 new GarlicSystem("Amiga",  "AMIGA", "64", "rom", new List<string>(){}),
                 new GarlicSystem("Amstrad CPC",  "CPC", "65", "rom", new List<string>(){}),
-                
+
                 new GarlicSystem("Arcade (Mame 2003+)",  "ARCADE", "75", "rom", new List<string>(){}),
                 new GarlicSystem("Arcade (FinalBurn 2012)",  "FBA2012", "75", "rom", new List<string>(){}),
                 new GarlicSystem("Arcade (FinalBurn Neo)",  "FBNEO", "75", "rom", new List<string>(){}),
@@ -92,7 +92,7 @@ namespace GarlicPress
                 new GarlicSystem("Nintendo Super Game Boy", "SGB", "127", "rom", new List<string>(){}),
                 new GarlicSystem("Nintendo Super Nintendo", "SFC", "4", "rom", new List<string>(){}),
                 new GarlicSystem("Nintendo Virtual Boy", "VB", "11", "rom", new List<string>(){}),
-                new GarlicSystem("Nintendo Game Boy", "GB", "9", "rom", new List<string>(){".gb", ".gbc", ".dmg", ".zip", ".7z"}), 
+                new GarlicSystem("Nintendo Game Boy", "GB", "9", "rom", new List<string>(){".gb", ".gbc", ".dmg", ".zip", ".7z"}),
                 new GarlicSystem("Nintendo Game Boy Color", "GBC", "10", "rom", new List<string>(){".gb", ".gbc", ".dmg", ".zip", ".7z"}),
                 new GarlicSystem("Nintendo Game Boy Advance", "GBA", "12", "rom", new List<string>(){".gb", ".gbc", ".dmg", ".zip", ".7z"}),
                 new GarlicSystem("Sony Playstation", "PS", "57", "iso", new List<string>(){".chd"}),
@@ -115,7 +115,7 @@ namespace GarlicPress
                 new GarlicSystem("Commodore 64", "COMMODORE", "66", "rom", new List<string>(){}),
             };
 
-            return systems.OrderBy(o=>o.name).ToList();
+            return systems.OrderBy(o => o.name).ToList();
         }
     }
 
@@ -144,22 +144,61 @@ namespace GarlicPress
         }
     }
 
-    public class GarlicSkinSettings
+    public class GarlicLanguageSettingsFile
+    {
+        public string fileKey { get; set; }
+        public string fileName { get; set; }
+        public GarlicLanguageSettings garlicLanguageSettings { get; set; }
+
+        public GarlicLanguageSettingsFile(string fileName, GarlicLanguageSettings garlicLanguageSettings)
+        {
+            this.fileName = fileName;
+            this.fileKey = fileName.ToLower();
+            this.garlicLanguageSettings = garlicLanguageSettings;
+        }
+    }
+
+    public class GarlicLanguageSettings
+    {
+        [JsonPropertyName("iso-code")] public string isocode { get; set; }
+        public string font { get; set; }
+        [JsonPropertyName("font-size")] public int fontsize { get; set; }
+        [JsonPropertyName("button-guide-font-size")] public int buttonguidefontsize { get; set; }
+        [JsonPropertyName("recent-label")] public string recentlabel { get; set; }
+        [JsonPropertyName("favorites-label")] public string favoriteslabel { get; set; }
+        [JsonPropertyName("consoles-label")] public string consoleslabel { get; set; }
+        [JsonPropertyName("retroarch-label")] public string retroarchlabel { get; set; }
+        [JsonPropertyName("settings-label")] public string settingslabel { get; set; }
+        [JsonPropertyName("language-label")] public string languagelabel { get; set; }
+        [JsonPropertyName("navigate-label")] public string navigatelabel { get; set; }
+        [JsonPropertyName("open-label")] public string openlabel { get; set; }
+        [JsonPropertyName("back-label")] public string backlabel { get; set; }
+        [JsonPropertyName("favorite-label")] public string favoritelabel { get; set; }
+        [JsonPropertyName("remove-label")] public string removelabel { get; set; }
+        [JsonPropertyName("empty-label")] public string emptylabel { get; set; }
+        [JsonPropertyName("savestates-unsupported")] public string savestatesunsupported { get; set; }
+        [JsonPropertyName("on-label")] public string onlabel { get; set; }
+        [JsonPropertyName("off-label")] public string offlabel { get; set; }
+        [JsonPropertyName("am-label")] public string amlabel { get; set; }
+        [JsonPropertyName("pm-label")] public string pmlabel { get; set; }
+        [JsonPropertyName("year-label")] public string yearlabel { get; set; }
+        [JsonPropertyName("month-label")] public string monthlabel { get; set; }
+        [JsonPropertyName("day-label")] public string daylabel { get; set; }
+        [JsonPropertyName("hour-label")] public string hourlabel { get; set; }
+        [JsonPropertyName("minute-label")] public string minutelabel { get; set; }
+        [JsonPropertyName("meridian-time-label")] public string meridiantimelabel { get; set; }
+        [JsonPropertyName("title-label")] public string titlelabel { get; set; }
+    }
+
+public class GarlicSkinSettings
     {
         [JsonPropertyName("text-alignment")] public string textalignment { get; set; }
-        
         [JsonPropertyName("text-margin")] public int textmargin { get; set; }
-        
         [JsonPropertyName("color-guide")] public string colorguide { get; set; }
-        
         [JsonPropertyName("color-inactive")] public string colorinactive { get; set; }
-        
         [JsonPropertyName("color-active")] public string coloractive { get; set; }
-        
         [JsonPropertyName("color-favorite-inactive")] public string colorfavoriteinactive { get; set; }
-        
         [JsonPropertyName("color-favorite-active")] public string colorfavoriteactive { get; set; }
-
         [JsonPropertyName("main-menu-text-visibility")] public bool mainmenutextvisibility { get; set; }
         [JsonPropertyName("guide-button-text-visibility")] public bool guidebuttontextvisibility { get; set; }
         [JsonPropertyName("recent-label")] public string recentlabel { get; set; }
@@ -213,7 +252,7 @@ namespace GarlicPress
                 new SSMediaType("2D Support", "support-2D"),
                 new SSMediaType("Screen Shot", "ss"),
                 new SSMediaType("Screen Shot Title", "sstitle"),
-                new SSMediaType("Fan Art", "fanart"),                
+                new SSMediaType("Fan Art", "fanart"),
                 new SSMediaType("Mixed Image v1", "mixrbv1"),
                 new SSMediaType("Mixed Image v2", "mixrbv2"),
             };
@@ -226,7 +265,7 @@ namespace GarlicPress
     {
         public string name { get; set; }
         public List<MediaLayer> mediaLayers { get; set; }
-        
+
     }
 
     public class MediaLayer
@@ -234,7 +273,7 @@ namespace GarlicPress
         public string mediaType { get; set; }
         public double resizePercent { get; set; }
         public int width { get; set; }
-        public int height { get; set; }        
+        public int height { get; set; }
         public int x { get; set; }
         public int y { get; set; }
         public int order { get; set; }
