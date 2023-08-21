@@ -43,22 +43,31 @@ namespace GarlicPress
             languageFiles.RemoveAll(o=> o.fileKey == fileKey);
         }
 
-        public static void SaveLangFile(string langFileName, GarlicLanguageSettings langSetting)
+        public static void SaveLangFile(GarlicLanguageSettingsFile languageFile)
         {
-            
-            var langSettingsJSON = JsonSerializer.Serialize(langSetting, jsonOptions);
-            File.WriteAllText("assets/lang/" + langFileName, langSettingsJSON) ;
-            ADBConnection.UploadFile("assets/lang/" + langFileName, "/mnt/mmc/CFW/lang/" + langFileName);
+
+            string filename = languageFile.fileName;
+
+            DebugLog.Write("Saving Language Json file");
+
+            //check if this languageFile is already in the list
+            if (languageFiles.Any(a => a.fileKey == languageFile.fileKey))
+            {
+                GarlicLanguageSettingsFile oldLangFile = languageFiles.First(w => w.fileKey == languageFile.fileKey);
+                oldLangFile.garlicLanguageSettings = languageFile.garlicLanguageSettings;
+                filename = oldLangFile.fileName;
+            }
+            else
+            {
+                languageFiles.Add(languageFile);
+            }
 
 
-            //if (languageSettingsDictonary.ContainsKey(langFileName))
-            //{
-            //    languageSettingsDictonary[langFileName] = langSetting;
-            //}
-            //else
-            //{
-            //    languageSettingsDictonary.Add(langFileName, langSetting);
-            //}
+            var langSettingsJSON = JsonSerializer.Serialize(languageFile.garlicLanguageSettings, jsonOptions);
+
+            Directory.CreateDirectory("assets/temp");
+            File.WriteAllText("assets/temp/langFile.json", langSettingsJSON) ;
+            ADBConnection.UploadFile("assets/temp/langFile.json", "/mnt/mmc/CFW/lang/" + filename);
         }
 
         public static void ReadAllLangFiles()
