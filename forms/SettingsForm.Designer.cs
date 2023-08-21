@@ -28,269 +28,271 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.GridMediaLayout = new System.Windows.Forms.DataGridView();
-            this.gridColMediaType = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.gridColResizePercent = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.gridColWidth = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.gridColHeight = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.gridColX = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.gridColY = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.gridColOrder = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnSave = new System.Windows.Forms.Button();
-            this.btnAddLayer = new System.Windows.Forms.Button();
-            this.btnDeleteLayer = new System.Windows.Forms.Button();
-            this.txtSSUsername = new System.Windows.Forms.TextBox();
-            this.txtSSPassword = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.txtSaveBackupLocation = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.boolSystemTrayOnClose = new System.Windows.Forms.CheckBox();
-            this.boolAutoBackup = new System.Windows.Forms.CheckBox();
-            this.btnCancel = new System.Windows.Forms.Button();
-            this.boolRomsRootSecondSD = new System.Windows.Forms.CheckBox();
-            this.boolWarnBeforeDelete = new System.Windows.Forms.CheckBox();
-            ((System.ComponentModel.ISupportInitialize)(this.GridMediaLayout)).BeginInit();
-            this.SuspendLayout();
+            GridMediaLayout = new DataGridView();
+            gridColMediaType = new DataGridViewComboBoxColumn();
+            gridColResizePercent = new DataGridViewTextBoxColumn();
+            gridColWidth = new DataGridViewTextBoxColumn();
+            gridColHeight = new DataGridViewTextBoxColumn();
+            gridColX = new DataGridViewTextBoxColumn();
+            gridColY = new DataGridViewTextBoxColumn();
+            gridColOrder = new DataGridViewTextBoxColumn();
+            btnSave = new Button();
+            btnAddLayer = new Button();
+            btnDeleteLayer = new Button();
+            txtSSUsername = new TextBox();
+            txtSSPassword = new TextBox();
+            label1 = new Label();
+            label2 = new Label();
+            label3 = new Label();
+            txtSaveBackupLocation = new TextBox();
+            label4 = new Label();
+            boolSystemTrayOnClose = new CheckBox();
+            boolAutoBackup = new CheckBox();
+            btnCancel = new Button();
+            boolRomsRootSecondSD = new CheckBox();
+            boolWarnBeforeDelete = new CheckBox();
+            btnShowPreview = new Button();
+            ((System.ComponentModel.ISupportInitialize)GridMediaLayout).BeginInit();
+            SuspendLayout();
             // 
             // GridMediaLayout
             // 
-            this.GridMediaLayout.AllowUserToAddRows = false;
-            this.GridMediaLayout.AllowUserToDeleteRows = false;
-            this.GridMediaLayout.AllowUserToResizeColumns = false;
-            this.GridMediaLayout.AllowUserToResizeRows = false;
-            this.GridMediaLayout.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.GridMediaLayout.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.GridMediaLayout.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            this.GridMediaLayout.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.GridMediaLayout.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.gridColMediaType,
-            this.gridColResizePercent,
-            this.gridColWidth,
-            this.gridColHeight,
-            this.gridColX,
-            this.gridColY,
-            this.gridColOrder});
-            this.GridMediaLayout.Location = new System.Drawing.Point(12, 218);
-            this.GridMediaLayout.MultiSelect = false;
-            this.GridMediaLayout.Name = "GridMediaLayout";
-            this.GridMediaLayout.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.GridMediaLayout.RowTemplate.Height = 25;
-            this.GridMediaLayout.Size = new System.Drawing.Size(776, 161);
-            this.GridMediaLayout.TabIndex = 20;
-            this.GridMediaLayout.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.GridMediaLayout_CellValidating);
+            GridMediaLayout.AllowUserToAddRows = false;
+            GridMediaLayout.AllowUserToDeleteRows = false;
+            GridMediaLayout.AllowUserToResizeColumns = false;
+            GridMediaLayout.AllowUserToResizeRows = false;
+            GridMediaLayout.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            GridMediaLayout.BorderStyle = BorderStyle.None;
+            GridMediaLayout.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            GridMediaLayout.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            GridMediaLayout.Columns.AddRange(new DataGridViewColumn[] { gridColMediaType, gridColResizePercent, gridColWidth, gridColHeight, gridColX, gridColY, gridColOrder });
+            GridMediaLayout.Location = new Point(12, 218);
+            GridMediaLayout.MultiSelect = false;
+            GridMediaLayout.Name = "GridMediaLayout";
+            GridMediaLayout.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            GridMediaLayout.RowTemplate.Height = 25;
+            GridMediaLayout.Size = new Size(776, 161);
+            GridMediaLayout.TabIndex = 20;
+            GridMediaLayout.CellValidating += GridMediaLayout_CellValidating;
             // 
             // gridColMediaType
             // 
-            this.gridColMediaType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.gridColMediaType.HeaderText = "Media Type";
-            this.gridColMediaType.Name = "gridColMediaType";
+            gridColMediaType.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            gridColMediaType.HeaderText = "Media Type";
+            gridColMediaType.Name = "gridColMediaType";
             // 
             // gridColResizePercent
             // 
-            this.gridColResizePercent.HeaderText = "Resize %";
-            this.gridColResizePercent.Name = "gridColResizePercent";
+            gridColResizePercent.HeaderText = "Resize %";
+            gridColResizePercent.Name = "gridColResizePercent";
             // 
             // gridColWidth
             // 
-            this.gridColWidth.HeaderText = "Width";
-            this.gridColWidth.Name = "gridColWidth";
+            gridColWidth.HeaderText = "Width";
+            gridColWidth.Name = "gridColWidth";
             // 
             // gridColHeight
             // 
-            this.gridColHeight.HeaderText = "Height";
-            this.gridColHeight.Name = "gridColHeight";
+            gridColHeight.HeaderText = "Height";
+            gridColHeight.Name = "gridColHeight";
             // 
             // gridColX
             // 
-            this.gridColX.HeaderText = "X Position";
-            this.gridColX.Name = "gridColX";
+            gridColX.HeaderText = "X Position";
+            gridColX.Name = "gridColX";
             // 
             // gridColY
             // 
-            this.gridColY.HeaderText = "Y Position";
-            this.gridColY.Name = "gridColY";
+            gridColY.HeaderText = "Y Position";
+            gridColY.Name = "gridColY";
             // 
             // gridColOrder
             // 
-            this.gridColOrder.HeaderText = "Draw Order";
-            this.gridColOrder.Name = "gridColOrder";
+            gridColOrder.HeaderText = "Draw Order";
+            gridColOrder.Name = "gridColOrder";
             // 
             // btnSave
             // 
-            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Location = new System.Drawing.Point(578, 407);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(123, 31);
-            this.btnSave.TabIndex = 21;
-            this.btnSave.Text = "Save";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            btnSave.Location = new Point(578, 407);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(123, 31);
+            btnSave.TabIndex = 21;
+            btnSave.Text = "Save";
+            btnSave.UseVisualStyleBackColor = true;
+            btnSave.Click += btnSave_Click;
             // 
             // btnAddLayer
             // 
-            this.btnAddLayer.Location = new System.Drawing.Point(12, 385);
-            this.btnAddLayer.Name = "btnAddLayer";
-            this.btnAddLayer.Size = new System.Drawing.Size(75, 23);
-            this.btnAddLayer.TabIndex = 22;
-            this.btnAddLayer.Text = "Add Layer";
-            this.btnAddLayer.UseVisualStyleBackColor = true;
-            this.btnAddLayer.Click += new System.EventHandler(this.btnAddLayer_Click);
+            btnAddLayer.Location = new Point(12, 385);
+            btnAddLayer.Name = "btnAddLayer";
+            btnAddLayer.Size = new Size(75, 23);
+            btnAddLayer.TabIndex = 22;
+            btnAddLayer.Text = "Add Layer";
+            btnAddLayer.UseVisualStyleBackColor = true;
+            btnAddLayer.Click += btnAddLayer_Click;
             // 
             // btnDeleteLayer
             // 
-            this.btnDeleteLayer.Location = new System.Drawing.Point(93, 385);
-            this.btnDeleteLayer.Name = "btnDeleteLayer";
-            this.btnDeleteLayer.Size = new System.Drawing.Size(84, 23);
-            this.btnDeleteLayer.TabIndex = 23;
-            this.btnDeleteLayer.Text = "Delete Layer";
-            this.btnDeleteLayer.UseVisualStyleBackColor = true;
-            this.btnDeleteLayer.Click += new System.EventHandler(this.btnDeleteLayer_Click);
+            btnDeleteLayer.Location = new Point(93, 385);
+            btnDeleteLayer.Name = "btnDeleteLayer";
+            btnDeleteLayer.Size = new Size(84, 23);
+            btnDeleteLayer.TabIndex = 23;
+            btnDeleteLayer.Text = "Delete Layer";
+            btnDeleteLayer.UseVisualStyleBackColor = true;
+            btnDeleteLayer.Click += btnDeleteLayer_Click;
             // 
             // txtSSUsername
             // 
-            this.txtSSUsername.Location = new System.Drawing.Point(12, 46);
-            this.txtSSUsername.Name = "txtSSUsername";
-            this.txtSSUsername.Size = new System.Drawing.Size(280, 23);
-            this.txtSSUsername.TabIndex = 24;
+            txtSSUsername.Location = new Point(12, 46);
+            txtSSUsername.Name = "txtSSUsername";
+            txtSSUsername.Size = new Size(280, 23);
+            txtSSUsername.TabIndex = 24;
             // 
             // txtSSPassword
             // 
-            this.txtSSPassword.Location = new System.Drawing.Point(12, 90);
-            this.txtSSPassword.Name = "txtSSPassword";
-            this.txtSSPassword.PasswordChar = '*';
-            this.txtSSPassword.Size = new System.Drawing.Size(280, 23);
-            this.txtSSPassword.TabIndex = 25;
-            this.txtSSPassword.UseSystemPasswordChar = true;
+            txtSSPassword.Location = new Point(12, 90);
+            txtSSPassword.Name = "txtSSPassword";
+            txtSSPassword.PasswordChar = '*';
+            txtSSPassword.Size = new Size(280, 23);
+            txtSSPassword.TabIndex = 25;
+            txtSSPassword.UseSystemPasswordChar = true;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 28);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(148, 15);
-            this.label1.TabIndex = 26;
-            this.label1.Text = "ScreenScraper.fr Username";
+            label1.AutoSize = true;
+            label1.Location = new Point(12, 28);
+            label1.Name = "label1";
+            label1.Size = new Size(148, 15);
+            label1.TabIndex = 26;
+            label1.Text = "ScreenScraper.fr Username";
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 72);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(145, 15);
-            this.label2.TabIndex = 27;
-            this.label2.Text = "ScreenScraper.fr Password";
+            label2.AutoSize = true;
+            label2.Location = new Point(12, 72);
+            label2.Name = "label2";
+            label2.Size = new Size(145, 15);
+            label2.TabIndex = 27;
+            label2.Text = "ScreenScraper.fr Password";
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(12, 116);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(288, 34);
-            this.label3.TabIndex = 28;
-            this.label3.Text = "Please create an account at screenscraper.fr. Anon access is very limited and you" +
-    " will have issues.";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            label3.Location = new Point(12, 116);
+            label3.Name = "label3";
+            label3.Size = new Size(288, 34);
+            label3.TabIndex = 28;
+            label3.Text = "Please create an account at screenscraper.fr. Anon access is very limited and you will have issues.";
+            label3.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // txtSaveBackupLocation
             // 
-            this.txtSaveBackupLocation.Location = new System.Drawing.Point(343, 48);
-            this.txtSaveBackupLocation.Name = "txtSaveBackupLocation";
-            this.txtSaveBackupLocation.Size = new System.Drawing.Size(280, 23);
-            this.txtSaveBackupLocation.TabIndex = 29;
+            txtSaveBackupLocation.Location = new Point(343, 48);
+            txtSaveBackupLocation.Name = "txtSaveBackupLocation";
+            txtSaveBackupLocation.Size = new Size(280, 23);
+            txtSaveBackupLocation.TabIndex = 29;
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(343, 30);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(127, 15);
-            this.label4.TabIndex = 30;
-            this.label4.Text = "Saves Backup Location";
+            label4.AutoSize = true;
+            label4.Location = new Point(343, 30);
+            label4.Name = "label4";
+            label4.Size = new Size(127, 15);
+            label4.TabIndex = 30;
+            label4.Text = "Saves Backup Location";
             // 
             // boolSystemTrayOnClose
             // 
-            this.boolSystemTrayOnClose.AutoSize = true;
-            this.boolSystemTrayOnClose.Location = new System.Drawing.Point(343, 102);
-            this.boolSystemTrayOnClose.Name = "boolSystemTrayOnClose";
-            this.boolSystemTrayOnClose.Size = new System.Drawing.Size(203, 19);
-            this.boolSystemTrayOnClose.TabIndex = 32;
-            this.boolSystemTrayOnClose.Text = "Minimise to System Tray on Close";
-            this.boolSystemTrayOnClose.UseVisualStyleBackColor = true;
+            boolSystemTrayOnClose.AutoSize = true;
+            boolSystemTrayOnClose.Location = new Point(343, 102);
+            boolSystemTrayOnClose.Name = "boolSystemTrayOnClose";
+            boolSystemTrayOnClose.Size = new Size(203, 19);
+            boolSystemTrayOnClose.TabIndex = 32;
+            boolSystemTrayOnClose.Text = "Minimise to System Tray on Close";
+            boolSystemTrayOnClose.UseVisualStyleBackColor = true;
             // 
             // boolAutoBackup
             // 
-            this.boolAutoBackup.AutoSize = true;
-            this.boolAutoBackup.Enabled = false;
-            this.boolAutoBackup.Location = new System.Drawing.Point(629, 50);
-            this.boolAutoBackup.Name = "boolAutoBackup";
-            this.boolAutoBackup.Size = new System.Drawing.Size(159, 19);
-            this.boolAutoBackup.TabIndex = 31;
-            this.boolAutoBackup.Text = "Auto Backup on Connect";
-            this.boolAutoBackup.UseVisualStyleBackColor = true;
+            boolAutoBackup.AutoSize = true;
+            boolAutoBackup.Enabled = false;
+            boolAutoBackup.Location = new Point(629, 50);
+            boolAutoBackup.Name = "boolAutoBackup";
+            boolAutoBackup.Size = new Size(159, 19);
+            boolAutoBackup.TabIndex = 31;
+            boolAutoBackup.Text = "Auto Backup on Connect";
+            boolAutoBackup.UseVisualStyleBackColor = true;
             // 
             // btnCancel
             // 
-            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.Location = new System.Drawing.Point(707, 407);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(81, 31);
-            this.btnCancel.TabIndex = 34;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            btnCancel.Location = new Point(707, 407);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(81, 31);
+            btnCancel.TabIndex = 34;
+            btnCancel.Text = "Cancel";
+            btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancel_Click;
             // 
             // boolRomsRootSecondSD
             // 
-            this.boolRomsRootSecondSD.AutoSize = true;
-            this.boolRomsRootSecondSD.Location = new System.Drawing.Point(343, 77);
-            this.boolRomsRootSecondSD.Name = "boolRomsRootSecondSD";
-            this.boolRomsRootSecondSD.Size = new System.Drawing.Size(246, 19);
-            this.boolRomsRootSecondSD.TabIndex = 35;
-            this.boolRomsRootSecondSD.Text = "Rom System Folders on Root of SD Card 2";
-            this.boolRomsRootSecondSD.UseVisualStyleBackColor = true;
+            boolRomsRootSecondSD.AutoSize = true;
+            boolRomsRootSecondSD.Location = new Point(343, 77);
+            boolRomsRootSecondSD.Name = "boolRomsRootSecondSD";
+            boolRomsRootSecondSD.Size = new Size(246, 19);
+            boolRomsRootSecondSD.TabIndex = 35;
+            boolRomsRootSecondSD.Text = "Rom System Folders on Root of SD Card 2";
+            boolRomsRootSecondSD.UseVisualStyleBackColor = true;
             // 
             // boolWarnBeforeDelete
             // 
-            this.boolWarnBeforeDelete.AutoSize = true;
-            this.boolWarnBeforeDelete.Location = new System.Drawing.Point(343, 125);
-            this.boolWarnBeforeDelete.Name = "boolWarnBeforeDelete";
-            this.boolWarnBeforeDelete.Size = new System.Drawing.Size(149, 19);
-            this.boolWarnBeforeDelete.TabIndex = 36;
-            this.boolWarnBeforeDelete.Text = "Warning Before Deletes";
-            this.boolWarnBeforeDelete.UseVisualStyleBackColor = true;
+            boolWarnBeforeDelete.AutoSize = true;
+            boolWarnBeforeDelete.Location = new Point(343, 125);
+            boolWarnBeforeDelete.Name = "boolWarnBeforeDelete";
+            boolWarnBeforeDelete.Size = new Size(149, 19);
+            boolWarnBeforeDelete.TabIndex = 36;
+            boolWarnBeforeDelete.Text = "Warning Before Deletes";
+            boolWarnBeforeDelete.UseVisualStyleBackColor = true;
+            // 
+            // btnShowPreview
+            // 
+            btnShowPreview.Location = new Point(183, 385);
+            btnShowPreview.Name = "btnShowPreview";
+            btnShowPreview.Size = new Size(109, 23);
+            btnShowPreview.TabIndex = 37;
+            btnShowPreview.Text = "Show Preview";
+            btnShowPreview.UseVisualStyleBackColor = true;
+            btnShowPreview.Click += btnShowPreview_Click;
             // 
             // SettingsForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.boolWarnBeforeDelete);
-            this.Controls.Add(this.boolRomsRootSecondSD);
-            this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.boolSystemTrayOnClose);
-            this.Controls.Add(this.boolAutoBackup);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.txtSaveBackupLocation);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtSSPassword);
-            this.Controls.Add(this.txtSSUsername);
-            this.Controls.Add(this.btnDeleteLayer);
-            this.Controls.Add(this.btnAddLayer);
-            this.Controls.Add(this.btnSave);
-            this.Controls.Add(this.GridMediaLayout);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "SettingsForm";
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Settings";
-            ((System.ComponentModel.ISupportInitialize)(this.GridMediaLayout)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            AutoSize = true;
+            ClientSize = new Size(800, 450);
+            Controls.Add(btnShowPreview);
+            Controls.Add(boolWarnBeforeDelete);
+            Controls.Add(boolRomsRootSecondSD);
+            Controls.Add(btnCancel);
+            Controls.Add(boolSystemTrayOnClose);
+            Controls.Add(boolAutoBackup);
+            Controls.Add(label4);
+            Controls.Add(txtSaveBackupLocation);
+            Controls.Add(label3);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Controls.Add(txtSSPassword);
+            Controls.Add(txtSSUsername);
+            Controls.Add(btnDeleteLayer);
+            Controls.Add(btnAddLayer);
+            Controls.Add(btnSave);
+            Controls.Add(GridMediaLayout);
+            FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            Name = "SettingsForm";
+            ShowInTaskbar = false;
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Settings";
+            FormClosing += SettingsForm_FormClosing;
+            ((System.ComponentModel.ISupportInitialize)GridMediaLayout).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -317,5 +319,6 @@
         private Button btnCancel;
         private CheckBox boolRomsRootSecondSD;
         private CheckBox boolWarnBeforeDelete;
+        private Button btnShowPreview;
     }
 }
