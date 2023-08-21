@@ -1,4 +1,5 @@
 using AdvancedSharpAdbClient;
+using GarlicPress.constants;
 using GarlicPress.forms;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -169,16 +170,16 @@ namespace GarlicPress
 
                 //get img file if one exists
                 string imgFile = Path.ChangeExtension(item.Path, ".png");
-                if (ADBConnection.DownloadFile(SelectedImgPath + imgFile, "assets/temp/gameart-down.png"))
+                if (ADBConnection.DownloadFile(SelectedImgPath + imgFile, PathConstants.assetsTempPath + "gameart-down.png"))
                 {
-                    Bitmap overlayImage = (Bitmap)Image.FromFile(@"assets/temp/gameart-down.png");
+                    Bitmap overlayImage = (Bitmap)Image.FromFile(PathConstants.assetsTempPath + "gameart-down.png");
                     picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage);
                     overlayImage.Dispose();
                     picGame.Refresh();
                 }
                 else
                 {
-                    Bitmap overlayImage = (Bitmap)Image.FromFile(@"assets/skin/background.png");
+                    Bitmap overlayImage = (Bitmap)Image.FromFile(PathConstants.assetSkinPath + "background.png");
                     picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage);
                     overlayImage.Dispose();
                 }
@@ -218,9 +219,16 @@ namespace GarlicPress
             }
             else
             {
-                if (Properties.Settings.Default.cleanTempOnExit && Directory.Exists(@"assets/temp"))
+                if (Properties.Settings.Default.cleanTempOnExit && Directory.Exists(PathConstants.assetsTempPath))
                 {
-                    Directory.Delete(@"assets/temp", true);
+                    try
+                    {
+                        Directory.Delete(PathConstants.assetsTempPath, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Could not delete temp folder. {ex.Message}");
+                    }
                 }
             }
         }

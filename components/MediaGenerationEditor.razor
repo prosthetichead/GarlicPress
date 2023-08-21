@@ -1,4 +1,5 @@
-﻿@using GarlicPress.forms;
+﻿@using GarlicPress.constants;
+@using GarlicPress.forms;
 @inject IJSRuntime JsRuntime
 @inject EditMediaLayersForm editMediaLayersForm
 @implements IDisposable
@@ -50,8 +51,18 @@
         }
     </div>
 
-    <div class="col-span-3 flex justify-center items-center">
+    <div class="col-span-2 flex justify-center items-center">
         <canvas width="640" height="480" id="@canvasId"></canvas>
+    </div>
+    <div class="col-span-1 overflow-scroll overflow-x-hidden">
+        @* Get game media *@
+        <button class="px-5 py-2.5 text-center bg-blue-500 hover:bg-blue-300 rounded m-2 py-2 text-white" @onclick="GetAllGameMedia"><b>Get Game Art</b></button>
+        @foreach (var gameMedia in GameMedias)
+        {
+            <div>
+                <img src="@gameMedia.imagePath" @onclick="(async () => await UpdateCanvas(gameMedia.imagePath, gameMedia.mediaType))" />
+            </div>
+        }
     </div>
     <div class="col-span-1">
         <button class="px-5 py-2.5 text-center bg-blue-500 hover:bg-blue-300 rounded m-2 py-2 text-white" @onclick="() => { GameMediaGeneration.SaveMediaLayoutJson(); editMediaLayersForm.Close(); }"><b>Save</b></button>
@@ -74,6 +85,8 @@
 
     List<string> Games = new();
     string SelectedGame = "";
+
+    List<(string mediaType, string imagePath)> GameMedias = new();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -105,9 +118,17 @@
             layer.x = details.left;
             layer.y = details.top;
             layer.resizePercent = details.scale;
+            layer.angle = details.angle;
         }
         StateHasChanged();
     }
+
+    [JSInvokable]
+    public void NotifyImageDeleted(string id)
+    {
+        GameMediaGeneration.RemoveMediaLayer(Guid.Parse(id));
+    }
+
 
     void UpdateGames()
     {
@@ -123,19 +144,18 @@
         if (!ArtUpdateRunning && SelectedSystem is not null && module is not null)
         {
             ArtUpdateRunning = true;
+            GameMedias.Clear();
             await module.InvokeVoidAsync("BlazorFabric.clearCanvas");
-
-            var baseImage = (Bitmap)Image.FromFile(@"assets/skin/background.png");
-            await module.InvokeVoidAsync("BlazorFabric.addBackgroundImage", "data:image/png;base64," + BitmapToBase64(baseImage));
+            await module.InvokeVoidAsync("BlazorFabric.addBackgroundImage", PathConstants.assetSkinPath.Replace("wwwroot/", "") + "background.png");
 
             await AddText();
 
             GameResponse game = await ScreenScraper.GetGameData(SelectedSystem, SelectedGame, SearchType.GameName);
-            if (game != null && game.status != "error")
+            if (game is not null && game.status != "error")
             {
-                foreach (var gameMedia in await GameMediaGeneration.GetGameMedia(game) ?? new List<(Bitmap?, MediaLayer)>())
+                await foreach (var gameMedia in GameMediaGeneration.GetGameMedia(game))
                 {
-                    await UpdateCanvas(gameMedia.bitmap, gameMedia.layer);
+                    await UpdateCanvas(gameMedia.imagePath?.Replace("wwwroot/", ""), gameMedia.layer);
                 }
             }
             else if (game != null)
@@ -151,6 +171,29 @@
         }
     }
 
+    async void GetAllGameMedia()
+    {
+        if (!ArtUpdateRunning && SelectedSystem is not null && module is not null)
+        {
+            ArtUpdateRunning = true;
+            GameMedias.Clear();
+            GameResponse game = await ScreenScraper.GetGameData(SelectedSystem, SelectedGame, SearchType.GameName);
+            if (game is not null && game.status != "error")
+            {
+                await foreach (var gameMedia in GameMediaGeneration.GetAllGameMedia(game))
+                {
+                    if (gameMedia.imagePath is not null && module is not null)
+                    {
+                        GameMedias.Add((gameMedia.mediaType, gameMedia.imagePath.Replace("wwwroot/", "")));
+                    }
+                    await this.InvokeAsync(() => StateHasChanged());
+                }
+            }
+
+            ArtUpdateRunning = false;
+        }
+    }
+
     async Task AddText()
     {
         if (module is not null)
@@ -158,19 +201,11 @@
             if (Games.Any())
             {
                 var indexof = Games.IndexOf(SelectedGame);
-
-                int cindex = 0;
-                foreach (var game in GetSurroundingStrings(Games, indexof))
-                {
-                    await module.InvokeVoidAsync("BlazorFabric.addText", game, GarlicSkin.skinSettings.textmargin, 100 + (cindex++ * 30), GarlicSkin.skinSettings.colorguide, "red", "GarlicFont");
-                }
+                await module.InvokeVoidAsync("BlazorFabric.addText", String.Join("\n", GetSurroundingStrings(Games, indexof)), GarlicSkin.skinSettings.textmargin, 90, GarlicSkin.skinSettings.colorguide, "red", "GarlicFont", GarlicSkin.languageSettingsDictonary.First().Value.fontsize, GarlicSkin.skinSettings.textalignment);
             }
             else
             {
-                for (int i = 0; i < 9; i++)
-                {
-                    await module.InvokeVoidAsync("BlazorFabric.addText", SelectedGame, 340, 100 + (i * 30), "white", "red", "GarlicFont");
-                }
+                await module.InvokeVoidAsync("BlazorFabric.addText", String.Join("\n", Enumerable.Repeat(SelectedGame, 8)), 340, 90, "white", "red", "GarlicFont");
             }
         }
     }
@@ -178,7 +213,7 @@
     public static List<string> GetSurroundingStrings(List<string> source, int index)
     {
         int start = Math.Max(0, index - 4); // Ensure we don't go below 0
-        int count = 9;
+        int count = 8;
 
         // If we're near the start of the list, adjust count to get more elements after index
         if (start < index - 4)
@@ -196,11 +231,21 @@
     }
 
 
-    async Task UpdateCanvas(Bitmap? bitmap, MediaLayer layer)
+    async Task UpdateCanvas(string? imagePath, MediaLayer layer)
     {
-        if (bitmap is not null && module is not null)
+        if (imagePath is not null && module is not null)
         {
-            await module.InvokeVoidAsync("BlazorFabric.addImage", "data:image/png;base64," + BitmapToBase64(bitmap), layer.id, layer.x, layer.y, layer.resizePercent / 100);
+            await module.InvokeVoidAsync("BlazorFabric.addImage", imagePath, layer.id, layer.x, layer.y, layer.resizePercent / 100, layer.angle);
+        }
+    }
+
+    async Task UpdateCanvas(string? imagePath, string mediaType)
+    {
+        if (imagePath is not null && module is not null)
+        {
+            var layer = new MediaLayer { mediaType = mediaType, order = GameMediaGeneration.MediaLayers.Count };
+            GameMediaGeneration.AddMediaLayer(layer);
+            await module.InvokeVoidAsync("BlazorFabric.addImage", imagePath, layer.id, layer.x, layer.y, layer.resizePercent / 100);
         }
     }
 

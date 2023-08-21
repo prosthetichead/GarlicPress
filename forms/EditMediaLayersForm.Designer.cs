@@ -37,7 +37,7 @@ partial class EditMediaLayersForm
         bwvMediaEditor.Dock = DockStyle.Fill;
         bwvMediaEditor.Location = new Point(0, 0);
         bwvMediaEditor.Name = "bwvMediaEditor";
-        bwvMediaEditor.Size = new Size(810, 670);
+        bwvMediaEditor.Size = new Size(1068, 670);
         bwvMediaEditor.TabIndex = 0;
         bwvMediaEditor.Text = "bwvMediaEditor";
         // 
@@ -45,10 +45,11 @@ partial class EditMediaLayersForm
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(810, 670);
+        ClientSize = new Size(1068, 670);
         Controls.Add(bwvMediaEditor);
         Icon = (Icon)resources.GetObject("$this.Icon");
         Name = "EditMediaLayersForm";
+        StartPosition = FormStartPosition.CenterScreen;
         Text = "Edit Media Layers";
         ResumeLayout(false);
     }

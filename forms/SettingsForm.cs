@@ -16,7 +16,7 @@ namespace GarlicPress
     {
 
         BindingList<MediaLayer> tempMediaLayout;
-        EditMediaLayersForm? previewForm;
+        EditMediaLayersForm? editLayersForm;
 
         public SettingsForm()
         {
@@ -30,6 +30,7 @@ namespace GarlicPress
             gridColHeight.DataPropertyName = "height";
             gridColX.DataPropertyName = "x";
             gridColY.DataPropertyName = "y";
+            gridColAngle.DataPropertyName = "angle";
             gridColOrder.DataPropertyName = "order";
 
             gridColMediaType.DataSource = SSMediaType.GetAllMediaTypes();
@@ -115,8 +116,8 @@ namespace GarlicPress
 
         private void btnShowPreview_Click(object sender, EventArgs e)
         {
-            previewForm = new();
-            previewForm.FormClosing += (s, e) => 
+            editLayersForm = new();
+            editLayersForm.FormClosing += (s, e) =>
             {
                 tempMediaLayout.Clear();
                 foreach (MediaLayer layer in GameMediaGeneration.MediaLayers)
@@ -124,13 +125,13 @@ namespace GarlicPress
                 GridMediaLayout.DataSource = tempMediaLayout;
             };
 
-            previewForm.Show();
+            editLayersForm.Show();
         }
 
         private void SettingsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             GameMediaGeneration.LoadMediaLayoutJson();
-            previewForm?.Close();
+            editLayersForm?.Close();
         }
     }
 }

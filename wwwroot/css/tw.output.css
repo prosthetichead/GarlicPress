@@ -542,8 +542,8 @@ video {
   grid-column: span 1 / span 1;
 }
 
-.col-span-3 {
-  grid-column: span 3 / span 3;
+.col-span-2 {
+  grid-column: span 2 / span 2;
 }
 
 .m-2 {
@@ -584,6 +584,14 @@ video {
 
 .gap-2 {
   gap: 0.5rem;
+}
+
+.overflow-scroll {
+  overflow: scroll;
+}
+
+.overflow-x-hidden {
+  overflow-x: hidden;
 }
 
 .rounded {

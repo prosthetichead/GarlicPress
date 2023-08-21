@@ -1,4 +1,5 @@
 ﻿using AdvancedSharpAdbClient;
+using GarlicPress.constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace GarlicPress
         public static void ReadSkinSettings()
         {
             string skinSettingsJson = ADBConnection.ReadTextFile("/mnt/mmc/CFW/skin/settings.json");
-            ADBConnection.DownloadFile("/mnt/mmc/CFW/skin/background.png", "assets/background.png");
+            ADBConnection.DownloadFile("/mnt/mmc/CFW/skin/background.png", PathConstants.assetSkinPath + "background.png");
             try
             {
                 skinSettings = JsonSerializer.Deserialize<GarlicSkinSettings>(skinSettingsJson);
@@ -94,7 +95,6 @@ namespace GarlicPress
 
         public static void ReadSkinFromDevice()
         {
-
             ReadSkinSettings();
             ReadAllLangFiles();
             ADBConnection.DownloadDirectory("/mnt/mmc/CFW/skin", "assets/skin");          

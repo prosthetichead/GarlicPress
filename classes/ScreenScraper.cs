@@ -1,4 +1,5 @@
-﻿using GarlicPress.Properties;
+﻿using GarlicPress.constants;
+using GarlicPress.Properties;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -62,8 +63,6 @@ namespace GarlicPress
                 return new GameResponse() { status = "error", statusMessage = response.StatusCode + "  " + json };
             }
         }
-        
-
 
         public static async Task<string> DownloadMedia(GameResponse game, string mediaType = "box-3D")
         {
@@ -73,7 +72,7 @@ namespace GarlicPress
 
                 List<string> ssRegionOrder = Settings.Default.ssRegionOrder.Split(',').ToList();
 
-                var medias = game.response.jeu.medias.Where(w => w.type == mediaType).OrderBy(o => ssRegionOrder.IndexOf(o.region)); //.OrderBy(o => o.support == null).ThenBy(o => o.support);
+                var medias = game.response.jeu.medias.Where(w => w.type == mediaType).OrderBy(o => ssRegionOrder.IndexOf(o.region));
                 
                 if (medias.Count() > 0)
                 {
@@ -89,9 +88,9 @@ namespace GarlicPress
                         }
                     }
 
-                    Directory.CreateDirectory("assets/temp");
+                    Directory.CreateDirectory(PathConstants.assetsTempPath);
 
-                    string mediaDownloadPath = "assets/temp/" + game.response.jeu.id + mediaType + "." + media.format;
+                    string mediaDownloadPath = PathConstants.assetsTempPath + game.response.jeu.id + mediaType + "." + media.format;
                     
                     
                     if (File.Exists(mediaDownloadPath))

@@ -35,6 +35,7 @@
             gridColHeight = new DataGridViewTextBoxColumn();
             gridColX = new DataGridViewTextBoxColumn();
             gridColY = new DataGridViewTextBoxColumn();
+            gridColAngle = new DataGridViewTextBoxColumn();
             gridColOrder = new DataGridViewTextBoxColumn();
             btnSave = new Button();
             btnAddLayer = new Button();
@@ -61,17 +62,18 @@
             GridMediaLayout.AllowUserToDeleteRows = false;
             GridMediaLayout.AllowUserToResizeColumns = false;
             GridMediaLayout.AllowUserToResizeRows = false;
+            GridMediaLayout.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             GridMediaLayout.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             GridMediaLayout.BorderStyle = BorderStyle.None;
             GridMediaLayout.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
             GridMediaLayout.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            GridMediaLayout.Columns.AddRange(new DataGridViewColumn[] { gridColMediaType, gridColResizePercent, gridColWidth, gridColHeight, gridColX, gridColY, gridColOrder });
+            GridMediaLayout.Columns.AddRange(new DataGridViewColumn[] { gridColMediaType, gridColResizePercent, gridColWidth, gridColHeight, gridColX, gridColY, gridColAngle, gridColOrder });
             GridMediaLayout.Location = new Point(12, 218);
             GridMediaLayout.MultiSelect = false;
             GridMediaLayout.Name = "GridMediaLayout";
             GridMediaLayout.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             GridMediaLayout.RowTemplate.Height = 25;
-            GridMediaLayout.Size = new Size(776, 161);
+            GridMediaLayout.Size = new Size(813, 161);
             GridMediaLayout.TabIndex = 20;
             GridMediaLayout.CellValidating += GridMediaLayout_CellValidating;
             // 
@@ -106,6 +108,11 @@
             gridColY.HeaderText = "Y Position";
             gridColY.Name = "gridColY";
             // 
+            // gridColAngle
+            // 
+            gridColAngle.HeaderText = "Angle";
+            gridColAngle.Name = "gridColAngle";
+            // 
             // gridColOrder
             // 
             gridColOrder.HeaderText = "Draw Order";
@@ -113,8 +120,8 @@
             // 
             // btnSave
             // 
-            btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            btnSave.Location = new Point(578, 407);
+            btnSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnSave.Location = new Point(615, 407);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(123, 31);
             btnSave.TabIndex = 21;
@@ -224,8 +231,8 @@
             // 
             // btnCancel
             // 
-            btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            btnCancel.Location = new Point(707, 407);
+            btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnCancel.Location = new Point(744, 407);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(81, 31);
             btnCancel.TabIndex = 34;
@@ -259,7 +266,7 @@
             btnShowPreview.Name = "btnShowPreview";
             btnShowPreview.Size = new Size(109, 23);
             btnShowPreview.TabIndex = 37;
-            btnShowPreview.Text = "Show Preview";
+            btnShowPreview.Text = "Edit Layers";
             btnShowPreview.UseVisualStyleBackColor = true;
             btnShowPreview.Click += btnShowPreview_Click;
             // 
@@ -268,7 +275,7 @@
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             AutoSize = true;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(837, 450);
             Controls.Add(btnShowPreview);
             Controls.Add(boolWarnBeforeDelete);
             Controls.Add(boolRomsRootSecondSD);
@@ -300,13 +307,6 @@
         #endregion
         private DataGridView GridMediaLayout;
         private Button btnSave;
-        private DataGridViewComboBoxColumn gridColMediaType;
-        private DataGridViewTextBoxColumn gridColResizePercent;
-        private DataGridViewTextBoxColumn gridColWidth;
-        private DataGridViewTextBoxColumn gridColHeight;
-        private DataGridViewTextBoxColumn gridColX;
-        private DataGridViewTextBoxColumn gridColY;
-        private DataGridViewTextBoxColumn gridColOrder;
         private Button btnAddLayer;
         private Button btnDeleteLayer;
         private TextBox txtSSUsername;
@@ -322,5 +322,13 @@
         private CheckBox boolRomsRootSecondSD;
         private CheckBox boolWarnBeforeDelete;
         private Button btnShowPreview;
+        private DataGridViewComboBoxColumn gridColMediaType;
+        private DataGridViewTextBoxColumn gridColResizePercent;
+        private DataGridViewTextBoxColumn gridColWidth;
+        private DataGridViewTextBoxColumn gridColHeight;
+        private DataGridViewTextBoxColumn gridColX;
+        private DataGridViewTextBoxColumn gridColY;
+        private DataGridViewTextBoxColumn gridColAngle;
+        private DataGridViewTextBoxColumn gridColOrder;
     }
 }

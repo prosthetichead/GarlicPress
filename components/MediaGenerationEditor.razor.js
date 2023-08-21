@@ -58,7 +58,7 @@
         }
     };
 
-    static addText = (content, left = 0, top = 0, textColor = 'black', activeTextColor = 'red', fontFamily = 'Arial') => {
+    static addText = (content, left = 0, top = 0, textColor = 'black', activeTextColor = 'red', fontFamily = 'Arial', fontSize = 28, textAlign = "left") => {
         if (this.canvas) {
             const text = new fabric.Text(content, {
                 left: left,
@@ -66,7 +66,8 @@
                 fill: textColor,
                 fontFamily: fontFamily,
                 selectable: false,
-                fontSize: 20,
+                fontSize: fontSize,
+                textAlign: textAlign,
                 // other properties as required...
             });
 
@@ -86,6 +87,19 @@
             this.canvas.add(text);
         }
     };
+
+
+    static deleteSelectedObject() {
+        const activeObject = BlazorFabric.canvas.getActiveObject();
+        if (activeObject) {
+
+            BlazorFabric.dotnetHelper.invokeMethodAsync('NotifyImageDeleted', activeObject.id)
+                .catch(error => console.error(error));
+
+            BlazorFabric.canvas.remove(activeObject);
+            BlazorFabric.canvas.requestRenderAll();
+        }
+    }
 
     // This method will be called from C# to set up the event listener
     static setupImageLocationUpdatedCallback = () => {
@@ -112,3 +126,10 @@
 }
 
 window.BlazorFabric = BlazorFabric;
+
+window.addEventListener('keydown', function (e) {
+    // Check for the Delete key
+    if (e.key === "Delete") {
+        BlazorFabric.deleteSelectedObject();
+    }
+});

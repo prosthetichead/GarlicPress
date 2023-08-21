@@ -14,7 +14,5 @@ public partial class EditMediaLayersForm : Form
         bwvMediaEditor.HostPage = "wwwroot\\index.html";
         bwvMediaEditor.Services = services.BuildServiceProvider();
         bwvMediaEditor.RootComponents.Add<MediaGenerationEditor>("#app");
-        
-        
     }
 }
