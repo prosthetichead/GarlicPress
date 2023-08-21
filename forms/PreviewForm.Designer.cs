@@ -130,6 +130,7 @@ partial class PreviewForm
         Controls.Add(comboSystems);
         Controls.Add(btnUpdate);
         Controls.Add(picGamePreview);
+        FormBorderStyle = FormBorderStyle.FixedToolWindow;
         Icon = (Icon)resources.GetObject("$this.Icon");
         MinimumSize = new Size(500, 400);
         Name = "PreviewForm";
