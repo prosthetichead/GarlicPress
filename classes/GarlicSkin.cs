@@ -1,6 +1,7 @@
 ﻿using AdvancedSharpAdbClient;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -13,6 +14,7 @@ namespace GarlicPress
 
         public static GarlicSkinSettings skinSettings;
         public static List<GarlicLanguageSettingsFile> languageFiles;
+        public static List<string> fonts;
         public static bool validSkinSettings;
 
         static JsonSerializerOptions jsonOptions = new JsonSerializerOptions
@@ -53,12 +55,14 @@ namespace GarlicPress
             //check if this languageFile is already in the list
             if (languageFiles.Any(a => a.fileKey == languageFile.fileKey))
             {
+                DebugLog.Write("Old Language File Found replace it");
                 GarlicLanguageSettingsFile oldLangFile = languageFiles.First(w => w.fileKey == languageFile.fileKey);
                 oldLangFile.garlicLanguageSettings = languageFile.garlicLanguageSettings;
                 filename = oldLangFile.fileName;
             }
             else
             {
+                DebugLog.Write("This is a new Language File");
                 languageFiles.Add(languageFile);
             }
 
@@ -66,7 +70,7 @@ namespace GarlicPress
             var langSettingsJSON = JsonSerializer.Serialize(languageFile.garlicLanguageSettings, jsonOptions);
 
             Directory.CreateDirectory("assets/temp");
-            File.WriteAllText("assets/temp/langFile.json", langSettingsJSON) ;
+            File.WriteAllText("assets/temp/langFile.json", langSettingsJSON);
             ADBConnection.UploadFile("assets/temp/langFile.json", "/mnt/mmc/CFW/lang/" + filename);
         }
 
@@ -102,11 +106,26 @@ namespace GarlicPress
             
         }
 
+        public static void ReadFonts()
+        {
+            //get font info
+            fonts = new List<string>();
+            List<FileStatistics> fontList = ADBConnection.GetDirectoryListing("/mnt/mmc/CFW/font");
+            foreach (var font in fontList)
+            {
+                if (font.Path != "." && font.Path != "..")
+                {
+                    fonts.Add(font.Path);
+                }
+            }
+        }
+
         public static void ReadSkinFromDevice()
         {
 
             ReadSkinSettings();
             ReadAllLangFiles();
+            ReadFonts();
             ADBConnection.DownloadDirectory("/mnt/mmc/CFW/skin", "assets/skin");          
         }
 

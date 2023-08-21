@@ -11,6 +11,12 @@ using static System.Net.WebRequestMethods;
 
 namespace GarlicPress
 {
+    public enum SearchType
+    {
+        GameName,
+        GameID
+    }
+
     public class GarlicGameArtSearch
     {
         public GarlicSystem system { get; set; }
