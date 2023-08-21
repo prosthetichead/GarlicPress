@@ -157,7 +157,6 @@
             label30 = new Label();
             txtLangIsoCode = new TextBox();
             btnSaveLang = new Button();
-            txtLangFileName = new TextBox();
             btnDeleteLangFile = new Button();
             label29 = new Label();
             cbLangSettings = new ComboBox();
@@ -165,6 +164,7 @@
             btnUploadBootScreen = new Button();
             picBootScreen = new PictureBox();
             btnReboot = new Button();
+            btnSaveLangAs = new Button();
             tabControl1.SuspendLayout();
             tabSkinSettings.SuspendLayout();
             tabLangSettings.SuspendLayout();
@@ -803,6 +803,7 @@
             // 
             // tabLangSettings
             // 
+            tabLangSettings.Controls.Add(btnSaveLangAs);
             tabLangSettings.Controls.Add(btnDeleteFont);
             tabLangSettings.Controls.Add(btnUploadFont);
             tabLangSettings.Controls.Add(cbLangFont);
@@ -862,7 +863,6 @@
             tabLangSettings.Controls.Add(label30);
             tabLangSettings.Controls.Add(txtLangIsoCode);
             tabLangSettings.Controls.Add(btnSaveLang);
-            tabLangSettings.Controls.Add(txtLangFileName);
             tabLangSettings.Controls.Add(btnDeleteLangFile);
             tabLangSettings.Controls.Add(label29);
             tabLangSettings.Controls.Add(cbLangSettings);
@@ -1346,7 +1346,7 @@
             // 
             // btnSaveLang
             // 
-            btnSaveLang.Location = new Point(530, 517);
+            btnSaveLang.Location = new Point(449, 517);
             btnSaveLang.Name = "btnSaveLang";
             btnSaveLang.Size = new Size(75, 23);
             btnSaveLang.TabIndex = 21;
@@ -1354,16 +1354,9 @@
             btnSaveLang.UseVisualStyleBackColor = true;
             btnSaveLang.Click += btnSaveLang_Click;
             // 
-            // txtLangFileName
-            // 
-            txtLangFileName.Location = new Point(319, 33);
-            txtLangFileName.Name = "txtLangFileName";
-            txtLangFileName.Size = new Size(205, 23);
-            txtLangFileName.TabIndex = 20;
-            // 
             // btnDeleteLangFile
             // 
-            btnDeleteLangFile.Location = new Point(530, 33);
+            btnDeleteLangFile.Location = new Point(319, 34);
             btnDeleteLangFile.Name = "btnDeleteLangFile";
             btnDeleteLangFile.Size = new Size(75, 23);
             btnDeleteLangFile.TabIndex = 19;
@@ -1433,6 +1426,15 @@
             btnReboot.Text = "Reboot";
             btnReboot.UseVisualStyleBackColor = true;
             btnReboot.Click += btnReboot_Click;
+            // 
+            // btnSaveLangAs
+            // 
+            btnSaveLangAs.Location = new Point(530, 517);
+            btnSaveLangAs.Name = "btnSaveLangAs";
+            btnSaveLangAs.Size = new Size(75, 23);
+            btnSaveLangAs.TabIndex = 95;
+            btnSaveLangAs.Text = "Save As";
+            btnSaveLangAs.UseVisualStyleBackColor = true;
             // 
             // SkinSettingsForm
             // 
@@ -1537,7 +1539,6 @@
         private Label label29;
         private Button btnDeleteLangFile;
         private Button btnSaveLang;
-        private TextBox txtLangFileName;
         private Label label30;
         private TextBox txtLangIsoCode;
         private Label label31;
@@ -1596,5 +1597,6 @@
         private Button btnDeleteFont;
         private Button btnUploadFont;
         private ComboBox cbLangFont;
+        private Button btnSaveLangAs;
     }
 }
