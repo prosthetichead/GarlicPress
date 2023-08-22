@@ -264,6 +264,8 @@ public class GarlicSkinSettings
         public int x { get; set; }
         public int y { get; set; }
         public int order { get; set; }
+        public Guid id { get; set; }
+        public int angle { get; set; }
 
         public MediaLayer()
         {
@@ -274,6 +276,8 @@ public class GarlicSkinSettings
             x = 0;
             y = 0;
             order = 0;
+            id = Guid.NewGuid();
+            angle = 0;
         }
 
     }

@@ -1,4 +1,5 @@
 using AdvancedSharpAdbClient;
+using GarlicPress.constants;
 using GarlicPress.forms;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -92,13 +93,13 @@ namespace GarlicPress
                         DebugLog.Write("a usb device has been disconected", Color.RebeccaPurple);
                         break;
                     case WM_DEVICECHANGE.DBT_DEVICEARRIVAL:
-                        DebugLog.Write("a usb device has conected", Color.RebeccaPurple);                        
+                        DebugLog.Write("a usb device has conected", Color.RebeccaPurple);
                         break;
                     case WM_DEVICECHANGE.DBT_DEVNODES_CHANGED:
                         DebugLog.Write("a usb device has changed", Color.RebeccaPurple);
                         break;
                     default:
-                        DebugLog.Write($"a usb event of code {m.WParam.ToString()} happened", Color.RebeccaPurple);                        
+                        DebugLog.Write($"a usb event of code {m.WParam.ToString()} happened", Color.RebeccaPurple);
                         break;
                 }
                 CheckConnection();
@@ -109,11 +110,11 @@ namespace GarlicPress
         {
             var deviceConnected = ADBConnection.deviceConnected;
             var connect = ADBConnection.ConnectToDevice();
-            if(deviceConnected && connect) 
+            if (deviceConnected && connect)
             {
                 DebugLog.Write("Device Already Connected");
             }
-            else if(!deviceConnected && connect)
+            else if (!deviceConnected && connect)
             {
                 DebugLog.Write("Device Connected");
 
@@ -169,16 +170,16 @@ namespace GarlicPress
 
                 //get img file if one exists
                 string imgFile = Path.ChangeExtension(item.Path, ".png");
-                if (ADBConnection.DownloadFile(SelectedImgPath + imgFile, "assets/temp/gameart-down.png"))
+                if (ADBConnection.DownloadFile(SelectedImgPath + imgFile, PathConstants.assetsTempPath + "gameart-down.png"))
                 {
-                    Bitmap overlayImage = (Bitmap)Image.FromFile(@"assets/temp/gameart-down.png");
+                    Bitmap overlayImage = (Bitmap)Image.FromFile(PathConstants.assetsTempPath + "gameart-down.png");
                     picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage);
                     overlayImage.Dispose();
                     picGame.Refresh();
                 }
                 else
                 {
-                    Bitmap overlayImage = (Bitmap)Image.FromFile(@"assets/skin/background.png");
+                    Bitmap overlayImage = (Bitmap)Image.FromFile(PathConstants.assetSkinPath + "background.png");
                     picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage);
                     overlayImage.Dispose();
                 }
@@ -216,7 +217,20 @@ namespace GarlicPress
                 this.WindowState = FormWindowState.Minimized;
                 this.ShowInTaskbar = false;
             }
-
+            else
+            {
+                if (Properties.Settings.Default.cleanTempOnExit && Directory.Exists(PathConstants.assetsTempPath))
+                {
+                    try
+                    {
+                        Directory.Delete(PathConstants.assetsTempPath, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Could not delete temp folder. {ex.Message}");
+                    }
+                }
+            }
         }
 
         private void miConsole_Click(object sender, EventArgs e)

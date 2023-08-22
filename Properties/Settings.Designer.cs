@@ -12,7 +12,7 @@ namespace GarlicPress.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.3.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.7.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -85,7 +85,7 @@ namespace GarlicPress.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("us,wor,jp")]
+        [global::System.Configuration.DefaultSettingValueAttribute("us,wor,eu,jp")]
         public string ssRegionOrder {
             get {
                 return ((string)(this["ssRegionOrder"]));
@@ -140,6 +140,18 @@ namespace GarlicPress.Properties {
             }
             set {
                 this["warningBeforeDelete"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool cleanTempOnExit {
+            get {
+                return ((bool)(this["cleanTempOnExit"]));
+            }
+            set {
+                this["cleanTempOnExit"] = value;
             }
         }
     }

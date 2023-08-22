@@ -1,4 +1,5 @@
-﻿using GarlicPress.Properties;
+﻿using GarlicPress.constants;
+using GarlicPress.Properties;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -62,8 +63,6 @@ namespace GarlicPress
                 return new GameResponse() { status = "error", statusMessage = response.StatusCode + "  " + json };
             }
         }
-        
-
 
         public static async Task<string> DownloadMedia(GameResponse game, string mediaType = "box-3D")
         {
@@ -73,12 +72,33 @@ namespace GarlicPress
 
                 List<string> ssRegionOrder = Settings.Default.ssRegionOrder.Split(',').ToList();
 
-                var medias = game.response.jeu.medias.Where(w => w.type == mediaType).OrderBy(o => ssRegionOrder.IndexOf(o.region)); //.OrderBy(o => o.support == null).ThenBy(o => o.support);
+                var medias = game.response.jeu.medias.Where(w => w.type == mediaType).OrderBy(o => ssRegionOrder.IndexOf(o.region));
                 
                 if (medias.Count() > 0)
                 {
                     var media = medias.First();
-                    string mediaDownloadPath = "assets/" + mediaType + "." + media.format;
+
+                    //Find the first media that matches the region order
+                    foreach (var region in ssRegionOrder)
+                    {
+                        if (medias.FirstOrDefault(x => x.region == region) is Media regionMedia)
+                        {
+                            media = regionMedia;
+                            break;
+                        }
+                    }
+
+                    Directory.CreateDirectory(PathConstants.assetsTempPath);
+
+                    string mediaDownloadPath = PathConstants.assetsTempPath + game.response.jeu.id + mediaType + "." + media.format;
+                    
+                    
+                    if (File.Exists(mediaDownloadPath))
+                    {
+                        return mediaDownloadPath;
+                    }
+
+
                     using (var s = await httpClient.GetStreamAsync(new Uri(media.url)))
                     {
                         using (var fs = new FileStream(mediaDownloadPath, FileMode.Create))
