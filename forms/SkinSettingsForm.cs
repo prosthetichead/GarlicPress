@@ -16,37 +16,35 @@ namespace GarlicPress
     public partial class SkinSettingsForm : Form
     {
         GarlicSkinSettings skinSettings;
-        BindingList<KeyValuePair<string, GarlicLanguageSettings>> languageSettingsList;
+
+
+        BindingList<GarlicLanguageSettingsFile> languageSettingsList;
         BindingList<string> fonts;
 
         public SkinSettingsForm()
         {
             InitializeComponent();
 
-            //get font info
-            fonts = new BindingList<string>();
-            List<FileStatistics> fontList = ADBConnection.GetDirectoryListing("/mnt/mmc/CFW/font");
-            foreach (var font in fontList)
-            {
-                if (font.Path != "." && font.Path != "..")
-                {
-                    fonts.Add(font.Path);
-                }
-            }
+
             cbLangFont.DataSource = fonts;
 
             //Get skin settings
             skinSettings = GarlicSkin.skinSettings;
-            languageSettingsList = new BindingList<KeyValuePair<string, GarlicLanguageSettings>>();
-            foreach (var lang in GarlicSkin.languageSettingsDictonary)
+            languageSettingsList = new BindingList<GarlicLanguageSettingsFile>();
+            foreach (var lang in GarlicSkin.languageFiles)
             {
                 languageSettingsList.Add(lang);
             }
-            cbLangSettings.ValueMember = "Value";
-            cbLangSettings.DisplayMember = "Key";
+            cbLangSettings.DisplayMember = "fileName";
             cbLangSettings.DataSource = languageSettingsList;
 
-
+            //get fonts
+            fonts = new BindingList<string>();
+            foreach (var font in GarlicSkin.fonts)
+            {
+                fonts.Add(font);
+            }
+            cbLangFont.DataSource = fonts;
 
             DownloadBootScreenPreview();
 
@@ -228,7 +226,7 @@ namespace GarlicPress
                 var selectedIndex = cbLangSettings.SelectedIndex;
                 var lang = (KeyValuePair<string, GarlicLanguageSettings>)cbLangSettings.SelectedItem;
 
-                GarlicSkin.DeleteLangFile(lang.Key);
+                //GarlicSkin.DeleteLangFile(lang.Key);
 
                 languageSettingsList.RemoveAt(selectedIndex);
             }
@@ -240,7 +238,8 @@ namespace GarlicPress
 
         private void btnSaveLang_Click(object sender, EventArgs e)
         {
-            GarlicLanguageSettings languageSettings = new GarlicLanguageSettings();
+            var langFile = (GarlicLanguageSettingsFile)cbLangSettings.SelectedItem;
+            GarlicLanguageSettings languageSettings = langFile.garlicLanguageSettings;
 
             languageSettings.isocode = txtLangIsoCode.Text;
             languageSettings.font = (string)cbLangFont.SelectedItem;
@@ -277,59 +276,45 @@ namespace GarlicPress
             languageSettings.yearlabel = txtLangYearLabel.Text;
             languageSettings.hourlabel = txtLangHourLabel.Text;
 
-            GarlicSkin.SaveLangFile(txtLangFileName.Text, languageSettings);
-
-            var newKeypair = new KeyValuePair<string, GarlicLanguageSettings>(txtLangFileName.Text, languageSettings);
-            if (languageSettingsList.Any(a => a.Key == newKeypair.Key))
-            {
-                var keypair = languageSettingsList.Where(a => a.Key == newKeypair.Key).First();
-                var index = languageSettingsList.IndexOf(keypair);
-                languageSettingsList[index] = newKeypair;
-            }
-            else
-            {
-                languageSettingsList.Add(newKeypair);
-            }
+            GarlicSkin.SaveLangFile(langFile);
         }
 
         private void cbLangSettings_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var LangKeyPair = (KeyValuePair<string, GarlicLanguageSettings>)cbLangSettings.SelectedItem;
+            var langFile = (GarlicLanguageSettingsFile)cbLangSettings.SelectedItem;
 
-            if(fonts!=null && fonts.Contains(LangKeyPair.Value.font))
-                cbLangFont.SelectedItem = LangKeyPair.Value.font;
+            if (fonts != null && fonts.Contains(langFile.garlicLanguageSettings.font))
+                cbLangFont.SelectedItem = langFile.garlicLanguageSettings.font;
             else
-                cbLangFont.SelectedIndex = 0;
+                cbLangFont.SelectedIndex = -1;
 
-            txtLangFileName.Text = LangKeyPair.Key;
-            txtLangIsoCode.Text = LangKeyPair.Value.isocode;
-            txtLangFontSize.Text = LangKeyPair.Value.fontsize.ToString();
-            txtLangAMLabel.Text = LangKeyPair.Value.amlabel;
-            txtLangBackLabel.Text = LangKeyPair.Value.backlabel;
-            txtLangButtonGuideFontSize.Text = LangKeyPair.Value.buttonguidefontsize.ToString();
-            txtLangConsoleLabel.Text = LangKeyPair.Value.consoleslabel;
-            txtLangDayLabel.Text = LangKeyPair.Value.daylabel;
-            txtLangEmptyLabel.Text = LangKeyPair.Value.emptylabel;
-            txtLangFavoriteLabel.Text = LangKeyPair.Value.favoritelabel;
-            txtLangFavoritesLabel.Text = LangKeyPair.Value.favoriteslabel;
-            txtLangLanguageLabel.Text = LangKeyPair.Value.languagelabel;
-            txtLangMeridianLabel.Text = LangKeyPair.Value.meridiantimelabel;
-            txtLangMinuteLabel.Text = LangKeyPair.Value.minutelabel;
-            txtLangMonthLabel.Text = LangKeyPair.Value.monthlabel;
-            txtLangNavigateLabel.Text = LangKeyPair.Value.navigatelabel;
-            txtLangOffLabel.Text = LangKeyPair.Value.offlabel;
-            txtLangOnLabel.Text = LangKeyPair.Value.onlabel;
-            txtLangOpenLabel.Text = LangKeyPair.Value.openlabel;
-            txtLangPMLabel.Text = LangKeyPair.Value.pmlabel;
-            txtLangRecentLabel.Text = LangKeyPair.Value.recentlabel;
-            txtLangRemoveLabel.Text = LangKeyPair.Value.removelabel;
-            txtLangRetroarchLabel.Text = LangKeyPair.Value.retroarchlabel;
-            txtLangSavestatesUnsupported.Text = LangKeyPair.Value.savestatesunsupported;
-            txtLangSettingsLabel.Text = LangKeyPair.Value.settingslabel;
-            txtLangTitleLabel.Text = LangKeyPair.Value.titlelabel;
-            txtLangYearLabel.Text = LangKeyPair.Value.yearlabel;
-            txtLangHourLabel.Text = LangKeyPair.Value.hourlabel;
-
+            txtLangIsoCode.Text = langFile.garlicLanguageSettings.isocode;
+            txtLangFontSize.Text = langFile.garlicLanguageSettings.fontsize.ToString();
+            txtLangAMLabel.Text = langFile.garlicLanguageSettings.amlabel;
+            txtLangBackLabel.Text = langFile.garlicLanguageSettings.backlabel;
+            txtLangButtonGuideFontSize.Text = langFile.garlicLanguageSettings.buttonguidefontsize.ToString();
+            txtLangConsoleLabel.Text = langFile.garlicLanguageSettings.consoleslabel;
+            txtLangDayLabel.Text = langFile.garlicLanguageSettings.daylabel;
+            txtLangEmptyLabel.Text = langFile.garlicLanguageSettings.emptylabel;
+            txtLangFavoriteLabel.Text = langFile.garlicLanguageSettings.favoritelabel;
+            txtLangFavoritesLabel.Text = langFile.garlicLanguageSettings.favoriteslabel;
+            txtLangLanguageLabel.Text = langFile.garlicLanguageSettings.languagelabel;
+            txtLangMeridianLabel.Text = langFile.garlicLanguageSettings.meridiantimelabel;
+            txtLangMinuteLabel.Text = langFile.garlicLanguageSettings.minutelabel;
+            txtLangMonthLabel.Text = langFile.garlicLanguageSettings.monthlabel;
+            txtLangNavigateLabel.Text = langFile.garlicLanguageSettings.navigatelabel;
+            txtLangOffLabel.Text = langFile.garlicLanguageSettings.offlabel;
+            txtLangOnLabel.Text = langFile.garlicLanguageSettings.onlabel;
+            txtLangOpenLabel.Text = langFile.garlicLanguageSettings.openlabel;
+            txtLangPMLabel.Text = langFile.garlicLanguageSettings.pmlabel;
+            txtLangRecentLabel.Text = langFile.garlicLanguageSettings.recentlabel;
+            txtLangRemoveLabel.Text = langFile.garlicLanguageSettings.removelabel;
+            txtLangRetroarchLabel.Text = langFile.garlicLanguageSettings.retroarchlabel;
+            txtLangSavestatesUnsupported.Text = langFile.garlicLanguageSettings.savestatesunsupported;
+            txtLangSettingsLabel.Text = langFile.garlicLanguageSettings.settingslabel;
+            txtLangTitleLabel.Text = langFile.garlicLanguageSettings.titlelabel;
+            txtLangYearLabel.Text = langFile.garlicLanguageSettings.yearlabel;
+            txtLangHourLabel.Text = langFile.garlicLanguageSettings.hourlabel;
         }
 
         private void txtLangButtonGuideFontSize_TextChanged(object sender, EventArgs e)

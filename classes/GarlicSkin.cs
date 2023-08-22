@@ -2,6 +2,7 @@
 using GarlicPress.constants;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -13,7 +14,8 @@ namespace GarlicPress
     {       
 
         public static GarlicSkinSettings skinSettings;
-        public static Dictionary<string, GarlicLanguageSettings> languageSettingsDictonary;
+        public static List<GarlicLanguageSettingsFile> languageFiles;
+        public static List<string> fonts;
         public static bool validSkinSettings;
 
         static JsonSerializerOptions jsonOptions = new JsonSerializerOptions
@@ -38,33 +40,44 @@ namespace GarlicPress
             }
         }
 
-        public static void DeleteLangFile(string langFileName)
+        public static void DeleteLangFile(string fileKey, string fileName)
         {
-            languageSettingsDictonary.Remove( langFileName.ToLower() );
-            ADBConnection.DeleteFile("/mnt/mmc/CFW/lang/"+langFileName);
+            ADBConnection.DeleteFile("/mnt/mmc/CFW/lang/" + fileName);
+            languageFiles.RemoveAll(o=> o.fileKey == fileKey);
         }
 
-        public static void SaveLangFile(string langFileName, GarlicLanguageSettings langSetting)
+        public static void SaveLangFile(GarlicLanguageSettingsFile languageFile)
         {
-            
-            var langSettingsJSON = JsonSerializer.Serialize(langSetting, jsonOptions);
-            File.WriteAllText("assets/lang/" + langFileName, langSettingsJSON) ;
-            ADBConnection.UploadFile("assets/lang/" + langFileName, "/mnt/mmc/CFW/lang/" + langFileName);
 
+            string filename = languageFile.fileName;
 
-            if (languageSettingsDictonary.ContainsKey(langFileName))
+            DebugLog.Write("Saving Language Json file");
+
+            //check if this languageFile is already in the list
+            if (languageFiles.Any(a => a.fileKey == languageFile.fileKey))
             {
-                languageSettingsDictonary[langFileName] = langSetting;
+                DebugLog.Write("Old Language File Found replace it");
+                GarlicLanguageSettingsFile oldLangFile = languageFiles.First(w => w.fileKey == languageFile.fileKey);
+                oldLangFile.garlicLanguageSettings = languageFile.garlicLanguageSettings;
+                filename = oldLangFile.fileName;
             }
             else
             {
-                languageSettingsDictonary.Add(langFileName, langSetting);
+                DebugLog.Write("This is a new Language File");
+                languageFiles.Add(languageFile);
             }
+
+
+            var langSettingsJSON = JsonSerializer.Serialize(languageFile.garlicLanguageSettings, jsonOptions);
+
+            Directory.CreateDirectory("assets/temp");
+            File.WriteAllText("assets/temp/langFile.json", langSettingsJSON);
+            ADBConnection.UploadFile("assets/temp/langFile.json", "/mnt/mmc/CFW/lang/" + filename);
         }
 
         public static void ReadAllLangFiles()
         {
-            languageSettingsDictonary = new Dictionary<string, GarlicLanguageSettings>();
+            languageFiles = new List<GarlicLanguageSettingsFile>();
             var langFiles = ADBConnection.GetDirectoryListing("/mnt/mmc/CFW/lang");
             foreach (var item in langFiles)
             {
@@ -74,7 +87,8 @@ namespace GarlicPress
                     {
                         var langSettingsJSON = ADBConnection.ReadTextFile($"/mnt/mmc/CFW/lang/{item.Path}");
                         var langSettings = JsonSerializer.Deserialize<GarlicLanguageSettings>(langSettingsJSON);
-                        languageSettingsDictonary.Add(item.Path, langSettings);
+                        GarlicLanguageSettingsFile lang = new GarlicLanguageSettingsFile(item.Path, langSettings);
+                        languageFiles.Add(lang);
                     }
                     catch (Exception ex)
                     {
@@ -93,10 +107,25 @@ namespace GarlicPress
             
         }
 
+        public static void ReadFonts()
+        {
+            //get font info
+            fonts = new List<string>();
+            List<FileStatistics> fontList = ADBConnection.GetDirectoryListing("/mnt/mmc/CFW/font");
+            foreach (var font in fontList)
+            {
+                if (font.Path != "." && font.Path != "..")
+                {
+                    fonts.Add(font.Path);
+                }
+            }
+        }
+
         public static void ReadSkinFromDevice()
         {
             ReadSkinSettings();
             ReadAllLangFiles();
+            ReadFonts();
             ADBConnection.DownloadDirectory("/mnt/mmc/CFW/skin", "assets/skin");          
         }
 

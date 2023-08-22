@@ -28,85 +28,84 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.labTitle = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.labVersion = new System.Windows.Forms.Label();
-            this.labIssue = new System.Windows.Forms.Label();
-            this.labCoffee = new System.Windows.Forms.Label();
-            this.SuspendLayout();
+            labTitle = new Label();
+            label2 = new Label();
+            labVersion = new Label();
+            labIssue = new Label();
+            labCoffee = new Label();
+            SuspendLayout();
             // 
             // labTitle
             // 
-            this.labTitle.Dock = System.Windows.Forms.DockStyle.Top;
-            this.labTitle.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.labTitle.Location = new System.Drawing.Point(0, 0);
-            this.labTitle.Name = "labTitle";
-            this.labTitle.Size = new System.Drawing.Size(370, 23);
-            this.labTitle.TabIndex = 0;
-            this.labTitle.Text = "GarlicPress";
+            labTitle.Dock = DockStyle.Top;
+            labTitle.Font = new Font("Segoe UI", 15F, FontStyle.Regular, GraphicsUnit.Point);
+            labTitle.Location = new Point(0, 0);
+            labTitle.Name = "labTitle";
+            labTitle.Size = new Size(370, 23);
+            labTitle.TabIndex = 0;
+            labTitle.Text = "GarlicPress";
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(10, 25);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(153, 22);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Created by prostheticHead\r\n";
+            label2.Location = new Point(10, 25);
+            label2.Name = "label2";
+            label2.Size = new Size(153, 22);
+            label2.TabIndex = 1;
+            label2.Text = "Created by prostheticHead\r\n";
             // 
             // labVersion
             // 
-            this.labVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.labVersion.Font = new System.Drawing.Font("m5x7", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labVersion.Location = new System.Drawing.Point(214, 198);
-            this.labVersion.Name = "labVersion";
-            this.labVersion.Size = new System.Drawing.Size(156, 13);
-            this.labVersion.TabIndex = 2;
-            this.labVersion.Text = "ver. 16072023";
-            this.labVersion.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+            labVersion.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            labVersion.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            labVersion.Location = new Point(214, 198);
+            labVersion.Name = "labVersion";
+            labVersion.Size = new Size(156, 13);
+            labVersion.TabIndex = 2;
+            labVersion.Text = "ver. 16072023";
+            labVersion.TextAlign = ContentAlignment.BottomRight;
             // 
             // labIssue
             // 
-            this.labIssue.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.labIssue.ForeColor = System.Drawing.Color.Blue;
-            this.labIssue.Location = new System.Drawing.Point(0, 85);
-            this.labIssue.Name = "labIssue";
-            this.labIssue.Size = new System.Drawing.Size(370, 39);
-            this.labIssue.TabIndex = 3;
-            this.labIssue.Text = "For Help, Feature Requests or Reporting an Error\r\nSubmit an Issue on GitHub";
-            this.labIssue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.labIssue.Click += new System.EventHandler(this.labIssue_Click);
+            labIssue.Cursor = Cursors.Hand;
+            labIssue.ForeColor = Color.Blue;
+            labIssue.Location = new Point(0, 85);
+            labIssue.Name = "labIssue";
+            labIssue.Size = new Size(370, 39);
+            labIssue.TabIndex = 3;
+            labIssue.Text = "For Help, Feature Requests or Reporting an Error\r\nSubmit an Issue on GitHub";
+            labIssue.TextAlign = ContentAlignment.MiddleCenter;
+            labIssue.Click += labIssue_Click;
             // 
             // labCoffee
             // 
-            this.labCoffee.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.labCoffee.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.labCoffee.ForeColor = System.Drawing.Color.Blue;
-            this.labCoffee.Location = new System.Drawing.Point(0, 158);
-            this.labCoffee.Name = "labCoffee";
-            this.labCoffee.Size = new System.Drawing.Size(370, 40);
-            this.labCoffee.TabIndex = 4;
-            this.labCoffee.Text = "Want to thank me? Buy Me a Coffee";
-            this.labCoffee.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.labCoffee.Click += new System.EventHandler(this.labCoffee_Click);
+            labCoffee.Cursor = Cursors.Hand;
+            labCoffee.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            labCoffee.ForeColor = Color.Blue;
+            labCoffee.Location = new Point(0, 158);
+            labCoffee.Name = "labCoffee";
+            labCoffee.Size = new Size(370, 40);
+            labCoffee.TabIndex = 4;
+            labCoffee.Text = "Want to thank me? Buy Me a Coffee";
+            labCoffee.TextAlign = ContentAlignment.MiddleCenter;
+            labCoffee.Click += labCoffee_Click;
             // 
             // AboutForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(370, 214);
-            this.Controls.Add(this.labCoffee);
-            this.Controls.Add(this.labIssue);
-            this.Controls.Add(this.labVersion);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.labTitle);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "AboutForm";
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "About";
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            AutoSize = true;
+            ClientSize = new Size(370, 214);
+            Controls.Add(labCoffee);
+            Controls.Add(labIssue);
+            Controls.Add(labVersion);
+            Controls.Add(label2);
+            Controls.Add(labTitle);
+            FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            Name = "AboutForm";
+            ShowInTaskbar = false;
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "About";
+            ResumeLayout(false);
         }
 
         #endregion

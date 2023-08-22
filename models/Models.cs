@@ -11,6 +11,12 @@ using static System.Net.WebRequestMethods;
 
 namespace GarlicPress
 {
+    public enum SearchType
+    {
+        GameName,
+        GameID
+    }
+
     public class GarlicGameArtSearch
     {
         public GarlicSystem system { get; set; }
@@ -144,6 +150,19 @@ namespace GarlicPress
         }
     }
 
+    public class GarlicLanguageSettingsFile
+    {
+        public string fileKey { get; set; }
+        public string fileName { get; set; }
+        public GarlicLanguageSettings garlicLanguageSettings { get; set; }
+
+        public GarlicLanguageSettingsFile(string fileName, GarlicLanguageSettings garlicLanguageSettings)
+        {
+            this.fileName = fileName;
+            this.fileKey = fileName.ToLower();
+            this.garlicLanguageSettings = garlicLanguageSettings;
+        }
+    }
 
     public class GarlicLanguageSettings
     {
