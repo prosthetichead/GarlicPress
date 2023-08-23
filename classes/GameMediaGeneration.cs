@@ -29,8 +29,6 @@ namespace GarlicPress
         {
             try
             {
-
-
                 if (File.Exists("mediaLayout.json"))
                 {
                     //this is the old location we used to keep the file, its now in the assets folder..

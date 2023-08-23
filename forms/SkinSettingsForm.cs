@@ -239,7 +239,15 @@ namespace GarlicPress
         private void btnSaveLang_Click(object sender, EventArgs e)
         {
             var langFile = (GarlicLanguageSettingsFile)cbLangSettings.SelectedItem;
-            GarlicLanguageSettings languageSettings = langFile.garlicLanguageSettings;
+
+            langFile.garlicLanguageSettings = CreateGarlicLanguageSettings();
+
+            GarlicSkin.SaveLangFile(langFile);
+        }
+
+        public GarlicLanguageSettings CreateGarlicLanguageSettings()
+        {
+            GarlicLanguageSettings languageSettings = new GarlicLanguageSettings();
 
             languageSettings.isocode = txtLangIsoCode.Text;
             languageSettings.font = (string)cbLangFont.SelectedItem;
@@ -276,7 +284,7 @@ namespace GarlicPress
             languageSettings.yearlabel = txtLangYearLabel.Text;
             languageSettings.hourlabel = txtLangHourLabel.Text;
 
-            GarlicSkin.SaveLangFile(langFile);
+            return languageSettings;
         }
 
         private void cbLangSettings_SelectedIndexChanged(object sender, EventArgs e)
@@ -317,13 +325,18 @@ namespace GarlicPress
             txtLangHourLabel.Text = langFile.garlicLanguageSettings.hourlabel;
         }
 
-        private void txtLangButtonGuideFontSize_TextChanged(object sender, EventArgs e)
+        private void btnSaveLangAs_Click(object sender, EventArgs e)
         {
+            SkinSettingsFormDialog dialog = new SkinSettingsFormDialog();
+            var result = dialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                string newFilename = dialog.txtNewFileName.Text;
+                GarlicLanguageSettings garlicLanguageSettings = CreateGarlicLanguageSettings();
+                GarlicLanguageSettingsFile garlicLanguageSettingsFile = new GarlicLanguageSettingsFile(newFilename, garlicLanguageSettings);
 
-        }
-
-        private void txtLangFontSize_TextChanged(object sender, EventArgs e)
-        {
+                GarlicSkin.SaveLangFile(garlicLanguageSettingsFile);
+            }
         }
     }
 }

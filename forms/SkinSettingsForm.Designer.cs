@@ -98,6 +98,7 @@
             btnTextColourActivePicker = new Button();
             label1 = new Label();
             tabLangSettings = new TabPage();
+            btnSaveLangAs = new Button();
             btnDeleteFont = new Button();
             btnUploadFont = new Button();
             cbLangFont = new ComboBox();
@@ -164,7 +165,6 @@
             btnUploadBootScreen = new Button();
             picBootScreen = new PictureBox();
             btnReboot = new Button();
-            btnSaveLangAs = new Button();
             tabControl1.SuspendLayout();
             tabSkinSettings.SuspendLayout();
             tabLangSettings.SuspendLayout();
@@ -874,6 +874,16 @@
             tabLangSettings.Text = "Language Settings";
             tabLangSettings.UseVisualStyleBackColor = true;
             // 
+            // btnSaveLangAs
+            // 
+            btnSaveLangAs.Location = new Point(530, 517);
+            btnSaveLangAs.Name = "btnSaveLangAs";
+            btnSaveLangAs.Size = new Size(75, 23);
+            btnSaveLangAs.TabIndex = 95;
+            btnSaveLangAs.Text = "Save As";
+            btnSaveLangAs.UseVisualStyleBackColor = true;
+            btnSaveLangAs.Click += btnSaveLangAs_Click;
+            // 
             // btnDeleteFont
             // 
             btnDeleteFont.Location = new Point(303, 86);
@@ -1300,7 +1310,6 @@
             txtLangButtonGuideFontSize.Name = "txtLangButtonGuideFontSize";
             txtLangButtonGuideFontSize.Size = new Size(97, 23);
             txtLangButtonGuideFontSize.TabIndex = 42;
-            txtLangButtonGuideFontSize.TextChanged += txtLangButtonGuideFontSize_TextChanged;
             // 
             // label32
             // 
@@ -1317,7 +1326,6 @@
             txtLangFontSize.Name = "txtLangFontSize";
             txtLangFontSize.Size = new Size(96, 23);
             txtLangFontSize.TabIndex = 40;
-            txtLangFontSize.TextChanged += txtLangFontSize_TextChanged;
             // 
             // label31
             // 
@@ -1426,15 +1434,6 @@
             btnReboot.Text = "Reboot";
             btnReboot.UseVisualStyleBackColor = true;
             btnReboot.Click += btnReboot_Click;
-            // 
-            // btnSaveLangAs
-            // 
-            btnSaveLangAs.Location = new Point(530, 517);
-            btnSaveLangAs.Name = "btnSaveLangAs";
-            btnSaveLangAs.Size = new Size(75, 23);
-            btnSaveLangAs.TabIndex = 95;
-            btnSaveLangAs.Text = "Save As";
-            btnSaveLangAs.UseVisualStyleBackColor = true;
             // 
             // SkinSettingsForm
             // 
