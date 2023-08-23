@@ -144,6 +144,7 @@ namespace GarlicPress
             // Fetch all the media layers in parallel
             var tasks = orderedMediaLayout.Select(layer => GetMediaFromMediaLayer(game, layer)).ToList();
 
+            //Wait for all to complete so layers gets drawn in correct order
             var results = await Task.WhenAll(tasks);
 
             foreach (var result in results)
@@ -174,22 +175,17 @@ namespace GarlicPress
             return finalImage;
         }
 
-
-
         private static void DrawRotatedImage(Graphics g, Bitmap img, float angle, float x, float y, float? width = null, float? height = null)
         {
             // Set the width and height if not provided
             width ??= img.Width;
             height ??= img.Height;
 
-            // Translate to the rotation center
-            g.TranslateTransform(x + width.Value / 2.0f, y + height.Value / 2.0f);
+            // Translate to the desired position
+            g.TranslateTransform(x, y);
 
             // Rotate the graphics object
             g.RotateTransform(angle);
-
-            // Translate back from the center
-            g.TranslateTransform(-width.Value / 2.0f, -height.Value / 2.0f);
 
             // Draw the image at its translated and rotated location
             g.DrawImage(img, 0, 0, width.Value, height.Value);

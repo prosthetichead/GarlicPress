@@ -1,13 +1,13 @@
 ﻿export class BlazorFabric {
     static canvas = null;
-    static dotnetHelper = null;
+    static dotnetMediaGenerationEditor = null;
 
     static createCanvas = (canvasId, dotnetHelper) => {
         if (BlazorFabric.canvas === null) {
             BlazorFabric.canvas = new fabric.Canvas(canvasId, { preserveObjectStacking: true });
         }
 
-        this.dotnetHelper = dotnetHelper;
+        this.dotnetMediaGenerationEditor = dotnetHelper;
     };
 
     static clearCanvas = () => {
@@ -68,20 +68,7 @@
                 selectable: false,
                 fontSize: fontSize,
                 textAlign: textAlign,
-                // other properties as required...
-            });
-
-            // If you want to change the text color when the item is active (selected),
-            // you can add an event listener to the 'selected' event.
-            text.on('selected', function () {
-                text.set('fill', activeTextColor);
-                this.canvas.renderAll();
-            });
-
-            // Similarly, you can revert the color when the object is deselected.
-            text.on('deselected', function () {
-                text.set('fill', textColor);
-                this.canvas.renderAll();
+                
             });
 
             this.canvas.add(text);
@@ -93,7 +80,7 @@
         const activeObject = BlazorFabric.canvas.getActiveObject();
         if (activeObject) {
 
-            BlazorFabric.dotnetHelper.invokeMethodAsync('NotifyImageDeleted', activeObject.id)
+            BlazorFabric.dotnetMediaGenerationEditor.invokeMethodAsync('NotifyImageDeleted', activeObject.id)
                 .catch(error => console.error(error));
 
             BlazorFabric.canvas.remove(activeObject);
@@ -117,7 +104,7 @@
                     });
 
                     // Call the C# method
-                    BlazorFabric.dotnetHelper.invokeMethodAsync('NotifyImageLocationUpdated', imageDetails)
+                    BlazorFabric.dotnetMediaGenerationEditor.invokeMethodAsync('NotifyImageLocationUpdated', imageDetails)
                         .catch(error => console.error(error));
                 }
             });

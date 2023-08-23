@@ -27,6 +27,7 @@ namespace GarlicPress
         {
             string skinSettingsJson = ADBConnection.ReadTextFile("/mnt/mmc/CFW/skin/settings.json");
             ADBConnection.DownloadFile("/mnt/mmc/CFW/skin/background.png", PathConstants.assetSkinPath + "background.png");
+            ADBConnection.DownloadFile("/mnt/mmc/CFW/skin/font.ttf", PathConstants.assetSkinPath + "font.ttf");
             try
             {
                 skinSettings = JsonSerializer.Deserialize<GarlicSkinSettings>(skinSettingsJson);

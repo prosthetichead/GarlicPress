@@ -14,9 +14,7 @@ namespace GarlicPress
 {
     public partial class SettingsForm : Form
     {
-
         BindingList<MediaLayer> tempMediaLayout;
-        EditMediaLayersForm? editLayersForm;
 
         public SettingsForm()
         {
@@ -116,7 +114,13 @@ namespace GarlicPress
 
         private void btnShowPreview_Click(object sender, EventArgs e)
         {
-            editLayersForm = new();
+            var previewForm = new PreviewForm();
+            previewForm.Show();
+        }
+
+        private void btnLayerEditor_Click(object sender, EventArgs e)
+        {
+            EditMediaLayersForm editLayersForm = new();
             editLayersForm.FormClosing += (s, e) =>
             {
                 tempMediaLayout.Clear();
@@ -131,7 +135,7 @@ namespace GarlicPress
         private void SettingsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             GameMediaGeneration.LoadMediaLayoutJson();
-            editLayersForm?.Close();
         }
+
     }
 }
