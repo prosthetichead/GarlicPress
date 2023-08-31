@@ -1,0 +1,76 @@
+﻿<div class="flex flex-col p-4 space-y-4 shadow-lg">
+    @if (Value is null)
+    {
+        <button @onclick="SetBlack" class="px-4 py-2 text-white bg-black rounded hover:bg-gray-900">Set Black</button>
+    }
+    else
+    {
+        <div>
+            <label for="colorPicker" class="block text-white text-sm font-medium">Color:</label>
+            <input type="color" id="colorPicker" @bind:event="oninput" @bind="RgbValue" @bind:after="UpdateCompositeValue" class="mt-1 p-1 w-full border rounded shadow-sm focus:ring focus:ring-opacity-50" />
+        </div>
+
+        <div>
+            <label for="opacityRange" class="block text-white text-sm font-medium ">Opacity: @(Opacity * 100)%</label>
+            <input type="range" id="opacityRange" min="0.0" max="1.0" step="0.01" @bind:event="oninput" @bind="Opacity" @bind:after="UpdateCompositeValue" class="mt-2 w-full slider appearance-none h-1.5 rounded bg-gradient-to-r from-gray-100 to-gray-400 focus:outline-none focus:ring" />
+        </div>
+
+        <button @onclick="SetNoColor" class="px-4 py-2 text-black bg-gray-200 border rounded hover:bg-gray-300">No Color</button>
+        <p class="text-white">Result: @Value</p>
+    }
+</div>
+
+
+@code {
+    private string RgbValue { get; set; } = "#FFFFFF";
+    private double Opacity { get; set; } = 1.0;
+
+    [Parameter]
+    public string? Value { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> ValueChanged { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        ParseValue();
+        base.OnParametersSet();
+    }
+
+    private void ParseValue()
+    {
+        if (Value is not null && Value.Length == 9)
+        {
+            RgbValue = Value.Substring(0, 7);
+            string alphaHex = Value.Substring(7, 2);
+            Opacity = Convert.ToInt32(alphaHex, 16) / 255.0;
+        }
+        else
+        {
+            RgbValue = "#FFFFFF";
+            Opacity = 1.0;
+        }
+    }
+
+    private void UpdateCompositeValue()
+    {
+        string hexOpacity = ((int)(Opacity * 255)).ToString("X2");
+        Value = $"{RgbValue}{hexOpacity}";
+        ValueChanged.InvokeAsync(Value);
+    }
+
+    private void SetBlack()
+    {
+        Value = "#000000FF";
+        ParseValue();
+        ValueChanged.InvokeAsync(Value);
+    }
+
+    private void SetNoColor()
+    {
+        Value = null;
+        ParseValue();
+        ValueChanged.InvokeAsync(Value);
+    }
+}
+

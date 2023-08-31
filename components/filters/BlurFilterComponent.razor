@@ -1,0 +1,19 @@
+﻿@if (BlurFilterSettings is not null)
+{
+    <h2 class="text-xl mb-4 text-white">Saturuation Controls</h2>
+    <label for="Blur" class="block text-sm font-medium text-white">Blur Amount: @(BlurFilterSettings.BlurAmount)</label>
+    <input type="range" id="Blur" min="0" max="10" step="1" @bind="BlurFilterSettings.BlurAmount" @bind:event="oninput" @bind:after="ApplyFilters" class="mt-2 w-full slider">
+}
+
+@code {
+    [Parameter]
+    public BlurFilter? BlurFilterSettings { get; set; }
+
+    [Parameter]
+    public EventCallback OnApplyFilters { get; set; }
+
+    private void ApplyFilters()
+    {
+        OnApplyFilters.InvokeAsync();
+    }
+}

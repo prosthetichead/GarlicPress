@@ -1,0 +1,35 @@
+﻿@typeparam TItem
+
+<div class="flex border rounded-md overflow-hidden m-1">
+    <label for="mediaType" class="text-xs font-medium text-gray-700 p-1 bg-gray-200">@Label</label>
+    <input type="text" @attributes="AllOtherAttributes" id="mediaType" @bind="Value" class="flex-grow p-1 text-xs font-medium" />
+</div>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public required string Label { get; set; }
+
+    TItem? item;
+
+    [Parameter]
+    public TItem? Value
+    {
+        get => item;
+        set
+        {
+            if (!item?.Equals(value) ?? true)
+            {
+                item = value;
+                ValueChanged?.InvokeAsync(value);
+            }
+        }
+    }
+
+    [Parameter]
+    public EventCallback<TItem>? ValueChanged { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AllOtherAttributes { get; set; }
+
+}

@@ -11,6 +11,7 @@
 		<FileVersion>0.0.2308.141</FileVersion>
 		<Version></Version>
 		<ServerGarbageCollection>false</ServerGarbageCollection>
+		<InvariantGlobalization>true</InvariantGlobalization>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

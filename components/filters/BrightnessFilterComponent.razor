@@ -1,0 +1,22 @@
+﻿@if (BrightnessFilterSettings is not null)
+{
+    <label for="brightness" class="block text-sm font-medium text-gray-700">Brightness: @(BrightnessFilterSettings.Brightness * 100)%</label>
+    <input type="range" id="brightness" min="-5.0" max="5.0" step="0.01" @bind="BrightnessFilterSettings.Brightness" @bind:event="oninput" @bind:after="ApplyFilters" class="mt-2 w-full slider">
+}
+
+
+
+
+@code {
+    [Parameter]
+    public BrightnessFilter? BrightnessFilterSettings { get; set; }
+
+    [Parameter]
+    public EventCallback OnApplyFilters { get; set; }
+
+    private void ApplyFilters()
+    {
+        OnApplyFilters.InvokeAsync();
+    }
+}
+

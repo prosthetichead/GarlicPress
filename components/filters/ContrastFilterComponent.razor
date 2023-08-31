@@ -1,0 +1,21 @@
+﻿@if (ContrastFilterSettings is not null)
+{
+    <label for="contrast" class="block text-sm font-medium text-gray-700">Contrast: @(ContrastFilterSettings.Contrast )%</label>
+    <input type="range" id="contrast" min="-100.0" max="100.0" step="1" @bind="ContrastFilterSettings.Contrast" @bind:event="oninput" @bind:after="ApplyFilters" class="mt-2 w-full slider">
+}
+
+
+
+@code {
+    [Parameter]
+    public ContrastFilter? ContrastFilterSettings { get; set; }
+
+    [Parameter]
+    public EventCallback OnApplyFilters { get; set; }
+
+    private void ApplyFilters()
+    {
+        OnApplyFilters.InvokeAsync();
+    }
+}
+

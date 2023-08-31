@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GarlicPress</title>
+    <base href="/" />
+    <link href="/wwwroot/css/app.css" rel="stylesheet" />
+    <link href="GarlicPress.styles.css" rel="stylesheet" />
+    <link href="/wwwroot/css/tw.output.css" rel="stylesheet" />
+</head>
+
+<body class="bg-gray-800">
+    <style>
+        label {
+            font-family: 'GarlicFont';
+        }
+    </style>
+
+    <div class="h-screen flex flex-col">
+
+        <div class="grid grid-cols-3 gap-2">
+
+            <div>
+                <label for="drive" class="block text-lg font-medium text-white">
+                    <b>Drive</b>
+                </label>
+                <select id="drive" @bind="SelectedDriveValue"
+                    @bind:after="(() => SelectedDrive = GarlicDrive.GetGarlicDrives().FirstOrDefault(x => x.name == SelectedDriveValue))"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+
+                    <option value="@drive.name">Drive 1</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="System" class="block text-lg font-medium text-white">
+                    <b>System</b>
+                </label>
+                <select id="System" @bind="SelectedSystemValue"
+                    @bind:after="(() => { SelectedSystem = GarlicSystem.GetAllSystems().FirstOrDefault(x => x.name == SelectedSystemValue); UpdateGames();})"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                    <option value="@system.name">Nintendo Game Boy</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="Game" class="block text-lg font-medium text-white">
+                    <b>Game</b>
+                </label>
+                <select id="Game" @bind="SelectedGame" @bind:after="(async () => { await UpdateGameArt(); })"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                    <option value="@game">Pokémon Blue Version</option>
+                </select>
+            </div>
+
+        </div>
+
+        <div class="grid grid-cols-3 overflow-auto gap-2 p-2 flex-grow">
+
+            <div class="col-span-2 flex justify-center items-center">
+                <img src="/bin/Debug/net7.0-windows/wwwroot/assets/skin/background.png"
+                    @onclick="(async () => await UpdateCanvas(gameMedia.imagePath, gameMedia.mediaType))" />
+            </div>
+
+            <diV class="flex-initial border rounded-lg p-2 border-black overflow-auto scrollbar">
+
+            </diV>
+
+            
+
+            <div class="col-span-3 overflow-auto grid grid-cols-4">
+
+                <div class="col-span-3 border rounded-lg p-2  scrollbar min-h-0 h-full border-black">
+
+                    <button class="px-5 py-2.5 text-center bg-blue-500 hover:bg-blue-300 rounded text-white"
+                        @onclick="GetAllGameMedia">
+                        <b>Get Game Art</b>
+                    </button>
+
+                    <div class="p-2 flex flex-wrap overflow-auto max-h-[90%]" >
+                        <img class="max-h-40 m-1" src="/bin/Debug/net7.0-windows/wwwroot/assets/temp/us69972box-3D.png"
+                            @onclick="(async () => await UpdateCanvas(gameMedia.imagePath, gameMedia.mediaType))" />
+                        <img class="max-h-40 m-1" src="/bin/Debug/net7.0-windows/wwwroot/assets/temp/us69972box-2D.png"
+                            @onclick="(async () => await UpdateCanvas(gameMedia.imagePath, gameMedia.mediaType))" />
+                        <img class="max-h-40 m-1"
+                            src="/bin/Debug/net7.0-windows/wwwroot/assets/temp/us69972wheel-steel.png"
+                            @onclick="(async () => await UpdateCanvas(gameMedia.imagePath, gameMedia.mediaType))" />
+                        <img class="max-h-40 m-1" src="/bin/Debug/net7.0-windows/wwwroot/assets/temp/us69972box-3D.png"
+                            @onclick="(async () => await UpdateCanvas(gameMedia.imagePath, gameMedia.mediaType))" />
+                            <img class="max-h-40 m-1" src="/bin/Debug/net7.0-windows/wwwroot/assets/temp/us69972box-2D.png"
+                            @onclick="(async () => await UpdateCanvas(gameMedia.imagePath, gameMedia.mediaType))" />
+                        <img class="max-h-40 m-1"
+                            src="/bin/Debug/net7.0-windows/wwwroot/assets/temp/us69972wheel-steel.png"
+                            @onclick="(async () => await UpdateCanvas(gameMedia.imagePath, gameMedia.mediaType))" />
+                        <img class="max-h-40 m-1" src="/bin/Debug/net7.0-windows/wwwroot/assets/temp/us69972box-3D.png"
+                            @onclick="(async () => await UpdateCanvas(gameMedia.imagePath, gameMedia.mediaType))" />
+                        <img class="max-h-40 m-1" src="/bin/Debug/net7.0-windows/wwwroot/assets/temp/us69972box-2D.png"
+                            @onclick="(async () => await UpdateCanvas(gameMedia.imagePath, gameMedia.mediaType))" />
+                        <img class="max-h-40 m-1"
+                            src="/bin/Debug/net7.0-windows/wwwroot/assets/temp/us69972wheel-steel.png"
+                            @onclick="(async () => await UpdateCanvas(gameMedia.imagePath, gameMedia.mediaType))" />
+                            <img class="max-h-40 m-1"
+                            src="/bin/Debug/net7.0-windows/wwwroot/assets/temp/us69972wheel-steel.png"
+                            @onclick="(async () => await UpdateCanvas(gameMedia.imagePath, gameMedia.mediaType))" />
+                        <img class="max-h-40 m-1" src="/bin/Debug/net7.0-windows/wwwroot/assets/temp/us69972box-3D.png"
+                            @onclick="(async () => await UpdateCanvas(gameMedia.imagePath, gameMedia.mediaType))" />
+                        <img class="max-h-40 m-1" src="/bin/Debug/net7.0-windows/wwwroot/assets/temp/us69972box-2D.png"
+                            @onclick="(async () => await UpdateCanvas(gameMedia.imagePath, gameMedia.mediaType))" />
+                        <img class="max-h-40 m-1"
+                            src="/bin/Debug/net7.0-windows/wwwroot/assets/temp/us69972wheel-steel.png"
+                            @onclick="(async () => await UpdateCanvas(gameMedia.imagePath, gameMedia.mediaType))" />
+                            <img class="max-h-40 m-1"
+                            src="/bin/Debug/net7.0-windows/wwwroot/assets/temp/us69972wheel-steel.png"
+                            @onclick="(async () => await UpdateCanvas(gameMedia.imagePath, gameMedia.mediaType))" />
+                        <img class="max-h-40 m-1" src="/bin/Debug/net7.0-windows/wwwroot/assets/temp/us69972box-3D.png"
+                            @onclick="(async () => await UpdateCanvas(gameMedia.imagePath, gameMedia.mediaType))" />
+                        <img class="max-h-40 m-1" src="/bin/Debug/net7.0-windows/wwwroot/assets/temp/us69972box-2D.png"
+                            @onclick="(async () => await UpdateCanvas(gameMedia.imagePath, gameMedia.mediaType))" />
+                        <img class="max-h-40 m-1"
+                            src="/bin/Debug/net7.0-windows/wwwroot/assets/temp/us69972wheel-steel.png"
+                            @onclick="(async () => await UpdateCanvas(gameMedia.imagePath, gameMedia.mediaType))" />
+                    </div>
+
+                </div>
+
+                <div class="col-span-1 grid">
+
+                    <button class="px-5 block p-2 text-center bg-blue-500 hover:bg-blue-300 rounded m-2 text-white">
+                        <b>Save</b>
+                    </button>
+
+                    <button class="px-5 p-2 text-center bg-gray-500 hover:bg-gray-300 rounded m-2 text-black">
+                        <b>Cancel</b>
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="fabric.js/fabric.min.js"></script>
+
+</body>
+
+</html>

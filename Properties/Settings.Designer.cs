@@ -145,7 +145,7 @@ namespace GarlicPress.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool cleanTempOnExit {
             get {
                 return ((bool)(this["cleanTempOnExit"]));

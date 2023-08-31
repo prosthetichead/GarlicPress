@@ -24,17 +24,17 @@ namespace GarlicPress
             query["devid"] = ssDevId;
             query["devpassword"] = ssDevPassword;
             query["softname"] = ssSoftname;
-            query["ssid"] = Properties.Settings.Default.ssUsername; 
-            query["sspassword"] = Properties.Settings.Default.ssPassword; 
+            query["ssid"] = Properties.Settings.Default.ssUsername;
+            query["sspassword"] = Properties.Settings.Default.ssPassword;
             query["output"] = "json";
             query["romtype"] = system.ss_romtype;
 
-            if(searchType == SearchType.GameName)
+            if (searchType == SearchType.GameName)
             {
                 query["romnom"] = searchText;
                 query["systemeid"] = system.ss_systemeid;
             }
-            else if(searchType == SearchType.GameID)
+            else if (searchType == SearchType.GameID)
             {
                 query["gameid"] = searchText;
             }
@@ -43,12 +43,12 @@ namespace GarlicPress
             string url = uriBuilder.ToString();
 
             HttpClient client = new HttpClient();
-            var response =  await client.GetAsync(url);
+            var response = await client.GetAsync(url);
 
-            var json = await response.Content.ReadAsStringAsync();            
+            var json = await response.Content.ReadAsStringAsync();
             if (!response.IsSuccessStatusCode)
             {
-                return new GameResponse() { status = "error", statusMessage = response.StatusCode + "  " + json };                              
+                return new GameResponse() { status = "error", statusMessage = response.StatusCode + "  " + json };
             }
 
             GameResponse? game = JsonSerializer.Deserialize<GameResponse>(json);
@@ -64,40 +64,29 @@ namespace GarlicPress
             }
         }
 
-        public static async Task<string> DownloadMedia(GameResponse game, string mediaType = "box-3D")
+        public static async Task<(string path,string region)> DownloadMedia(GameResponse game, string mediaType = "box-3D", string region = "")
         {
             if (game.status != "error")
             {
                 HttpClient httpClient = new HttpClient();
 
-                List<string> ssRegionOrder = Settings.Default.ssRegionOrder.Split(',').ToList();
+                List<string> ssRegionOrders = Settings.Default.ssRegionOrder.Split(',').ToList();
 
-                var medias = game.response.jeu.medias.Where(w => w.type == mediaType).OrderBy(o => ssRegionOrder.IndexOf(o.region));
-                
+                var medias = game.response.jeu.medias.Where(w => w.type == mediaType).OrderBy(o => ssRegionOrders.IndexOf(o.region));
+
                 if (medias.Count() > 0)
                 {
-                    var media = medias.First();
-
-                    //Find the first media that matches the region order
-                    foreach (var region in ssRegionOrder)
-                    {
-                        if (medias.FirstOrDefault(x => x.region == region) is Media regionMedia)
-                        {
-                            media = regionMedia;
-                            break;
-                        }
-                    }
+                    Media? media = GetMedia(region, ssRegionOrders, medias);
 
                     Directory.CreateDirectory(PathConstants.assetsTempPath);
 
-                    string mediaDownloadPath = PathConstants.assetsTempPath + game.response.jeu.id + mediaType + "." + media.format;
-                    
-                    
+                    string mediaDownloadPath = PathConstants.assetsTempPath + media.region + game.response.jeu.id + mediaType + "." + media.format;
+
+
                     if (File.Exists(mediaDownloadPath))
                     {
-                        return mediaDownloadPath;
+                        return (mediaDownloadPath, media.region);
                     }
-
 
                     using (var s = await httpClient.GetStreamAsync(new Uri(media.url)))
                     {
@@ -106,10 +95,42 @@ namespace GarlicPress
                             await s.CopyToAsync(fs);
                         }
                     }
-                    return mediaDownloadPath;
+                    return (mediaDownloadPath, media.region);
                 }
             }
-            return "";
+            return ("", "");
+        }
+
+        private static Media GetMedia(string region, List<string> ssRegionOrders, IOrderedEnumerable<Media> medias)
+        {
+            Media? media = null;
+
+            //If no region is specified, find the first media that matches the region order
+            if (String.IsNullOrEmpty(region))
+            {
+                //Find the first media that matches the region order
+                foreach (var regionOrder in ssRegionOrders)
+                {
+                    if (medias.FirstOrDefault(x => x.region == regionOrder) is Media regionMedia)
+                    {
+                        media = regionMedia;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                //Find the media that matches the region
+                media = medias.FirstOrDefault(x => x.region == region);
+            }
+
+            //If no media is found, just use the first one
+            if (media is null)
+            {
+                media = medias.First();
+            }
+
+            return media;
         }
     }
 }

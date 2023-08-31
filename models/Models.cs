@@ -1,4 +1,5 @@
 ﻿
+using GarlicPress.classes.bitmapClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -285,6 +286,8 @@ public class GarlicSkinSettings
         public int order { get; set; }
         public Guid id { get; set; }
         public int angle { get; set; }
+        public string region { get; set; }
+        public List<IFilter> Filters { get; set; }
 
         public MediaLayer()
         {
@@ -297,8 +300,9 @@ public class GarlicSkinSettings
             order = 0;
             id = Guid.NewGuid();
             angle = 0;
+            region = "us";
+            Filters = new List<IFilter>();
         }
-
     }
 
     public class GameResponse

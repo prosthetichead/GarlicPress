@@ -1,7 +1,9 @@
 ﻿using AdvancedSharpAdbClient;
+using GarlicPress.classes.bitmapClasses;
 using GarlicPress.constants;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -39,8 +41,12 @@ namespace GarlicPress
                 }
                 if (File.Exists(jsonPath))
                 {
+                    var options = new JsonSerializerOptions
+                    {
+                        Converters = { new BitmapFilterConverter() }
+                    };
                     string mediaLayoutJson = File.ReadAllText(jsonPath);
-                    mediaLayout = JsonSerializer.Deserialize<List<MediaLayer>>(mediaLayoutJson) ?? new() { new MediaLayer() { mediaType = "mixrbv2", resizePercent = 45, height = 0, width = 0, x = 1, y = 65, order = 1 } };
+                    mediaLayout = JsonSerializer.Deserialize<List<MediaLayer>>(mediaLayoutJson, options) ?? new() { new MediaLayer() { mediaType = "mixrbv2", resizePercent = 45, height = 0, width = 0, x = 1, y = 65, order = 1 } };
                 }
                 else
                 {
@@ -61,7 +67,12 @@ namespace GarlicPress
 
         public static void SaveMediaLayoutJson()
         {
-            string mediaLayoutJson = JsonSerializer.Serialize(mediaLayout.OrderBy(o => o.order));
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                Converters = { new BitmapFilterConverter() }
+            };
+            string mediaLayoutJson = JsonSerializer.Serialize(mediaLayout.OrderBy(o => o.order), options);
             File.WriteAllText(jsonPath, mediaLayoutJson);
         }
 
@@ -149,24 +160,25 @@ namespace GarlicPress
 
             foreach (var result in results)
             {
-                if (result.imagePath != null)
+                if (result.media.path != null)
                 {
-                    var baseImage = (Bitmap)Image.FromFile(result.imagePath);
+                    var baseImage = (Bitmap)Image.FromFile(result.media.path);
                     baseImage.SetResolution(graphics.DpiX, graphics.DpiY);
+
 
                     if (result.layer.resizePercent > 0)
                     {
                         float newWidth = (float)((result.layer.resizePercent / 100) * baseImage.Width);
                         float newHeight = (float)((result.layer.resizePercent / 100) * baseImage.Height);
-                        DrawRotatedImage(graphics, baseImage, result.layer.angle, result.layer.x, result.layer.y, newWidth, newHeight);
+                        BitmapUtilites.DrawRotatedImage(graphics, baseImage, result.layer.angle, result.layer.x, result.layer.y, newWidth, newHeight);
                     }
                     else if (result.layer.width > 0 && result.layer.height > 0)
                     {
-                        DrawRotatedImage(graphics, baseImage, result.layer.angle, result.layer.x, result.layer.y, result.layer.width, result.layer.height);
+                        BitmapUtilites.DrawRotatedImage(graphics, baseImage, result.layer.angle, result.layer.x, result.layer.y, result.layer.width, result.layer.height);
                     }
                     else
                     {
-                        DrawRotatedImage(graphics, baseImage, result.layer.angle, result.layer.x, result.layer.y);
+                        BitmapUtilites.DrawRotatedImage(graphics, baseImage, result.layer.angle, result.layer.x, result.layer.y);
                     }
                     baseImage.Dispose();
                 }
@@ -175,34 +187,22 @@ namespace GarlicPress
             return finalImage;
         }
 
-        private static void DrawRotatedImage(Graphics g, Bitmap img, float angle, float x, float y, float? width = null, float? height = null)
-        {
-            // Set the width and height if not provided
-            width ??= img.Width;
-            height ??= img.Height;
-
-            // Translate to the desired position
-            g.TranslateTransform(x, y);
-
-            // Rotate the graphics object
-            g.RotateTransform(angle);
-
-            // Draw the image at its translated and rotated location
-            g.DrawImage(img, 0, 0, width.Value, height.Value);
-
-            // Reset the graphics transformation
-            g.ResetTransform();
-        }
-
-        public static async IAsyncEnumerable<(string? imagePath, MediaLayer layer)> GetGameMedia(GameResponse game)
+        /// <summary>
+        /// Gets all media for a game and returns it as a tuple with the media path and the media type
+        /// </summary>
+        /// <param name="game"></param>
+        /// <returns>Returns when all media is downloaded</returns>
+        public static async IAsyncEnumerable<((string path, string region) media, MediaLayer layer)> GetGameMedia(GameResponse game)
         {
             if (game.status == "error")
             {
                 yield break;
             }
 
+            // Fetch all the media layers in parallel
             var tasks = mediaLayout.OrderBy(o => o.order).Select(layer => GetMediaFromMediaLayer(game, layer)).ToList();
 
+            //Wait for all to complete so layers gets drawn in correct order
             var results = await Task.WhenAll(tasks);
 
             foreach (var result in results)
@@ -211,7 +211,12 @@ namespace GarlicPress
             }
         }
 
-        public static async IAsyncEnumerable<(string? imagePath, string mediaType)> GetAllGameMedia(GameResponse game)
+        /// <summary>
+        /// Gets all media for a game and returns it as a tuple with the media path and the media type
+        /// </summary>
+        /// <param name="game"></param>
+        /// <returns>Returns each media as soon as it is downloaded</returns>
+        public static async IAsyncEnumerable<((string path, string region) media, string mediaType)> GetAllGameMedia(GameResponse game)
         {
             if (game.status == "error")
             {
@@ -228,17 +233,48 @@ namespace GarlicPress
             }
         }
 
-        private static async Task<(string? imagePath, MediaLayer layer)> GetMediaFromMediaLayer(GameResponse game, MediaLayer layer)
+        public static Bitmap ApplyAllFilters(Bitmap originalImage, MediaLayer layer)
         {
-            return (await LimitedDownloadMedia(game, layer.mediaType), layer);
+            Bitmap imageCopy = (Bitmap)originalImage.Clone();
+
+            foreach (var filter in layer.Filters)
+            {
+                imageCopy = filter.Apply(imageCopy);
+            }
+
+            return imageCopy;
         }
 
-        private static async Task<(string? bitmap, string type)> GetMediaFromType(GameResponse game, string type)
+        /// <summary>
+        /// Returns a tuple with the media path and the media type
+        /// Image has filters applied
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="layer"></param>
+        /// <returns></returns>
+        public static async Task<((string path, string region) media, MediaLayer layer)> GetMediaFromMediaLayer(GameResponse game, MediaLayer layer)
+        {
+            var media = await LimitedDownloadMedia(game, layer.mediaType);
+            var baseImage = (Bitmap)Image.FromFile(media.path);
+
+            var newBaseImage = ApplyAllFilters(baseImage, layer);
+            baseImage.Dispose();
+
+            var tempPath = Path.Combine("wwwroot", "assets", "temp", $"temp{Path.GetFileName(media.path)}").Replace(@"\", "/");
+            newBaseImage.Save(tempPath, ImageFormat.Png);
+            newBaseImage.Dispose();
+
+            media.path = tempPath;
+
+            return (media, layer);
+        }
+
+        private static async Task<((string path, string region) media, string type)> GetMediaFromType(GameResponse game, string type)
         {
             return (await LimitedDownloadMedia(game, type), type);
         }
 
-        private static async Task<string?> LimitedDownloadMedia(GameResponse game, string mediaType)
+        private static async Task<(string path, string region)> LimitedDownloadMedia(GameResponse game, string mediaType)
         {
             int maxthreads = 1;
             Int32.TryParse(game.response.ssuser.maxthreads, out maxthreads);
