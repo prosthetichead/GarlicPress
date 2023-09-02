@@ -14,6 +14,10 @@ namespace GarlicPress
 {
     public partial class SkinSettingsFormDialog : Form
     {
+        public SkinSettingsFormDialog()
+        {
+            InitializeComponent();
+        }
         private void btnOk_Click(object sender, EventArgs e)
         {
             var invalidChars = new string(Path.GetInvalidFileNameChars());
