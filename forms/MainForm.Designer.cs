@@ -38,6 +38,7 @@
             menuStrip = new MenuStrip();
             miFile = new ToolStripMenuItem();
             miSettings = new ToolStripMenuItem();
+            miShowDebugLog = new ToolStripMenuItem();
             exitToolStripMenuItem = new ToolStripMenuItem();
             toolsToolStripMenuItem = new ToolStripMenuItem();
             miConsole = new ToolStripMenuItem();
@@ -62,7 +63,6 @@
             txtFileName = new TextBox();
             label3 = new Label();
             btnRename = new Button();
-            miShowDebugLog = new ToolStripMenuItem();
             statusStrip.SuspendLayout();
             menuStrip.SuspendLayout();
             notifyIconMenu.SuspendLayout();
@@ -142,14 +142,21 @@
             // miSettings
             // 
             miSettings.Name = "miSettings";
-            miSettings.Size = new Size(180, 22);
+            miSettings.Size = new Size(164, 22);
             miSettings.Text = "Settings";
             miSettings.Click += miSettings_Click;
+            // 
+            // miShowDebugLog
+            // 
+            miShowDebugLog.Name = "miShowDebugLog";
+            miShowDebugLog.Size = new Size(164, 22);
+            miShowDebugLog.Text = "Show Debug Log";
+            miShowDebugLog.Click += miShowDebugLog_Click;
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(180, 22);
+            exitToolStripMenuItem.Size = new Size(164, 22);
             exitToolStripMenuItem.Text = "Exit";
             exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
             // 
@@ -352,13 +359,6 @@
             btnRename.UseVisualStyleBackColor = true;
             btnRename.Click += btnRename_Click;
             // 
-            // miShowDebugLog
-            // 
-            miShowDebugLog.Name = "miShowDebugLog";
-            miShowDebugLog.Size = new Size(180, 22);
-            miShowDebugLog.Text = "Show Debug Log";
-            miShowDebugLog.Click += miShowDebugLog_Click;
-            // 
             // MainForm
             // 
             AllowDrop = true;
@@ -388,6 +388,7 @@
             MaximumSize = new Size(10000, 10000);
             Name = "MainForm";
             SizeGripStyle = SizeGripStyle.Hide;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "GarlicPress";
             WindowState = FormWindowState.Minimized;
             FormClosing += MainForm_FormClosing;

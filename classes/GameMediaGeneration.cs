@@ -372,7 +372,7 @@ namespace GarlicPress
         private static async Task<GameMediaResponse?> LimitedDownloadMedia(GameResponse game, string mediaType)
         {
             int maxthreads = 1;
-            Int32.TryParse(game.response.ssuser.maxthreads, out maxthreads);
+            Int32.TryParse(game.response.ssuser?.maxthreads ?? "1", out maxthreads);
             if (_semaphore is null)
             {
                 _semaphore = new SemaphoreSlim(maxthreads);
