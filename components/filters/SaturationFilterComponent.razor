@@ -1,19 +1,18 @@
-﻿@if (SaturationFilterSettings is not null)
-{
-    <h2 class="text-xl mb-4 text-white">Saturuation Controls</h2>
-    <label for="saturation" class="block text-sm font-medium text-white">Saturation: @(SaturationFilterSettings.Saturation * 100)%</label>
-    <input type="range" id="saturation" min="-1.0" max="2.0" step="0.01" @bind="SaturationFilterSettings.Saturation" @bind:event="oninput" @bind:after="ApplyFilters" class="mt-2 w-full slider">
-}
+﻿<NumberSlider T="float"
+              Label="Saturation"
+              Value="@SaturationFilterSettings.Saturation"
+              ValueChanged="@(value => { SaturationFilterSettings.Saturation = value; OnApplyFilters.InvokeAsync(); })"
+              Max="2.0F"
+              Min="-1.0F"
+              Step="0.01F"
+              LabelValue="@((SaturationFilterSettings.Saturation * 100).ToString("F0") + "%")">
+</NumberSlider>
 
 @code {
     [Parameter]
-    public SaturationFilter? SaturationFilterSettings { get; set; }
+    [EditorRequired]
+    public required SaturationFilter SaturationFilterSettings { get; set; }
 
     [Parameter]
     public EventCallback OnApplyFilters { get; set; }
-
-    private void ApplyFilters()
-    {
-        OnApplyFilters.InvokeAsync();
-    }
 }

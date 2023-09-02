@@ -22,4 +22,23 @@
         .scrollbar::-webkit-scrollbar-thumb:hover {
             background: #c0a0b9;
         }
+
+
+    .slider::-webkit-slider-thumb {
+        @apply w-5 h-5 bg-blue-500 rounded-full appearance-none cursor-pointer;
+        margin-top: -8px;
+    }
+
+    .slider::-moz-range-thumb {
+        @apply w-5 h-5 bg-blue-500 rounded-full cursor-pointer;
+    }
+
+    /* Slider track */
+    .slider::-webkit-slider-runnable-track {
+        @apply h-2 bg-gray-300 rounded;
+    }
+
+    .slider::-moz-range-track {
+        @apply h-2 bg-gray-300 rounded;
+    }
 }

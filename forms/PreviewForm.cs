@@ -23,8 +23,9 @@ public partial class PreviewForm : Form
     GarlicDrive SelectedDrive { get { return (GarlicDrive)comboDrive.SelectedItem; } }
     GarlicSystem SelectedSystem { get { return (GarlicSystem)comboSystems.SelectedItem; } }
 
+    public MediaLayerCollection? SelectedMediaLayerCollection { get; }
 
-    public PreviewForm()
+    public PreviewForm(MediaLayerCollection? selectedMediaLayerCollection)
     {
         InitializeComponent();
 
@@ -37,6 +38,7 @@ public partial class PreviewForm : Form
         comboSystems.DisplayMember = "name";
         comboSystems.ValueMember = "folder";
         comboSystems.BindingContext = this.BindingContext;
+        SelectedMediaLayerCollection = selectedMediaLayerCollection;
     }
 
     private void comboSystems_SelectedIndexChanged(object sender, EventArgs e)
@@ -70,7 +72,7 @@ public partial class PreviewForm : Form
             {
                 if (lastGameResponse != null)
                 {
-                    var bitmap = await GameMediaGeneration.GenerateGameMedia(lastGameResponse);
+                    var bitmap = await GameMediaGeneration.GenerateGameMedia(lastGameResponse, SelectedMediaLayerCollection);
                     if (bitmap != null)
                     {
                         picGamePreview.Image = GameMediaGeneration.OverlayImageWithSkinBackground(bitmap);
@@ -85,7 +87,7 @@ public partial class PreviewForm : Form
             if (game != null && game.status != "error")
             {
                 lastGameResponse = game;
-                var bitmap = await GameMediaGeneration.GenerateGameMedia(game);
+                var bitmap = await GameMediaGeneration.GenerateGameMedia(game, SelectedMediaLayerCollection);
                 if (bitmap != null)
                 {
                     picGamePreview.Image = GameMediaGeneration.OverlayImageWithSkinBackground(bitmap);

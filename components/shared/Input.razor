@@ -10,21 +10,8 @@
     [EditorRequired]
     public required string Label { get; set; }
 
-    TItem? item;
-
     [Parameter]
-    public TItem? Value
-    {
-        get => item;
-        set
-        {
-            if (!item?.Equals(value) ?? true)
-            {
-                item = value;
-                ValueChanged?.InvokeAsync(value);
-            }
-        }
-    }
+    public TItem? Value { get; set; }
 
     [Parameter]
     public EventCallback<TItem>? ValueChanged { get; set; }
@@ -32,4 +19,14 @@
     [Parameter(CaptureUnmatchedValues = true)]
     public Dictionary<string, object>? AllOtherAttributes { get; set; }
 
+    TItem? item;
+
+    protected override void OnParametersSet()
+    {
+        if (!item?.Equals(Value) ?? true)
+        {
+            item = Value;
+            ValueChanged?.InvokeAsync(Value);
+        }
+    }
 }

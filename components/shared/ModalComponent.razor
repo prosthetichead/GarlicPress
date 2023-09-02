@@ -1,0 +1,44 @@
+﻿@inject IJSRuntime JS
+
+<div>
+    <dialog @ref="DialogElement">
+        <div class="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50" style="z-index: 1000;">
+            <div class="relative bg-white rounded-md shadow-xl max-w-xl w-full">
+                <button @onclick="Close" class="absolute right-4 top-4 text-gray-500 hover:text-gray-800 text-2xl focus:outline-none">&times;</button>
+                @ChildContent
+            </div>
+        </div>
+    </dialog>
+</div>
+
+
+@code {
+    [Parameter] 
+    [EditorRequired] 
+    public required RenderFragment ChildContent { get; set; }
+
+    [Parameter] 
+    public EventCallback OnClose { get; set; }
+
+    private ElementReference DialogElement;
+    IJSObjectReference? module;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            module = await JS.InvokeAsync<IJSObjectReference>("import", "./components/shared/ModalComponent.razor.js");
+        }
+    }
+
+    public void Open()
+    {
+        module?.InvokeVoidAsync("openModal", DialogElement);
+    }
+
+    public void Close()
+    {
+        module?.InvokeVoidAsync("closeModal", DialogElement);
+        OnClose.InvokeAsync(null);
+    }
+}

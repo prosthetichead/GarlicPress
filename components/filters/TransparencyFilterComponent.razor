@@ -1,19 +1,18 @@
-﻿@if (TransparencyFilterSettings is not null)
-{
-    <h2 class="text-xl mb-4 text-white">Saturuation Controls</h2>
-    <label for="Transparency" class="block text-sm font-medium text-white">Transparency: @(TransparencyFilterSettings.Transparency * 100)%</label>
-    <input type="range" id="Transparency" min="0.0" max="1.0" step="0.01" @bind="TransparencyFilterSettings.Transparency" @bind:event="oninput" @bind:after="ApplyFilters" class="mt-2 w-full slider">
-}
+﻿<NumberSlider T="float"
+              Label="Transparency: "
+              Value="@TransparencyFilterSettings.Transparency"
+              ValueChanged="@(value => { TransparencyFilterSettings.Transparency = value; OnApplyFilters.InvokeAsync(); })"
+              Max="1.0F"
+              Min="0.0F"
+              Step="0.01F"
+              LabelValue="@((@TransparencyFilterSettings.Transparency * 100).ToString("F0") + "%")">
+</NumberSlider>
 
 @code {
     [Parameter]
-    public TransparencyFilter? TransparencyFilterSettings { get; set; }
+    [EditorRequired]
+    public required TransparencyFilter TransparencyFilterSettings { get; set; }
 
     [Parameter]
     public EventCallback OnApplyFilters { get; set; }
-
-    private void ApplyFilters()
-    {
-        OnApplyFilters.InvokeAsync();
-    }
 }

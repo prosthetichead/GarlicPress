@@ -1,36 +1,49 @@
-﻿@if (GradientFilterSettings is not null)
-{
-    <h2 class="text-lg mb-4 text-white">Gradient Controls</h2>
-    <div>
-        <label for="angle" class="block text-white text-sm font-medium text-gray-700">Angle: @GradientFilterSettings.Angle°</label>
-        <input type="range" id="angle" min="-90" max="90" @bind:event="oninput" @bind="GradientFilterSettings.Angle" @bind:after="ApplyFilters" class="mt-2 w-full slider">
-    </div>
+﻿<h2 class="text-lg mb-4 text-white">Gradient Controls</h2>
+<NumberSlider T="float"
+              Label="Angle: "
+              Value="@GradientFilterSettings.Start"
+              ValueChanged="@(value => { GradientFilterSettings.Angle = value; ApplyFilters(); })"
+              Max="10"
+              Min="0"
+              Step="1"
+              LabelValue="@((@GradientFilterSettings.Angle).ToString("F0") + "°")">
+</NumberSlider>
 
-    <div class="mt-4">
-        <label for="start" class="block text-white text-sm font-medium text-gray-700">Start: @(GradientFilterSettings.Start * 100)%</label>
-        <input type="range" id="start" min="0.0" max="1.0" step="0.01" @bind:event="oninput" @bind="GradientFilterSettings.Start" @bind:after="ApplyFilters" class="mt-2 w-full slider">
-    </div>
+<NumberSlider T="float"
+              Label="Start: "
+              Value="@GradientFilterSettings.Start"
+              ValueChanged="@(value => { GradientFilterSettings.Start = value; ApplyFilters(); })"
+              Max="1.0F"
+              Min="0.0F"
+              Step="0.01F"
+              LabelValue="@((@GradientFilterSettings.Start * 100).ToString("F0") + "%")">
+</NumberSlider>
 
-    <div class="mt-4">
-        <label for="end" class="block text-white text-sm font-medium text-gray-700">Width: @(GradientFilterSettings.Width * 100)%</label>
-        <input type="range" id="end" min="0.0" max="1.0" step="0.01" @bind:event="oninput" @bind="GradientFilterSettings.Width" @bind:after="ApplyFilters" class="mt-2 w-full slider">
-    </div>
+<NumberSlider T="float"
+              Label="Width: "
+              Value="@GradientFilterSettings.Width"
+              ValueChanged="@(value => { GradientFilterSettings.Width = value; ApplyFilters(); })"
+              Max="1.0F"
+              Min="0.0F"
+              Step="0.01F"
+              LabelValue="@((@GradientFilterSettings.Width * 100).ToString("F0") + "%")">
+</NumberSlider>
 
-    <div class="border rounded p-1">
-        <p class="text-white">Color 1</p>
-        <ColorInput @bind-Value="GradientFilterSettings.Color1" @bind-Value:after="ApplyFilters" />
-    </div>
+<div class="border rounded p-1">
+    <p class="text-white">Color 1</p>
+    <ColorInput @bind-Value="GradientFilterSettings.Color1" @bind-Value:after="ApplyFilters" />
+</div>
 
-    <div class="border rounded p-1">
-        <p class="text-white">Color 2</p>
-        <ColorInput @bind-Value="GradientFilterSettings.Color2" @bind-Value:after="ApplyFilters" />
-    </div>
-}
+<div class="border rounded p-1">
+    <p class="text-white">Color 2</p>
+    <ColorInput @bind-Value="GradientFilterSettings.Color2" @bind-Value:after="ApplyFilters" />
+</div>
 
 @code {
 
     [Parameter]
-    public GradientFilter? GradientFilterSettings { get; set; }
+    [EditorRequired]
+    public required GradientFilter GradientFilterSettings { get; set; }
 
     [Parameter]
     public EventCallback OnApplyFilters { get; set; }
@@ -39,5 +52,4 @@
     {
         OnApplyFilters.InvokeAsync();
     }
-
 }

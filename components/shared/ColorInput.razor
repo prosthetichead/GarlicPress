@@ -10,10 +10,15 @@
             <input type="color" id="colorPicker" @bind:event="oninput" @bind="RgbValue" @bind:after="UpdateCompositeValue" class="mt-1 p-1 w-full border rounded shadow-sm focus:ring focus:ring-opacity-50" />
         </div>
 
-        <div>
-            <label for="opacityRange" class="block text-white text-sm font-medium ">Opacity: @(Opacity * 100)%</label>
-            <input type="range" id="opacityRange" min="0.0" max="1.0" step="0.01" @bind:event="oninput" @bind="Opacity" @bind:after="UpdateCompositeValue" class="mt-2 w-full slider appearance-none h-1.5 rounded bg-gradient-to-r from-gray-100 to-gray-400 focus:outline-none focus:ring" />
-        </div>
+        <NumberSlider T="double"
+                      Label="Opacity: "
+                      Value="@Opacity"
+                      ValueChanged="@(value => { Opacity = value; UpdateCompositeValue(); })"
+                      Max="1.0"
+                      Min="0.0"
+                      Step="0.01"
+                      LabelValue="@((@Opacity * 100).ToString("F0") + "%")">
+        </NumberSlider>
 
         <button @onclick="SetNoColor" class="px-4 py-2 text-black bg-gray-200 border rounded hover:bg-gray-300">No Color</button>
         <p class="text-white">Result: @Value</p>

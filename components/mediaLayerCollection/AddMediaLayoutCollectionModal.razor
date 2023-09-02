@@ -1,0 +1,34 @@
+﻿<div class="p-6">
+    <h3 class="text-lg font-semibold mb-4">Add Media Layer Collection</h3>
+    <p>Select an existing collection to copy media layers from or leave empty:</p>
+    <select id="template" @bind="selectedTemplate" class="w-full p-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+        <option value="">-- None --</option>
+        @foreach (var collections in GameMediaGeneration.GetMediaLayerCollections())
+        {
+            <option value="@collections.id">@collections.name</option>
+        }
+    </select>
+    <div class="mt-4">
+        <div class="flex border rounded-md overflow-hidden m-1">
+            <label for="mediaType" class="text-gray-700 p-1 bg-gray-200">Name</label>
+            <input type="text" id="mediaType" @bind="newName" class="flex-grow p-1 " />
+        </div>
+    </div>
+    <div class="mt-4 flex justify-end">
+        <button class="px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-600" @onclick="AddNewLayer">Add</button>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public EventCallback<(string name, Guid? templateid)> OnNewLayerAdded { get; set; }
+
+    private Guid? selectedTemplate = null;
+    private string newName = "";
+
+    private void AddNewLayer()
+    {
+        OnNewLayerAdded.InvokeAsync((newName, selectedTemplate));
+    }
+}

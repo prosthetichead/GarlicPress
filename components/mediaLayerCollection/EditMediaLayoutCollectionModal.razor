@@ -1,0 +1,25 @@
+﻿
+<div class="bg-white p-6 rounded-lg shadow-md space-y-4">
+    <div class="flex flex-col">
+        <label for="name" class="text-gray-700 mb-2 font-medium">Edit Name:</label>
+        <input id="name" type="text" @bind="newName" class="p-2 border border-gray-300 rounded focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+    </div>
+    <button @onclick="() => OnNameChanged.InvokeAsync(newName)" class="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded transition duration-200">Update</button>
+</div>
+
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public required string CurrentName { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnNameChanged { get; set; }
+
+    string newName = "";
+
+    protected override void OnParametersSet()
+    {
+        newName = CurrentName;
+    }
+}

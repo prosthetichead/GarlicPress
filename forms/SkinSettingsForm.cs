@@ -15,23 +15,21 @@ namespace GarlicPress
 {
     public partial class SkinSettingsForm : Form
     {
-        GarlicSkinSettings skinSettings;
+        GarlicSkinSettings? skinSettings;
 
-
-        BindingList<GarlicLanguageSettingsFile> languageSettingsList;
-        BindingList<string> fonts;
+        BindingList<GarlicLanguageSettingsFile>? languageSettingsList;
+        BindingList<string>? fonts;
 
         public SkinSettingsForm()
         {
             InitializeComponent();
-
 
             cbLangFont.DataSource = fonts;
 
             //Get skin settings
             skinSettings = GarlicSkin.skinSettings;
             languageSettingsList = new BindingList<GarlicLanguageSettingsFile>();
-            foreach (var lang in GarlicSkin.languageFiles)
+            foreach (var lang in GarlicSkin.languageFiles ?? new())
             {
                 languageSettingsList.Add(lang);
             }
@@ -40,7 +38,7 @@ namespace GarlicPress
 
             //get fonts
             fonts = new BindingList<string>();
-            foreach (var font in GarlicSkin.fonts)
+            foreach (var font in GarlicSkin.fonts ?? new())
             {
                 fonts.Add(font);
             }
@@ -48,39 +46,46 @@ namespace GarlicPress
 
             DownloadBootScreenPreview();
 
-            comboTextAlignment.SelectedItem = skinSettings.textalignment;
-            txtColorActive.Text = skinSettings.coloractive;
-            txtColorGuide.Text = skinSettings.colorguide;
-            txtColorInactive.Text = skinSettings.colorinactive;
-            txtColourFavActive.Text = skinSettings.colorfavoriteactive;
-            txtMargin.Text = skinSettings.textmargin.ToString();
+            if (skinSettings != null)
+            {
+                comboTextAlignment.SelectedItem = skinSettings.textalignment;
+                txtColorActive.Text = skinSettings.coloractive;
+                txtColorGuide.Text = skinSettings.colorguide;
+                txtColorInactive.Text = skinSettings.colorinactive;
+                txtColourFavActive.Text = skinSettings.colorfavoriteactive;
+                txtMargin.Text = skinSettings.textmargin.ToString();
 
-            boolMainMenuTextVisibility.Checked = skinSettings.mainmenutextvisibility;
-            boolGuideButtonTextVisibility.Checked = skinSettings.guidebuttontextvisibility;
+                boolMainMenuTextVisibility.Checked = skinSettings.mainmenutextvisibility;
+                boolGuideButtonTextVisibility.Checked = skinSettings.guidebuttontextvisibility;
 
-            txtRecentLabel.Text = skinSettings.recentlabel;
-            txtFavoritesLabel.Text = skinSettings.favoriteslabel;
-            txtConsolesLabel.Text = skinSettings.consoleslabel;
-            txtRetroarchLabel.Text = skinSettings.retroarchlabel;
-            txtRtcLabel.Text = skinSettings.rtclabel;
-            txtNavigateLabel.Text = skinSettings.navigatelabel;
-            txtOpenLabel.Text = skinSettings.openlabel;
-            txtBackLabel.Text = skinSettings.backlabel;
-            txtFavoriteLabel.Text = skinSettings.favoritelabel;
-            txtRemoveLabel.Text = skinSettings.removelabel;
-            txtEmptyLabel.Text = skinSettings.emptylabel;
-            txtSaveStatesUnsupported.Text = skinSettings.savestatesunsupported;
-            txtOnLabel.Text = skinSettings.onlabel;
-            txtOffLabel.Text = skinSettings.offlabel;
-            txtAmLabel.Text = skinSettings.amlabel;
-            txtPmLabel.Text = skinSettings.pmlabel;
-            txtYearLabel.Text = skinSettings.yearlabel;
-            txtMonthLabel.Text = skinSettings.monthlabel;
-            txtDayLabel.Text = skinSettings.daylabel;
-            txtHourLabel.Text = skinSettings.hourlabel;
-            txtMinuteLabel.Text = skinSettings.minutelabel;
-            txtMeridianTimeLabel.Text = skinSettings.meridiantimelabel;
-            txtTitleLabel.Text = skinSettings.titlelabel;
+                txtRecentLabel.Text = skinSettings.recentlabel;
+                txtFavoritesLabel.Text = skinSettings.favoriteslabel;
+                txtConsolesLabel.Text = skinSettings.consoleslabel;
+                txtRetroarchLabel.Text = skinSettings.retroarchlabel;
+                txtRtcLabel.Text = skinSettings.rtclabel;
+                txtNavigateLabel.Text = skinSettings.navigatelabel;
+                txtOpenLabel.Text = skinSettings.openlabel;
+                txtBackLabel.Text = skinSettings.backlabel;
+                txtFavoriteLabel.Text = skinSettings.favoritelabel;
+                txtRemoveLabel.Text = skinSettings.removelabel;
+                txtEmptyLabel.Text = skinSettings.emptylabel;
+                txtSaveStatesUnsupported.Text = skinSettings.savestatesunsupported;
+                txtOnLabel.Text = skinSettings.onlabel;
+                txtOffLabel.Text = skinSettings.offlabel;
+                txtAmLabel.Text = skinSettings.amlabel;
+                txtPmLabel.Text = skinSettings.pmlabel;
+                txtYearLabel.Text = skinSettings.yearlabel;
+                txtMonthLabel.Text = skinSettings.monthlabel;
+                txtDayLabel.Text = skinSettings.daylabel;
+                txtHourLabel.Text = skinSettings.hourlabel;
+                txtMinuteLabel.Text = skinSettings.minutelabel;
+                txtMeridianTimeLabel.Text = skinSettings.meridiantimelabel;
+                txtTitleLabel.Text = skinSettings.titlelabel;
+            }
+            else
+            {
+                MessageBox.Show("Skin settings not found. Please check your skin folder and try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
             cbLangSettings.SelectedIndex = 0;
         }
@@ -100,6 +105,12 @@ namespace GarlicPress
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            if (skinSettings is null)
+            {
+                MessageBox.Show("Skin settings not found. Please check your skin folder and try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             skinSettings.textalignment = (string)comboTextAlignment.SelectedItem;
             skinSettings.coloractive = txtColorActive.Text;
             skinSettings.colorguide = txtColorGuide.Text;
@@ -221,7 +232,7 @@ namespace GarlicPress
 
         private void btnDeleteLangFile_Click(object sender, EventArgs e)
         {
-            if (languageSettingsList.Count > 1)
+            if (languageSettingsList?.Count > 1)
             {
                 var selectedIndex = cbLangSettings.SelectedIndex;
                 var lang = (KeyValuePair<string, GarlicLanguageSettings>)cbLangSettings.SelectedItem;

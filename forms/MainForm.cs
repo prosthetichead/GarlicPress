@@ -28,7 +28,7 @@ namespace GarlicPress
         GarlicDrive SelectedDrive { get { return (GarlicDrive)comboDrive.SelectedItem; } }
         GarlicSystem SelectedSystem { get { return (GarlicSystem)comboSystems.SelectedItem; } }
 
-        FileStatistics currentSelectedItem;
+        FileStatistics? currentSelectedItem;
 
         DebugLogForm debugLogForm;
 
@@ -161,9 +161,7 @@ namespace GarlicPress
 
         private void fileListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var item = (FileStatistics)fileListBox.SelectedItem;
-
-            if (item != null && item != currentSelectedItem)
+            if (fileListBox.SelectedItem is FileStatistics item && item != currentSelectedItem)
             {
                 currentSelectedItem = item;
                 txtFileName.Text = item.Path;
@@ -262,17 +260,15 @@ namespace GarlicPress
 
         private void MainForm_DragDropEnter(object sender, DragEventArgs e)
         {
-
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            if (e.Data?.GetDataPresent(DataFormats.FileDrop) ?? false)
                 e.Effect = DragDropEffects.Copy;
-
         }
 
         private void MainForm_DragDrop(object sender, DragEventArgs e)
         {
             var system = (GarlicSystem)comboSystems.SelectedItem;
-            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            foreach (string file in files)
+            var files = e.Data?.GetData(DataFormats.FileDrop) as string[];
+            foreach (string file in files ?? Enumerable.Empty<string>())
             {
                 FileAttributes attr = File.GetAttributes(file);
                 if (attr != FileAttributes.Directory)
@@ -325,7 +321,7 @@ namespace GarlicPress
         {
             if (fileListBox.SelectedItems.Count > 0)
             {
-                int firstIndex = fileListBox.Items.IndexOf(fileListBox.SelectedItems[0]);
+                int firstIndex = fileListBox.Items.IndexOf(fileListBox.SelectedItems[0]!);
 
                 bool deleteFiles = true;
                 if (Properties.Settings.Default.warningBeforeDelete)
@@ -423,7 +419,7 @@ namespace GarlicPress
         private void btnRename_Click(object sender, EventArgs e)
         {
             string newFileName = txtFileName.Text;
-            var item = (FileStatistics)fileListBox.SelectedItem;
+            var item = fileListBox.SelectedItem as FileStatistics;
             var index = fileListBox.SelectedIndex;
 
             var invalidChars = new string(Path.GetInvalidFileNameChars());

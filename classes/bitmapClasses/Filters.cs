@@ -1,11 +1,9 @@
-﻿using System.Drawing;
-
-
-namespace GarlicPress.classes.bitmapClasses;
+﻿namespace GarlicPress.classes.bitmapClasses;
 
 public interface IFilter
 {
     Bitmap Apply(Bitmap bmp);
+    IFilter Clone();
 }
 
 public class Filters
@@ -40,6 +38,11 @@ public class Filters
         {
             return BitmapUtilites.AdjustSaturation(bmp, Saturation);
         }
+
+        public IFilter Clone()
+        {
+            return new SaturationFilter(Saturation);
+        }
     }
 
     public class ContrastFilter : IFilter
@@ -60,6 +63,11 @@ public class Filters
         {
             return BitmapUtilites.AdjustContrast(bmp, Contrast);
         }
+
+        public IFilter Clone()
+        {
+            return new ContrastFilter(Contrast);
+        }
     }
 
     public class BrightnessFilter : IFilter
@@ -79,6 +87,11 @@ public class Filters
         public Bitmap Apply(Bitmap bmp)
         {
             return BitmapUtilites.AdjustBrightness(bmp, Brightness);
+        }
+
+        public IFilter Clone()
+        {
+            return new BrightnessFilter(Brightness);
         }
     }
 
@@ -101,6 +114,11 @@ public class Filters
         {
             return BitmapUtilites.ApplyBlur(bmp, BlurAmount);
         }
+
+        public IFilter Clone()
+        {
+            return new BlurFilter(BlurAmount);
+        }
     }
 
     public class GaussianBlurFilter : IFilter
@@ -120,6 +138,11 @@ public class Filters
         public Bitmap Apply(Bitmap bmp)
         {
             return BitmapUtilites.ApplyGaussianBlur(bmp, BlurAmount);
+        }
+
+        public IFilter Clone()
+        {
+            return new GaussianBlurFilter(BlurAmount);
         }
     }
 
@@ -153,6 +176,11 @@ public class Filters
         {
             return BitmapUtilites.ApplyColorGradient(bmp, Color1, Color2,Width, Start, Angle);
         }
+
+        public IFilter Clone()
+        {
+            return new GradientFilter(Color1, Color2, Width, Start, Angle);
+        }
     }
 
     public class TransparencyFilter : IFilter
@@ -173,6 +201,11 @@ public class Filters
         {
             return BitmapUtilites.ApplyTransparency(bmp, Transparency);
         }
+
+        public IFilter Clone()
+        {
+            return new TransparencyFilter(Transparency);
+        }
     }
 
     public class GrayscaleFilter : IFilter
@@ -180,6 +213,11 @@ public class Filters
         public Bitmap Apply(Bitmap bmp)
         {
             return BitmapUtilites.ApplyGrayscale(bmp);
+        }
+
+        public IFilter Clone()
+        {
+            return new GrayscaleFilter();
         }
     }
 }

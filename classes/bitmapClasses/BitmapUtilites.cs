@@ -422,7 +422,7 @@ internal static class BitmapUtilites
         return Color.FromArgb(a, r, g, b);
     }
 
-    private static Color? HexToColor(string hex)
+    private static Color? HexToColor(string? hex)
     {
         if (string.IsNullOrEmpty(hex))
             return null;

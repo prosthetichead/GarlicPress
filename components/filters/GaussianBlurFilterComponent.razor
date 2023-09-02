@@ -1,19 +1,18 @@
-﻿@if (GaussianBlurFilterSettings is not null)
-{
-    <h2 class="text-xl mb-4 text-white">Saturuation Controls</h2>
-    <label for="GaussianBlur" class="block text-sm font-medium text-white">GaussianBlur Amount: @(GaussianBlurFilterSettings.BlurAmount)</label>
-    <input type="range" id="GaussianBlur" min="0" max="10" step="1" @bind="GaussianBlurFilterSettings.BlurAmount" @bind:event="oninput" @bind:after="ApplyFilters" class="mt-2 w-full slider">
-}
+﻿<NumberSlider T="int"
+              Label="GaussianBlur Amount: "
+              Value="@GaussianBlurFilterSettings.BlurAmount"
+              ValueChanged="@(value => { GaussianBlurFilterSettings.BlurAmount = value; OnApplyFilters.InvokeAsync();; })"
+              Max="10"
+              Min="0"
+              Step="1"
+              LabelValue="@GaussianBlurFilterSettings.BlurAmount.ToString()">
+</NumberSlider>
 
 @code {
     [Parameter]
-    public GaussianBlurFilter? GaussianBlurFilterSettings { get; set; }
+    [EditorRequired]
+    public required GaussianBlurFilter GaussianBlurFilterSettings { get; set; }
 
     [Parameter]
     public EventCallback OnApplyFilters { get; set; }
-
-    private void ApplyFilters()
-    {
-        OnApplyFilters.InvokeAsync();
-    }
 }

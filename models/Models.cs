@@ -62,65 +62,65 @@ namespace GarlicPress
         public static List<GarlicSystem> GetAllSystems()
         {
             List<GarlicSystem> systems = new List<GarlicSystem>()
-            { //https://github.com/OnionUI/Onion/wiki/Emulators#rom-folders---quick-reference
-                new GarlicSystem("Amiga",  "AMIGA", "64", "rom", new List<string>(){}),
-                new GarlicSystem("Amstrad CPC",  "CPC", "65", "rom", new List<string>(){}),
+        { //https://github.com/OnionUI/Onion/wiki/Emulators#rom-folders---quick-reference
+            new GarlicSystem("Amiga",  "AMIGA", "64", "rom", new List<string>(){}),
+            new GarlicSystem("Amstrad CPC",  "CPC", "65", "rom", new List<string>(){}),
 
-                new GarlicSystem("Arcade (Mame 2003+)",  "ARCADE", "75", "rom", new List<string>(){}),
-                new GarlicSystem("Arcade (FinalBurn 2012)",  "FBA2012", "75", "rom", new List<string>(){}),
-                new GarlicSystem("Arcade (FinalBurn Neo)",  "FBNEO", "75", "rom", new List<string>(){}),
-                new GarlicSystem("Arcade (Mame 2000)",  "MAME2000", "75", "rom", new List<string>(){}),
+            new GarlicSystem("Arcade (Mame 2003+)",  "ARCADE", "75", "rom", new List<string>(){}),
+            new GarlicSystem("Arcade (FinalBurn 2012)",  "FBA2012", "75", "rom", new List<string>(){}),
+            new GarlicSystem("Arcade (FinalBurn Neo)",  "FBNEO", "75", "rom", new List<string>(){}),
+            new GarlicSystem("Arcade (Mame 2000)",  "MAME2000", "75", "rom", new List<string>(){}),
 
-                new GarlicSystem("Atari 2600", "ATARI", "26", "rom", new List<string>(){}),
-                new GarlicSystem("Atari 5200", "FIFTYTWOHUNDRED", "40", "rom", new List<string>(){}),
-                new GarlicSystem("Atari 7800", "SEVENTYEIGHTHUNDRED", "41", "rom", new List<string>(){}),
-                new GarlicSystem("Atari Lynx", "LYNX", "28", "rom", new List<string>(){}),
-                new GarlicSystem("Bandai Sufami Turbo", "SUFAMI", "108", "rom", new List<string>(){}),
-                new GarlicSystem("Bandai WonderSwan & Color", "WS", "45", "rom", new List<string>(){}),
-                new GarlicSystem("Capcom Play System 1", "CPS1", "75", "rom", new List<string>(){}),
-                new GarlicSystem("Capcom Play System 2", "CPS2", "75", "rom", new List<string>(){}),
-                new GarlicSystem("Capcom Play System 3", "CPS3", "75", "rom", new List<string>(){}),
-                new GarlicSystem("ColecoVision", "COLECO", "48", "rom", new List<string>(){}),
-                new GarlicSystem("Fairchild Channel F", "FAIRCHILD", "80", "rom", new List<string>(){}),
-                new GarlicSystem("Famicom Disk System", "FDS", "106", "rom", new List<string>(){}),
-                new GarlicSystem("Game & Watch", "GW", "52", "rom", new List<string>(){}),
-                new GarlicSystem("GCE Vectrex", "VECTREX", "102", "rom", new List<string>(){}),
-                new GarlicSystem("Magnavox Odyssey 2", "ODYSSEY", "104", "rom", new List<string>(){}),
-                new GarlicSystem("Mattel Intellivision", "INTELLIVISION", "115", "rom", new List<string>(){}),
-                new GarlicSystem("Mega Duck", "MEGADUCK", "90", "rom", new List<string>(){}),
-                new GarlicSystem("MS-DOS", "DOS", "135", "dossier", new List<string>(){}),
-                new GarlicSystem("MSX - MSX2", "MSX", "113", "rom", new List<string>(){}),
-                new GarlicSystem("PC Engine SuperGrafx", "SGFX", "105", "rom", new List<string>(){}),
-                new GarlicSystem("PC Engine CD-Rom", "PCECD", "114", "rom", new List<string>(){}),
-                new GarlicSystem("PC Engine", "PCE", "31", "rom", new List<string>(){}),
-                new GarlicSystem("Nintendo Entertainment System", "FC", "3", "rom", new List<string>(){}),
-                new GarlicSystem("Nintendo Pokemini", "POKE", "211", "rom", new List<string>(){}),
-                new GarlicSystem("Nintendo Satellaview", "SATELLAVIEW", "107", "rom", new List<string>(){}),
-                new GarlicSystem("Nintendo Super Game Boy", "SGB", "127", "rom", new List<string>(){}),
-                new GarlicSystem("Nintendo Super Nintendo", "SFC", "4", "rom", new List<string>(){}),
-                new GarlicSystem("Nintendo Virtual Boy", "VB", "11", "rom", new List<string>(){}),
-                new GarlicSystem("Nintendo Game Boy", "GB", "9", "rom", new List<string>(){".gb", ".gbc", ".dmg", ".zip", ".7z"}),
-                new GarlicSystem("Nintendo Game Boy Color", "GBC", "10", "rom", new List<string>(){".gb", ".gbc", ".dmg", ".zip", ".7z"}),
-                new GarlicSystem("Nintendo Game Boy Advance", "GBA", "12", "rom", new List<string>(){".gb", ".gbc", ".dmg", ".zip", ".7z"}),
-                new GarlicSystem("Sony Playstation", "PS", "57", "iso", new List<string>(){".chd"}),
-                new GarlicSystem("PICO-8", "PICO", "234", "fichier", new List<string>(){}),
-                new GarlicSystem("Ports collection", "PORTS", "?", "fichier", new List<string>(){}),
-                new GarlicSystem("ScummVM", "SCUMMVM", "123", "dossier", new List<string>(){}),
-                new GarlicSystem("Sega 32X", "THIRTYTWOX", "19", "rom", new List<string>(){}),
-                new GarlicSystem("Sega CD", "SEGACD", "20", "iso", new List<string>(){}),
-                new GarlicSystem("Sega Game Gear", "GG", "21", "rom", new List<string>(){}),
-                new GarlicSystem("Sega Genesis", "MD", "1", "rom", new List<string>(){}),
-                new GarlicSystem("Sega Master System", "MS", "2", "rom", new List<string>(){}),
-                new GarlicSystem("Sega SG-1000", "SEGASGONE", "109", "rom", new List<string>(){}),
-                new GarlicSystem("Sinclair ZX Spectrum", "ZXS", "76", "rom", new List<string>(){}),
-                new GarlicSystem("SNK NeoGeo", "NEOGEO", "75", "rom", new List<string>(){}),
-                new GarlicSystem("SNK NeoGeo CD", "NEOCD", "70", "iso", new List<string>(){}),
-                new GarlicSystem("SNK NeoGeo Pocket & Color", "NGP", "82", "rom", new List<string>(){}),
-                new GarlicSystem("TIC-80", "TIC", "222", "rom", new List<string>(){}),
-                new GarlicSystem("VideoPac", "VIDEOPAC", "104", "rom", new List<string>(){}),
-                new GarlicSystem("Watara Supervision", "SUPERVISION", "207", "rom", new List<string>(){}),
-                new GarlicSystem("Commodore 64", "COMMODORE", "66", "rom", new List<string>(){}),
-            };
+            new GarlicSystem("Atari 2600", "ATARI", "26", "rom", new List<string>(){}),
+            new GarlicSystem("Atari 5200", "FIFTYTWOHUNDRED", "40", "rom", new List<string>(){}),
+            new GarlicSystem("Atari 7800", "SEVENTYEIGHTHUNDRED", "41", "rom", new List<string>(){}),
+            new GarlicSystem("Atari Lynx", "LYNX", "28", "rom", new List<string>(){}),
+            new GarlicSystem("Bandai Sufami Turbo", "SUFAMI", "108", "rom", new List<string>(){}),
+            new GarlicSystem("Bandai WonderSwan & Color", "WS", "45", "rom", new List<string>(){}),
+            new GarlicSystem("Capcom Play System 1", "CPS1", "75", "rom", new List<string>(){}),
+            new GarlicSystem("Capcom Play System 2", "CPS2", "75", "rom", new List<string>(){}),
+            new GarlicSystem("Capcom Play System 3", "CPS3", "75", "rom", new List<string>(){}),
+            new GarlicSystem("ColecoVision", "COLECO", "48", "rom", new List<string>(){}),
+            new GarlicSystem("Fairchild Channel F", "FAIRCHILD", "80", "rom", new List<string>(){}),
+            new GarlicSystem("Famicom Disk System", "FDS", "106", "rom", new List<string>(){}),
+            new GarlicSystem("Game & Watch", "GW", "52", "rom", new List<string>(){}),
+            new GarlicSystem("GCE Vectrex", "VECTREX", "102", "rom", new List<string>(){}),
+            new GarlicSystem("Magnavox Odyssey 2", "ODYSSEY", "104", "rom", new List<string>(){}),
+            new GarlicSystem("Mattel Intellivision", "INTELLIVISION", "115", "rom", new List<string>(){}),
+            new GarlicSystem("Mega Duck", "MEGADUCK", "90", "rom", new List<string>(){}),
+            new GarlicSystem("MS-DOS", "DOS", "135", "dossier", new List<string>(){}),
+            new GarlicSystem("MSX - MSX2", "MSX", "113", "rom", new List<string>(){}),
+            new GarlicSystem("PC Engine SuperGrafx", "SGFX", "105", "rom", new List<string>(){}),
+            new GarlicSystem("PC Engine CD-Rom", "PCECD", "114", "rom", new List<string>(){}),
+            new GarlicSystem("PC Engine", "PCE", "31", "rom", new List<string>(){}),
+            new GarlicSystem("Nintendo Entertainment System", "FC", "3", "rom", new List<string>(){}),
+            new GarlicSystem("Nintendo Pokemini", "POKE", "211", "rom", new List<string>(){}),
+            new GarlicSystem("Nintendo Satellaview", "SATELLAVIEW", "107", "rom", new List<string>(){}),
+            new GarlicSystem("Nintendo Super Game Boy", "SGB", "127", "rom", new List<string>(){}),
+            new GarlicSystem("Nintendo Super Nintendo", "SFC", "4", "rom", new List<string>(){}),
+            new GarlicSystem("Nintendo Virtual Boy", "VB", "11", "rom", new List<string>(){}),
+            new GarlicSystem("Nintendo Game Boy", "GB", "9", "rom", new List<string>(){".gb", ".gbc", ".dmg", ".zip", ".7z"}),
+            new GarlicSystem("Nintendo Game Boy Color", "GBC", "10", "rom", new List<string>(){".gb", ".gbc", ".dmg", ".zip", ".7z"}),
+            new GarlicSystem("Nintendo Game Boy Advance", "GBA", "12", "rom", new List<string>(){".gb", ".gbc", ".dmg", ".zip", ".7z"}),
+            new GarlicSystem("Sony Playstation", "PS", "57", "iso", new List<string>(){".chd"}),
+            new GarlicSystem("PICO-8", "PICO", "234", "fichier", new List<string>(){}),
+            new GarlicSystem("Ports collection", "PORTS", "?", "fichier", new List<string>(){}),
+            new GarlicSystem("ScummVM", "SCUMMVM", "123", "dossier", new List<string>(){}),
+            new GarlicSystem("Sega 32X", "THIRTYTWOX", "19", "rom", new List<string>(){}),
+            new GarlicSystem("Sega CD", "SEGACD", "20", "iso", new List<string>(){}),
+            new GarlicSystem("Sega Game Gear", "GG", "21", "rom", new List<string>(){}),
+            new GarlicSystem("Sega Genesis", "MD", "1", "rom", new List<string>(){}),
+            new GarlicSystem("Sega Master System", "MS", "2", "rom", new List<string>(){}),
+            new GarlicSystem("Sega SG-1000", "SEGASGONE", "109", "rom", new List<string>(){}),
+            new GarlicSystem("Sinclair ZX Spectrum", "ZXS", "76", "rom", new List<string>(){}),
+            new GarlicSystem("SNK NeoGeo", "NEOGEO", "75", "rom", new List<string>(){}),
+            new GarlicSystem("SNK NeoGeo CD", "NEOCD", "70", "iso", new List<string>(){}),
+            new GarlicSystem("SNK NeoGeo Pocket & Color", "NGP", "82", "rom", new List<string>(){}),
+            new GarlicSystem("TIC-80", "TIC", "222", "rom", new List<string>(){}),
+            new GarlicSystem("VideoPac", "VIDEOPAC", "104", "rom", new List<string>(){}),
+            new GarlicSystem("Watara Supervision", "SUPERVISION", "207", "rom", new List<string>(){}),
+            new GarlicSystem("Commodore 64", "COMMODORE", "66", "rom", new List<string>(){}),
+        };
 
             return systems.OrderBy(o => o.name).ToList();
         }
@@ -143,10 +143,10 @@ namespace GarlicPress
         public static List<GarlicDrive> GetGarlicDrives()
         {
             List<GarlicDrive> drives = new List<GarlicDrive>()
-            {
-                new GarlicDrive("SD Card 1",  "/mnt/mmc", 1),
-                new GarlicDrive("SD Card 2",  "/mnt/SDCARD", 2),
-            };
+        {
+            new GarlicDrive("SD Card 1",  "/mnt/mmc", 1),
+            new GarlicDrive("SD Card 2",  "/mnt/SDCARD", 2),
+        };
             return drives;
         }
     }
@@ -164,6 +164,8 @@ namespace GarlicPress
             this.garlicLanguageSettings = garlicLanguageSettings;
         }
     }
+
+#nullable disable
 
     public class GarlicLanguageSettings
     {
@@ -197,7 +199,7 @@ namespace GarlicPress
         [JsonPropertyName("title-label")] public string titlelabel { get; set; }
     }
 
-public class GarlicSkinSettings
+    public class GarlicSkinSettings
     {
         [JsonPropertyName("text-alignment")] public string textalignment { get; set; }
         [JsonPropertyName("text-margin")] public int textmargin { get; set; }
@@ -247,22 +249,22 @@ public class GarlicSkinSettings
         public static List<SSMediaType> GetAllMediaTypes()
         {
             List<SSMediaType> systems = new List<SSMediaType>()
-            {
-                new SSMediaType("Logo", "wheel"),
-                new SSMediaType("Logo Steel", "wheel-steel"),
-                new SSMediaType("Logo Carbon", "wheel-carbon"),
-                new SSMediaType("Logo Steam Grid", "steamgrid"),
-                new SSMediaType("Screen Marquee", "screenmarquee"),
-                new SSMediaType("Screen Marquee Small", "screenmarqueesmall"),
-                new SSMediaType("3D Box", "box-3D"),
-                new SSMediaType("2D Box", "box-2D"),
-                new SSMediaType("2D Support", "support-2D"),
-                new SSMediaType("Screen Shot", "ss"),
-                new SSMediaType("Screen Shot Title", "sstitle"),
-                new SSMediaType("Fan Art", "fanart"),
-                new SSMediaType("Mixed Image v1", "mixrbv1"),
-                new SSMediaType("Mixed Image v2", "mixrbv2"),
-            };
+        {
+            new SSMediaType("Logo", "wheel"),
+            new SSMediaType("Logo Steel", "wheel-steel"),
+            new SSMediaType("Logo Carbon", "wheel-carbon"),
+            new SSMediaType("Logo Steam Grid", "steamgrid"),
+            new SSMediaType("Screen Marquee", "screenmarquee"),
+            new SSMediaType("Screen Marquee Small", "screenmarqueesmall"),
+            new SSMediaType("3D Box", "box-3D"),
+            new SSMediaType("2D Box", "box-2D"),
+            new SSMediaType("2D Support", "support-2D"),
+            new SSMediaType("Screen Shot", "ss"),
+            new SSMediaType("Screen Shot Title", "sstitle"),
+            new SSMediaType("Fan Art", "fanart"),
+            new SSMediaType("Mixed Image v1", "mixrbv1"),
+            new SSMediaType("Mixed Image v2", "mixrbv2"),
+        };
 
             return systems;
         }
@@ -270,9 +272,10 @@ public class GarlicSkinSettings
 
     public class MediaLayerCollection
     {
-        public string name { get; set; }
-        public List<MediaLayer> mediaLayers { get; set; }
-
+        public Guid id { get; set; } = Guid.NewGuid();
+        public string name { get; set; } = "New Collection";
+        public bool defaultCollection { get; set; }
+        public List<MediaLayer> mediaLayers { get; set; } = new List<MediaLayer>();
     }
 
     public class MediaLayer
@@ -289,6 +292,21 @@ public class GarlicSkinSettings
         public string region { get; set; }
         public List<IFilter> Filters { get; set; }
 
+        public MediaLayer Clone()
+        {
+            if (MemberwiseClone() is MediaLayer clone)
+            {
+                clone.id = Guid.NewGuid();
+                clone.Filters = new List<IFilter>();
+                foreach (var filter in Filters)
+                {
+                    clone.Filters.Add(filter.Clone());
+                }
+                return clone;
+            }
+            return new MediaLayer();
+        }
+
         public MediaLayer()
         {
             mediaType = "wheel";
@@ -302,6 +320,18 @@ public class GarlicSkinSettings
             angle = 0;
             region = "us";
             Filters = new List<IFilter>();
+        }
+
+        public struct GameMediaResponse
+        {
+            public string path { get; set; }
+            public string region { get; set; }
+
+            public GameMediaResponse(string path, string region)
+            {
+                this.path = path;
+                this.region = region;
+            }
         }
     }
 
@@ -548,8 +578,6 @@ public class GarlicSkinSettings
 
             public string support { get; set; }
         }
-
-
-
     }
 }
+#nullable enable

@@ -29,6 +29,14 @@
         private void InitializeComponent()
         {
             GridMediaLayout = new DataGridView();
+            gridColMediaType = new DataGridViewComboBoxColumn();
+            gridColResizePercent = new DataGridViewTextBoxColumn();
+            gridColWidth = new DataGridViewTextBoxColumn();
+            gridColHeight = new DataGridViewTextBoxColumn();
+            gridColX = new DataGridViewTextBoxColumn();
+            gridColY = new DataGridViewTextBoxColumn();
+            gridColAngle = new DataGridViewTextBoxColumn();
+            gridColOrder = new DataGridViewTextBoxColumn();
             btnSave = new Button();
             btnAddLayer = new Button();
             btnDeleteLayer = new Button();
@@ -46,14 +54,8 @@
             boolWarnBeforeDelete = new CheckBox();
             btnShowPreview = new Button();
             btnLayerEditor = new Button();
-            gridColMediaType = new DataGridViewComboBoxColumn();
-            gridColResizePercent = new DataGridViewTextBoxColumn();
-            gridColWidth = new DataGridViewTextBoxColumn();
-            gridColHeight = new DataGridViewTextBoxColumn();
-            gridColX = new DataGridViewTextBoxColumn();
-            gridColY = new DataGridViewTextBoxColumn();
-            gridColAngle = new DataGridViewTextBoxColumn();
-            gridColOrder = new DataGridViewTextBoxColumn();
+            cbMediaLayerCollection = new ComboBox();
+            label5 = new Label();
             ((System.ComponentModel.ISupportInitialize)GridMediaLayout).BeginInit();
             SuspendLayout();
             // 
@@ -77,6 +79,48 @@
             GridMediaLayout.Size = new Size(813, 161);
             GridMediaLayout.TabIndex = 20;
             GridMediaLayout.CellValidating += GridMediaLayout_CellValidating;
+            // 
+            // gridColMediaType
+            // 
+            gridColMediaType.HeaderText = "Media Type";
+            gridColMediaType.Name = "gridColMediaType";
+            // 
+            // gridColResizePercent
+            // 
+            gridColResizePercent.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            gridColResizePercent.HeaderText = "Resize %";
+            gridColResizePercent.Name = "gridColResizePercent";
+            // 
+            // gridColWidth
+            // 
+            gridColWidth.HeaderText = "Width";
+            gridColWidth.Name = "gridColWidth";
+            // 
+            // gridColHeight
+            // 
+            gridColHeight.HeaderText = "Height";
+            gridColHeight.Name = "gridColHeight";
+            // 
+            // gridColX
+            // 
+            gridColX.HeaderText = "X Position";
+            gridColX.Name = "gridColX";
+            // 
+            // gridColY
+            // 
+            gridColY.HeaderText = "Y Position";
+            gridColY.Name = "gridColY";
+            // 
+            // gridColAngle
+            // 
+            gridColAngle.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            gridColAngle.HeaderText = "Angle";
+            gridColAngle.Name = "gridColAngle";
+            // 
+            // gridColOrder
+            // 
+            gridColOrder.HeaderText = "Draw Order";
+            gridColOrder.Name = "gridColOrder";
             // 
             // btnSave
             // 
@@ -241,47 +285,23 @@
             btnLayerEditor.UseVisualStyleBackColor = true;
             btnLayerEditor.Click += btnLayerEditor_Click;
             // 
-            // gridColMediaType
+            // cbMediaLayerCollection
             // 
-            gridColMediaType.HeaderText = "Media Type";
-            gridColMediaType.Name = "gridColMediaType";
+            cbMediaLayerCollection.FormattingEnabled = true;
+            cbMediaLayerCollection.Location = new Point(14, 189);
+            cbMediaLayerCollection.Name = "cbMediaLayerCollection";
+            cbMediaLayerCollection.Size = new Size(228, 23);
+            cbMediaLayerCollection.TabIndex = 39;
+            cbMediaLayerCollection.SelectedIndexChanged += cbMediaLayerCollection_SelectedIndexChanged;
             // 
-            // gridColResizePercent
+            // label5
             // 
-            gridColResizePercent.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            gridColResizePercent.HeaderText = "Resize %";
-            gridColResizePercent.Name = "gridColResizePercent";
-            // 
-            // gridColWidth
-            // 
-            gridColWidth.HeaderText = "Width";
-            gridColWidth.Name = "gridColWidth";
-            // 
-            // gridColHeight
-            // 
-            gridColHeight.HeaderText = "Height";
-            gridColHeight.Name = "gridColHeight";
-            // 
-            // gridColX
-            // 
-            gridColX.HeaderText = "X Position";
-            gridColX.Name = "gridColX";
-            // 
-            // gridColY
-            // 
-            gridColY.HeaderText = "Y Position";
-            gridColY.Name = "gridColY";
-            // 
-            // gridColAngle
-            // 
-            gridColAngle.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            gridColAngle.HeaderText = "Angle";
-            gridColAngle.Name = "gridColAngle";
-            // 
-            // gridColOrder
-            // 
-            gridColOrder.HeaderText = "Draw Order";
-            gridColOrder.Name = "gridColOrder";
+            label5.AutoSize = true;
+            label5.Location = new Point(12, 171);
+            label5.Name = "label5";
+            label5.Size = new Size(128, 15);
+            label5.TabIndex = 40;
+            label5.Text = "Media Layer Collection";
             // 
             // SettingsForm
             // 
@@ -289,6 +309,8 @@
             AutoScaleMode = AutoScaleMode.Dpi;
             AutoSize = true;
             ClientSize = new Size(837, 450);
+            Controls.Add(label5);
+            Controls.Add(cbMediaLayerCollection);
             Controls.Add(btnLayerEditor);
             Controls.Add(btnShowPreview);
             Controls.Add(boolWarnBeforeDelete);
@@ -345,5 +367,7 @@
         private DataGridViewTextBoxColumn gridColY;
         private DataGridViewTextBoxColumn gridColAngle;
         private DataGridViewTextBoxColumn gridColOrder;
+        private ComboBox cbMediaLayerCollection;
+        private Label label5;
     }
 }

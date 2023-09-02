@@ -7,11 +7,9 @@ using System.Windows.Forms;
 
 namespace GarlicPress
 {
-      
-
     internal static class DebugLog
     {
-        private static RichTextBox log;
+        private static RichTextBox? log;
         public static RichTextBox logRitchTextBox { set { log = value; } }
                 
         public static void Write(string text, Color? color = null, bool timestamp = true, bool newLine = true) {

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
 using static GarlicPress.GameResponse;
+using static GarlicPress.MediaLayer;
 
 namespace GarlicPress
 {
@@ -46,13 +47,13 @@ namespace GarlicPress
             var response = await client.GetAsync(url);
 
             var json = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode && client is not null)
             {
                 return new GameResponse() { status = "error", statusMessage = response.StatusCode + "  " + json };
             }
 
             GameResponse? game = JsonSerializer.Deserialize<GameResponse>(json);
-            if (game != null)
+            if (game != null && client is not null)
             {
                 game.status = "ok";
                 game.statusMessage = "ok";
@@ -64,7 +65,7 @@ namespace GarlicPress
             }
         }
 
-        public static async Task<(string path,string region)> DownloadMedia(GameResponse game, string mediaType = "box-3D", string region = "")
+        public static async Task<GameMediaResponse?> DownloadMedia(GameResponse game, string mediaType = "box-3D", string region = "")
         {
             if (game.status != "error")
             {
@@ -85,7 +86,7 @@ namespace GarlicPress
 
                     if (File.Exists(mediaDownloadPath))
                     {
-                        return (mediaDownloadPath, media.region);
+                        return new GameMediaResponse(mediaDownloadPath, media.region);
                     }
 
                     using (var s = await httpClient.GetStreamAsync(new Uri(media.url)))
@@ -95,18 +96,21 @@ namespace GarlicPress
                             await s.CopyToAsync(fs);
                         }
                     }
-                    return (mediaDownloadPath, media.region);
+                    return new GameMediaResponse(mediaDownloadPath, media.region);
                 }
             }
-            return ("", "");
+            return null;
         }
 
         private static Media GetMedia(string region, List<string> ssRegionOrders, IOrderedEnumerable<Media> medias)
         {
             Media? media = null;
 
-            //If no region is specified, find the first media that matches the region order
-            if (String.IsNullOrEmpty(region))
+            //Find the media that matches the region
+            media = medias.FirstOrDefault(x => x.region == region);
+
+            //if no media found from specefied region find the first media that matches the region order
+            if (media is null)
             {
                 //Find the first media that matches the region order
                 foreach (var regionOrder in ssRegionOrders)
@@ -117,11 +121,6 @@ namespace GarlicPress
                         break;
                     }
                 }
-            }
-            else
-            {
-                //Find the media that matches the region
-                media = medias.FirstOrDefault(x => x.region == region);
             }
 
             //If no media is found, just use the first one

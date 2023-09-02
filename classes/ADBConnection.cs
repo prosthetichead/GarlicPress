@@ -16,10 +16,10 @@ namespace GarlicPress
     internal static class ADBConnection
     {
         public static bool deviceConnected;
-        public static AdbClient client;
-        public static DeviceData device;
+        public static AdbClient? client;
+        public static DeviceData? device;
 
-        
+
         public static void StartADBServer()
         {
             DebugLog.Write("Atempting to Start ADB Server");
@@ -38,7 +38,7 @@ namespace GarlicPress
                 }
                 catch (Exception ex)
                 {
-                    DebugLog.Write($"Error Starting ADB Server: {ex.Message}",Color.OrangeRed);
+                    DebugLog.Write($"Error Starting ADB Server: {ex.Message}", Color.OrangeRed);
                     MessageBox.Show("Error: " + ex.Message, "Oh No",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
@@ -73,7 +73,7 @@ namespace GarlicPress
             deviceConnected = isConnected;
 
             return deviceConnected;
-        }        
+        }
 
         public static string ReadTextFile(string readPath)
         {
@@ -82,7 +82,7 @@ namespace GarlicPress
 
         public static List<FileStatistics> GetDirectoryListing(string path)
         {
-            if (deviceConnected)
+            if (deviceConnected && client is not null)
             {
                 using (SyncService service = new SyncService(new AdbSocket(client.EndPoint), device))
                 {
@@ -92,15 +92,14 @@ namespace GarlicPress
             }
             else
             {
-                return null;
+                return new();
             }
         }
 
         public static async Task<bool> UploadFileAsync(string readPath, string writePath, Progress<int> progress, CancellationToken cancellationToken)
         {
-            if (deviceConnected)
+            if (deviceConnected && client is not null)
             {
-
                 DebugLog.Write($"Async Uploading File {readPath} to {writePath}");
 
                 using (SyncService service = new SyncService(new AdbSocket(client.EndPoint), device))
@@ -129,7 +128,7 @@ namespace GarlicPress
         public static bool UploadFile(string readPath, string writePath)
         {
             Progress<int> progress = new Progress<int>();
-            if (deviceConnected)
+            if (deviceConnected && client is not null)
             {
                 DebugLog.Write($"Uploading File {readPath} to {writePath}");
 
@@ -157,7 +156,7 @@ namespace GarlicPress
         public static bool DownloadFile(string readPath, string writePath)
         {
             Progress<int> progress = new Progress<int>();
-            if (deviceConnected)
+            if (deviceConnected && client is not null)
             {
                 try
                 {
@@ -166,9 +165,9 @@ namespace GarlicPress
                     new FileInfo(writePath).Directory?.Create();
 
                     using (SyncService service = new SyncService(new AdbSocket(client.EndPoint), device))
-                    {                    
+                    {
                         using (Stream stream = File.Create(writePath))
-                        {               
+                        {
                             service.Pull(readPath, stream, progress, CancellationToken.None);
                             DebugLog.Write($"Download Complete");
                             return true;
@@ -186,28 +185,28 @@ namespace GarlicPress
 
         public static bool DownloadDirectory(string readPath, string writePath)
         {
-            
+
             Directory.CreateDirectory(writePath);
 
             //check if readpath is a Directory
             var pathType = DevicePathType(readPath);
 
-            if (pathType == "dir")
+            if (pathType == "dir" && client is not null)
             {
-                                
+
                 //list the directory and start writing files to the writePath
                 using (SyncService service = new SyncService(new AdbSocket(client.EndPoint), device))
                 {
                     var files = service.GetDirectoryListing(readPath);
-                    foreach(var file in files.Where(w=>w.Path != "." && w.Path != ".."))
+                    foreach (var file in files.Where(w => w.Path != "." && w.Path != ".."))
                     {
-                        if(DevicePathType(readPath + "/" + file.Path) == "dir")
+                        if (DevicePathType(readPath + "/" + file.Path) == "dir")
                         {
                             //we have hit a directory lets make it and move down into it
                             Directory.CreateDirectory(writePath + "/" + file.Path);
                             DownloadDirectory(readPath + "/" + file.Path, writePath + "/" + file.Path);
                         }
-                        if(DevicePathType(readPath + "/" + file.Path) == "file")
+                        if (DevicePathType(readPath + "/" + file.Path) == "file")
                         {
                             //we have hit a file pull it
                             DownloadFile(readPath + "/" + file.Path, writePath + "/" + file.Path);
@@ -221,14 +220,14 @@ namespace GarlicPress
         public static string ExecuteCommand(string command)
         {
             ConsoleOutputReceiver receiver = new ConsoleOutputReceiver();
-            client.ExecuteRemoteCommand(command, device, receiver);
-            
+            client?.ExecuteRemoteCommand(command, device, receiver);
+
             string results = receiver.ToString().Trim();
 
             return results;
         }
 
-        public static string DevicePathType(string path)
+        public static string? DevicePathType(string path)
         {
             var files = client.List(device, path);
             if (files != null && files.Count() == 0)
@@ -236,20 +235,20 @@ namespace GarlicPress
             else if (files != null && files.Count() > 0)
                 return "dir";
             else
-                return null; 
+                return null;
         }
 
         public static string DeleteFile(string path)
         {
-            if (deviceConnected)
+            if (deviceConnected && client is not null)
             {
                 ConsoleOutputReceiver receiver = new ConsoleOutputReceiver();
-                client.ExecuteRemoteCommand($"rm -r \"{path}\" " , device, receiver);
+                client.ExecuteRemoteCommand($"rm -r \"{path}\" ", device, receiver);
 
                 return receiver.ToString().Trim();
             }
             return "device not connected";
-        }        
+        }
 
         public static void SetBacklight(int bightness)
         {
@@ -258,11 +257,11 @@ namespace GarlicPress
 
         public static string RenameFile(string path, string newPath)
         {
-            if (deviceConnected)
+            if (deviceConnected && client is not null)
             {
                 ConsoleOutputReceiver receiver = new ConsoleOutputReceiver();
                 client.ExecuteRemoteCommand($"mv {path} {newPath}", device, receiver);
-               
+
 
                 return receiver.ToString().Trim();
 

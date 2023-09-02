@@ -1,0 +1,50 @@
+﻿@typeparam T
+
+<div class="mt-4">
+    <label for="@Id" class="block text-white text-sm font-medium text-gray-700">@Label: @LabelValue</label>
+    <input type="range" id="@Id" min="@Convert.ToDouble(Min).ToString(CultureInfo.InvariantCulture)" max="@Convert.ToDouble(Max).ToString(CultureInfo.InvariantCulture)" step="@Convert.ToDouble(Step).ToString(CultureInfo.InvariantCulture)" @bind="InnerValue" @bind:event="oninput" class="mt-2 w-full slider">
+</div>
+
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public required T Value { get; set; }
+    
+    [Parameter] 
+    public EventCallback<T> ValueChanged { get; set; }
+    
+    [Parameter]
+    [EditorRequired]
+    public required T Min { get; set; }
+
+    [Parameter] 
+    [EditorRequired]
+    public required T Max { get; set; }
+    
+    [Parameter]
+    [EditorRequired]
+    public required T Step { get; set; }
+    
+    [Parameter] 
+    [EditorRequired]
+    public required string Label { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public required string LabelValue { get; set; }
+
+    Guid Id = Guid.NewGuid();
+
+    private string InnerValue
+    {
+        get => Convert.ToDouble(Value).ToString(CultureInfo.InvariantCulture);
+        set
+        {
+            var convertedValue = (T)Convert.ChangeType(double.Parse(value, CultureInfo.InvariantCulture), typeof(T));
+            Value = convertedValue;
+            ValueChanged.InvokeAsync(Value);
+        }
+    }
+}
+

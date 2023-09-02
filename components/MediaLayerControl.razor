@@ -1,32 +1,9 @@
-﻿
-<style>
-    /* Basic Tailwind-style slider thumb */
-    .slider::-webkit-slider-thumb {
-        @@apply w-5 h-5 bg-blue-500 rounded-full appearance-none cursor-pointer;
-        margin-top: -8px;
-    }
-
-    .slider::-moz-range-thumb {
-        @@apply w-5 h-5 bg-blue-500 rounded-full cursor-pointer;
-    }
-
-    /* Slider track */
-    .slider::-webkit-slider-runnable-track {
-        @@apply h-2 bg-gray-300 rounded;
-    }
-
-    .slider::-moz-range-track {
-        @@apply h-2 bg-gray-300 rounded;
-    }
-</style>
-
-
-@if (IsImageSelected && mediaLayer is not null)
+﻿@if (IsImageSelected && mediaLayer is not null)
 {
     <div>
         <h2 class="text-xl mb-4 text-white">MediaLayer Control</h2>
         <div>
-            <Input @bind-Value="mediaLayer.mediaType" Label="Media Type:" disabled></Input>
+            <Input Value="SSMediaType.GetAllMediaTypes().First(x => x.value == mediaLayer.mediaType).label" Label="Media Type:" disabled></Input>
 
             <Input @bind-Value="mediaLayer.resizePercent" Label="Resize Percentage:" @bind-Value:after="async () => await  mediaLayerChanged.InvokeAsync(mediaLayer)"></Input>
 
@@ -122,35 +99,26 @@
     [Parameter] public bool IsImageSelected { get; set; }
     [Parameter] public EventCallback<MediaLayer> OnApplyFilters { get; set; }
 
-    MediaLayer? _mediaLayer;
-
-    string selectedFilterType = nameof(GradientFilter);
 
     [Parameter]
     [EditorRequired]
-    public required MediaLayer? mediaLayer
-    {
-        get
-        {
-            return _mediaLayer;
-        }
-        set
-        {
-            if (!value?.Filters?.Contains(selectedFilterSetting ?? default!) ?? true)
-            {
-                selectedFilterSetting = null;
-            }
-            _mediaLayer = value;
-        }
-    }
+    public required MediaLayer? mediaLayer { get; set; }
 
     [Parameter]
     [EditorRequired]
     public EventCallback<MediaLayer> mediaLayerChanged { get; set; }
 
+    string selectedFilterType = nameof(GradientFilter);
     IFilter? selectedFilterSetting;
-
     System.Threading.Timer? debounceTimer;
+
+    protected override void OnParametersSet()
+    {
+        if (!mediaLayer?.Filters?.Contains(selectedFilterSetting ?? default!) ?? true)
+        {
+            selectedFilterSetting = null;
+        }
+    }
 
     void ApplyFilters()
     {
@@ -181,8 +149,6 @@
             OnApplyFilters.InvokeAsync(mediaLayer);
         }
     }
-
-
 
     void AddNewFilter()
     {
