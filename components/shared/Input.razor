@@ -2,7 +2,7 @@
 
 <div class="flex border rounded-md overflow-hidden m-1">
     <label for="mediaType" class="text-xs font-medium text-gray-700 p-1 bg-gray-200">@Label</label>
-    <input type="text" @attributes="AllOtherAttributes" id="mediaType" @bind="Value" class="flex-grow p-1 text-xs font-medium" />
+    <input type="text" @attributes="AllOtherAttributes" id="mediaType" @bind="Value" @bind:after="() => ValueChanged.InvokeAsync(Value)" class="flex-grow p-1 text-xs font-medium" />
 </div>
 
 @code {
@@ -14,19 +14,8 @@
     public TItem? Value { get; set; }
 
     [Parameter]
-    public EventCallback<TItem>? ValueChanged { get; set; }
+    public EventCallback<TItem> ValueChanged { get; set; }
 
     [Parameter(CaptureUnmatchedValues = true)]
     public Dictionary<string, object>? AllOtherAttributes { get; set; }
-
-    TItem? item;
-
-    protected override void OnParametersSet()
-    {
-        if (!item?.Equals(Value) ?? true)
-        {
-            item = Value;
-            ValueChanged?.InvokeAsync(Value);
-        }
-    }
 }

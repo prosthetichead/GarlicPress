@@ -56,6 +56,8 @@
             btnLayerEditor = new Button();
             cbMediaLayerCollection = new ComboBox();
             label5 = new Label();
+            label6 = new Label();
+            txtRegionOrder = new TextBox();
             ((System.ComponentModel.ISupportInitialize)GridMediaLayout).BeginInit();
             SuspendLayout();
             // 
@@ -215,7 +217,7 @@
             // boolSystemTrayOnClose
             // 
             boolSystemTrayOnClose.AutoSize = true;
-            boolSystemTrayOnClose.Location = new Point(343, 102);
+            boolSystemTrayOnClose.Location = new Point(343, 150);
             boolSystemTrayOnClose.Name = "boolSystemTrayOnClose";
             boolSystemTrayOnClose.Size = new Size(203, 19);
             boolSystemTrayOnClose.TabIndex = 32;
@@ -247,7 +249,7 @@
             // boolRomsRootSecondSD
             // 
             boolRomsRootSecondSD.AutoSize = true;
-            boolRomsRootSecondSD.Location = new Point(343, 77);
+            boolRomsRootSecondSD.Location = new Point(343, 125);
             boolRomsRootSecondSD.Name = "boolRomsRootSecondSD";
             boolRomsRootSecondSD.Size = new Size(246, 19);
             boolRomsRootSecondSD.TabIndex = 35;
@@ -257,7 +259,7 @@
             // boolWarnBeforeDelete
             // 
             boolWarnBeforeDelete.AutoSize = true;
-            boolWarnBeforeDelete.Location = new Point(343, 125);
+            boolWarnBeforeDelete.Location = new Point(343, 173);
             boolWarnBeforeDelete.Name = "boolWarnBeforeDelete";
             boolWarnBeforeDelete.Size = new Size(149, 19);
             boolWarnBeforeDelete.TabIndex = 36;
@@ -303,12 +305,30 @@
             label5.TabIndex = 40;
             label5.Text = "Media Layer Collection";
             // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(343, 72);
+            label6.Name = "label6";
+            label6.Size = new Size(159, 15);
+            label6.TabIndex = 42;
+            label6.Text = "ScreenScrper.fr Region Order";
+            // 
+            // txtRegionOrder
+            // 
+            txtRegionOrder.Location = new Point(343, 90);
+            txtRegionOrder.Name = "txtRegionOrder";
+            txtRegionOrder.Size = new Size(280, 23);
+            txtRegionOrder.TabIndex = 41;
+            // 
             // SettingsForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             AutoSize = true;
             ClientSize = new Size(837, 450);
+            Controls.Add(label6);
+            Controls.Add(txtRegionOrder);
             Controls.Add(label5);
             Controls.Add(cbMediaLayerCollection);
             Controls.Add(btnLayerEditor);
@@ -369,5 +389,7 @@
         private DataGridViewTextBoxColumn gridColOrder;
         private ComboBox cbMediaLayerCollection;
         private Label label5;
+        private Label label6;
+        private TextBox txtRegionOrder;
     }
 }

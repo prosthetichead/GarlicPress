@@ -41,6 +41,7 @@ public partial class SettingsForm : Form
         txtSSUsername.Text = Properties.Settings.Default.ssUsername;
         txtSSPassword.Text = Properties.Settings.Default.ssPassword;
         txtSaveBackupLocation.Text = Properties.Settings.Default.saveBackupPath;
+        txtRegionOrder.Text = Properties.Settings.Default.ssRegionOrder;
         boolAutoBackup.Checked = Properties.Settings.Default.autoBackup;
         boolSystemTrayOnClose.Checked = Properties.Settings.Default.systemTrayOnClose;
         boolWarnBeforeDelete.Checked = Properties.Settings.Default.warningBeforeDelete;
@@ -90,6 +91,7 @@ public partial class SettingsForm : Form
         Properties.Settings.Default.ssUsername = txtSSUsername.Text;
         Properties.Settings.Default.ssPassword = txtSSPassword.Text;
         Properties.Settings.Default.saveBackupPath = txtSaveBackupLocation.Text;
+        Properties.Settings.Default.ssRegionOrder = txtRegionOrder.Text;
         Properties.Settings.Default.autoBackup = boolAutoBackup.Checked;
         Properties.Settings.Default.systemTrayOnClose = boolSystemTrayOnClose.Checked;
         Properties.Settings.Default.romsOnRootSD2 = boolRomsRootSecondSD.Checked;
@@ -151,7 +153,7 @@ public partial class SettingsForm : Form
                 GridMediaLayout.DataSource = tempMediaLayout;
                 UpdateMediaLayerCollection();
             }
-            
+
         };
 
         editLayersForm.Show();
