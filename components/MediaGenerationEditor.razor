@@ -25,7 +25,7 @@
 
 </style>
 
-<div class="h-screen flex flex-col p-1">
+<div class="h-screen p-1">
     <div class="grid grid-cols-4 gap-2">
         <div>
             <label for="mediaLayerCollection" class="block text-lg font-medium text-white mb-2">
@@ -116,60 +116,48 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-3 overflow-auto gap-2 p-2">
-        <div class="col-span-2 flex justify-center items-center h-[50vh]">
+    <div class="grid grid-cols-3 py-2 overflow-auto gap-2 h-[500px]">
+        <div class="col-span-2 flex justify-center items-center relative">
             <FabricCanvas TItem="MediaLayer" width="640" height="480" @ref="_fabricCanvas" MediaUpdated="OnMediaUpdated" MediaDeleted="OnMediaDeleted" MediaSelected="OnMediaSelected" MediaUnselected="OnMediaUnselected" />
+
+            @if (_artUpdateRunning)
+            {
+                <div class="absolute inset-0 flex justify-center items-center bg-black bg-opacity-60">
+                    <div class="flex flex-col items-center gap-2 text-white">
+                        <GarlicLoading></GarlicLoading>
+                        <b>Loading Game Art...</b>
+                    </div>
+                </div>
+            }
+
         </div>
 
-        <div class="flex-initial border rounded-lg border-white overflow-auto scrollbar p-2 h-[50vh]">
+        <div class="flex-initial border rounded-lg border-white overflow-auto scrollbar ">
             <MediaLayerControl IsImageSelected="_imageSelected" OnApplyFilters="async () => await UpdateImage(_selectedMediaLayer, true)" mediaLayer="_selectedMediaLayer" mediaLayerChanged="async () => await UpdateImage(_selectedMediaLayer)" />
         </div>
     </div>
 
-    <div class="grid grid-cols-3 overflow-auto gap-2 p-2 max-h-[30vh] flex-grow ">
-        <div class="col-span-3 overflow-auto grid grid-cols-4">
-            <div class="col-span-3 border rounded-lg p-2 scrollbar min-h-0 h-full border-white">
+    <div class="grid grid-cols-4">
+        <div class="col-span-3 border rounded-lg border-white">
+            <MediaContent _selectedSystem="_selectedSystem" _selectedGame="@_selectedGame" _game="_game" _addNewMediaLayerImageToCanvas="AddNewMediaLayerImageToCanvas"></MediaContent>
+        </div>
 
-                <button class="px-5 py-2.5 text-center bg-blue-500 hover:bg-blue-300 rounded text-white" @onclick="GetAllGameMedia">
-                    <b>Get Game Art</b>
-                </button>
+        <div class="grid">
 
-                <div class="p-2 flex flex-wrap overflow-auto scrollbar max-h-[80%]">
-                    @foreach (var gameMedia in _gameMedias)
-                    {
-                        <div class="p-2">
-                            <img class="max-h-40 m-1" src="@gameMedia.imagePath" @onclick="(async () => await AddNewMediaLayerImageToCanvas(gameMedia.imagePath, gameMedia.mediaType))" />
-                        </div>
-                    }
-                    @if (_artUpdateRunning)
-                    {
-                        <div class="grid place-content-center p-2">
-                            <div class="flex items-center gap-2 text-white">
-                                <span class="h-10 w-10 block rounded-full border-4 border-t-green-600 animate-spin"></span>
-                                loading...
-                            </div>
-                        </div>
-                    }
-                </div>
-            </div>
+            <button class="px-5 py-2.5 text-center bg-blue-500 hover:bg-blue-300 rounded ml-2 mb-2 text-white disabled:bg-gray-400 disabled:hover:bg:bg-gray-400 disabled:cursor-not-allowed"
+            @onclick="(async () => { await UpdateGameArt(); })" disabled="@_artUpdateRunning">
+                <b>@(_artUpdateRunning ? "Updating..." : "Update")</b>
+            </button>
+            <button class="px-5 py-2.5 text-center bg-blue-500 hover:bg-blue-300 rounded ml-2 my-2 text-white disabled:bg-gray-400 disabled:hover:bg:bg-gray-400 disabled:cursor-not-allowed"
+            @onclick="SaveMediaLayoutCollection" disabled="@_saving">
+                <b>@(_saving ? "Saving..." : "Save")</b>
+            </button>
 
-            <div class="col-span-1 grid">
+            <button class="px-5 py-2.5 text-center bg-gray-500 hover:bg-gray-300 rounded ml-2 mt-2 text-white"
+            @onclick="() => { editMediaLayersForm.Close(); }">
+                <b>Close</b>
+            </button>
 
-                <button class="px-5 py-2.5 text-center bg-blue-500 hover:bg-blue-300 rounded m-2 py-2 text-white disabled:bg-gray-400 disabled:hover:bg:bg-gray-400 disabled:cursor-not-allowed"
-                @onclick="(async () => { await UpdateGameArt(); })" disabled="@_artUpdateRunning">
-                    <b>@(_artUpdateRunning ? "Updating..." : "Update")</b>
-                </button>
-                <button class="px-5 py-2.5 text-center bg-blue-500 hover:bg-blue-300 rounded m-2 py-2 text-white disabled:bg-gray-400 disabled:hover:bg:bg-gray-400 disabled:cursor-not-allowed"
-                @onclick="SaveMediaLayoutCollection" disabled="@_saving">
-                    <b>@(_saving ? "Saving..." : "Save")</b>
-                </button>
-
-                <button class="px-5 py-2.5 text-center bg-gray-500 hover:bg-gray-300 rounded m-2 py-2 text-white"
-                @onclick="() => { editMediaLayersForm.Close(); }">
-                    <b>Close</b>
-                </button>
-
-            </div>
         </div>
     </div>
 </div>
@@ -196,7 +184,6 @@
     List<string> _games = new();
     string _selectedGame = "";
 
-    List<(string mediaType, string imagePath)> _gameMedias = new();
     GameResponse? _game;
 
     ModalComponent? addModal;
@@ -228,16 +215,7 @@
 
     private void OnMediaUpdated(FabricCanvas<MediaLayer>.imageDetails details)
     {
-        if (_selectedMediaLayerCollection?.mediaLayers.FirstOrDefault(x => x.id == Guid.Parse(details.id)) is MediaLayer layer)
-        {
-            layer.x = details.left;
-            layer.y = details.top;
-            layer.resizePercent = details.scale;
-            layer.angle = details.angle;
-            layer.order = details.drawOrder;
-
-            _selectedMediaLayer = layer;
-        }
+        UpdateMediaLayer(details);
         StateHasChanged();
     }
 
@@ -251,17 +229,30 @@
 
     void OnMediaSelected(FabricCanvas<MediaLayer>.imageDetails details)
     {
-        if (_selectedMediaLayerCollection?.mediaLayers.FirstOrDefault(x => x.id == Guid.Parse(details.id)) is MediaLayer layer)
+        _selectedMediaLayer = UpdateMediaLayer(details);
+        _imageSelected = true;
+    }
+
+    MediaLayer? UpdateMediaLayer(imageDetails details)
+    {
+        MediaLayer? layer = null;
+
+        if (_selectedMediaLayerCollection != null)
+        {
+            layer = _selectedMediaLayerCollection.mediaLayers
+                .FirstOrDefault(x => x.id == Guid.Parse(details.id));
+        }
+
+        if (layer is not null)
         {
             layer.x = details.left;
             layer.y = details.top;
             layer.resizePercent = details.scale;
             layer.angle = details.angle;
             layer.order = details.drawOrder;
-
-            _selectedMediaLayer = layer;
-            _imageSelected = true;
         }
+
+        return layer;
     }
 
     void OnMediaUnselected()
@@ -286,7 +277,6 @@
             && !String.IsNullOrWhiteSpace(_selectedGame))
         {
             _artUpdateRunning = true;
-            _gameMedias.Clear();
             await _fabricCanvas.ClearCanvas();
             await _fabricCanvas.AddBackgroundImage(PathConstants.assetSkinPath.Replace("wwwroot/", "") + "background.png");
 
@@ -316,30 +306,6 @@
             }
 
             _artUpdateRunning = false;
-        }
-    }
-
-    async void GetAllGameMedia()
-    {
-        if (!_artUpdateRunning && _selectedSystem is not null)
-        {
-            _artUpdateRunning = true;
-            _gameMedias.Clear();
-            _game ??= await ScreenScraper.GetGameData(_selectedSystem, _selectedGame, SearchType.GameName);
-            if (_game is not null && _game.status != "error")
-            {
-                await foreach (var gameMedia in GameMediaGeneration.GetAllGameMedia(_game))
-                {
-                    if (gameMedia.media is GameMediaResponse media)
-                    {
-                        _gameMedias.Add((gameMedia.mediaType, media.path.Replace("wwwroot/", "")));
-                    }
-                    await this.InvokeAsync(() => StateHasChanged());
-                }
-            }
-
-            _artUpdateRunning = false;
-            StateHasChanged();
         }
     }
 
@@ -388,7 +354,7 @@
                 var gameMedia = await GameMediaGeneration.GetMediaFromMediaLayer(_game, layer);
                 if (gameMedia.media is GameMediaResponse media)
                 {
-                    await _fabricCanvas.UpdateImage(layer.id, layer, media.path.Replace("wwwroot/", ""));
+                    await _fabricCanvas.UpdateImage(layer.id, layer, media.path.Replace("wwwroot/", "").Replace(@"wwwroot\", ""));
                 }
             }
             else
@@ -402,19 +368,25 @@
     {
         if (imagePath is not null && _fabricCanvas is not null)
         {
-            await _fabricCanvas.AddImage(imagePath, layer.id, layer);
+            await _fabricCanvas.AddImage(imagePath.Replace("wwwroot/", "").Replace(@"wwwroot\", ""), layer.id, layer);
         }
     }
 
-    async Task AddNewMediaLayerImageToCanvas(string? imagePath, string mediaType)
+    async Task AddNewMediaLayerImageToCanvas((string? imagePath, string mediaType) image)
     {
-        if (imagePath is not null
+        if (image.imagePath is not null
             && _fabricCanvas is not null
             && _selectedMediaLayerCollection is not null)
         {
-            var layer = new MediaLayer { mediaType = mediaType, order = _selectedMediaLayerCollection.mediaLayers.Count + 1 };
+            var layer = new MediaLayer
+                {
+                    mediaType = image.mediaType,
+                    order = _selectedMediaLayerCollection.mediaLayers.Count + 1,
+                    path = image.imagePath
+                };
+
             GameMediaGeneration.AddMediaLayer(layer, _selectedMediaLayerCollection);
-            await _fabricCanvas.AddImage(imagePath, layer.id, layer);
+            await _fabricCanvas.AddImage(image.imagePath.Replace("wwwroot/", "").Replace(@"wwwroot\", ""), layer.id, layer);
         }
     }
 }

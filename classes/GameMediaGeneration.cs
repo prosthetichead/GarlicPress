@@ -52,7 +52,6 @@ namespace GarlicPress
                     tempMediaLayer = JsonSerializer.Deserialize<List<MediaLayer>>(mediaLayoutJson, options);
                 }
 
-
                 if (File.Exists(jsonPath))
                 {
                     var options = new JsonSerializerOptions
@@ -292,12 +291,11 @@ namespace GarlicPress
             // Fetch all the media layers in parallel
             var tasks = mediaLayerCollection.mediaLayers.OrderBy(o => o.order).Select(layer => GetMediaFromMediaLayer(game, layer)).ToList();
 
-            //Wait for all to complete so layers gets drawn in correct order
-            var results = await Task.WhenAll(tasks);
-
-            foreach (var result in results)
+            while (tasks.Count > 0)
             {
-                yield return result;
+                var completedTask = await Task.WhenAny(tasks);
+                tasks.Remove(completedTask);
+                yield return await completedTask;
             }
         }
 
@@ -313,7 +311,7 @@ namespace GarlicPress
                 yield break;
             }
 
-            var tasks = SSMediaType.GetAllMediaTypes().Select(media => GetMediaFromType(game, media.value)).ToList();
+            var tasks = SSMediaType.GetAllMediaTypes().Where(x => x.value != "local").Select(media => GetMediaFromType(game, media.value)).ToList();
 
             while (tasks.Count > 0)
             {
@@ -336,32 +334,56 @@ namespace GarlicPress
         }
 
         /// <summary>
-        /// Returns a tuple with the media path and the media type
-        /// Image has filters applied
+        /// Returns media with filters applied
         /// </summary>
         /// <param name="game"></param>
         /// <param name="layer"></param>
         /// <returns></returns>
         public static async Task<(GameMediaResponse? media, MediaLayer layer)> GetMediaFromMediaLayer(GameResponse game, MediaLayer layer)
         {
-            var media = await LimitedDownloadMedia(game, layer.mediaType);
-            if (media is GameMediaResponse downloadedMedia)
+            try
             {
-                var baseImage = (Bitmap)Image.FromFile(downloadedMedia.path);
+                if (await GetGameMediaResponse(game, layer) is GameMediaResponse downloadedMedia)
+                {
+                    var baseImage = (Bitmap)Image.FromFile(downloadedMedia.path);
 
-                var newBaseImage = ApplyAllFilters(baseImage, layer);
-                baseImage.Dispose();
+                    var newBaseImage = ApplyAllFilters(baseImage, layer);
+                    baseImage.Dispose();
 
-                var tempPath = Path.Combine("wwwroot", "assets", "temp", $"temp{Path.GetFileName(downloadedMedia.path)}").Replace(@"\", "/");
-                newBaseImage.Save(tempPath, ImageFormat.Png);
-                newBaseImage.Dispose();
+                    var tempPath = Path.Combine("wwwroot", "assets", "temp", $"temp{Path.GetFileName(downloadedMedia.path)}").Replace(@"\", "/");
+                    newBaseImage.Save(tempPath, ImageFormat.Png);
+                    newBaseImage.Dispose();
 
-                downloadedMedia.path = tempPath;
+                    downloadedMedia.path = tempPath;
 
-                return (downloadedMedia, layer);
+                    return (downloadedMedia, layer);
+                }
+            }
+            catch (Exception)
+            {
+
             }
 
             return (null, layer);
+        }
+
+        private static async Task<GameMediaResponse?> GetGameMediaResponse(GameResponse game, MediaLayer layer)
+        {
+            GameMediaResponse? media = null;
+            if (layer.mediaType == "local")
+            {
+                media = new GameMediaResponse()
+                {
+                    path = layer.path,
+                    region = layer.mediaType
+                };
+            }
+            else
+            {
+                media = await LimitedDownloadMedia(game, layer.mediaType);
+            }
+
+            return media;
         }
 
         private static async Task<(GameMediaResponse? media, string type)> GetMediaFromType(GameResponse game, string type)

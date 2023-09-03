@@ -1,9 +1,9 @@
 ﻿<h2 class="text-lg mb-4 text-white">Gradient Controls</h2>
 <NumberSlider T="float"
               Label="Angle: "
-              Value="@GradientFilterSettings.Start"
+              Value="@GradientFilterSettings.Angle"
               ValueChanged="@(value => { GradientFilterSettings.Angle = value; ApplyFilters(); })"
-              Max="10"
+              Max="90"
               Min="0"
               Step="1"
               LabelValue="@((@GradientFilterSettings.Angle).ToString("F0") + "°")">

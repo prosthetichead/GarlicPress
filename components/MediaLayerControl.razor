@@ -3,7 +3,7 @@
     <div>
         <h2 class="text-xl mb-4 text-white">MediaLayer Control</h2>
         <div>
-            <Input Value="SSMediaType.GetAllMediaTypes().First(x => x.value == mediaLayer.mediaType).label" Label="Media Type:" disabled></Input>
+            <Input Value="(SSMediaType.GetAllMediaTypes().FirstOrDefault(x => x.value == mediaLayer.mediaType)?.label)" Label="Media Type:" disabled></Input>
 
             <Input @bind-Value="mediaLayer.resizePercent" Label="Resize Percentage:" @bind-Value:after="async () => await  mediaLayerChanged.InvokeAsync(mediaLayer)"></Input>
 

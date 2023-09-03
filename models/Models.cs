@@ -264,6 +264,7 @@ namespace GarlicPress
             new SSMediaType("Fan Art", "fanart"),
             new SSMediaType("Mixed Image v1", "mixrbv1"),
             new SSMediaType("Mixed Image v2", "mixrbv2"),
+            new SSMediaType("Local Media", "local")
         };
 
             return systems;
@@ -290,6 +291,7 @@ namespace GarlicPress
         public Guid id { get; set; }
         public int angle { get; set; }
         public string region { get; set; }
+        public string path { get; set; }
         public List<IFilter> Filters { get; set; }
 
         public MediaLayer Clone()
@@ -322,16 +324,17 @@ namespace GarlicPress
             Filters = new List<IFilter>();
         }
 
-        public struct GameMediaResponse
-        {
-            public string path { get; set; }
-            public string region { get; set; }
+    }
 
-            public GameMediaResponse(string path, string region)
-            {
-                this.path = path;
-                this.region = region;
-            }
+    public struct GameMediaResponse
+    {
+        public string path { get; set; }
+        public string region { get; set; }
+
+        public GameMediaResponse(string path, string region)
+        {
+            this.path = path;
+            this.region = region;
         }
     }
 
