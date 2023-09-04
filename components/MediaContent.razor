@@ -1,19 +1,19 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms;
 
-<div class="col-span-3 flex border-b border-white">
-    <button class="flex-1 hover:bg-gray-500 @(activeTab == Tabs.Screenscraper ? "bg-white" : "bg-gray-800 text-white") rounded-tl-lg"
+<div class="col-span-3 flex border-gray-800 border-b-2">
+    <button class="flex-1 hover:bg-blue-200 @(activeTab == Tabs.Screenscraper ? "bg-gray-800 text-white" : "bg-gray-200") rounded-tl-sm"
     @onclick="() => activeTab = Tabs.Screenscraper">
         Screenscraper.fr Media
     </button>
-    <button class="flex-1 py-2 hover:bg-gray-500 @(activeTab == Tabs.Local ? "bg-white" : "bg-gray-800 text-white") rounded-tr-lg"
+    <button class="flex-1 py-2 hover:bg-blue-200 @(activeTab == Tabs.Local ? "bg-gray-800 text-white" : "bg-gray-200") rounded-tr-sm"
     @onclick="() => activeTab = Tabs.Local">
         Local Media
     </button>
 </div>
 
-<div class="scrollbar overflow-auto h-[calc(100vh-500px-210px)]"
+<div class="scrollbar overflow-auto h-[calc(100vh-50vh-160px)]"
      style="display: @(activeTab == Tabs.Local ? "block" : "none")">
-    <div class="border-2  border-gray-500 p-4 flex items-center justify-center text-white text-xl cursor-pointer relative min-h-[50px] hover:bg-gray-500 hover:text-black @dropClass">
+    <div class="border-2  border-gray-800 p-4 flex items-center justify-center text-white text-xl cursor-pointer relative min-h-[50px] hover:bg-gray-500 hover:text-black @dropClass">
         Drag and drop, or click to add a local image.
         <InputFile accept="image/*" multiple OnChange="AddLocalMedia"
         @ondragenter="HandleDragEnter" @ondragleave="HandleDragLeave"
@@ -33,12 +33,12 @@
 
 </div>
 
-<div class="scrollbar overflow-auto h-[calc(100vh-500px-210px)]" style="display: @(activeTab == Tabs.Screenscraper ? "block" : "none")">
-
+<div class="scrollbar overflow-auto h-[calc(100vh-50vh-160px)]" style="display: @(activeTab == Tabs.Screenscraper ? "block" : "none")">
     <div class="p-2 flex overflow-auto flex-wrap w-full">
-        <button class="px-5 py-2.5 text-center bg-blue-500 hover:bg-blue-300 rounded text-white w-full" @onclick="GetAllGameMedia">
-            <b>Get Game Art</b>
-        </button>
+        <div class="grid w-full">
+            <Button ButtonText="Get Game Art" OnClick="GetAllGameMedia"></Button>
+        </div>
+
         @foreach (var gameMedia in _gameMedias)
         {
             <div class="p-2">
@@ -175,7 +175,7 @@
         LoadLocalMedia();
         StateHasChanged();
     }
-    
+
     void DeleteLocalMedia(string localMediaPath)
     {
         _localMedia.Remove(localMediaPath);

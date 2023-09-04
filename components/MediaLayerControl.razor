@@ -1,7 +1,7 @@
 ﻿@if (IsImageSelected && mediaLayer is not null)
 {
     <div>
-        <h2 class="text-xl mb-4 text-white">MediaLayer Control</h2>
+        <h2 class="text-xl mb-4">MediaLayer Control</h2>
         <div>
             <Input Value="(SSMediaType.GetAllMediaTypes().FirstOrDefault(x => x.value == mediaLayer.mediaType)?.label)" Label="Media Type:" disabled></Input>
 
@@ -23,7 +23,7 @@
         </div>
 
 
-        <h1 class="text-xl text-white">Filters</h1>
+        <h1 class="text-xl">Filters</h1>
         <div class="flex">
             <select @bind="selectedFilterType" class="p-2 m-1 flex-grow bg-white rounded">
                 @foreach (var filterEntry in FilterTypeMap)
@@ -33,27 +33,34 @@
             </select>
             <button @onclick="AddNewFilter" class="px-4 py-2 m-1 flex-grow overflow-hidden bg-blue-500 text-white rounded hover:bg-blue-600">Add Selected Filter</button>
         </div>
-        <table class="min-w-full">
-            <thead>
-                <tr>
-                    <th class="py-2 px-4 border-b text-white">Name</th>
-                    <th class="py-2 px-4 border-b text-white">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var filter in mediaLayer.Filters)
-                {
+        <div class="relative overflow-x-auto">
+            <table class="w-full text-left">
+                <thead class="uppercase bg-gradient-to-r from-gray-400 to-gray-500">
                     <tr>
-                        <td class="py-2 px-4 border-b text-white">@($"Filter: " + filter.GetType().Name)</td>
-                        <td class="py-2 px-4 border-b">
-                            <button @onclick="() => selectedFilterSetting = filter" class="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2">Select</button>
-                            <button @onclick="() => DeleteFilter(filter)" class="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600">Delete</button>
-                        </td>
+                        <th scope="col" class="px-6 py-3">
+                            Filter Name
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Actions
+                        </th>
                     </tr>
-                }
-            </tbody>
-        </table>
-
+                </thead>
+                <tbody>
+                    @foreach (var filter in mediaLayer.Filters)
+                    {
+                        <tr class="odd:bg-blue-50 even:bg-white border-b">
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-800 whitespace-nowrap">
+                                @($"Filter: " + filter.GetType().Name)
+                            </th>
+                            <td class="grid grid-cols-2 px-6 py-4 gap-1">
+                                <button @onclick="() => selectedFilterSetting = filter" class="px-2 py-1 text-white bg-blue-800 rounded-sm hover:bg-blue-600">Select</button>
+                                <button @onclick="() => DeleteFilter(filter)" class="px-2 py-1 bg-red-500 rounded-sm hover:bg-red-600">Delete</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
 
 
         @if (selectedFilterSetting is not null)
@@ -72,7 +79,7 @@
                         <BrightnessFilterComponent BrightnessFilterSettings="brightnessFilter" OnApplyFilters="ApplyFilters"></BrightnessFilterComponent>
                         break;
                     case BlurFilter blurFilter:
-                       <BlurFilterComponent BlurFilterSettings="blurFilter" OnApplyFilters="ApplyFilters"></BlurFilterComponent>
+                        <BlurFilterComponent BlurFilterSettings="blurFilter" OnApplyFilters="ApplyFilters"></BlurFilterComponent>
                         break;
                     case GaussianBlurFilter gaussianBlurFilter:
                         <GaussianBlurFilterComponent GaussianBlurFilterSettings="gaussianBlurFilter" OnApplyFilters="ApplyFilters"></GaussianBlurFilterComponent>

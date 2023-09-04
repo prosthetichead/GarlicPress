@@ -1,6 +1,8 @@
 ﻿export class BlazorFabric {
     static canvas = null;
     static dotnetMediaGenerationEditor = null;
+    static originalWidth = 0;
+    static originalHeight = 0;
 
     static createCanvas = (canvasId, dotnetHelper) => {
         if (BlazorFabric.canvas === null) {
@@ -9,6 +11,10 @@
 
         this.dotnetMediaGenerationEditor = dotnetHelper;
 
+        BlazorFabric.originalWidth = BlazorFabric.canvas.width;
+        BlazorFabric.originalHeight = BlazorFabric.canvas.height;
+
+        BlazorFabric.resizeCanvas();
 
         BlazorFabric.canvas.on('object:modified', options => BlazorFabric.handleImageEvent(options.target, 'NotifyImageLocationUpdated'));
         BlazorFabric.canvas.on('selection:updated', options => BlazorFabric.handleImageEvent(options.selected[0], 'NotifyImageSelected'));
@@ -60,8 +66,6 @@
                     left: 0,
                     top: 0,
                     angle: 0,
-                    scaleX: 1,
-                    scaleY: 1,
                     selectable: false
                 });
                 img.moveTo(0);
@@ -80,8 +84,8 @@
                     model: model,
                     left: model.x,
                     top: model.y,
-                    scaleX: model.resizePercent / 100,
-                    scaleY: model.resizePercent / 100,
+                    scaleX: (model.resizePercent / 100),
+                    scaleY: (model.resizePercent / 100),
                     angle: model.angle,
                     selectable: true,
                     uniformScaling: false,
@@ -146,8 +150,8 @@
                 img.set({
                     left: model.x,
                     top: model.y,
-                    scaleX: model.resizePercent / 100,
-                    scaleY: model.resizePercent / 100,
+                    scaleX: (model.resizePercent / 100),
+                    scaleY: (model.resizePercent / 100),
                     angle: model.angle,
                     drawOrder: model.order
                 });
@@ -210,6 +214,47 @@
     static exportCanvasAsPNG() {
         return BlazorFabric.canvas.toDataURL('png');
     }
+
+    static resizeCanvas() {
+        if (BlazorFabric.canvas != null) {
+            // Get the parent container dimensions
+            const container = BlazorFabric.canvas.wrapperEl.parentNode;
+            const containerWidth = container.clientWidth;
+            const containerHeight = container.clientHeight;
+
+            // Get the padding of the parent container
+            const style = window.getComputedStyle(container);
+            const paddingTop = parseFloat(style.paddingTop);
+            const paddingBottom = parseFloat(style.paddingBottom);
+            const paddingLeft = parseFloat(style.paddingLeft);
+            const paddingRight = parseFloat(style.paddingRight);
+
+            // Adjust the available width and height based on the padding
+            const availableWidth = containerWidth - paddingLeft - paddingRight;
+            const availableHeight = containerHeight - paddingTop - paddingBottom;
+
+            const scaleX = availableWidth / BlazorFabric.originalWidth;
+            const scaleY = availableHeight / BlazorFabric.originalHeight;
+
+            // Use the smallest scale ratio to ensure the canvas content fits both horizontally and vertically
+            const scale = Math.min(scaleX, scaleY);
+
+            // If the scale is greater than 1, reset it to 1 to prevent upscaling
+            const zoomFactor = (scale > 1) ? 1 : scale;
+
+            // Compute the new width and height while preserving the aspect ratio
+            const newCanvasWidth = BlazorFabric.originalWidth * zoomFactor;
+            const newCanvasHeight = BlazorFabric.originalHeight * zoomFactor;
+
+            // Update canvas dimensions
+            BlazorFabric.canvas.setWidth(newCanvasWidth);
+            BlazorFabric.canvas.setHeight(newCanvasHeight);
+
+            BlazorFabric.canvas.setZoom(zoomFactor);
+            BlazorFabric.canvas.calcOffset(); // Refresh canvas offsets
+            BlazorFabric.canvas.renderAll(); // Re-render the canvas
+        }
+    }
 }
 
 window.BlazorFabric = BlazorFabric;
@@ -233,4 +278,8 @@ window.addEventListener('keydown', function (e) {
     if (e.key === "Delete") {
         BlazorFabric.deleteSelectedObject();
     }
+});
+
+window.addEventListener('resize', function () {
+    BlazorFabric.resizeCanvas();
 });

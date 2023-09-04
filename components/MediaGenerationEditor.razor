@@ -28,30 +28,23 @@
 <div class="h-screen p-1">
     <div class="grid grid-cols-4 gap-2">
         <div>
-            <label for="mediaLayerCollection" class="block text-lg font-medium text-white mb-2">
-                <b>Media Layer Collection</b>
-            </label>
-            <select id="mediaLayerCollection" @bind="_selectedMediaLayerCollectionId"
-            @bind:after="(async () => await UpdateGameArt())"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                @foreach (var mediaLayerCollection in GameMediaGeneration.GetMediaLayerCollections().ToList())
-                {
-                    <option value="@mediaLayerCollection.id">@mediaLayerCollection.name</option>
-                }
-            </select>
+            <Select @bind-Value="_selectedMediaLayerCollectionId" @bind-Value:after="(async () => await UpdateGameArt())"
+                    Items="GameMediaGeneration.GetMediaLayerCollections().ToList()">
+                <Label>Media Layer Collection</Label>
+                <Option Context="mediaLayoutCollection">
+                <option value="@mediaLayoutCollection.id">@mediaLayoutCollection.name</option>
+                </Option>
+            </Select>
         </div>
-        <button @onclick="() => addModal?.Open()"
-                class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-400 focus:outline-none focus:bg-blue-700">
-            Add Media Layer Collection
-        </button>
-        <button @onclick="() => editModal?.Open()"
-                class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-400 focus:outline-none focus:bg-green-700">
-            Edit Media Layer Collection Name
-        </button>
-        <button @onclick="() => deleteModal?.Open()"
-                class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-400 focus:outline-none focus:bg-red-700">
-            Delete Media Layer Collection
-        </button>
+        <div class="grid">
+            <Button ButtonText="Add Media Layer Collection" OnClick="() => addModal?.Open()"></Button>
+        </div>
+        <div class="grid">
+            <Button ButtonText="Edit Media Layer Collection Name" OnClick="() => editModal?.Open()"></Button>
+        </div>
+        <div class="grid">
+            <Button ButtonText="Delete Media Layer Collection" OnClick="() => deleteModal?.Open()"></Button>
+        </div>
 
         <ModalComponent @ref="addModal">
             <AddMediaLayoutCollectionModal OnNewLayerAdded="(x => { var newMediaLayerCollection = GameMediaGeneration.AddMediaLayerCollection(x.name, x.templateid); _selectedMediaLayerCollectionId = newMediaLayerCollection.id; addModal?.Close(); })"></AddMediaLayoutCollectionModal>
@@ -71,54 +64,49 @@
     </div>
     <div class="grid grid-cols-3 gap-2">
         <div>
-            <label for="drive" class="block text-lg font-medium text-white">
-                <b>Drive</b>
-            </label>
-            <select id="drive" @bind="_selectedDriveValue" @bind:after="(() => _selectedDrive = GarlicDrive.GetGarlicDrives().FirstOrDefault(x => x.name == _selectedDriveValue))"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-                @foreach (var drive in GarlicDrive.GetGarlicDrives())
-                {
-                    <option value="@drive.name">@drive.name</option>
-                }
-            </select>
+            <Select @bind-Value="_selectedDriveValue" @bind-Value:after="(() => _selectedDrive = GarlicDrive.GetGarlicDrives().FirstOrDefault(x => x.name == _selectedDriveValue))"
+                    Items="GarlicDrive.GetGarlicDrives()">
+                <Label>Drive</Label>
+                <Option Context="drive">
+                <option value="@drive.name">@drive.name</option>
+                </Option>
+            </Select>
         </div>
         <div>
-            <label for="System" class="block text-lg font-medium text-white">
-                <b>System</b>
-            </label>
-            <select id="System" @bind="_selectedSystemValue" @bind:after="(() => { _selectedSystem = GarlicSystem.GetAllSystems().FirstOrDefault(x => x.name == _selectedSystemValue); UpdateGames();})"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-                @foreach (var system in GarlicSystem.GetAllSystems())
-                {
-                    <option value="@system.name">@system.name</option>
-                }
-            </select>
+            <Select @bind-Value="_selectedSystemValue" @bind-Value:after="(() => { _selectedSystem = GarlicSystem.GetAllSystems().FirstOrDefault(x => x.name == _selectedSystemValue); UpdateGames();})"
+                    Items="GarlicSystem.GetAllSystems()">
+                <Label>System</Label>
+                <Option Context="system">
+                <option value="@system.name">@system.name</option>
+                </Option>
+            </Select>
         </div>
         <div>
-            <label for="Game" class="block text-lg font-medium text-white">
-                <b>Game</b>
-            </label>
+
             @if (_games.Any())
             {
-                <select id="Game" @bind="_selectedGame" @bind:after="(async () => { await UpdateGameArt(); })"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                    @foreach (var game in _games)
-                    {
-                        <option value="@game">@game</option>
-                    }
-                </select>
+                <Select @bind-Value="_selectedGame" @bind-Value:after="(async () => { await UpdateGameArt(); })"
+                        Items="GarlicSystem.GetAllSystems()">
+                    <Label>System</Label>
+                    <Option Context="game">
+                    <option value="@game">@game</option>
+                    </Option>
+                </Select>
             }
             else
             {
+                <label for="Game" class="block text-sm font-medium">
+                    Game
+                </label>
                 <input id="Game" type="text" @bind="_selectedGame" @bind:after="(async () => { await UpdateGameArt(); })"
-                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2" />
+                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-1" />
             }
         </div>
     </div>
 
-    <div class="grid grid-cols-3 py-2 overflow-auto gap-2 h-[500px]">
-        <div class="col-span-2 flex justify-center items-center relative">
-            <FabricCanvas TItem="MediaLayer" width="640" height="480" @ref="_fabricCanvas" MediaUpdated="OnMediaUpdated" MediaDeleted="OnMediaDeleted" MediaSelected="OnMediaSelected" MediaUnselected="OnMediaUnselected" />
+    <div class="grid grid-cols-3 overflow-auto gap-2 h-[50vh]">
+        <div class="col-span-2 flex py-2 justify-center items-center overscroll-auto relative h-[50vh]">
+            <FabricCanvas TItem="MediaLayer" @ref="_fabricCanvas" MediaUpdated="OnMediaUpdated" MediaDeleted="OnMediaDeleted" MediaSelected="OnMediaSelected" MediaUnselected="OnMediaUnselected" />
 
             @if (_artUpdateRunning)
             {
@@ -132,32 +120,20 @@
 
         </div>
 
-        <div class="flex-initial border rounded-lg border-white overflow-auto scrollbar ">
+        <div class="flex-initial border rounded-sm border-gray-800 overflow-auto scrollbar my-2 p-2">
             <MediaLayerControl IsImageSelected="_imageSelected" OnApplyFilters="async () => await UpdateImage(_selectedMediaLayer, true)" mediaLayer="_selectedMediaLayer" mediaLayerChanged="async () => await UpdateImage(_selectedMediaLayer)" />
         </div>
     </div>
 
     <div class="grid grid-cols-4">
-        <div class="col-span-3 border rounded-lg border-white">
+        <div class="col-span-3 border rounded-sm border-gray-800">
             <MediaContent _selectedSystem="_selectedSystem" _selectedGame="@_selectedGame" _game="_game" _addNewMediaLayerImageToCanvas="AddNewMediaLayerImageToCanvas"></MediaContent>
         </div>
 
-        <div class="grid">
-
-            <button class="px-5 py-2.5 text-center bg-blue-500 hover:bg-blue-300 rounded ml-2 mb-2 text-white disabled:bg-gray-400 disabled:hover:bg:bg-gray-400 disabled:cursor-not-allowed"
-            @onclick="(async () => { await UpdateGameArt(); })" disabled="@_artUpdateRunning">
-                <b>@(_artUpdateRunning ? "Updating..." : "Update")</b>
-            </button>
-            <button class="px-5 py-2.5 text-center bg-blue-500 hover:bg-blue-300 rounded ml-2 my-2 text-white disabled:bg-gray-400 disabled:hover:bg:bg-gray-400 disabled:cursor-not-allowed"
-            @onclick="SaveMediaLayoutCollection" disabled="@_saving">
-                <b>@(_saving ? "Saving..." : "Save")</b>
-            </button>
-
-            <button class="px-5 py-2.5 text-center bg-gray-500 hover:bg-gray-300 rounded ml-2 mt-2 text-white"
-            @onclick="() => { editMediaLayersForm.Close(); }">
-                <b>Close</b>
-            </button>
-
+        <div class="grid gap-2 ml-2">
+            <Button ButtonText="@(_artUpdateRunning ? "Updating..." : "Update")" disabled="@_artUpdateRunning" OnClick="(async () => { await UpdateGameArt(); })"></Button>
+            <Button ButtonText="@(_saving ? "Saving..." : "Save")" disabled="@_saving" OnClick="SaveMediaLayoutCollection"></Button>
+            <Button ButtonText="Close" OnClick="() => { editMediaLayersForm.Close(); }"></Button>
         </div>
     </div>
 </div>
