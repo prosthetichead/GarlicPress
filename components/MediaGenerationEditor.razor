@@ -95,11 +95,11 @@
             }
             else
             {
-                <label for="Game" class="block text-sm font-medium">
+                <label for="Game" class="block text-xs font-medium">
                     Game
                 </label>
                 <input id="Game" type="text" @bind="_selectedGame" @bind:after="(async () => { await UpdateGameArt(); })"
-                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-1" />
+                       class="bg-gray-50 border border-gray-300 text-gray-900 text-xs focus:ring-blue-500 focus:border-blue-500 block w-full p-1" />
             }
         </div>
     </div>

@@ -23,24 +23,25 @@
         </div>
 
 
-        <h1 class="text-xl">Filters</h1>
-        <div class="flex">
-            <select @bind="selectedFilterType" class="p-2 m-1 flex-grow bg-white rounded">
-                @foreach (var filterEntry in FilterTypeMap)
-                {
-                    <option value="@filterEntry.Key">@filterEntry.Key</option>
-                }
-            </select>
-            <button @onclick="AddNewFilter" class="px-4 py-2 m-1 flex-grow overflow-hidden bg-blue-500 text-white rounded hover:bg-blue-600">Add Selected Filter</button>
+        <h1 class="text-md">Filters</h1>
+        <div class="grid grid-cols-2">
+            <div>
+                <Select Tid="string" T="KeyValuePair<string, Type>" @bind-Value="selectedFilterType" Items="FilterTypeMap.AsEnumerable()">
+                    <Label></Label>
+                    <Option Context="filterEntry">
+                    <option value="@filterEntry.Key">@filterEntry.Key</option></Option>
+                </Select>
+            </div>
+            <Button OnClick="AddNewFilter" ButtonText="Add Selected Filter"></Button>
         </div>
         <div class="relative overflow-x-auto">
             <table class="w-full text-left">
-                <thead class="uppercase bg-gradient-to-r from-gray-400 to-gray-500">
+                <thead class="uppercase bg-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="p-1 text-xs">
                             Filter Name
                         </th>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="p-1 text-xs">
                             Actions
                         </th>
                     </tr>
@@ -48,13 +49,14 @@
                 <tbody>
                     @foreach (var filter in mediaLayer.Filters)
                     {
+                        var selected = selectedFilterSetting == filter;
                         <tr class="odd:bg-blue-50 even:bg-white border-b">
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-800 whitespace-nowrap">
+                            <th scope="row" class="text-xs p-1 font-medium text-gray-800 whitespace-nowrap overflow-hidden truncate">
                                 @($"Filter: " + filter.GetType().Name)
                             </th>
-                            <td class="grid grid-cols-2 px-6 py-4 gap-1">
-                                <button @onclick="() => selectedFilterSetting = filter" class="px-2 py-1 text-white bg-blue-800 rounded-sm hover:bg-blue-600">Select</button>
-                                <button @onclick="() => DeleteFilter(filter)" class="px-2 py-1 bg-red-500 rounded-sm hover:bg-red-600">Delete</button>
+                            <td class="grid grid-cols-2 p-2 gap-1">
+                                <button @onclick="() => selectedFilterSetting = filter" class="text-xs px-2 py-1 text-white @(selected ? "bg-blue-500" : "bg-blue-800") rounded-sm hover:bg-blue-600">@(selected ? "Selected" : "Select")</button>
+                                <button @onclick="() => DeleteFilter(filter)" class="text-xs px-2 py-1 bg-red-500 rounded-sm hover:bg-red-600">Delete</button>
                             </td>
                         </tr>
                     }

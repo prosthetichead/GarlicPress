@@ -16,4 +16,11 @@ public partial class EditMediaLayersForm : Form
         bwvMediaEditor.Services = services.BuildServiceProvider();
         bwvMediaEditor.RootComponents.Add<MediaGenerationEditor>("#app");
     }
+
+    private void EditMediaLayersForm_LocationChanged(object sender, EventArgs e)
+    {
+        //fix for select not being in correct location if window is moved
+        bwvMediaEditor.Width++;
+        bwvMediaEditor.Width--;
+    }
 }
