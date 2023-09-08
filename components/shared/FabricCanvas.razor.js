@@ -128,6 +128,7 @@
                 selectable: false,
                 fontSize: fontSize,
                 textAlign: textAlign,
+                lineHeight: 1.25
             });
 
             BlazorFabric.canvas.off('object:added').on('object:added', function (options) {

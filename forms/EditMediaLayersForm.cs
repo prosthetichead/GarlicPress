@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace GarlicPress.forms;
 public partial class EditMediaLayersForm : Form
 {
-    public EditMediaLayersForm()
+    public EditMediaLayersForm(GarlicDrive? garlicDrive = null, GarlicSystem? garlicSystem = null, string? game = null)
     {
         InitializeComponent();
         var services = new ServiceCollection();
@@ -14,7 +14,17 @@ public partial class EditMediaLayersForm : Form
         services.AddSingleton(this);
         bwvMediaEditor.HostPage = "wwwroot\\index.html";
         bwvMediaEditor.Services = services.BuildServiceProvider();
-        bwvMediaEditor.RootComponents.Add<MediaGenerationEditor>("#app");
+
+        var parameters = new Dictionary<string, object?>
+        {
+            { nameof(MediaGenerationEditor._selectedDrive), garlicDrive },
+            { nameof(MediaGenerationEditor._selectedSystem), garlicSystem },
+            { nameof(MediaGenerationEditor._selectedGame), game }
+        };
+
+        var rootComp = new RootComponent("#app", typeof(MediaGenerationEditor), parameters);
+        
+        bwvMediaEditor.RootComponents.Add(rootComp);
     }
 
     private void EditMediaLayersForm_LocationChanged(object sender, EventArgs e)

@@ -64,7 +64,7 @@
     </div>
     <div class="grid grid-cols-3 gap-2">
         <div>
-            <Select @bind-Value="_selectedDriveValue" @bind-Value:after="(() => _selectedDrive = GarlicDrive.GetGarlicDrives().FirstOrDefault(x => x.name == _selectedDriveValue))"
+            <Select @bind-Value="_selectedDriveValue" @bind-Value:after="(() => { _selectedDrive = GarlicDrive.GetGarlicDrives().FirstOrDefault(x => x.name == _selectedDriveValue); UpdateGames();})"
                     Items="GarlicDrive.GetGarlicDrives()">
                 <Label>Drive</Label>
                 <Option Context="drive">
@@ -86,8 +86,8 @@
             @if (_games.Any())
             {
                 <Select @bind-Value="_selectedGame" @bind-Value:after="(async () => { await UpdateGameArt(); })"
-                        Items="GarlicSystem.GetAllSystems()">
-                    <Label>System</Label>
+                        Items="_games">
+                    <Label>Games</Label>
                     <Option Context="game">
                     <option value="@game">@game</option>
                     </Option>
@@ -152,13 +152,18 @@
 
     string _selectedImgPath { get { return _selectedDrive?.path + "/Roms/" + _selectedSystem?.folder + "/Imgs/"; } }
     string _selectedRomPath { get { return _selectedDrive?.romPath + "/" + _selectedSystem?.folder; } }
-    GarlicDrive? _selectedDrive { get; set; }
+
+    [Parameter]
+    public GarlicDrive? _selectedDrive { get; set; }
     string? _selectedDriveValue { get; set; }
-    GarlicSystem? _selectedSystem { get; set; }
+
+    [Parameter]
+    public GarlicSystem? _selectedSystem { get; set; }
     string? _selectedSystemValue { get; set; }
 
+    [Parameter]
+    public string _selectedGame { get; set; } = "";
     List<string> _games = new();
-    string _selectedGame = "";
 
     GameResponse? _game;
 
@@ -168,13 +173,21 @@
 
     bool _saving = false;
 
-    protected override void OnAfterRender(bool firstRender)
+    protected override void OnInitialized()
+    {
+        _selectedDrive ??= GarlicDrive.GetGarlicDrives().First();
+        _selectedSystem ??= GarlicSystem.GetAllSystems().First();
+        _selectedDriveValue = _selectedDrive.name;
+        _selectedSystemValue = _selectedSystem.name;
+        _selectedMediaLayerCollectionId = GameMediaGeneration.GetMediaLayerCollections().FirstOrDefault()?.id;
+        UpdateGames();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            _selectedDrive = GarlicDrive.GetGarlicDrives().First();
-            _selectedSystem = GarlicSystem.GetAllSystems().First();
-            _selectedMediaLayerCollectionId = GameMediaGeneration.GetMediaLayerCollections().FirstOrDefault()?.id;
+            await UpdateGameArt();
             StateHasChanged();
         }
     }
@@ -253,6 +266,10 @@
             && !String.IsNullOrWhiteSpace(_selectedGame))
         {
             _artUpdateRunning = true;
+            StateHasChanged();
+            await Task.Yield();
+            await Task.Delay(100);
+
             await _fabricCanvas.ClearCanvas();
             await _fabricCanvas.AddBackgroundImage(PathConstants.assetSkinPath.Replace("wwwroot/", "") + "background.png");
 
@@ -289,12 +306,12 @@
     {
         if (_fabricCanvas is not null)
         {
-            if (_games.Any() && GarlicSkin.skinSettings is not null && GarlicSkin.languageFiles is not null)
+            if (_games.Any() && GarlicSkin.skinSettings is not null && GarlicSkin.languageFiles is not null && GarlicSkin.validSkinSettings)
             {
                 var indexof = _games.IndexOf(_selectedGame);
-                await _fabricCanvas.AddText(String.Join("\n", GetSurroundingStrings(_games, indexof)), GarlicSkin.skinSettings.textmargin, 90, GarlicSkin.skinSettings.colorguide, "GarlicFont", GarlicSkin.languageFiles.First().garlicLanguageSettings.fontsize, GarlicSkin.skinSettings.textalignment);
+                await _fabricCanvas.AddText(String.Join("\n", GetSurroundingStrings(_games, indexof)), GarlicSkin.skinSettings.textmargin, 90, GarlicSkin.skinSettings.colorinactive ?? "white", "GarlicFont", GarlicSkin.languageFiles.First().garlicLanguageSettings.fontsize, GarlicSkin.skinSettings.textalignment ?? "left");
             }
-            else
+            else if (ADBConnection.deviceConnected == false)
             {
                 await _fabricCanvas.AddText(String.Join("\n", Enumerable.Repeat(_selectedGame, 8)), 340, 90, "white", "GarlicFont");
             }
@@ -303,13 +320,13 @@
 
     public static List<string> GetSurroundingStrings(List<string> source, int index)
     {
-        int start = Math.Max(0, index - 4); // Ensure we don't go below 0
+        int start = Math.Max(0, index - 3); // Ensure we don't go below 0
         int count = 8;
 
         // If we're near the start of the list, adjust count to get more elements after index
-        if (start < index - 4)
+        if (start < index - 3)
         {
-            count += (index - 4) - start;
+            count += (index - 3) - start;
         }
 
         // If we're near the end of the list, adjust count to stay within bounds

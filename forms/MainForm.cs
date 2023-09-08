@@ -484,5 +484,11 @@ namespace GarlicPress
         {
             debugLogForm.Show();
         }
+
+        private void btnOpenEditor_Click(object sender, EventArgs e)
+        {
+            EditMediaLayersForm editLayersForm = new(SelectedDrive, SelectedSystem, txtFileName.Text);
+            editLayersForm.Show();
+        }
     }
 }
