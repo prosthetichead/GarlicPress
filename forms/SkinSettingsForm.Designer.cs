@@ -892,6 +892,7 @@
             btnDeleteFont.TabIndex = 94;
             btnDeleteFont.Text = "Delete Font";
             btnDeleteFont.UseVisualStyleBackColor = true;
+            btnDeleteFont.Click += btnDeleteFont_Click;
             // 
             // btnUploadFont
             // 
