@@ -321,6 +321,28 @@ namespace GarlicPress
             }
         }
 
+        /// <summary>
+        /// Gets all media for a system and returns it as a tuple with the media path and the media type
+        /// </summary>
+        /// <param name="game"></param>
+        /// <returns>Returns each media as soon as it is downloaded</returns>
+        public static async IAsyncEnumerable<(GameMediaResponse? media, string mediaType)> GetAllSystemMedia(GameResponse game)
+        {
+            if (game.status == "error")
+            {
+                yield break;
+            }
+
+            var tasks = SSMediaType.GetAllMediaTypes().Where(x => x.value != "local").Select(media => GetMediaFromType(game, media.value)).ToList();
+
+            while (tasks.Count > 0)
+            {
+                var completedTask = await Task.WhenAny(tasks);
+                tasks.Remove(completedTask);
+                yield return await completedTask;
+            }
+        }
+
         public static Bitmap ApplyAllFilters(Bitmap originalImage, MediaLayer layer)
         {
             Bitmap imageCopy = (Bitmap)originalImage.Clone();

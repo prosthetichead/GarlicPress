@@ -239,35 +239,45 @@ namespace GarlicPress
     {
         public string label { get; set; }
         public string value { get; set; }
+        public MediaTypes mediaType { get; set; }
 
-        public SSMediaType(string label, string value)
+        public SSMediaType(string label, string value, MediaTypes mediaType)
         {
             this.label = label;
             this.value = value;
+            this.mediaType = mediaType;
         }
 
         public static List<SSMediaType> GetAllMediaTypes()
         {
             List<SSMediaType> systems = new List<SSMediaType>()
         {
-            new SSMediaType("Logo", "wheel"),
-            new SSMediaType("Logo Steel", "wheel-steel"),
-            new SSMediaType("Logo Carbon", "wheel-carbon"),
-            new SSMediaType("Logo Steam Grid", "steamgrid"),
-            new SSMediaType("Screen Marquee", "screenmarquee"),
-            new SSMediaType("Screen Marquee Small", "screenmarqueesmall"),
-            new SSMediaType("3D Box", "box-3D"),
-            new SSMediaType("2D Box", "box-2D"),
-            new SSMediaType("2D Support", "support-2D"),
-            new SSMediaType("Screen Shot", "ss"),
-            new SSMediaType("Screen Shot Title", "sstitle"),
-            new SSMediaType("Fan Art", "fanart"),
-            new SSMediaType("Mixed Image v1", "mixrbv1"),
-            new SSMediaType("Mixed Image v2", "mixrbv2"),
-            new SSMediaType("Local Media", "local")
+            new SSMediaType("Logo", "wheel", MediaTypes.SSGame),
+            new SSMediaType("Logo Steel", "wheel-steel", MediaTypes.SSGame),
+            new SSMediaType("Logo Carbon", "wheel-carbon", MediaTypes.SSGame),
+            new SSMediaType("Logo Steam Grid", "steamgrid", MediaTypes.SSGame),
+            new SSMediaType("Screen Marquee", "screenmarquee", MediaTypes.SSGame),
+            new SSMediaType("Screen Marquee Small", "screenmarqueesmall", MediaTypes.SSGame),
+            new SSMediaType("3D Box", "box-3D", MediaTypes.SSGame),
+            new SSMediaType("2D Box", "box-2D", MediaTypes.SSGame),
+            new SSMediaType("2D Support", "support-2D", MediaTypes.SSGame),
+            new SSMediaType("Screen Shot", "ss", MediaTypes.SSGame),
+            new SSMediaType("Screen Shot Title", "sstitle", MediaTypes.SSGame),
+            new SSMediaType("Fan Art", "fanart", MediaTypes.SSGame),
+            new SSMediaType("Mixed Image v1", "mixrbv1", MediaTypes.SSGame),
+            new SSMediaType("Mixed Image v2", "mixrbv2", MediaTypes.SSGame),
+            new SSMediaType("Local Media", "local", MediaTypes.Local)
+
         };
 
             return systems;
+        }
+
+        public enum MediaTypes
+        {
+            SSGame = 0,
+            SSSystem = 1,
+            Local = 2
         }
     }
 

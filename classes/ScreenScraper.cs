@@ -43,26 +43,30 @@ namespace GarlicPress
             uriBuilder.Query = query.ToString();
             string url = uriBuilder.ToString();
 
-            HttpClient client = new HttpClient();
-            var response = await client.GetAsync(url);
+            try
+            {
+                HttpClient client = new HttpClient();
+                var response = await client.GetAsync(url);
 
-            var json = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode && client is not null)
+                var json = await response.Content.ReadAsStringAsync();
+                if (!response.IsSuccessStatusCode && client is not null)
+                {
+                    return new GameResponse() { status = "error", statusMessage = response.StatusCode + "  " + json };
+                }
+                GameResponse? game = JsonSerializer.Deserialize<GameResponse>(json);
+                if (game != null && client is not null)
+                {
+                    game.status = "ok";
+                    game.statusMessage = "ok";
+                    return game;
+                }
+            }
+            catch (Exception ex)
             {
-                return new GameResponse() { status = "error", statusMessage = response.StatusCode + "  " + json };
+                MessageBox.Show(ex.Message);
             }
 
-            GameResponse? game = JsonSerializer.Deserialize<GameResponse>(json);
-            if (game != null && client is not null)
-            {
-                game.status = "ok";
-                game.statusMessage = "ok";
-                return game;
-            }
-            else
-            {
-                return new GameResponse() { status = "error", statusMessage = response.StatusCode + "  " + json };
-            }
+            return new GameResponse() { status = "error" };
         }
 
         public static async Task<GameMediaResponse?> DownloadMedia(GameResponse game, string mediaType = "box-3D", string region = "")

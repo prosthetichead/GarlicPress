@@ -3,7 +3,11 @@
 <div class="col-span-3 flex border-gray-800 border-b-2">
     <button class="flex-1 hover:bg-blue-200 @(activeTab == Tabs.Screenscraper ? "bg-gray-800 text-white" : "bg-gray-200") rounded-tl-sm"
     @onclick="() => activeTab = Tabs.Screenscraper">
-        Screenscraper.fr Media
+        Screenscraper.fr Game Media
+    </button>
+    <button class="flex-1 hover:bg-blue-200 @(activeTab == Tabs.ScreenscraperSystem ? "bg-gray-800 text-white" : "bg-gray-200") rounded-tl-sm"
+    @onclick="() => activeTab = Tabs.ScreenscraperSystem">
+        Screenscraper.fr System Media
     </button>
     <button class="flex-1 py-2 hover:bg-blue-200 @(activeTab == Tabs.Local ? "bg-gray-800 text-white" : "bg-gray-200") rounded-tr-sm"
     @onclick="() => activeTab = Tabs.Local">
@@ -11,6 +15,7 @@
     </button>
 </div>
 
+@* Local Media *@
 <div class="scrollbar overflow-auto h-[calc(100vh-50vh-160px)]"
      style="display: @(activeTab == Tabs.Local ? "block" : "none")">
     <div class="border-2  border-gray-800 p-4 flex items-center justify-center text-white text-xl cursor-pointer relative min-h-[50px] hover:bg-gray-500 hover:text-black @dropClass">
@@ -30,13 +35,38 @@
             </div>
         }
     </div>
-
 </div>
 
+@* Game Media *@
 <div class="scrollbar overflow-auto h-[calc(100vh-50vh-160px)]" style="display: @(activeTab == Tabs.Screenscraper ? "block" : "none")">
     <div class="p-2 flex overflow-auto flex-wrap w-full">
         <div class="grid w-full">
             <Button ButtonText="Get Game Art" OnClick="GetAllGameMedia"></Button>
+        </div>
+
+        @foreach (var gameMedia in _gameMedias)
+        {
+            <div class="p-2">
+                <img class="max-h-40 max-w-[200px] m-1" src="@gameMedia.path" @onclick="(async () => await AddNewMediaLayerImageToCanvas(gameMedia.path, gameMedia.mediaType))" />
+            </div>
+        }
+        @if (_artUpdateRunning)
+        {
+            <div class="grid place-content-center mt-8">
+                <div class="flex flex-col items-center gap-2 text-white">
+                    <GarlicLoading></GarlicLoading>
+                    <b>Loading Game Art...</b>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@* System Media *@
+<div class="scrollbar overflow-auto h-[calc(100vh-50vh-160px)]" style="display: @(activeTab == Tabs.Screenscraper ? "block" : "none")">
+    <div class="p-2 flex overflow-auto flex-wrap w-full">
+        <div class="grid w-full">
+            <Button ButtonText="Get System Art" OnClick="GetAllSystemMedia"></Button>
         </div>
 
         @foreach (var gameMedia in _gameMedias)
@@ -81,6 +111,8 @@
     List<(string path, string mediaType)> _gameMedias = new();
     bool _artUpdateRunning = false;
 
+    List<(string path, string mediaType)> _systemMedias = new();
+
     List<string> _localMedia = new();
     string dropClass = "bg-gray-700 border-dashed";
 
@@ -98,6 +130,7 @@
         {
             previousSelectedGame = _selectedGame;
             _gameMedias.Clear();
+            _systemMedias.Clear();
         }
     }
 
@@ -113,7 +146,8 @@
     enum Tabs
     {
         Local,
-        Screenscraper
+        Screenscraper,
+        ScreenscraperSystem
     }
 
     async void GetAllGameMedia()
@@ -130,6 +164,30 @@
                     if (gameMedia.media is GameMediaResponse media)
                     {
                         _gameMedias.Add((media.path.Replace("wwwroot/", ""), gameMedia.mediaType));
+                    }
+                    await this.InvokeAsync(() => StateHasChanged());
+                }
+            }
+
+            _artUpdateRunning = false;
+            StateHasChanged();
+        }
+    }
+
+    async void GetAllSystemMedia()
+    {
+        if (!_artUpdateRunning && _selectedSystem is not null)
+        {
+            _artUpdateRunning = true;
+            _systemMedias.Clear();
+            _game ??= await ScreenScraper.GetGameData(_selectedSystem, _selectedGame, SearchType.GameName);
+            if (_game is not null && _game.status != "error")
+            {
+                await foreach (var systemMedia in GameMediaGeneration.GetAllGameMedia(_game))
+                {
+                    if (systemMedia.media is GameMediaResponse media)
+                    {
+                        _systemMedias.Add((media.path.Replace("wwwroot/", ""), systemMedia.mediaType));
                     }
                     await this.InvokeAsync(() => StateHasChanged());
                 }
