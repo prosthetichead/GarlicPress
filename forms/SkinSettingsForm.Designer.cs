@@ -892,6 +892,7 @@
             btnDeleteFont.TabIndex = 94;
             btnDeleteFont.Text = "Delete Font";
             btnDeleteFont.UseVisualStyleBackColor = true;
+            btnDeleteFont.Click += btnDeleteFont_Click;
             // 
             // btnUploadFont
             // 
@@ -901,6 +902,7 @@
             btnUploadFont.TabIndex = 93;
             btnUploadFont.Text = "Upload Font";
             btnUploadFont.UseVisualStyleBackColor = true;
+            btnUploadFont.Click += btnUploadFont_Click;
             // 
             // cbLangFont
             // 

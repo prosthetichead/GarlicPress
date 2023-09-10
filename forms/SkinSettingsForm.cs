@@ -349,5 +349,30 @@ namespace GarlicPress
                 GarlicSkin.SaveLangFile(garlicLanguageSettingsFile);
             }
         }
+
+        private void btnUploadFont_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Fonts|*.ttf;*.otf";
+            openFileDialog.Multiselect = false;
+            openFileDialog.CheckFileExists = true;
+            DialogResult result = openFileDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                string fileName = openFileDialog.FileName;
+
+                ADBConnection.ExecuteCommand("mount -o remount,rw /misc");
+                ADBConnection.UploadFile(fileName, "/mnt/mmc/cfw/font/" + openFileDialog.SafeFileName);
+                ADBConnection.ExecuteCommand("mount -o remount,ro /misc");
+
+                fonts.Add(openFileDialog.SafeFileName);
+            }
+        }
+
+        private void btnDeleteFont_Click(object sender, EventArgs e)
+        {
+            ADBConnection.DeleteFile("/mnt/mmc/cfw/font/" + (string)cbLangFont.SelectedItem);
+            fonts.Remove((string)cbLangFont.SelectedItem);
+        }
     }
 }
