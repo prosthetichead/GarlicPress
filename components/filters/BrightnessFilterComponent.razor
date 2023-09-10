@@ -1,0 +1,19 @@
+﻿<NumberSlider T="float"
+              Label="Brightness: "
+              Value="@BrightnessFilterSettings.Brightness"
+              ValueChanged="@(value => { BrightnessFilterSettings.Brightness = value; OnApplyFilters.InvokeAsync(); })"
+              Max="5.0F"
+              Min="-5.0F"
+              Step="0.01F"
+              LabelValue="@((@BrightnessFilterSettings.Brightness * 100).ToString("F0") + "%")">
+</NumberSlider>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public required BrightnessFilter BrightnessFilterSettings { get; set; }
+
+    [Parameter]
+    public EventCallback OnApplyFilters { get; set; }
+}
+

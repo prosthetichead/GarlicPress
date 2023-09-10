@@ -1,0 +1,21 @@
+﻿@if (BlurFilterSettings is not null)
+{
+    <h2 class="text-xl mb-4">Blur Controls</h2>
+    <NumberSlider T="int"
+                  Label="Blur Amount: "
+                  Value="@BlurFilterSettings.BlurAmount"
+                  ValueChanged="@(value => { BlurFilterSettings.BlurAmount = value; OnApplyFilters.InvokeAsync(); })"
+                  Max="10"
+                  Min="0"
+                  Step="1"
+                  LabelValue="@((BlurFilterSettings.BlurAmount).ToString())">
+    </NumberSlider>
+}
+
+@code {
+    [Parameter]
+    public BlurFilter? BlurFilterSettings { get; set; }
+
+    [Parameter]
+    public EventCallback OnApplyFilters { get; set; }
+}

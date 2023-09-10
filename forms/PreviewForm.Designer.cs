@@ -134,7 +134,7 @@ partial class PreviewForm
         Icon = (Icon)resources.GetObject("$this.Icon");
         MinimumSize = new Size(500, 400);
         Name = "PreviewForm";
-        StartPosition = FormStartPosition.CenterParent;
+        StartPosition = FormStartPosition.CenterScreen;
         Text = "Preview";
         ((System.ComponentModel.ISupportInitialize)picGamePreview).EndInit();
         ResumeLayout(false);

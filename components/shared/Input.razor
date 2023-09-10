@@ -1,0 +1,23 @@
+﻿@typeparam TItem
+
+<div class="flex border-gray-400 rounded-md overflow-hidden m-1">
+    <label for="@id" class="text-xs font-medium text-gray-700 p-1 bg-gray-100">@Label</label>
+    <input id="@id" type="text" @attributes="AllOtherAttributes" @bind="Value" @bind:after="() => ValueChanged.InvokeAsync(Value)" class="flex-grow p-1 text-xs font-medium" />
+</div>
+
+@code {
+    Guid id = Guid.NewGuid();
+
+    [Parameter]
+    [EditorRequired]
+    public required string Label { get; set; }
+
+    [Parameter]
+    public TItem? Value { get; set; }
+
+    [Parameter]
+    public EventCallback<TItem> ValueChanged { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AllOtherAttributes { get; set; }
+}

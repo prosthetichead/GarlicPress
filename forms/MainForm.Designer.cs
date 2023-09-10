@@ -38,6 +38,7 @@
             menuStrip = new MenuStrip();
             miFile = new ToolStripMenuItem();
             miSettings = new ToolStripMenuItem();
+            miShowDebugLog = new ToolStripMenuItem();
             exitToolStripMenuItem = new ToolStripMenuItem();
             toolsToolStripMenuItem = new ToolStripMenuItem();
             miConsole = new ToolStripMenuItem();
@@ -62,7 +63,7 @@
             txtFileName = new TextBox();
             label3 = new Label();
             btnRename = new Button();
-            miShowDebugLog = new ToolStripMenuItem();
+            btnOpenEditor = new Button();
             statusStrip.SuspendLayout();
             menuStrip.SuspendLayout();
             notifyIconMenu.SuspendLayout();
@@ -72,11 +73,13 @@
             // statusStrip
             // 
             statusStrip.BackColor = SystemColors.ControlLight;
+            statusStrip.ImageScalingSize = new Size(28, 28);
             statusStrip.Items.AddRange(new ToolStripItem[] { txtUpdate, toolStripDeviceStatus, txtCurrentTask });
-            statusStrip.Location = new Point(0, 588);
+            statusStrip.Location = new Point(0, 1028);
             statusStrip.Name = "statusStrip";
+            statusStrip.Padding = new Padding(24, 0, 2, 0);
             statusStrip.RightToLeft = RightToLeft.Yes;
-            statusStrip.Size = new Size(1013, 24);
+            statusStrip.Size = new Size(1773, 43);
             statusStrip.SizingGrip = false;
             statusStrip.TabIndex = 3;
             statusStrip.Text = "statusStrip";
@@ -87,7 +90,7 @@
             txtUpdate.BorderSides = ToolStripStatusLabelBorderSides.Left | ToolStripStatusLabelBorderSides.Top | ToolStripStatusLabelBorderSides.Right | ToolStripStatusLabelBorderSides.Bottom;
             txtUpdate.ForeColor = Color.Blue;
             txtUpdate.Name = "txtUpdate";
-            txtUpdate.Size = new Size(100, 19);
+            txtUpdate.Size = new Size(174, 34);
             txtUpdate.Text = "Update Available";
             txtUpdate.Visible = false;
             txtUpdate.Click += txtUpdate_Click;
@@ -98,13 +101,13 @@
             toolStripDeviceStatus.BorderSides = ToolStripStatusLabelBorderSides.Left | ToolStripStatusLabelBorderSides.Top | ToolStripStatusLabelBorderSides.Right | ToolStripStatusLabelBorderSides.Bottom;
             toolStripDeviceStatus.ForeColor = SystemColors.ControlText;
             toolStripDeviceStatus.Name = "toolStripDeviceStatus";
-            toolStripDeviceStatus.Size = new Size(81, 19);
+            toolStripDeviceStatus.Size = new Size(141, 34);
             toolStripDeviceStatus.Text = "Device Status";
             // 
             // txtCurrentTask
             // 
             txtCurrentTask.Name = "txtCurrentTask";
-            txtCurrentTask.Size = new Size(91, 19);
+            txtCurrentTask.Size = new Size(161, 34);
             txtCurrentTask.Text = "No Current Task";
             // 
             // fileListBox
@@ -114,21 +117,24 @@
             fileListBox.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             fileListBox.ForeColor = Color.White;
             fileListBox.FormattingEnabled = true;
-            fileListBox.ItemHeight = 17;
-            fileListBox.Location = new Point(12, 72);
+            fileListBox.ItemHeight = 31;
+            fileListBox.Location = new Point(21, 126);
+            fileListBox.Margin = new Padding(5);
             fileListBox.Name = "fileListBox";
             fileListBox.SelectionMode = SelectionMode.MultiExtended;
-            fileListBox.Size = new Size(343, 510);
+            fileListBox.Size = new Size(600, 868);
             fileListBox.TabIndex = 5;
             fileListBox.SelectedIndexChanged += fileListBox_SelectedIndexChanged;
             fileListBox.KeyDown += fileListBox_KeyDown;
             // 
             // menuStrip
             // 
+            menuStrip.ImageScalingSize = new Size(28, 28);
             menuStrip.Items.AddRange(new ToolStripItem[] { miFile, toolsToolStripMenuItem, aboutToolStripMenuItem });
             menuStrip.Location = new Point(0, 0);
             menuStrip.Name = "menuStrip";
-            menuStrip.Size = new Size(1013, 24);
+            menuStrip.Padding = new Padding(10, 4, 0, 4);
+            menuStrip.Size = new Size(1773, 42);
             menuStrip.TabIndex = 8;
             menuStrip.Text = "menuStrip";
             // 
@@ -136,20 +142,27 @@
             // 
             miFile.DropDownItems.AddRange(new ToolStripItem[] { miSettings, miShowDebugLog, exitToolStripMenuItem });
             miFile.Name = "miFile";
-            miFile.Size = new Size(37, 20);
+            miFile.Size = new Size(62, 34);
             miFile.Text = "File";
             // 
             // miSettings
             // 
             miSettings.Name = "miSettings";
-            miSettings.Size = new Size(180, 22);
+            miSettings.Size = new Size(289, 40);
             miSettings.Text = "Settings";
             miSettings.Click += miSettings_Click;
+            // 
+            // miShowDebugLog
+            // 
+            miShowDebugLog.Name = "miShowDebugLog";
+            miShowDebugLog.Size = new Size(289, 40);
+            miShowDebugLog.Text = "Show Debug Log";
+            miShowDebugLog.Click += miShowDebugLog_Click;
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(180, 22);
+            exitToolStripMenuItem.Size = new Size(289, 40);
             exitToolStripMenuItem.Text = "Exit";
             exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
             // 
@@ -157,46 +170,46 @@
             // 
             toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { miConsole, miSkinSettings, miBackupSaves, toolStripSeparator2, miUpdateAllArt });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            toolsToolStripMenuItem.Size = new Size(46, 20);
+            toolsToolStripMenuItem.Size = new Size(78, 34);
             toolsToolStripMenuItem.Text = "Tools";
             // 
             // miConsole
             // 
             miConsole.Name = "miConsole";
-            miConsole.Size = new Size(194, 22);
+            miConsole.Size = new Size(342, 40);
             miConsole.Text = "Console";
             miConsole.Click += miConsole_Click;
             // 
             // miSkinSettings
             // 
             miSkinSettings.Name = "miSkinSettings";
-            miSkinSettings.Size = new Size(194, 22);
+            miSkinSettings.Size = new Size(342, 40);
             miSkinSettings.Text = "Edit Skin Settings";
             miSkinSettings.Click += miSkinSettings_Click;
             // 
             // miBackupSaves
             // 
             miBackupSaves.Name = "miBackupSaves";
-            miBackupSaves.Size = new Size(194, 22);
+            miBackupSaves.Size = new Size(342, 40);
             miBackupSaves.Text = "Backup Saves";
             miBackupSaves.Click += miBackupSaves_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(191, 6);
+            toolStripSeparator2.Size = new Size(339, 6);
             // 
             // miUpdateAllArt
             // 
             miUpdateAllArt.Name = "miUpdateAllArt";
-            miUpdateAllArt.Size = new Size(194, 22);
+            miUpdateAllArt.Size = new Size(342, 40);
             miUpdateAllArt.Text = "Update All Systems Art";
             miUpdateAllArt.Click += miUpdateAllArt_Click;
             // 
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(52, 20);
+            aboutToolStripMenuItem.Size = new Size(88, 34);
             aboutToolStripMenuItem.Text = "About";
             aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
             // 
@@ -213,25 +226,26 @@
             // 
             // notifyIconMenu
             // 
+            notifyIconMenu.ImageScalingSize = new Size(28, 28);
             notifyIconMenu.Items.AddRange(new ToolStripItem[] { miOpenGalicPress, toolStripSeparator1, miExit });
             notifyIconMenu.Name = "notifyIconMenu";
-            notifyIconMenu.Size = new Size(160, 54);
+            notifyIconMenu.Size = new Size(237, 82);
             // 
             // miOpenGalicPress
             // 
             miOpenGalicPress.Name = "miOpenGalicPress";
-            miOpenGalicPress.Size = new Size(159, 22);
+            miOpenGalicPress.Size = new Size(236, 36);
             miOpenGalicPress.Text = "Open GalicPress";
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(156, 6);
+            toolStripSeparator1.Size = new Size(233, 6);
             // 
             // miExit
             // 
             miExit.Name = "miExit";
-            miExit.Size = new Size(159, 22);
+            miExit.Size = new Size(236, 36);
             miExit.Text = "Exit";
             // 
             // comboSystems
@@ -240,27 +254,30 @@
             comboSystems.FlatStyle = FlatStyle.System;
             comboSystems.FormattingEnabled = true;
             comboSystems.Items.AddRange(new object[] { "GameBoy" });
-            comboSystems.Location = new Point(107, 43);
+            comboSystems.Location = new Point(187, 75);
+            comboSystems.Margin = new Padding(5);
             comboSystems.Name = "comboSystems";
-            comboSystems.Size = new Size(248, 23);
+            comboSystems.Size = new Size(431, 38);
             comboSystems.TabIndex = 9;
             comboSystems.SelectedIndexChanged += comboSystems_SelectedIndexChanged;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(107, 24);
+            label1.Location = new Point(187, 42);
+            label1.Margin = new Padding(5, 0, 5, 0);
             label1.Name = "label1";
-            label1.Size = new Size(45, 15);
+            label1.Size = new Size(78, 30);
             label1.TabIndex = 10;
             label1.Text = "System";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(12, 24);
+            label2.Location = new Point(21, 42);
+            label2.Margin = new Padding(5, 0, 5, 0);
             label2.Name = "label2";
-            label2.Size = new Size(34, 15);
+            label2.Size = new Size(61, 30);
             label2.TabIndex = 11;
             label2.Text = "Drive";
             // 
@@ -270,9 +287,10 @@
             comboDrive.FlatStyle = FlatStyle.System;
             comboDrive.FormattingEnabled = true;
             comboDrive.Items.AddRange(new object[] { "SD Card 1", "SD Card 2" });
-            comboDrive.Location = new Point(12, 42);
+            comboDrive.Location = new Point(21, 74);
+            comboDrive.Margin = new Padding(5);
             comboDrive.Name = "comboDrive";
-            comboDrive.Size = new Size(89, 23);
+            comboDrive.Size = new Size(153, 38);
             comboDrive.TabIndex = 12;
             comboDrive.SelectedIndexChanged += comboDrive_SelectedIndexChanged;
             // 
@@ -281,9 +299,10 @@
             picGame.BackColor = Color.Transparent;
             picGame.BackgroundImageLayout = ImageLayout.None;
             picGame.BorderStyle = BorderStyle.FixedSingle;
-            picGame.Location = new Point(361, 72);
+            picGame.Location = new Point(632, 126);
+            picGame.Margin = new Padding(5);
             picGame.Name = "picGame";
-            picGame.Size = new Size(640, 480);
+            picGame.Size = new Size(1118, 838);
             picGame.SizeMode = PictureBoxSizeMode.StretchImage;
             picGame.TabIndex = 13;
             picGame.TabStop = false;
@@ -291,9 +310,10 @@
             // btnUpdateSelectedArt
             // 
             btnUpdateSelectedArt.FlatStyle = FlatStyle.Flat;
-            btnUpdateSelectedArt.Location = new Point(449, 556);
+            btnUpdateSelectedArt.Location = new Point(786, 973);
+            btnUpdateSelectedArt.Margin = new Padding(5);
             btnUpdateSelectedArt.Name = "btnUpdateSelectedArt";
-            btnUpdateSelectedArt.Size = new Size(82, 26);
+            btnUpdateSelectedArt.Size = new Size(144, 46);
             btnUpdateSelectedArt.TabIndex = 15;
             btnUpdateSelectedArt.Text = "Update Art";
             btnUpdateSelectedArt.UseVisualStyleBackColor = true;
@@ -304,9 +324,10 @@
             btnDelete.BackColor = Color.DarkRed;
             btnDelete.FlatStyle = FlatStyle.Flat;
             btnDelete.ForeColor = Color.White;
-            btnDelete.Location = new Point(919, 556);
+            btnDelete.Location = new Point(1608, 973);
+            btnDelete.Margin = new Padding(5);
             btnDelete.Name = "btnDelete";
-            btnDelete.Size = new Size(82, 26);
+            btnDelete.Size = new Size(144, 46);
             btnDelete.TabIndex = 16;
             btnDelete.Text = "Delete";
             btnDelete.UseVisualStyleBackColor = false;
@@ -315,9 +336,10 @@
             // btnSelectAll
             // 
             btnSelectAll.FlatStyle = FlatStyle.Flat;
-            btnSelectAll.Location = new Point(361, 556);
+            btnSelectAll.Location = new Point(632, 973);
+            btnSelectAll.Margin = new Padding(5);
             btnSelectAll.Name = "btnSelectAll";
-            btnSelectAll.Size = new Size(82, 26);
+            btnSelectAll.Size = new Size(144, 46);
             btnSelectAll.TabIndex = 18;
             btnSelectAll.Text = "Select All";
             btnSelectAll.UseVisualStyleBackColor = true;
@@ -326,47 +348,56 @@
             // txtFileName
             // 
             txtFileName.BorderStyle = BorderStyle.FixedSingle;
-            txtFileName.Location = new Point(361, 42);
+            txtFileName.Location = new Point(632, 74);
+            txtFileName.Margin = new Padding(5);
             txtFileName.Name = "txtFileName";
-            txtFileName.Size = new Size(572, 23);
+            txtFileName.Size = new Size(1000, 35);
             txtFileName.TabIndex = 19;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(361, 24);
+            label3.Location = new Point(632, 42);
+            label3.Margin = new Padding(5, 0, 5, 0);
             label3.Name = "label3";
-            label3.Size = new Size(60, 15);
+            label3.Size = new Size(106, 30);
             label3.TabIndex = 21;
             label3.Text = "File Name";
             // 
             // btnRename
             // 
             btnRename.FlatStyle = FlatStyle.Flat;
-            btnRename.Location = new Point(939, 42);
+            btnRename.Location = new Point(1643, 74);
+            btnRename.Margin = new Padding(5);
             btnRename.Name = "btnRename";
-            btnRename.Size = new Size(62, 23);
+            btnRename.Size = new Size(108, 40);
             btnRename.TabIndex = 22;
             btnRename.Text = "Rename";
             btnRename.TextAlign = ContentAlignment.TopCenter;
             btnRename.UseVisualStyleBackColor = true;
             btnRename.Click += btnRename_Click;
             // 
-            // miShowDebugLog
+            // btnOpenEditor
             // 
-            miShowDebugLog.Name = "miShowDebugLog";
-            miShowDebugLog.Size = new Size(180, 22);
-            miShowDebugLog.Text = "Show Debug Log";
-            miShowDebugLog.Click += miShowDebugLog_Click;
+            btnOpenEditor.FlatStyle = FlatStyle.Flat;
+            btnOpenEditor.Location = new Point(940, 973);
+            btnOpenEditor.Margin = new Padding(5);
+            btnOpenEditor.Name = "btnOpenEditor";
+            btnOpenEditor.Size = new Size(144, 46);
+            btnOpenEditor.TabIndex = 23;
+            btnOpenEditor.Text = "Open Editor";
+            btnOpenEditor.UseVisualStyleBackColor = true;
+            btnOpenEditor.Click += btnOpenEditor_Click;
             // 
             // MainForm
             // 
             AllowDrop = true;
-            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleDimensions = new SizeF(168F, 168F);
             AutoScaleMode = AutoScaleMode.Dpi;
             AutoSize = true;
             AutoValidate = AutoValidate.EnablePreventFocusChange;
-            ClientSize = new Size(1013, 612);
+            ClientSize = new Size(1773, 1071);
+            Controls.Add(btnOpenEditor);
             Controls.Add(btnRename);
             Controls.Add(label3);
             Controls.Add(txtFileName);
@@ -384,10 +415,12 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip;
+            Margin = new Padding(5);
             MaximizeBox = false;
-            MaximumSize = new Size(10000, 10000);
+            MaximumSize = new Size(17482, 17452);
             Name = "MainForm";
             SizeGripStyle = SizeGripStyle.Hide;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "GarlicPress";
             WindowState = FormWindowState.Minimized;
             FormClosing += MainForm_FormClosing;
@@ -440,5 +473,6 @@
         private Label label3;
         private Button btnRename;
         private ToolStripMenuItem miShowDebugLog;
+        private Button btnOpenEditor;
     }
 }

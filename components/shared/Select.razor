@@ -1,0 +1,36 @@
+﻿@typeparam T
+@typeparam Tid
+
+<label for="@id" class="block text-xs font-medium">
+    @Label
+</label>
+<select id="@id" @bind="Value" @bind:after="() => ValueChanged.InvokeAsync(Value)"
+        class="bg-gray-50 shadow border border-gray-300 text-gray-900 text-xs focus:ring-blue-500 focus:border-blue-500 block w-full p-1">
+    @foreach (var item in Items)
+    {
+        @Option(item)
+    }
+</select>
+
+@code {
+    string id = Guid.NewGuid().ToString();
+
+    [Parameter]
+    [EditorRequired]
+    public required Tid Value { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public required RenderFragment<T> Option { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public required RenderFragment Label { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public required IEnumerable<T> Items { get; set; }
+
+    [Parameter]
+    public EventCallback<Tid> ValueChanged { get; set; }
+}

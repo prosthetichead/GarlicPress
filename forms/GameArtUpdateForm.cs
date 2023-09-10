@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GarlicPress.constants;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,7 @@ namespace GarlicPress.forms
     public partial class GameArtUpdateForm : Form
     {
         BindingList<GarlicGameArtSearch> searchItems = new BindingList<GarlicGameArtSearch>();
+        MediaLayerCollection? _selectedMediaLayerCollection = null;
         bool ArtUpdateRunning = false;
         bool CancelArtRun = false;
 
@@ -27,6 +29,14 @@ namespace GarlicPress.forms
 
             foreach (GarlicGameArtSearch item in searchItems)
                 this.searchItems.Add(item);
+
+            cbMediaLayerCollection.DataSource = GameMediaGeneration.GetMediaLayerCollections();
+            cbMediaLayerCollection.DisplayMember = nameof(MediaLayerCollection.name);
+            if (cbMediaLayerCollection.DataSource is List<MediaLayerCollection> mediaLayerCollections
+                && mediaLayerCollections.Count > 0)
+            {
+                cbMediaLayerCollection.SelectedIndex = 0;
+            }
 
 
             dataGridSearch.AutoGenerateColumns = false;
@@ -120,19 +130,19 @@ namespace GarlicPress.forms
                         {
                             log("Game Found");
                             log("Generating Game Art");
-                            var bitmap = await GameMediaGeneration.GenerateGameMedia(game);
+                            var bitmap = await GameMediaGeneration.GenerateGameMedia(game, _selectedMediaLayerCollection);
                             if (bitmap != null && !CancelArtRun)
                             {
                                 ImgArtPreview.Image = GameMediaGeneration.OverlayImageWithSkinBackground(bitmap);
                                 log("Game Art Generation Complete");
 
-                                Directory.CreateDirectory("assets/temp");
-                                bitmap.Save("assets/temp/gameart-up.png", ImageFormat.Png);
+                                Directory.CreateDirectory(PathConstants.assetsTempPath);
+                                bitmap.Save(PathConstants.assetsTempPath + "gameart-up.png", ImageFormat.Png);
                                 bitmap.Dispose();
-                                
+
                                 log("Uploading Game Art to Device");
                                 Progress<int> progress = new Progress<int>(p => { log(".." + p.ToString() + "%", Color.Orange, false); });
-                                await ADBConnection.UploadFileAsync("assets/temp/gameart-up.png", item.imgPath, progress, CancellationToken.None);
+                                await ADBConnection.UploadFileAsync(PathConstants.assetsTempPath + "gameart-up.png", item.imgPath, progress, CancellationToken.None);
                                 log("");
                                 item.status = "Complete";
                             }
@@ -196,6 +206,14 @@ namespace GarlicPress.forms
             if (!ArtUpdateRunning)
             {
                 Close();
+            }
+        }
+
+        private void cbMediaLayerCollection_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbMediaLayerCollection.SelectedItem is MediaLayerCollection mediaLayerCollection)
+            {
+                _selectedMediaLayerCollection = mediaLayerCollection;
             }
         }
     }

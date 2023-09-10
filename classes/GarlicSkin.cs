@@ -1,4 +1,5 @@
 ﻿using AdvancedSharpAdbClient;
+using GarlicPress.constants;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,9 +13,9 @@ namespace GarlicPress
     internal static class GarlicSkin
     {       
 
-        public static GarlicSkinSettings skinSettings;
-        public static List<GarlicLanguageSettingsFile> languageFiles;
-        public static List<string> fonts;
+        public static GarlicSkinSettings? skinSettings;
+        public static List<GarlicLanguageSettingsFile>? languageFiles;
+        public static List<string>? fonts;
         public static bool validSkinSettings;
 
         static JsonSerializerOptions jsonOptions = new JsonSerializerOptions
@@ -25,7 +26,8 @@ namespace GarlicPress
         public static void ReadSkinSettings()
         {
             string skinSettingsJson = ADBConnection.ReadTextFile("/mnt/mmc/CFW/skin/settings.json");
-            ADBConnection.DownloadFile("/mnt/mmc/CFW/skin/background.png", "assets/background.png");
+            ADBConnection.DownloadFile("/mnt/mmc/CFW/skin/background.png", PathConstants.assetSkinPath + "background.png");
+            ADBConnection.DownloadFile("/mnt/mmc/CFW/skin/font.ttf", PathConstants.assetSkinPath + "font.ttf");
             try
             {
                 skinSettings = JsonSerializer.Deserialize<GarlicSkinSettings>(skinSettingsJson);
@@ -42,7 +44,7 @@ namespace GarlicPress
         public static void DeleteLangFile(string fileKey, string fileName)
         {
             ADBConnection.DeleteFile("/mnt/mmc/CFW/lang/" + fileName);
-            languageFiles.RemoveAll(o=> o.fileKey == fileKey);
+            languageFiles?.RemoveAll(o=> o.fileKey == fileKey);
         }
 
         public static void SaveLangFile(GarlicLanguageSettingsFile languageFile)
@@ -53,7 +55,7 @@ namespace GarlicPress
             DebugLog.Write("Saving Language Json file");
 
             //check if this languageFile is already in the list
-            if (languageFiles.Any(a => a.fileKey == languageFile.fileKey))
+            if (languageFiles?.Any(a => a.fileKey == languageFile.fileKey) ?? false)
             {
                 DebugLog.Write("Old Language File Found replace it");
                 GarlicLanguageSettingsFile oldLangFile = languageFiles.First(w => w.fileKey == languageFile.fileKey);
@@ -63,7 +65,7 @@ namespace GarlicPress
             else
             {
                 DebugLog.Write("This is a new Language File");
-                languageFiles.Add(languageFile);
+                languageFiles?.Add(languageFile);
             }
 
 
@@ -86,7 +88,7 @@ namespace GarlicPress
                     {
                         var langSettingsJSON = ADBConnection.ReadTextFile($"/mnt/mmc/CFW/lang/{item.Path}");
                         var langSettings = JsonSerializer.Deserialize<GarlicLanguageSettings>(langSettingsJSON);
-                        GarlicLanguageSettingsFile lang = new GarlicLanguageSettingsFile(item.Path, langSettings);
+                        GarlicLanguageSettingsFile lang = new GarlicLanguageSettingsFile(item.Path, langSettings ?? new());
                         languageFiles.Add(lang);
                     }
                     catch (Exception ex)
@@ -122,7 +124,6 @@ namespace GarlicPress
 
         public static void ReadSkinFromDevice()
         {
-
             ReadSkinSettings();
             ReadAllLangFiles();
             ReadFonts();

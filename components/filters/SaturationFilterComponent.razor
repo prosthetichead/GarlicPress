@@ -1,0 +1,18 @@
+﻿<NumberSlider T="float"
+              Label="Saturation"
+              Value="@SaturationFilterSettings.Saturation"
+              ValueChanged="@(value => { SaturationFilterSettings.Saturation = value; OnApplyFilters.InvokeAsync(); })"
+              Max="2.0F"
+              Min="-1.0F"
+              Step="0.01F"
+              LabelValue="@((SaturationFilterSettings.Saturation * 100).ToString("F0") + "%")">
+</NumberSlider>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public required SaturationFilter SaturationFilterSettings { get; set; }
+
+    [Parameter]
+    public EventCallback OnApplyFilters { get; set; }
+}

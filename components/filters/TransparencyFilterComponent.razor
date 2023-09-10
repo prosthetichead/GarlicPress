@@ -1,0 +1,18 @@
+﻿<NumberSlider T="float"
+              Label="Transparency: "
+              Value="@TransparencyFilterSettings.Transparency"
+              ValueChanged="@(value => { TransparencyFilterSettings.Transparency = value; OnApplyFilters.InvokeAsync(); })"
+              Max="1.0F"
+              Min="0.0F"
+              Step="0.01F"
+              LabelValue="@((@TransparencyFilterSettings.Transparency * 100).ToString("F0") + "%")">
+</NumberSlider>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public required TransparencyFilter TransparencyFilterSettings { get; set; }
+
+    [Parameter]
+    public EventCallback OnApplyFilters { get; set; }
+}

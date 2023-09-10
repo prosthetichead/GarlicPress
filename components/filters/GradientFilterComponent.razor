@@ -1,0 +1,55 @@
+﻿<h2 class="text-lg mb-4 text-white">Gradient Controls</h2>
+<NumberSlider T="float"
+              Label="Angle: "
+              Value="@GradientFilterSettings.Angle"
+              ValueChanged="@(value => { GradientFilterSettings.Angle = value; ApplyFilters(); })"
+              Max="90"
+              Min="0"
+              Step="1"
+              LabelValue="@((@GradientFilterSettings.Angle).ToString("F0") + "°")">
+</NumberSlider>
+
+<NumberSlider T="float"
+              Label="Start: "
+              Value="@GradientFilterSettings.Start"
+              ValueChanged="@(value => { GradientFilterSettings.Start = value; ApplyFilters(); })"
+              Max="1.0F"
+              Min="0.0F"
+              Step="0.01F"
+              LabelValue="@((@GradientFilterSettings.Start * 100).ToString("F0") + "%")">
+</NumberSlider>
+
+<NumberSlider T="float"
+              Label="Width: "
+              Value="@GradientFilterSettings.Width"
+              ValueChanged="@(value => { GradientFilterSettings.Width = value; ApplyFilters(); })"
+              Max="1.0F"
+              Min="0.0F"
+              Step="0.01F"
+              LabelValue="@((@GradientFilterSettings.Width * 100).ToString("F0") + "%")">
+</NumberSlider>
+
+<div class="border rounded p-1">
+    <p class="text-white">Color 1</p>
+    <ColorInput @bind-Value="GradientFilterSettings.Color1" @bind-Value:after="ApplyFilters" />
+</div>
+
+<div class="border rounded p-1">
+    <p class="text-white">Color 2</p>
+    <ColorInput @bind-Value="GradientFilterSettings.Color2" @bind-Value:after="ApplyFilters" />
+</div>
+
+@code {
+
+    [Parameter]
+    [EditorRequired]
+    public required GradientFilter GradientFilterSettings { get; set; }
+
+    [Parameter]
+    public EventCallback OnApplyFilters { get; set; }
+
+    private void ApplyFilters()
+    {
+        OnApplyFilters.InvokeAsync();
+    }
+}

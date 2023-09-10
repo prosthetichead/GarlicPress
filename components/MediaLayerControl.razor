@@ -1,0 +1,174 @@
+﻿@if (IsImageSelected && mediaLayer is not null)
+{
+    <div>
+        <h2 class="text-xl mb-4">MediaLayer Control</h2>
+        <div>
+            <Input Value="(SSMediaType.GetAllMediaTypes().FirstOrDefault(x => x.value == mediaLayer.mediaType)?.label)" Label="Media Type:" disabled></Input>
+
+            <Input @bind-Value="mediaLayer.resizePercent" Label="Resize Percentage:" @bind-Value:after="async () => await  mediaLayerChanged.InvokeAsync(mediaLayer)"></Input>
+
+            <Input @bind-Value="mediaLayer.width" Label="Width:" @bind-Value:after="async () => await mediaLayerChanged.InvokeAsync(mediaLayer)"></Input>
+
+            <Input @bind-Value="mediaLayer.height" Label="Height:" @bind-Value:after="async () => await mediaLayerChanged.InvokeAsync(mediaLayer)"></Input>
+
+            <Input @bind-Value="mediaLayer.x" Label="X:" type="number" @bind-Value:after="async () => await mediaLayerChanged.InvokeAsync(mediaLayer)"></Input>
+
+            <Input @bind-Value="mediaLayer.y" Label="Y:" type="number" @bind-Value:after="async () => await mediaLayerChanged.InvokeAsync(mediaLayer)"></Input>
+
+            <Input @bind-Value="mediaLayer.angle" Label="Angle:" type="number" @bind-Value:after="async () => await mediaLayerChanged.InvokeAsync(mediaLayer)"></Input>
+
+            <Input @bind-Value="mediaLayer.order" Label="Order:" type="number" disabled></Input>
+
+            <Input @bind-Value="mediaLayer.region" Label="Region:" disabled></Input>
+        </div>
+
+
+        <h1 class="text-md">Filters</h1>
+        <div class="grid grid-cols-2">
+            <div>
+                <Select Tid="string" T="KeyValuePair<string, Type>" @bind-Value="selectedFilterType" Items="FilterTypeMap.AsEnumerable()">
+                    <Label></Label>
+                    <Option Context="filterEntry">
+                    <option value="@filterEntry.Key">@filterEntry.Key</option></Option>
+                </Select>
+            </div>
+            <Button OnClick="AddNewFilter" ButtonText="Add Selected Filter"></Button>
+        </div>
+        <div class="relative overflow-x-auto">
+            <table class="w-full text-left">
+                <thead class="uppercase bg-gray-400">
+                    <tr>
+                        <th scope="col" class="p-1 text-xs">
+                            Filter Name
+                        </th>
+                        <th scope="col" class="p-1 text-xs">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var filter in mediaLayer.Filters)
+                    {
+                        var selected = selectedFilterSetting == filter;
+                        <tr class="odd:bg-blue-50 even:bg-white border-b">
+                            <th scope="row" class="text-xs p-1 font-medium text-gray-800 whitespace-nowrap overflow-hidden truncate">
+                                @($"Filter: " + filter.GetType().Name)
+                            </th>
+                            <td class="grid grid-cols-2 p-2 gap-1">
+                                <button @onclick="() => selectedFilterSetting = filter" class="text-xs px-2 py-1 text-white @(selected ? "bg-blue-500" : "bg-blue-800") rounded-sm hover:bg-blue-600">@(selected ? "Selected" : "Select")</button>
+                                <button @onclick="() => DeleteFilter(filter)" class="text-xs px-2 py-1 bg-red-500 rounded-sm hover:bg-red-600">Delete</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+
+        @if (selectedFilterSetting is not null)
+        {
+            <div class="mt-5 p-4 border rounded">
+
+                @switch (selectedFilterSetting)
+                {
+                    case SaturationFilter saturationFilter:
+                        <SaturationFilterComponent SaturationFilterSettings="saturationFilter" OnApplyFilters="ApplyFilters"></SaturationFilterComponent>
+                        break;
+                    case ContrastFilter contrastFilter:
+                        <ContrastFilterComponent ContrastFilterSettings="contrastFilter" OnApplyFilters="ApplyFilters"></ContrastFilterComponent>
+                        break;
+                    case BrightnessFilter brightnessFilter:
+                        <BrightnessFilterComponent BrightnessFilterSettings="brightnessFilter" OnApplyFilters="ApplyFilters"></BrightnessFilterComponent>
+                        break;
+                    case BlurFilter blurFilter:
+                        <BlurFilterComponent BlurFilterSettings="blurFilter" OnApplyFilters="ApplyFilters"></BlurFilterComponent>
+                        break;
+                    case GaussianBlurFilter gaussianBlurFilter:
+                        <GaussianBlurFilterComponent GaussianBlurFilterSettings="gaussianBlurFilter" OnApplyFilters="ApplyFilters"></GaussianBlurFilterComponent>
+                        break;
+                    case GradientFilter gradientFilter:
+                        <GradientFilterComponent GradientFilterSettings="gradientFilter" OnApplyFilters="ApplyFilters"></GradientFilterComponent>
+                        break;
+                    case TransparencyFilter transparencyFilter:
+                        <TransparencyFilterComponent TransparencyFilterSettings="transparencyFilter" OnApplyFilters="ApplyFilters"></TransparencyFilterComponent>
+                        break;
+                    case GrayscaleFilter grayscaleFilter:
+                        <p class="text-white">Nothing to change on grayscale filter</p>
+                        break;
+                    default:
+                        <p class="text-white">Unknown Filter Selected.</p>
+                        break;
+                }
+            </div>
+        }
+    </div>
+}
+
+@code {
+    [Parameter] public bool IsImageSelected { get; set; }
+    [Parameter] public EventCallback<MediaLayer> OnApplyFilters { get; set; }
+
+
+    [Parameter]
+    [EditorRequired]
+    public required MediaLayer? mediaLayer { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public EventCallback<MediaLayer> mediaLayerChanged { get; set; }
+
+    string selectedFilterType = nameof(GradientFilter);
+    IFilter? selectedFilterSetting;
+    System.Threading.Timer? debounceTimer;
+
+    protected override void OnParametersSet()
+    {
+        if (!mediaLayer?.Filters?.Contains(selectedFilterSetting ?? default!) ?? true)
+        {
+            selectedFilterSetting = null;
+        }
+    }
+
+    void ApplyFilters()
+    {
+        if (debounceTimer != null)
+        {
+            debounceTimer.Dispose(); // Disposes the old timer if exists
+        }
+
+        debounceTimer = new System.Threading.Timer(async _ =>
+        {
+            await InvokeAsync(() =>
+            {
+                OnApplyFilters.InvokeAsync(mediaLayer);
+            });
+            debounceTimer = null;
+        }, null, TimeSpan.FromMilliseconds(300), Timeout.InfiniteTimeSpan);
+    }
+
+    void DeleteFilter(IFilter filter)
+    {
+        if (mediaLayer?.Filters is not null)
+        {
+            if (selectedFilterSetting == filter)
+            {
+                selectedFilterSetting = null;
+            }
+            mediaLayer.Filters.Remove(filter);
+            OnApplyFilters.InvokeAsync(mediaLayer);
+        }
+    }
+
+    void AddNewFilter()
+    {
+        if (FilterTypeMap.TryGetValue(selectedFilterType, out Type? filterType))
+        {
+            var filter = (IFilter?)Activator.CreateInstance(filterType);
+            if (filter is not null)
+            {
+                mediaLayer?.Filters.Add(filter);
+                OnApplyFilters.InvokeAsync(mediaLayer);
+            }
+        }
+    }
+}

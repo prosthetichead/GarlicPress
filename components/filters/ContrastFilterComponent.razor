@@ -1,0 +1,19 @@
+﻿<NumberSlider T="float"
+              Label="Contrast: "
+              Value="@ContrastFilterSettings.Contrast"
+              ValueChanged="@(value => { ContrastFilterSettings.Contrast = value; OnApplyFilters.InvokeAsync(); })"
+              Max="100.0F"
+              Min="-100.0F"
+              Step="1"
+              LabelValue="@((@ContrastFilterSettings.Contrast).ToString("F0") + "%")">
+</NumberSlider>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public required ContrastFilter ContrastFilterSettings { get; set; }
+
+    [Parameter]
+    public EventCallback OnApplyFilters { get; set; }
+}
+

@@ -1,0 +1,189 @@
+﻿@using Microsoft.AspNetCore.Components.Forms;
+
+<div class="col-span-3 flex border-gray-800 border-b-2">
+    <button class="flex-1 hover:bg-blue-200 @(activeTab == Tabs.Screenscraper ? "bg-gray-800 text-white" : "bg-gray-200") rounded-tl-sm"
+    @onclick="() => activeTab = Tabs.Screenscraper">
+        Screenscraper.fr Media
+    </button>
+    <button class="flex-1 py-2 hover:bg-blue-200 @(activeTab == Tabs.Local ? "bg-gray-800 text-white" : "bg-gray-200") rounded-tr-sm"
+    @onclick="() => activeTab = Tabs.Local">
+        Local Media
+    </button>
+</div>
+
+<div class="scrollbar overflow-auto h-[calc(100vh-50vh-160px)]"
+     style="display: @(activeTab == Tabs.Local ? "block" : "none")">
+    <div class="border-2  border-gray-800 p-4 flex items-center justify-center text-white text-xl cursor-pointer relative min-h-[50px] hover:bg-gray-500 hover:text-black @dropClass">
+        Drag and drop, or click to add a local image.
+        <InputFile accept="image/*" multiple OnChange="AddLocalMedia"
+        @ondragenter="HandleDragEnter" @ondragleave="HandleDragLeave"
+                   class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"></InputFile>
+    </div>
+
+    <div class="p-2 flex overflow-auto flex-wrap w-full">
+        @foreach (var localMedia in _localMedia)
+        {
+            var mediaType = "local";
+            <div class="p-2 relative group">
+                <img class="max-h-40 max-w-[200px] m-1" src="@localMedia.Replace(@"wwwroot\", "")" @onclick="async () => await AddNewMediaLayerImageToCanvas(localMedia, mediaType)" />
+                <button @onclick="() => DeleteLocalMedia(localMedia)" class="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-bl-md hover:bg-red-600 opacity-0 group-hover:opacity-100">Delete</button>
+            </div>
+        }
+    </div>
+
+</div>
+
+<div class="scrollbar overflow-auto h-[calc(100vh-50vh-160px)]" style="display: @(activeTab == Tabs.Screenscraper ? "block" : "none")">
+    <div class="p-2 flex overflow-auto flex-wrap w-full">
+        <div class="grid w-full">
+            <Button ButtonText="Get Game Art" OnClick="GetAllGameMedia"></Button>
+        </div>
+
+        @foreach (var gameMedia in _gameMedias)
+        {
+            <div class="p-2">
+                <img class="max-h-40 max-w-[200px] m-1" src="@gameMedia.path" @onclick="(async () => await AddNewMediaLayerImageToCanvas(gameMedia.path, gameMedia.mediaType))" />
+            </div>
+        }
+        @if (_artUpdateRunning)
+        {
+            <div class="grid place-content-center mt-8">
+                <div class="flex flex-col items-center gap-2 text-white">
+                    <GarlicLoading></GarlicLoading>
+                    <b>Loading Game Art...</b>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public required GarlicSystem _selectedSystem { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public required string _selectedGame { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public GameResponse? _game { get; set; }
+
+    string previousSelectedGame = "";
+
+    [Parameter]
+    [EditorRequired]
+    public EventCallback<(string path, string mediaType)> _addNewMediaLayerImageToCanvas { get; set; }
+
+    Tabs activeTab = Tabs.Screenscraper;
+
+    List<(string path, string mediaType)> _gameMedias = new();
+    bool _artUpdateRunning = false;
+
+    List<string> _localMedia = new();
+    string dropClass = "bg-gray-700 border-dashed";
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            LoadLocalMedia();
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (_selectedGame != previousSelectedGame)
+        {
+            previousSelectedGame = _selectedGame;
+            _gameMedias.Clear();
+        }
+    }
+
+    void HandleDragEnter()
+    {
+        dropClass = "gb-gray-800";
+    }
+    void HandleDragLeave()
+    {
+        dropClass = "bg-gray-700 border-dashed";
+    }
+
+    enum Tabs
+    {
+        Local,
+        Screenscraper
+    }
+
+    async void GetAllGameMedia()
+    {
+        if (!_artUpdateRunning && _selectedSystem is not null)
+        {
+            _artUpdateRunning = true;
+            _gameMedias.Clear();
+            _game ??= await ScreenScraper.GetGameData(_selectedSystem, _selectedGame, SearchType.GameName);
+            if (_game is not null && _game.status != "error")
+            {
+                await foreach (var gameMedia in GameMediaGeneration.GetAllGameMedia(_game))
+                {
+                    if (gameMedia.media is GameMediaResponse media)
+                    {
+                        _gameMedias.Add((media.path.Replace("wwwroot/", ""), gameMedia.mediaType));
+                    }
+                    await this.InvokeAsync(() => StateHasChanged());
+                }
+            }
+
+            _artUpdateRunning = false;
+            StateHasChanged();
+        }
+    }
+
+    async Task AddNewMediaLayerImageToCanvas(string imagePath, string mediaType)
+    {
+        await _addNewMediaLayerImageToCanvas.InvokeAsync((imagePath, mediaType));
+    }
+
+    void LoadLocalMedia()
+    {
+        _localMedia.Clear();
+        var localMediaPath = Path.Combine("wwwroot", "assets", "localmedia");
+        if (Directory.Exists(localMediaPath))
+        {
+            foreach (var file in Directory.GetFiles(localMediaPath))
+            {
+                _localMedia.Add(file);
+            }
+        }
+    }
+
+    async void AddLocalMedia(InputFileChangeEventArgs e)
+    {
+        foreach (var file in e.GetMultipleFiles())
+        {
+            var isImage = file.ContentType.StartsWith("image/");
+            if (isImage)
+            {
+                Directory.CreateDirectory(Path.Combine("wwwroot", "assets", "localmedia"));
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "assets", "localmedia", file.Name);
+                await using FileStream fs = new(path, FileMode.Create);
+                await file.OpenReadStream().CopyToAsync(fs);
+            }
+        }
+        dropClass = "bg-gray-700 border-dashed";
+        LoadLocalMedia();
+        StateHasChanged();
+    }
+
+    void DeleteLocalMedia(string localMediaPath)
+    {
+        _localMedia.Remove(localMediaPath);
+
+        var physicalPath = Path.Combine(Directory.GetCurrentDirectory(), localMediaPath);
+        if (System.IO.File.Exists(physicalPath))
+        {
+            System.IO.File.Delete(physicalPath);
+        }
+    }
+}

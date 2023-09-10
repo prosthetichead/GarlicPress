@@ -1,0 +1,148 @@
+﻿@using GarlicPress.classes.bitmapClasses;
+@inject IJSRuntime JsRuntime
+@implements IDisposable
+@typeparam TItem
+
+<canvas width="640" height="480" @attributes="AllOtherAttributes" id="@canvasId"></canvas>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public EventCallback<imageDetails> MediaUpdated { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public EventCallback<imageDetails> MediaSelected { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public EventCallback MediaUnselected { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public EventCallback<Guid> MediaDeleted { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AllOtherAttributes { get; set; }
+
+    string canvasId = $"canvas-{Guid.NewGuid()}";
+    IJSObjectReference? module;
+    DotNetObjectReference<FabricCanvas<TItem>>? objRef;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            objRef = DotNetObjectReference.Create(this);
+            module = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./components/shared/FabricCanvas.razor.js");
+            await module.InvokeVoidAsync("BlazorFabric.createCanvas", canvasId, objRef);
+        }
+    }
+
+    public async Task ClearCanvas()
+    {
+        if (module is not null)
+        {
+            await module.InvokeVoidAsync("BlazorFabric.clearCanvas");
+        }
+    }
+
+    public async Task AddText(string text, int posX = 360, int posY = 90, string color = "white", string font = "GarlicFont", int fontSize = 28, string textAlignment = "left")
+    {
+        if (module is not null)
+        {
+            await module.InvokeVoidAsync("BlazorFabric.addText", text, posX, posY, color, font, fontSize, textAlignment);
+        }
+    }
+
+    public async Task AddBackgroundImage(string? imagePath)
+    {
+        if (module is not null)
+        {
+            await module.InvokeVoidAsync("BlazorFabric.addBackgroundImage", imagePath);
+        }
+    }
+
+    public async Task AddImage(string? imagePath, Guid id, TItem model)
+    {
+        if (module is not null)
+        {
+            await module.InvokeVoidAsync("BlazorFabric.addImage", imagePath, id, model);
+        }
+    }
+
+    public async Task UpdateImage(Guid id, TItem model, string? imgPath = null)
+    {
+        if (module is not null)
+        {
+            await module.InvokeVoidAsync("BlazorFabric.updateImage", id, model, imgPath);
+        }
+    }
+
+    public async Task MoveObjectForward()
+    {
+        if (module is not null)
+        {
+            await module.InvokeVoidAsync("BlazorFabric.moveObjectForward");
+        }
+    }
+
+    public async Task MoveObjectBackward()
+    {
+        if (module is not null)
+        {
+            await module.InvokeVoidAsync("BlazorFabric.moveObjectBackward");
+        }
+    }
+
+    public async Task RemoveSelectedImage(bool notitfyDotnet)
+    {
+        if (module is not null)
+        {
+            await module.InvokeVoidAsync("BlazorFabric.deleteSelectedObject", notitfyDotnet);
+        }
+    }
+
+    public struct imageDetails
+    {
+        public string id { get; set; }
+        public TItem model { get; set; }
+        public int left { get; set; }
+        public int top { get; set; }
+        public int angle { get; set; }
+        public int scale { get; set; }
+        public int drawOrder { get; set; }
+    }
+
+    [JSInvokable]
+    public void NotifyImageLocationUpdated(string imageDetails)
+    {
+        var details = JsonSerializer.Deserialize<imageDetails>(imageDetails);
+        MediaUpdated.InvokeAsync(details);
+    }
+
+    [JSInvokable]
+    public async void NotifyImageSelected(string imageDetails)
+    {
+        var details = JsonSerializer.Deserialize<imageDetails>(imageDetails);
+        await MediaSelected.InvokeAsync(details);
+    }
+
+    [JSInvokable]
+    public async void NotifyImageUnselected()
+    {
+        await MediaUnselected.InvokeAsync();
+    }
+
+    [JSInvokable]
+    public void NotifyImageDeleted(Guid id)
+    {
+        MediaDeleted.InvokeAsync(id);
+    }
+
+    public void Dispose()
+    {
+        module?.DisposeAsync();
+        objRef?.Dispose();
+    }
+}

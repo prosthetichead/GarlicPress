@@ -1,6 +1,9 @@
 ﻿using AdvancedSharpAdbClient;
+using GarlicPress.classes.bitmapClasses;
+using GarlicPress.constants;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -8,65 +11,172 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using static GarlicPress.MediaLayer;
+using static System.Net.Mime.MediaTypeNames;
+using Image = System.Drawing.Image;
 
 namespace GarlicPress
 {
     internal static class GameMediaGeneration
     {
-        public static List<MediaLayer> MediaLayers { get { return mediaLayout.OrderBy(o => o.order).ToList(); } set { mediaLayout = value; } }
-        private static List<MediaLayer> mediaLayout;
-        private static string jsonPath = "assets/mediaLayout.json";
+        private static List<MediaLayerCollection> mediaLayerCollections;
+        private static string jsonPath = "assets/mediaLayoutCollection.json";
+        private static SemaphoreSlim? _semaphore; //used to handle multiple requests to generate media at the same time
 
         static GameMediaGeneration()
         {
-            mediaLayout = new List<MediaLayer>();
+            mediaLayerCollections = new();
             LoadMediaLayoutJson();
         }
-
-
 
         public static void LoadMediaLayoutJson()
         {
             try
             {
+                List<MediaLayer>? tempMediaLayer = null;
                 if (File.Exists("mediaLayout.json"))
                 {
                     //this is the old location we used to keep the file, its now in the assets folder..
                     //move it to the new assets/mediaLayout.json                    
                     File.Move("mediaLayout.json", jsonPath);
                 }
+
+                if (File.Exists("assets/mediaLayout.json"))
+                {
+                    var options = new JsonSerializerOptions
+                    {
+                        Converters = { new BitmapFilterConverter() }
+                    };
+                    string mediaLayoutJson = File.ReadAllText("assets/mediaLayout.json");
+                    tempMediaLayer = JsonSerializer.Deserialize<List<MediaLayer>>(mediaLayoutJson, options);
+                }
+
                 if (File.Exists(jsonPath))
                 {
-                    string mediaLayoutJson = File.ReadAllText(jsonPath);
-                    mediaLayout = JsonSerializer.Deserialize<List<MediaLayer>>(mediaLayoutJson);
+                    var options = new JsonSerializerOptions
+                    {
+                        Converters = { new BitmapFilterConverter() }
+                    };
+                    string mediaLayoutCollectionJson = File.ReadAllText(jsonPath);
+                    mediaLayerCollections = JsonSerializer.Deserialize<List<MediaLayerCollection>>(mediaLayoutCollectionJson, options) ?? new() { LoadInitialMediaLayerSettings() };
                 }
                 else
                 {
-                    mediaLayout.Add(new MediaLayer() { mediaType = "mixrbv2", resizePercent = 45, height = 0, width = 0, x = 1, y = 65, order = 1 });
+                    if (tempMediaLayer is not null)
+                    {
+                        mediaLayerCollections.Add(new MediaLayerCollection()
+                        {
+                            name = "General",
+                            defaultCollection = true,
+                            mediaLayers = tempMediaLayer
+                        });
+                    }
+                    else
+                    {
+                        mediaLayerCollections.Add(LoadInitialMediaLayerSettings());
+                    }
+
                     SaveMediaLayoutJson();
                 }
             }
             catch (Exception ex)
             {
                 //anything goes wrong? load the defaul and ignore the file
-                mediaLayout = new List<MediaLayer>();
-                mediaLayout.Add(new MediaLayer() { mediaType = "mixrbv2", resizePercent = 45, height = 0, width = 0, x = 1, y = 65, order = 1 });
+                mediaLayerCollections = new() { LoadInitialMediaLayerSettings() };
 
                 MessageBox.Show("Error Reading " + jsonPath + " defaults have been loaded \n " + ex.Message + " \n\n Please screenshot and report this to issues on github. link can be found in on the About screen");
             }
 
         }
 
-        public static void SaveMediaLayoutJson()
+        private static MediaLayerCollection LoadInitialMediaLayerSettings()
         {
-            string mediaLayoutJson = JsonSerializer.Serialize(mediaLayout.OrderBy(o => o.order));
-            File.WriteAllText(jsonPath, mediaLayoutJson);
+            return new()
+            {
+                name = "General",
+                defaultCollection = true,
+                mediaLayers = new()
+            {
+                new MediaLayer()
+                {
+                    mediaType = "mixrbv2",
+                    resizePercent = 45,
+                    height = 0,
+                    width = 0,
+                    x = 1,
+                    y = 65,
+                    order = 1
+                }
+            }
+            };
         }
 
+        public static List<MediaLayerCollection> GetMediaLayerCollections()
+        {
+            return mediaLayerCollections;
+        }
+
+        public static MediaLayerCollection AddMediaLayerCollection(string mediaLayerCollectionName, Guid? templateMediaLayerCollectionId = null)
+        {
+            var newMediaLayerCollection = new MediaLayerCollection()
+            {
+                name = mediaLayerCollectionName,
+                defaultCollection = false,
+                mediaLayers = mediaLayerCollections.FirstOrDefault(x => x.id == templateMediaLayerCollectionId)?.mediaLayers
+                .Select(x => x.Clone()).ToList() ?? new()
+            };
+
+            mediaLayerCollections.Add(newMediaLayerCollection);
+
+            return newMediaLayerCollection;
+        }
+
+        public static void RemoveMediaLayerCollection(Guid? mediaLayerCollectionId)
+        {
+            if (mediaLayerCollections.FirstOrDefault(x => x.id == mediaLayerCollectionId) is MediaLayerCollection mediaLayerCollection)
+            {
+                mediaLayerCollections.Remove(mediaLayerCollection);
+            }
+        }
+
+        public static List<MediaLayer>? GetMediaLayers(string mediaLayerCollectionName)
+        {
+            return mediaLayerCollections.Where(x => x.name == mediaLayerCollectionName).FirstOrDefault()?.mediaLayers.OrderBy(o => o.order).ToList() ?? new();
+        }
+
+        public static void SaveMediaLayoutJson()
+        {
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                Converters = { new BitmapFilterConverter() }
+            };
+            string mediaLayoutCollectionsJson = JsonSerializer.Serialize(mediaLayerCollections, options);
+            File.WriteAllText(jsonPath, mediaLayoutCollectionsJson);
+        }
+
+        public static void AddMediaLayer(MediaLayer mediaLayer, MediaLayerCollection mediaLayerCollection)
+        {
+            mediaLayerCollection.mediaLayers.Add(mediaLayer);
+        }
+
+        public static void RemoveMediaLayer(MediaLayer mediaLayer, MediaLayerCollection mediaLayerCollection)
+        {
+            mediaLayerCollection.mediaLayers.Remove(mediaLayer);
+        }
+
+        public static void RemoveMediaLayer(Guid id, MediaLayerCollection mediaLayerCollection)
+        {
+            if (mediaLayerCollection.mediaLayers.FirstOrDefault(x => x.id == id) is MediaLayer mediaLayer)
+            {
+                mediaLayerCollection.mediaLayers.Remove(mediaLayer);
+            }
+        }
 
         public static Bitmap OverlayImageWithSkinBackground(Bitmap imageToOverlay)
         {
-            var baseImage = (Bitmap)Image.FromFile(@"assets/skin/background.png");
+            var baseImage = (Bitmap)Image.FromFile(PathConstants.assetSkinPath + "background.png");
             var overlayImage = imageToOverlay;
             var textImage = (Bitmap)Image.FromFile(@"assets/SampleTextCenter.png");
             int txtMargin = 0;
@@ -109,8 +219,17 @@ namespace GarlicPress
             return finalImage;
         }
 
-        public static async Task<Bitmap?> GenerateGameMedia(GameResponse game)
+        public static async Task<Bitmap?> GenerateGameMedia(GameResponse game, MediaLayerCollection? mediaLayerCollection = null)
         {
+            if (mediaLayerCollection is null)
+            {
+                mediaLayerCollection = mediaLayerCollections.FirstOrDefault();
+                if (mediaLayerCollection is null)
+                {
+                    return null;
+                }
+            }
+
             var finalImage = new Bitmap(640, 480, PixelFormat.Format32bppArgb);
             var graphics = Graphics.FromImage(finalImage);
             graphics.CompositingMode = CompositingMode.SourceOver;
@@ -119,30 +238,180 @@ namespace GarlicPress
             {
                 return null;
             }
-            foreach (var layer in mediaLayout.OrderBy(o => o.order))
+
+            var orderedMediaLayout = mediaLayerCollection.mediaLayers.OrderBy(o => o.order).ToList();
+
+            // Fetch all the media layers in parallel
+            var tasks = orderedMediaLayout.Select(layer => GetMediaFromMediaLayer(game, layer)).ToList();
+
+            //Wait for all to complete so layers gets drawn in correct order
+            var results = await Task.WhenAll(tasks);
+
+            foreach (var result in results)
             {
-                var filename = await ScreenScraper.DownloadMedia(game, layer.mediaType);
-                if (!string.IsNullOrEmpty(filename))
+                if (result.media is GameMediaResponse media)
                 {
-                    var baseImage = (Bitmap)Image.FromFile(filename);
+                    var baseImage = (Bitmap)Image.FromFile(media.path);
                     baseImage.SetResolution(graphics.DpiX, graphics.DpiY);
-                    if (layer.resizePercent > 0)
+
+
+                    if (result.layer.resizePercent > 0)
                     {
-                        graphics.DrawImage(baseImage, layer.x, layer.y, (float)((layer.resizePercent / 100) * baseImage.Width), (float)((layer.resizePercent / 100) * baseImage.Height));
+                        float newWidth = (float)((result.layer.resizePercent / 100) * baseImage.Width);
+                        float newHeight = (float)((result.layer.resizePercent / 100) * baseImage.Height);
+                        BitmapUtilites.DrawRotatedImage(graphics, baseImage, result.layer.angle, result.layer.x, result.layer.y, newWidth, newHeight);
                     }
-                    else if (layer.width > 0 && layer.height > 0)
+                    else if (result.layer.width > 0 && result.layer.height > 0)
                     {
-                        graphics.DrawImage(baseImage, layer.x, layer.y, layer.width, layer.height);
+                        BitmapUtilites.DrawRotatedImage(graphics, baseImage, result.layer.angle, result.layer.x, result.layer.y, result.layer.width, result.layer.height);
                     }
                     else
                     {
-                        graphics.DrawImage(baseImage, layer.x, layer.y, baseImage.Width, baseImage.Height);
+                        BitmapUtilites.DrawRotatedImage(graphics, baseImage, result.layer.angle, result.layer.x, result.layer.y);
                     }
                     baseImage.Dispose();
-                    File.Delete(filename); //clean up the old temp image
                 }
             }
+
             return finalImage;
+        }
+
+        /// <summary>
+        /// Gets all media for a game and returns it as a tuple with the media path and the media type
+        /// </summary>
+        /// <param name="game"></param>
+        /// <returns>Returns when all media is downloaded</returns>
+        public static async IAsyncEnumerable<(GameMediaResponse? media, MediaLayer layer)> GetGameMedia(GameResponse game, MediaLayerCollection mediaLayerCollection)
+        {
+            if (game.status == "error")
+            {
+                yield break;
+            }
+
+            // Fetch all the media layers in parallel
+            var tasks = mediaLayerCollection.mediaLayers.OrderBy(o => o.order).Select(layer => GetMediaFromMediaLayer(game, layer)).ToList();
+
+            while (tasks.Count > 0)
+            {
+                var completedTask = await Task.WhenAny(tasks);
+                tasks.Remove(completedTask);
+                yield return await completedTask;
+            }
+        }
+
+        /// <summary>
+        /// Gets all media for a game and returns it as a tuple with the media path and the media type
+        /// </summary>
+        /// <param name="game"></param>
+        /// <returns>Returns each media as soon as it is downloaded</returns>
+        public static async IAsyncEnumerable<(GameMediaResponse? media, string mediaType)> GetAllGameMedia(GameResponse game)
+        {
+            if (game.status == "error")
+            {
+                yield break;
+            }
+
+            var tasks = SSMediaType.GetAllMediaTypes().Where(x => x.value != "local").Select(media => GetMediaFromType(game, media.value)).ToList();
+
+            while (tasks.Count > 0)
+            {
+                var completedTask = await Task.WhenAny(tasks);
+                tasks.Remove(completedTask);
+                yield return await completedTask;
+            }
+        }
+
+        public static Bitmap ApplyAllFilters(Bitmap originalImage, MediaLayer layer)
+        {
+            Bitmap imageCopy = (Bitmap)originalImage.Clone();
+
+            foreach (var filter in layer.Filters)
+            {
+                imageCopy = filter.Apply(imageCopy);
+            }
+
+            return imageCopy;
+        }
+
+        /// <summary>
+        /// Returns media with filters applied
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="layer"></param>
+        /// <returns></returns>
+        public static async Task<(GameMediaResponse? media, MediaLayer layer)> GetMediaFromMediaLayer(GameResponse game, MediaLayer layer)
+        {
+            try
+            {
+                if (await GetGameMediaResponse(game, layer) is GameMediaResponse downloadedMedia)
+                {
+                    var baseImage = (Bitmap)Image.FromFile(downloadedMedia.path);
+
+                    var newBaseImage = ApplyAllFilters(baseImage, layer);
+                    baseImage.Dispose();
+
+                    var tempPath = Path.Combine("wwwroot", "assets", "temp", $"temp{Path.GetFileName(downloadedMedia.path)}").Replace(@"\", "/");
+                    newBaseImage.Save(tempPath, ImageFormat.Png);
+                    newBaseImage.Dispose();
+
+                    downloadedMedia.path = tempPath;
+
+                    return (downloadedMedia, layer);
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+
+            return (null, layer);
+        }
+
+        private static async Task<GameMediaResponse?> GetGameMediaResponse(GameResponse game, MediaLayer layer)
+        {
+            GameMediaResponse? media = null;
+            if (layer.mediaType == "local")
+            {
+                media = new GameMediaResponse()
+                {
+                    path = layer.path,
+                    region = layer.mediaType
+                };
+            }
+            else
+            {
+                media = await LimitedDownloadMedia(game, layer.mediaType);
+            }
+
+            return media;
+        }
+
+        private static async Task<(GameMediaResponse? media, string type)> GetMediaFromType(GameResponse game, string type)
+        {
+            return (await LimitedDownloadMedia(game, type), type);
+        }
+
+        private static async Task<GameMediaResponse?> LimitedDownloadMedia(GameResponse game, string mediaType)
+        {
+            int maxthreads = 1;
+            Int32.TryParse(game.response.ssuser?.maxthreads ?? "1", out maxthreads);
+            if (_semaphore is null)
+            {
+                _semaphore = new SemaphoreSlim(maxthreads);
+            }
+
+            // Wait for an available slot (based on maxThreads)
+            await _semaphore.WaitAsync();
+
+            try
+            {
+                return await ScreenScraper.DownloadMedia(game, mediaType);
+            }
+            finally
+            {
+                // Release the slot after finishing the operation
+                _semaphore.Release();
+            }
         }
     }
 }

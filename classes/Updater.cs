@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace GarlicPress
 {
-
     public class UpdateInfo
     {
         public bool success { get; set; }      
@@ -26,7 +25,7 @@ namespace GarlicPress
 
     internal static class Updater
     {
-        private static UpdateInfo updateInfo;
+        private static UpdateInfo? updateInfo;
 
         public static UpdateInfo GetUpdateInfo()
         {
@@ -35,7 +34,7 @@ namespace GarlicPress
                 updateInfo = new UpdateInfo();
                 try
                 {
-                    Version appVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+                    Version? appVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
 
                     //check github for latest release
                     var github = new GitHubClient(new ProductHeaderValue("GarlicPress"));

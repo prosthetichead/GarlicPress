@@ -1,0 +1,17 @@
+﻿<button @onclick="() => OnClick.InvokeAsync()" @attributes="AllOtherAttributes"
+        class="bg-gray-100 w-full whitespace-nowrap text-xs truncate shadow block border border-gray-700 rounded-sm hover:bg-blue-100 focus:outline-none focus:bg-gray-300">
+    @ButtonText
+</button>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public required string ButtonText { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public EventCallback OnClick { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AllOtherAttributes { get; set; }
+}

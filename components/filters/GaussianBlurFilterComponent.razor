@@ -1,0 +1,18 @@
+﻿<NumberSlider T="int"
+              Label="GaussianBlur Amount: "
+              Value="@GaussianBlurFilterSettings.BlurAmount"
+              ValueChanged="@(value => { GaussianBlurFilterSettings.BlurAmount = value; OnApplyFilters.InvokeAsync();; })"
+              Max="10"
+              Min="0"
+              Step="1"
+              LabelValue="@GaussianBlurFilterSettings.BlurAmount.ToString()">
+</NumberSlider>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public required GaussianBlurFilter GaussianBlurFilterSettings { get; set; }
+
+    [Parameter]
+    public EventCallback OnApplyFilters { get; set; }
+}

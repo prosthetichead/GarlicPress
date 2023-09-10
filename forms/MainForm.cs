@@ -1,4 +1,5 @@
 using AdvancedSharpAdbClient;
+using GarlicPress.constants;
 using GarlicPress.forms;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -27,7 +28,7 @@ namespace GarlicPress
         GarlicDrive SelectedDrive { get { return (GarlicDrive)comboDrive.SelectedItem; } }
         GarlicSystem SelectedSystem { get { return (GarlicSystem)comboSystems.SelectedItem; } }
 
-        FileStatistics currentSelectedItem;
+        FileStatistics? currentSelectedItem;
 
         DebugLogForm debugLogForm;
 
@@ -92,13 +93,13 @@ namespace GarlicPress
                         DebugLog.Write("a usb device has been disconected", Color.RebeccaPurple);
                         break;
                     case WM_DEVICECHANGE.DBT_DEVICEARRIVAL:
-                        DebugLog.Write("a usb device has conected", Color.RebeccaPurple);                        
+                        DebugLog.Write("a usb device has conected", Color.RebeccaPurple);
                         break;
                     case WM_DEVICECHANGE.DBT_DEVNODES_CHANGED:
                         DebugLog.Write("a usb device has changed", Color.RebeccaPurple);
                         break;
                     default:
-                        DebugLog.Write($"a usb event of code {m.WParam.ToString()} happened", Color.RebeccaPurple);                        
+                        DebugLog.Write($"a usb event of code {m.WParam.ToString()} happened", Color.RebeccaPurple);
                         break;
                 }
                 CheckConnection();
@@ -109,11 +110,11 @@ namespace GarlicPress
         {
             var deviceConnected = ADBConnection.deviceConnected;
             var connect = ADBConnection.ConnectToDevice();
-            if(deviceConnected && connect) 
+            if (deviceConnected && connect)
             {
                 DebugLog.Write("Device Already Connected");
             }
-            else if(!deviceConnected && connect)
+            else if (!deviceConnected && connect)
             {
                 DebugLog.Write("Device Connected");
 
@@ -160,25 +161,23 @@ namespace GarlicPress
 
         private void fileListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var item = (FileStatistics)fileListBox.SelectedItem;
-
-            if (item != null && item != currentSelectedItem)
+            if (fileListBox.SelectedItem is FileStatistics item && item != currentSelectedItem)
             {
                 currentSelectedItem = item;
                 txtFileName.Text = item.Path;
 
                 //get img file if one exists
                 string imgFile = Path.ChangeExtension(item.Path, ".png");
-                if (ADBConnection.DownloadFile(SelectedImgPath + imgFile, "assets/temp/gameart-down.png"))
+                if (ADBConnection.DownloadFile(SelectedImgPath + imgFile, PathConstants.assetsTempPath + "gameart-down.png"))
                 {
-                    Bitmap overlayImage = (Bitmap)Image.FromFile(@"assets/temp/gameart-down.png");
+                    Bitmap overlayImage = (Bitmap)Image.FromFile(PathConstants.assetsTempPath + "gameart-down.png");
                     picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage);
                     overlayImage.Dispose();
                     picGame.Refresh();
                 }
                 else
                 {
-                    Bitmap overlayImage = (Bitmap)Image.FromFile(@"assets/skin/background.png");
+                    Bitmap overlayImage = (Bitmap)Image.FromFile(PathConstants.assetSkinPath + "background.png");
                     picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage);
                     overlayImage.Dispose();
                 }
@@ -216,7 +215,20 @@ namespace GarlicPress
                 this.WindowState = FormWindowState.Minimized;
                 this.ShowInTaskbar = false;
             }
-
+            else
+            {
+                if (Properties.Settings.Default.cleanTempOnExit && Directory.Exists(PathConstants.assetsTempPath))
+                {
+                    try
+                    {
+                        Directory.Delete(PathConstants.assetsTempPath, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Could not delete temp folder. {ex.Message}");
+                    }
+                }
+            }
         }
 
         private void miConsole_Click(object sender, EventArgs e)
@@ -248,17 +260,15 @@ namespace GarlicPress
 
         private void MainForm_DragDropEnter(object sender, DragEventArgs e)
         {
-
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            if (e.Data?.GetDataPresent(DataFormats.FileDrop) ?? false)
                 e.Effect = DragDropEffects.Copy;
-
         }
 
         private void MainForm_DragDrop(object sender, DragEventArgs e)
         {
             var system = (GarlicSystem)comboSystems.SelectedItem;
-            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            foreach (string file in files)
+            var files = e.Data?.GetData(DataFormats.FileDrop) as string[];
+            foreach (string file in files ?? Enumerable.Empty<string>())
             {
                 FileAttributes attr = File.GetAttributes(file);
                 if (attr != FileAttributes.Directory)
@@ -311,7 +321,7 @@ namespace GarlicPress
         {
             if (fileListBox.SelectedItems.Count > 0)
             {
-                int firstIndex = fileListBox.Items.IndexOf(fileListBox.SelectedItems[0]);
+                int firstIndex = fileListBox.Items.IndexOf(fileListBox.SelectedItems[0]!);
 
                 bool deleteFiles = true;
                 if (Properties.Settings.Default.warningBeforeDelete)
@@ -409,7 +419,7 @@ namespace GarlicPress
         private void btnRename_Click(object sender, EventArgs e)
         {
             string newFileName = txtFileName.Text;
-            var item = (FileStatistics)fileListBox.SelectedItem;
+            var item = fileListBox.SelectedItem as FileStatistics;
             var index = fileListBox.SelectedIndex;
 
             var invalidChars = new string(Path.GetInvalidFileNameChars());
@@ -473,6 +483,12 @@ namespace GarlicPress
         private void miShowDebugLog_Click(object sender, EventArgs e)
         {
             debugLogForm.Show();
+        }
+
+        private void btnOpenEditor_Click(object sender, EventArgs e)
+        {
+            EditMediaLayersForm editLayersForm = new(SelectedDrive, SelectedSystem, txtFileName.Text);
+            editLayersForm.Show();
         }
     }
 }
