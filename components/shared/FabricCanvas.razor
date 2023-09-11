@@ -47,11 +47,11 @@
         }
     }
 
-    public async Task AddText(string text, int posX = 360, int posY = 90, string color = "white", string font = "GarlicFont", int fontSize = 28, string textAlignment = "left")
+    public async Task AddText(string text, int posX = 360, int posY = 90, string color = "white", string font = "GarlicFont", int fontSize = 28, string textAlignment = "left", int selectedRow = 4, string selectedColor = "white")
     {
         if (module is not null)
         {
-            await module.InvokeVoidAsync("BlazorFabric.addText", text, posX, posY, color, font, fontSize, textAlignment);
+            await module.InvokeVoidAsync("BlazorFabric.addText", text, posX, posY, color, font, fontSize, textAlignment, selectedRow, selectedColor);
         }
     }
 

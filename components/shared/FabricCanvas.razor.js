@@ -118,9 +118,16 @@
     };
 
 
-    static addText = (content, left = 0, top = 0, textColor = 'black', fontFamily = 'Arial', fontSize = 28, textAlign = "left") => {
+    static addText = (content, left = 0, top = 0, textColor = 'black', fontFamily = 'Arial', fontSize = 28, textAlign = "left", selectedRow = 4, selectedColor = "white") => {
         if (BlazorFabric.canvas) {
-            const text = new fabric.Text(content, {
+            if (textAlign === 'center') {
+                left = BlazorFabric.originalWidth / 2;
+            }
+            if (textAlign === 'right') {
+                left = BlazorFabric.originalWidth - left;
+            }
+
+            const text = new fabric.IText(content, {
                 left: left,
                 top: top,
                 fill: textColor,
@@ -128,8 +135,21 @@
                 selectable: false,
                 fontSize: fontSize,
                 textAlign: textAlign,
-                lineHeight: 1.25
+                lineHeight: 1.25,
+                evented: false
             });
+
+            text.set({ originX: textAlign });
+
+            if (selectedRow > 0 && selectedRow <= text._textLines.length) {
+                if (!text.styles[selectedRow - 1]) {
+                    text.styles[selectedRow - 1] = {};
+                }
+                // Modify the styles property to change color for each character in the specified row
+                for (let i = 0; i < text._textLines[selectedRow - 1].length; i++) {
+                    text.styles[selectedRow - 1][i] = { fill: selectedColor };
+                }
+            }
 
             BlazorFabric.canvas.off('object:added').on('object:added', function (options) {
                 var obj = options.target;
@@ -138,9 +158,10 @@
                 }
             }.bind(this));
 
-            this.canvas.add(text);
+            BlazorFabric.canvas.add(text);
         }
     };
+
 
     static updateImage = function (imageId, model, imgUrl) {
         if (BlazorFabric.canvas != null) {

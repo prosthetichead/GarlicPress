@@ -53,7 +53,7 @@
         @if (_artUpdateRunning)
         {
             <div class="grid place-content-center mt-8">
-                <div class="flex flex-col items-center gap-2 text-white">
+                <div class="flex flex-col items-center gap-2">
                     <GarlicLoading></GarlicLoading>
                     <b>Loading Game Art...</b>
                 </div>
@@ -63,22 +63,22 @@
 </div>
 
 @* System Media *@
-<div class="scrollbar overflow-auto h-[calc(100vh-50vh-160px)]" style="display: @(activeTab == Tabs.Screenscraper ? "block" : "none")">
+<div class="scrollbar overflow-auto h-[calc(100vh-50vh-160px)]" style="display: @(activeTab == Tabs.ScreenscraperSystem ? "block" : "none")">
     <div class="p-2 flex overflow-auto flex-wrap w-full">
         <div class="grid w-full">
             <Button ButtonText="Get System Art" OnClick="GetAllSystemMedia"></Button>
         </div>
 
-        @foreach (var gameMedia in _gameMedias)
+        @foreach (var systemMedia in _systemMedias)
         {
             <div class="p-2">
-                <img class="max-h-40 max-w-[200px] m-1" src="@gameMedia.path" @onclick="(async () => await AddNewMediaLayerImageToCanvas(gameMedia.path, gameMedia.mediaType))" />
+                <img class="max-h-40 max-w-[200px] m-1" src="@systemMedia.path" @onclick="(async () => await AddNewMediaLayerImageToCanvas(systemMedia.path, systemMedia.mediaType))" />
             </div>
         }
         @if (_artUpdateRunning)
         {
             <div class="grid place-content-center mt-8">
-                <div class="flex flex-col items-center gap-2 text-white">
+                <div class="flex flex-col items-center gap-2">
                     <GarlicLoading></GarlicLoading>
                     <b>Loading Game Art...</b>
                 </div>
@@ -99,6 +99,8 @@
     [Parameter]
     [EditorRequired]
     public GameResponse? _game { get; set; }
+
+    SystemsResponse? _systems;
 
     string previousSelectedGame = "";
 
@@ -161,7 +163,7 @@
             {
                 await foreach (var gameMedia in GameMediaGeneration.GetAllGameMedia(_game))
                 {
-                    if (gameMedia.media is GameMediaResponse media)
+                    if (gameMedia.media is MediaResponse media)
                     {
                         _gameMedias.Add((media.path.Replace("wwwroot/", ""), gameMedia.mediaType));
                     }
@@ -180,12 +182,12 @@
         {
             _artUpdateRunning = true;
             _systemMedias.Clear();
-            _game ??= await ScreenScraper.GetGameData(_selectedSystem, _selectedGame, SearchType.GameName);
-            if (_game is not null && _game.status != "error")
+            _systems ??= await ScreenScraper.GetSystemsData();
+            if (_systems is not null && _systems.status != "error")
             {
-                await foreach (var systemMedia in GameMediaGeneration.GetAllGameMedia(_game))
+                await foreach (var systemMedia in GameMediaGeneration.GetAllSystemMedia(_systems, int.Parse(_selectedSystem.ss_systemeid)))
                 {
-                    if (systemMedia.media is GameMediaResponse media)
+                    if (systemMedia.media is MediaResponse media)
                     {
                         _systemMedias.Add((media.path.Replace("wwwroot/", ""), systemMedia.mediaType));
                     }

@@ -2,6 +2,7 @@
 @using GarlicPress.components.shared;
 @using GarlicPress.constants;
 @using GarlicPress.forms;
+@using System.Drawing.Imaging;
 @using static GarlicPress.MediaLayer;
 @using static GarlicPress.components.shared.FabricCanvas<MediaLayer>;
 @inject EditMediaLayersForm editMediaLayersForm
@@ -132,11 +133,18 @@
 
         <div class="grid gap-2 ml-2">
             <Button ButtonText="@(_artUpdateRunning ? "Updating..." : "Update")" disabled="@_artUpdateRunning" OnClick="(async () => { await UpdateGameArt(); })"></Button>
+            <Button ButtonText="@(_artUpdateDeviceRunning ? "Updating Art on Device..." : "Update Art on Device")" disabled="@_artUpdateDeviceRunning" OnClick="(async () => { await UpdateGameArtDevice(); })"></Button>
             <Button ButtonText="@(_saving ? "Saving..." : "Save")" disabled="@_saving" OnClick="SaveMediaLayoutCollection"></Button>
             <Button ButtonText="Close" OnClick="() => { editMediaLayersForm.Close(); }"></Button>
         </div>
     </div>
 </div>
+
+<ModalComponent @ref="_artUpdateModal">
+    <p class="m-2 p-2 ">
+        @((MarkupString)_artUpdateDeviceStatus)
+    </p>
+</ModalComponent>
 
 @code {
     FabricCanvas<MediaLayer>? _fabricCanvas;
@@ -149,6 +157,10 @@
     MediaLayer? _selectedMediaLayer;
 
     bool _artUpdateRunning;
+
+    bool _artUpdateDeviceRunning;
+    string _artUpdateDeviceStatus = "";
+    ModalComponent? _artUpdateModal;
 
     string _selectedImgPath { get { return _selectedDrive?.path + "/Roms/" + _selectedSystem?.folder + "/Imgs/"; } }
     string _selectedRomPath { get { return _selectedDrive?.romPath + "/" + _selectedSystem?.folder; } }
@@ -282,7 +294,7 @@
             {
                 await foreach (var gameMedia in GameMediaGeneration.GetGameMedia(_game, _selectedMediaLayerCollection))
                 {
-                    if (gameMedia.media is GameMediaResponse media)
+                    if (gameMedia.media is MediaResponse media)
                     {
                         var mediaPath = media.path.Replace("wwwroot/", "");
                         await AddImageToCanvas(mediaPath, gameMedia.layer);
@@ -302,6 +314,46 @@
         }
     }
 
+    async Task UpdateGameArtDevice()
+    {
+        if (_selectedDrive is not null
+            && _selectedSystem is not null
+            && !String.IsNullOrWhiteSpace(_selectedGame)
+            && _game is not null
+            && _game.status != "error"
+            && _selectedMediaLayerCollection is not null)
+        {
+            _artUpdateDeviceRunning = true;
+            _artUpdateModal?.Open();
+
+            _artUpdateDeviceStatus = "Generating Game Art<br />";
+            StateHasChanged();
+            await Task.Yield();
+            var bitmap = await GameMediaGeneration.GenerateGameMedia(_game, _selectedMediaLayerCollection);
+            _artUpdateDeviceStatus += "Game Art Generation Complete<br />";
+            StateHasChanged();
+
+            Directory.CreateDirectory(PathConstants.assetsTempPath);
+            bitmap?.Save(PathConstants.assetsTempPath + "gameart-up.png", ImageFormat.Png);
+            bitmap?.Dispose();
+
+            _artUpdateDeviceStatus += "Uploading Game Art to Device<br />";
+            StateHasChanged();
+            GarlicGameArtSearch ggas = new GarlicGameArtSearch(_selectedSystem, _selectedDrive, SearchType.GameName, _selectedGame);
+            Progress<int> progress = new Progress<int>(async p =>
+            {
+                await InvokeAsync(() => StateHasChanged()); _artUpdateDeviceStatus += (".." + p.ToString() + "%");
+            });
+            await ADBConnection.UploadFileAsync(PathConstants.assetsTempPath + "gameart-up.png", ggas.imgPath, progress, CancellationToken.None);
+
+            _artUpdateDeviceStatus += "<br />Complete";
+            StateHasChanged();
+            await Task.Delay(1000);
+            _artUpdateDeviceRunning = false;
+            _artUpdateModal?.Close();
+        }
+    }
+
     async Task AddText()
     {
         if (_fabricCanvas is not null)
@@ -309,7 +361,19 @@
             if (_games.Any() && GarlicSkin.skinSettings is not null && GarlicSkin.languageFiles is not null && GarlicSkin.validSkinSettings)
             {
                 var indexof = _games.IndexOf(_selectedGame);
-                await _fabricCanvas.AddText(String.Join("\n", GetSurroundingStrings(_games, indexof)), GarlicSkin.skinSettings.textmargin, 90, GarlicSkin.skinSettings.colorinactive ?? "white", "GarlicFont", GarlicSkin.languageFiles.First().garlicLanguageSettings.fontsize, GarlicSkin.skinSettings.textalignment ?? "left");
+                
+                var transformedGames = _games.Select(TransformTitle).ToList();
+
+                await _fabricCanvas.AddText(
+                    String.Join("\n", GetSurroundingStrings(transformedGames, indexof)), 
+                    GarlicSkin.skinSettings.textmargin, 
+                    90, 
+                    GarlicSkin.skinSettings.colorinactive ?? "white", 
+                    "GarlicFont", 
+                    GarlicSkin.languageFiles.First().garlicLanguageSettings.fontsize, 
+                    GarlicSkin.skinSettings.textalignment ?? "left", 
+                    indexof < 4 ? indexof + 1 : 4, 
+                    GarlicSkin.skinSettings.coloractive ?? "white");
             }
             else if (ADBConnection.deviceConnected == false)
             {
@@ -318,7 +382,7 @@
         }
     }
 
-    public static List<string> GetSurroundingStrings(List<string> source, int index)
+    List<string> GetSurroundingStrings(List<string> source, int index)
     {
         int start = Math.Max(0, index - 3); // Ensure we don't go below 0
         int count = 8;
@@ -338,6 +402,16 @@
         return source.Skip(start).Take(count).ToList();
     }
 
+    string TransformTitle(string title)
+    {
+        int index = title.IndexOf('(');
+        if (index != -1)
+        {
+            title = title.Substring(0, index).Trim();
+        }
+        return title;
+    }
+
     private async Task UpdateImage(MediaLayer? layer, bool updateImage = false)
     {
         if (layer is not null && _fabricCanvas is not null && _game is not null)
@@ -345,7 +419,7 @@
             if (updateImage)
             {
                 var gameMedia = await GameMediaGeneration.GetMediaFromMediaLayer(_game, layer);
-                if (gameMedia.media is GameMediaResponse media)
+                if (gameMedia.media is MediaResponse media)
                 {
                     await _fabricCanvas.UpdateImage(layer.id, layer, media.path.Replace("wwwroot/", "").Replace(@"wwwroot\", ""));
                 }

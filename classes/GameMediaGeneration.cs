@@ -249,7 +249,7 @@ namespace GarlicPress
 
             foreach (var result in results)
             {
-                if (result.media is GameMediaResponse media)
+                if (result.media is MediaResponse media)
                 {
                     var baseImage = (Bitmap)Image.FromFile(media.path);
                     baseImage.SetResolution(graphics.DpiX, graphics.DpiY);
@@ -281,7 +281,7 @@ namespace GarlicPress
         /// </summary>
         /// <param name="game"></param>
         /// <returns>Returns when all media is downloaded</returns>
-        public static async IAsyncEnumerable<(GameMediaResponse? media, MediaLayer layer)> GetGameMedia(GameResponse game, MediaLayerCollection mediaLayerCollection)
+        public static async IAsyncEnumerable<(MediaResponse? media, MediaLayer layer)> GetGameMedia(GameResponse game, MediaLayerCollection mediaLayerCollection)
         {
             if (game.status == "error")
             {
@@ -304,14 +304,14 @@ namespace GarlicPress
         /// </summary>
         /// <param name="game"></param>
         /// <returns>Returns each media as soon as it is downloaded</returns>
-        public static async IAsyncEnumerable<(GameMediaResponse? media, string mediaType)> GetAllGameMedia(GameResponse game)
+        public static async IAsyncEnumerable<(MediaResponse? media, string mediaType)> GetAllGameMedia(GameResponse game)
         {
             if (game.status == "error")
             {
                 yield break;
             }
 
-            var tasks = SSMediaType.GetAllMediaTypes().Where(x => x.value != "local").Select(media => GetMediaFromType(game, media.value)).ToList();
+            var tasks = SSMediaType.GetAllMediaTypes().Where(x => x.mediaType == SSMediaType.MediaTypes.SSGame).Select(media => GetMediaFromType(game, media.value)).ToList();
 
             while (tasks.Count > 0)
             {
@@ -324,16 +324,16 @@ namespace GarlicPress
         /// <summary>
         /// Gets all media for a system and returns it as a tuple with the media path and the media type
         /// </summary>
-        /// <param name="game"></param>
+        /// <param name="systems"></param>
         /// <returns>Returns each media as soon as it is downloaded</returns>
-        public static async IAsyncEnumerable<(GameMediaResponse? media, string mediaType)> GetAllSystemMedia(GameResponse game)
+        public static async IAsyncEnumerable<(MediaResponse? media, string mediaType)> GetAllSystemMedia(SystemsResponse systems, int systemId)
         {
-            if (game.status == "error")
+            if (systems.status == "error")
             {
                 yield break;
             }
 
-            var tasks = SSMediaType.GetAllMediaTypes().Where(x => x.value != "local").Select(media => GetMediaFromType(game, media.value)).ToList();
+            var tasks = SSMediaType.GetAllMediaTypes().Where(x => x.mediaType == SSMediaType.MediaTypes.SSSystem).Select(media => GetSystemMediaFromType(systems, systemId, media.value)).ToList();
 
             while (tasks.Count > 0)
             {
@@ -361,11 +361,11 @@ namespace GarlicPress
         /// <param name="game"></param>
         /// <param name="layer"></param>
         /// <returns></returns>
-        public static async Task<(GameMediaResponse? media, MediaLayer layer)> GetMediaFromMediaLayer(GameResponse game, MediaLayer layer)
+        public static async Task<(MediaResponse? media, MediaLayer layer)> GetMediaFromMediaLayer(GameResponse game, MediaLayer layer)
         {
             try
             {
-                if (await GetGameMediaResponse(game, layer) is GameMediaResponse downloadedMedia)
+                if (await GetGameMediaResponse(game, layer) is MediaResponse downloadedMedia)
                 {
                     var baseImage = (Bitmap)Image.FromFile(downloadedMedia.path);
 
@@ -389,45 +389,73 @@ namespace GarlicPress
             return (null, layer);
         }
 
-        private static async Task<GameMediaResponse?> GetGameMediaResponse(GameResponse game, MediaLayer layer)
+        private static async Task<MediaResponse?> GetGameMediaResponse(GameResponse game, MediaLayer layer)
         {
-            GameMediaResponse? media = null;
+            MediaResponse? media = null;
             if (layer.mediaType == "local")
             {
-                media = new GameMediaResponse()
+                media = new MediaResponse()
                 {
                     path = layer.path,
                     region = layer.mediaType
                 };
             }
+            else if (layer.mediaType.StartsWith("system-"))
+            {
+                var systemId = int.Parse(game.response.jeu.systeme.id);
+                var systems = await ScreenScraper.GetSystemsData();
+                media = await LimitedDownloadSystemMedia(systems, systemId, layer.mediaType);
+            }
             else
             {
-                media = await LimitedDownloadMedia(game, layer.mediaType);
+                media = await LimitedDownloadGameMedia(game, layer.mediaType);
             }
 
             return media;
         }
 
-        private static async Task<(GameMediaResponse? media, string type)> GetMediaFromType(GameResponse game, string type)
+        private static async Task<(MediaResponse? media, string type)> GetMediaFromType(GameResponse game, string type)
         {
-            return (await LimitedDownloadMedia(game, type), type);
+            return (await LimitedDownloadGameMedia(game, type), type);
         }
 
-        private static async Task<GameMediaResponse?> LimitedDownloadMedia(GameResponse game, string mediaType)
+        private static async Task<(MediaResponse? media, string type)> GetSystemMediaFromType(SystemsResponse system, int systemId, string type)
+        {
+            return (await LimitedDownloadSystemMedia(system, systemId, type), type);
+        }
+
+        private static async Task<MediaResponse?> LimitedDownloadGameMedia(GameResponse game, string mediaType)
         {
             int maxthreads = 1;
             Int32.TryParse(game.response.ssuser?.maxthreads ?? "1", out maxthreads);
-            if (_semaphore is null)
-            {
-                _semaphore = new SemaphoreSlim(maxthreads);
-            }
+            _semaphore ??= new SemaphoreSlim(maxthreads);
 
             // Wait for an available slot (based on maxThreads)
             await _semaphore.WaitAsync();
 
             try
             {
-                return await ScreenScraper.DownloadMedia(game, mediaType);
+                return await ScreenScraper.DownloadGameMedia(game, mediaType);
+            }
+            finally
+            {
+                // Release the slot after finishing the operation
+                _semaphore.Release();
+            }
+        }
+
+        private static async Task<MediaResponse?> LimitedDownloadSystemMedia(SystemsResponse systems, int systemId, string mediaType)
+        {
+            int maxthreads = 1;
+            Int32.TryParse(systems.response.ssuser?.maxthreads ?? "1", out maxthreads);
+            _semaphore ??= new SemaphoreSlim(maxthreads);
+
+            // Wait for an available slot (based on maxThreads)
+            await _semaphore.WaitAsync();
+
+            try
+            {
+                return await ScreenScraper.DownloadSystemMedia(systems, systemId, mediaType.Replace("system-", ""));
             }
             finally
             {
