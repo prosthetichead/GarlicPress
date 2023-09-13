@@ -165,7 +165,7 @@ namespace GarlicPress
 
                     Directory.CreateDirectory(PathConstants.assetsTempPath);
 
-                    string mediaDownloadPath = PathConstants.assetsTempPath + media.region + system.id + mediaType + "." + media.format;
+                    string mediaDownloadPath = PathConstants.assetsTempPath + media.region + system!.id + mediaType + "." + media.format;
 
                     if (File.Exists(mediaDownloadPath))
                     {

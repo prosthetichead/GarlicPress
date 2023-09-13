@@ -26,7 +26,7 @@
     public Dictionary<string, object>? AllOtherAttributes { get; set; }
 
     string canvasId = $"canvas-{Guid.NewGuid()}";
-    IJSObjectReference? module;
+    public IJSObjectReference? module;
     DotNetObjectReference<FabricCanvas<TItem>>? objRef;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -95,11 +95,27 @@
         }
     }
 
+    public async Task SelectObject(Guid id)
+    {
+        if (module is not null)
+        {
+            await module.InvokeVoidAsync("BlazorFabric.selectObject", id);
+        }
+    }
+
     public async Task RemoveSelectedImage(bool notitfyDotnet)
     {
         if (module is not null)
         {
             await module.InvokeVoidAsync("BlazorFabric.deleteSelectedObject", notitfyDotnet);
+        }
+    }
+
+    public async Task RemoveImage(Guid id)
+    {
+        if (module is not null)
+        {
+            await module.InvokeVoidAsync("BlazorFabric.deleteObject", id);
         }
     }
 

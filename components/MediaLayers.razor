@@ -1,0 +1,62 @@
+﻿
+<div>
+    <h3 class="">Media Layers</h3>
+    <div class="relative overflow-x-auto">
+        <table class="w-full text-left">
+            <thead class="uppercase bg-gray-400">
+                <tr>
+                    <th scope="col" class="p-1 text-xs">
+                        Order
+                    </th>
+                    <th scope="col" class="p-1 text-xs">
+                        Media Type
+                    </th>
+                    <th scope="col" class="p-1 text-xs">
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var mediaLayer in MediaLayerList.OrderBy(x => x.order))
+                {
+                    var selected = SelectedMediaLayer == mediaLayer;
+                    <tr class="odd:bg-blue-50 even:bg-white border-b">
+                        <td class="text-xs font-medium text-gray-800 whitespace-nowrap overflow-hidden truncate">
+                            @mediaLayer.order
+                        </td>
+                        <th scope="row" class="text-xs font-medium text-gray-800 whitespace-nowrap overflow-hidden truncate">
+                            @(SSMediaType.GetAllMediaTypes().FirstOrDefault(x => x.value == mediaLayer.mediaType)?.label)
+                        </th>
+                        <td class="grid grid-cols-2 gap-1">
+                            <button @onclick="() => { SelectedMediaLayer = mediaLayer; OnMediaLayerSelected.InvokeAsync(mediaLayer.id); }" class="text-xs px-1 py-1 text-white @(selected ? "bg-blue-500" : "bg-blue-800") rounded-sm hover:bg-blue-600">@(selected ? "Selected" : "Select")</button>
+                            <button @onclick="() => OnMediaLayerDelete.InvokeAsync(mediaLayer.id)" class="text-xs px-1 py-1 bg-red-500 rounded-sm hover:bg-red-600">Delete</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public required List<MediaLayer> MediaLayerList { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public EventCallback<Guid> OnMediaLayerDelete { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public EventCallback<Guid> OnMediaLayerSelected { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public MediaLayer? SelectedMediaLayer { get; set; }
+
+    [Parameter]
+    public EventCallback<MediaLayer> SelectedMediaLayerChanged { get; set; }
+
+}

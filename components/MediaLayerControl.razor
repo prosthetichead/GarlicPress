@@ -35,7 +35,7 @@
             <Button OnClick="AddNewFilter" ButtonText="Add Selected Filter"></Button>
         </div>
         <div class="relative overflow-x-auto">
-            <table class="w-full text-left">
+            <table class="w-full text-left mt-1">
                 <thead class="uppercase bg-gray-400">
                     <tr>
                         <th scope="col" class="p-1 text-xs">
@@ -52,11 +52,11 @@
                         var selected = selectedFilterSetting == filter;
                         <tr class="odd:bg-blue-50 even:bg-white border-b">
                             <th scope="row" class="text-xs p-1 font-medium text-gray-800 whitespace-nowrap overflow-hidden truncate">
-                                @($"Filter: " + filter.GetType().Name)
+                                @filter.GetType().Name
                             </th>
                             <td class="grid grid-cols-2 p-2 gap-1">
-                                <button @onclick="() => selectedFilterSetting = filter" class="text-xs px-2 py-1 text-white @(selected ? "bg-blue-500" : "bg-blue-800") rounded-sm hover:bg-blue-600">@(selected ? "Selected" : "Select")</button>
-                                <button @onclick="() => DeleteFilter(filter)" class="text-xs px-2 py-1 bg-red-500 rounded-sm hover:bg-red-600">Delete</button>
+                                <button @onclick="() => selectedFilterSetting = filter" class="text-xs px-1 py-1 text-white @(selected ? "bg-blue-500" : "bg-blue-800") rounded-sm hover:bg-blue-600">@(selected ? "Selected" : "Select")</button>
+                                <button @onclick="() => DeleteFilter(filter)" class="text-xs px-1 py-1 bg-red-500 rounded-sm hover:bg-red-600">Delete</button>
                             </td>
                         </tr>
                     }
@@ -67,7 +67,7 @@
 
         @if (selectedFilterSetting is not null)
         {
-            <div class="mt-5 p-4 border rounded">
+            <div class="m-1 p-1 border rounded">
 
                 @switch (selectedFilterSetting)
                 {

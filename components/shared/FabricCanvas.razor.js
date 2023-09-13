@@ -28,8 +28,7 @@
     };
 
     static handleImageEvent(obj, methodName) {
-        if (obj instanceof fabric.Image) {
-
+        if (obj instanceof fabric.Image && obj.model != undefined) {
             obj.model.x = Math.round(obj.left);
             obj.model.y = Math.round(obj.top);
             obj.model.angle = Math.round(obj.angle);
@@ -191,6 +190,17 @@
         }
     };
 
+    static selectObject(imageId) {
+        if (BlazorFabric.canvas != null) {
+            const img = BlazorFabric.canvas._objects.find(obj => obj.id === imageId);
+
+            if (img) {
+                BlazorFabric.canvas.setActiveObject(img);
+                BlazorFabric.canvas.renderAll();
+            }
+        }
+    }
+
     static deleteSelectedObject(notifyDotnet = true) {
         const activeObject = BlazorFabric.canvas.getActiveObject();
         if (activeObject) {
@@ -201,6 +211,17 @@
 
             BlazorFabric.canvas.remove(activeObject);
             BlazorFabric.canvas.requestRenderAll();
+        }
+    }
+
+    static deleteObject(imageId) {
+        if (BlazorFabric.canvas != null) {
+            const img = BlazorFabric.canvas._objects.find(obj => obj.id === imageId);
+
+            if (img) {
+                BlazorFabric.canvas.remove(img);
+                BlazorFabric.canvas.requestRenderAll();
+            }
         }
     }
 
@@ -215,7 +236,7 @@
             BlazorFabric.canvas.bringForward(activeObject);
             BlazorFabric.canvas.renderAll();
 
-            BlazorFabric.handleImageEvent(activeObject, 'NotifyImageLocationUpdated');
+            BlazorFabric.notifyAllImages();
         }
     }
 
@@ -229,6 +250,47 @@
             BlazorFabric.canvas.sendBackwards(activeObject);
             BlazorFabric.canvas.renderAll();
 
+            BlazorFabric.notifyAllImages();
+        }
+    }
+
+    static notifyAllImages() {
+        const objects = BlazorFabric.canvas._objects;
+        for (let i = 0; i < objects.length; i++) {
+            const obj = objects[i];
+            if (obj instanceof fabric.Image) {
+                BlazorFabric.handleImageEvent(obj, 'NotifyImageLocationUpdated');
+            }
+        }
+    }
+
+    //move object one pixel in direction
+    static moveObject(direction) {
+        const activeObject = BlazorFabric.canvas.getActiveObject();
+        if (activeObject instanceof fabric.Image) {
+            switch (direction) {
+                case "up":
+                    activeObject.set({
+                        top: activeObject.top - 1
+                    });
+                    break;
+                case "down":
+                    activeObject.set({
+                        top: activeObject.top + 1
+                    });
+                    break;
+                case "left":
+                    activeObject.set({
+                        left: activeObject.left - 1
+                    });
+                    break;
+                case "right":
+                    activeObject.set({
+                        left: activeObject.left + 1
+                    });
+                    break;
+            }
+            BlazorFabric.canvas.renderAll();
             BlazorFabric.handleImageEvent(activeObject, 'NotifyImageLocationUpdated');
         }
     }
@@ -299,6 +361,20 @@ window.addEventListener('keydown', function (e) {
     // 'Delete' object
     if (e.key === "Delete") {
         BlazorFabric.deleteSelectedObject();
+    }
+
+    // arrow keys for moving selected object
+    if (e.key === "ArrowUp") {
+        BlazorFabric.moveObject("up");
+    }
+    if (e.key === "ArrowDown") {
+        BlazorFabric.moveObject("down");
+    }
+    if (e.key === "ArrowLeft") {
+        BlazorFabric.moveObject("left");
+    }
+    if (e.key === "ArrowRight") {
+        BlazorFabric.moveObject("right");
     }
 });
 

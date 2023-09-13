@@ -30,7 +30,7 @@ namespace GarlicPress
 
         FileStatistics? currentSelectedItem;
 
-        DebugLogForm debugLogForm;
+        DebugLogForm? debugLogForm;
 
         public MainForm()
         {
@@ -165,24 +165,28 @@ namespace GarlicPress
             {
                 currentSelectedItem = item;
                 txtFileName.Text = item.Path;
+                UpdateImageFromDevice(item);
+            }
+        }
 
-                //get img file if one exists
-                string imgFile = Path.ChangeExtension(item.Path, ".png");
-                if (ADBConnection.DownloadFile(SelectedImgPath + imgFile, PathConstants.assetsTempPath + "gameart-down.png"))
-                {
-                    Bitmap overlayImage = (Bitmap)Image.FromFile(PathConstants.assetsTempPath + "gameart-down.png");
-                    picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage);
-                    overlayImage.Dispose();
-                    picGame.Refresh();
-                }
-                else
-                {
-                    Bitmap overlayImage = (Bitmap)Image.FromFile(PathConstants.assetSkinPath + "background.png");
-                    picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage);
-                    overlayImage.Dispose();
-                }
+        private void UpdateImageFromDevice(FileStatistics item)
+        {
+            //get img file if one exists
+            string imgFile = Path.ChangeExtension(item.Path, ".png");
+            if (ADBConnection.DownloadFile(SelectedImgPath + imgFile, PathConstants.assetsTempPath + "gameart-down.png"))
+            {
+                Bitmap overlayImage = (Bitmap)Image.FromFile(PathConstants.assetsTempPath + "gameart-down.png");
+                picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage);
+                overlayImage.Dispose();
                 picGame.Refresh();
             }
+            else
+            {
+                Bitmap overlayImage = (Bitmap)Image.FromFile(PathConstants.assetSkinPath + "background.png");
+                picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage);
+                overlayImage.Dispose();
+            }
+            picGame.Refresh();
         }
 
         private void miSettings_Click(object sender, EventArgs e)
@@ -482,13 +486,30 @@ namespace GarlicPress
 
         private void miShowDebugLog_Click(object sender, EventArgs e)
         {
-            debugLogForm.Show();
+            debugLogForm?.Show();
         }
 
         private void btnOpenEditor_Click(object sender, EventArgs e)
         {
-            EditMediaLayersForm editLayersForm = new(SelectedDrive, SelectedSystem, txtFileName.Text);
-            editLayersForm.Show();
+            EditMediaLayersForm.Instance._garlicDrive = SelectedDrive;
+            EditMediaLayersForm.Instance._garlicSystem = SelectedSystem;
+            EditMediaLayersForm.Instance._game = txtFileName.Text;
+            EditMediaLayersForm.Instance.UpdateModels();
+            EditMediaLayersForm.Instance.FormClosing -= EditMediaLayersForm_FormClosing;
+            EditMediaLayersForm.Instance.FormClosing += EditMediaLayersForm_FormClosing;
+            EditMediaLayersForm.Instance.ShowDialog();
+        }
+
+        private void EditMediaLayersForm_FormClosing(object? sender, FormClosingEventArgs e)
+        {
+            if (sender is EditMediaLayersForm form && form.Visible == false)
+            {
+                GameMediaGeneration.LoadMediaLayoutJson();
+                if (fileListBox.SelectedItem is FileStatistics item)
+                {
+                    UpdateImageFromDevice(item);
+                }
+            }
         }
     }
 }

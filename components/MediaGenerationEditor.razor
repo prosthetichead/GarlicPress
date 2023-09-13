@@ -105,7 +105,7 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-3 overflow-auto gap-2 h-[50vh]">
+    <div class="grid grid-cols-4 overflow-auto gap-2 h-[50vh]">
         <div class="col-span-2 flex py-2 justify-center items-center overscroll-auto relative h-[50vh]">
             <FabricCanvas TItem="MediaLayer" @ref="_fabricCanvas" MediaUpdated="OnMediaUpdated" MediaDeleted="OnMediaDeleted" MediaSelected="OnMediaSelected" MediaUnselected="OnMediaUnselected" />
 
@@ -120,8 +120,13 @@
             }
 
         </div>
-
-        <div class="flex-initial border rounded-sm border-gray-800 overflow-auto scrollbar my-2 p-2">
+        <div class="flex-initial border rounded-sm border-gray-800 overflow-auto scrollbar my-1 p-1">
+            @if (_selectedMediaLayerCollection is not null && _fabricCanvas is not null)
+            {
+                <MediaLayers MediaLayerList="_selectedMediaLayerCollection.mediaLayers" @bind-SelectedMediaLayer="_selectedMediaLayer" OnMediaLayerDelete="async id => { OnMediaDeleted(id); await _fabricCanvas.RemoveImage(id); }" OnMediaLayerSelected="_fabricCanvas.SelectObject" />
+            }
+        </div>
+        <div class="flex-initial border rounded-sm border-gray-800 overflow-auto scrollbar m-1 p-1">
             <MediaLayerControl IsImageSelected="_imageSelected" OnApplyFilters="async () => await UpdateImage(_selectedMediaLayer, true)" mediaLayer="_selectedMediaLayer" mediaLayerChanged="async () => await UpdateImage(_selectedMediaLayer)" />
         </div>
     </div>
@@ -147,6 +152,45 @@
 </ModalComponent>
 
 @code {
+    public GarlicDrive? _selectedDrive
+    {
+        get
+        {
+            return EditMediaLayersForm.Instance._garlicDrive;
+        }
+        set
+        {
+            EditMediaLayersForm.Instance._garlicDrive = value;
+        }
+    }
+    string? _selectedDriveValue { get; set; }
+
+    public GarlicSystem? _selectedSystem
+    {
+        get
+        {
+            return EditMediaLayersForm.Instance._garlicSystem;
+        }
+        set
+        {
+            EditMediaLayersForm.Instance._garlicSystem = value;
+        }
+    }
+    string? _selectedSystemValue { get; set; }
+
+    public string _selectedGame
+    {
+        get
+        {
+            return EditMediaLayersForm.Instance._game;
+        }
+        set
+        {
+            EditMediaLayersForm.Instance._game = value;
+        }
+    }
+    List<string> _games = new();
+
     FabricCanvas<MediaLayer>? _fabricCanvas;
 
     Guid? _selectedMediaLayerCollectionId { get; set; }
@@ -165,17 +209,6 @@
     string _selectedImgPath { get { return _selectedDrive?.path + "/Roms/" + _selectedSystem?.folder + "/Imgs/"; } }
     string _selectedRomPath { get { return _selectedDrive?.romPath + "/" + _selectedSystem?.folder; } }
 
-    [Parameter]
-    public GarlicDrive? _selectedDrive { get; set; }
-    string? _selectedDriveValue { get; set; }
-
-    [Parameter]
-    public GarlicSystem? _selectedSystem { get; set; }
-    string? _selectedSystemValue { get; set; }
-
-    [Parameter]
-    public string _selectedGame { get; set; } = "";
-    List<string> _games = new();
 
     GameResponse? _game;
 
@@ -200,8 +233,17 @@
         if (firstRender)
         {
             await UpdateGameArt();
+            EditMediaLayersForm.Instance.OnUpdatedModels += OnUpdatedModels_Event;
             StateHasChanged();
         }
+    }
+
+    async void OnUpdatedModels_Event()
+    {
+        _selectedDriveValue = _selectedDrive?.name;
+        _selectedSystemValue = _selectedSystem?.name;
+        UpdateGames();
+        await UpdateGameArt();
     }
 
     async void SaveMediaLayoutCollection()
@@ -280,7 +322,18 @@
             _artUpdateRunning = true;
             StateHasChanged();
             await Task.Yield();
-            await Task.Delay(100);
+
+            //Wait for the canvas to be ready
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+            while (_fabricCanvas.module is null)
+            {
+                if (sw.ElapsedMilliseconds > 5000)
+                {
+                    sw.Stop();
+                    break;
+                }
+                await Task.Delay(100);
+            }
 
             await _fabricCanvas.ClearCanvas();
             await _fabricCanvas.AddBackgroundImage(PathConstants.assetSkinPath.Replace("wwwroot/", "") + "background.png");
@@ -311,6 +364,7 @@
             }
 
             _artUpdateRunning = false;
+            StateHasChanged();
         }
     }
 
@@ -361,23 +415,28 @@
             if (_games.Any() && GarlicSkin.skinSettings is not null && GarlicSkin.languageFiles is not null && GarlicSkin.validSkinSettings)
             {
                 var indexof = _games.IndexOf(_selectedGame);
-                
+
                 var transformedGames = _games.Select(TransformTitle).ToList();
 
                 await _fabricCanvas.AddText(
-                    String.Join("\n", GetSurroundingStrings(transformedGames, indexof)), 
-                    GarlicSkin.skinSettings.textmargin, 
-                    90, 
-                    GarlicSkin.skinSettings.colorinactive ?? "white", 
-                    "GarlicFont", 
-                    GarlicSkin.languageFiles.First().garlicLanguageSettings.fontsize, 
-                    GarlicSkin.skinSettings.textalignment ?? "left", 
-                    indexof < 4 ? indexof + 1 : 4, 
+                    String.Join("\n", GetSurroundingStrings(transformedGames, indexof)),
+                    GarlicSkin.skinSettings.textmargin,
+                    90,
+                    GarlicSkin.skinSettings.colorinactive ?? "white",
+                    "GarlicFont",
+                    GarlicSkin.languageFiles.First().garlicLanguageSettings.fontsize,
+                    GarlicSkin.skinSettings.textalignment ?? "left",
+                    indexof < 4 ? indexof + 1 : 4,
                     GarlicSkin.skinSettings.coloractive ?? "white");
             }
             else if (ADBConnection.deviceConnected == false)
             {
-                await _fabricCanvas.AddText(String.Join("\n", Enumerable.Repeat(_selectedGame, 8)), 340, 90, "white", "GarlicFont");
+                await _fabricCanvas.AddText(
+                    String.Join("\n", Enumerable.Repeat(_selectedGame, 8)),
+                    340,
+                    90,
+                    "white",
+                    "GarlicFont");
             }
         }
     }
