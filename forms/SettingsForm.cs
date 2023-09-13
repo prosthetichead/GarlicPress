@@ -1,4 +1,5 @@
-﻿using GarlicPress.forms;
+﻿using GarlicPress.constants;
+using GarlicPress.forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -46,7 +47,6 @@ public partial class SettingsForm : Form
         boolSystemTrayOnClose.Checked = Properties.Settings.Default.systemTrayOnClose;
         boolWarnBeforeDelete.Checked = Properties.Settings.Default.warningBeforeDelete;
         boolRomsRootSecondSD.Checked = Properties.Settings.Default.romsOnRootSD2;
-
 
         GridMediaLayout.DataSource = tempMediaLayout;
     }
@@ -172,6 +172,54 @@ public partial class SettingsForm : Form
             foreach (MediaLayer layer in collection.mediaLayers)
                 tempMediaLayout.Add(layer);
             GridMediaLayout.DataSource = tempMediaLayout;
+        }
+    }
+
+    public static long DirSize(DirectoryInfo d)
+    {
+        long size = 0;
+        // Add file sizes.
+        FileInfo[] fis = d.GetFiles();
+        foreach (FileInfo fi in fis)
+        {
+            size += fi.Length;
+        }
+        // Add subdirectory sizes.
+        DirectoryInfo[] dis = d.GetDirectories();
+        foreach (DirectoryInfo di in dis)
+        {
+            size += DirSize(di);
+        }
+        return size;
+    }
+
+    private void btnClearCache_Click(object sender, EventArgs e)
+    {
+        if (Directory.Exists(PathConstants.assetsTempPath))
+        {
+            try
+            {
+                // Compute folder size
+                long directorySizeInBytes = DirSize(new DirectoryInfo(PathConstants.assetsTempPath));
+                double directorySizeInMB = directorySizeInBytes / (1024.0 * 1024.0); // Convert bytes to megabytes
+
+                // Confirm with the user
+                DialogResult result = MessageBox.Show($"The cache size is {directorySizeInMB:0.##} MB. Are you sure you want to clear it?", "Confirm Clear Cache", MessageBoxButtons.YesNo);
+
+                if (result == DialogResult.Yes)
+                {
+                    Directory.Delete(PathConstants.assetsTempPath, true);
+                    MessageBox.Show("Cache cleared successfully.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Could not delete temp folder. {ex.Message}");
+            }
+        }
+        else
+        {
+            MessageBox.Show("Cache already cleared.");
         }
     }
 }
