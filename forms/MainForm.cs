@@ -511,5 +511,11 @@ namespace GarlicPress
                 }
             }
         }
+
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var docForm = new DocumentationForm("help.md");
+            docForm.Show();
+        }
     }
 }

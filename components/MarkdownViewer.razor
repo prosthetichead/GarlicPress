@@ -1,0 +1,31 @@
+﻿@using System.IO
+
+<div class="markdown-content">
+    @if (HtmlContent is not null)
+    {
+        @((MarkupString)HtmlContent)
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string? MarkdownFilePath { get; set; }
+
+    private string? HtmlContent { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(MarkdownFilePath))
+        {
+            try
+            {
+                var markdownContent = await File.ReadAllTextAsync(MarkdownFilePath);
+                HtmlContent = Markdig.Markdown.ToHtml(markdownContent?.Replace("wwwroot/", "") ?? string.Empty);
+            }
+            catch (Exception ex)
+            {
+                HtmlContent = $"Error loading markdown content: {ex.Message}";
+            }
+        }
+    }
+}
