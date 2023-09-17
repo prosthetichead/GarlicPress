@@ -57,21 +57,21 @@ Finally, put the SD card back into the RG35xx.
 
 1. Connect your RG35xx to your PC using a USB cable.
 2. Open GarlicPress. When connected, the app icon will turn green.
+![Connecting](wwwroot/docs/GarlicPressConnecting.gif)
 
 ### **Viewing ROMs**
 
 Browse various sections like 'DOS games' to see content from your RG35xx.
 
-Understood! Let's revise the section considering your feedback:
-
----
+![Roms](wwwroot/docs/GarlicPressRoms.gif)
 
 ### **Updating Art**
 
-![Update Art](wwwroot/docs/GarlicPressUpdateArt.png)
+![Update Art](wwwroot/docs/GarlicPressUpdateGameArt.gif)
+
 Enhance or change the visual representation of your games with the 'Update Art' function in GarlicPress. To use this feature, follow the steps below:
 
-1. **Initiating the Update Art Feature**:
+1. **Initiating the Update Art**:
    - In the main window, click the 'Update Art' button.
    - This action opens the Update Art window which displays games you've previously selected in the main window.
 
@@ -90,7 +90,9 @@ Enhance or change the visual representation of your games with the 'Update Art' 
 ### **ScreenScraper.fr**
 
 1. Create an account on [ScreenScraper.fr](https://www.screenscraper.fr/).
-2. Enter your ScreenScraper credentials in GarlicPress's settings, important to use your username and not email.
+2. Enter your ScreenScraper credentials in GarlicPress's settings, important to use your username and not mail adress.
+
+![ScreenScraper](wwwroot/docs/GarlicPressScreenScraperLogin.png)
 
 ---
 
@@ -99,7 +101,7 @@ Enhance or change the visual representation of your games with the 'Update Art' 
 ### **Introduction**
 
 The Media Layer Editor in GarlicPress makes it easy preview and change game art layouts for GarlicOS.
-![MediaLayerEditor](wwwroot/docs/GarlicPressMediaLayerEditor.png)
+![MediaLayerEditor](wwwroot/docs/GarlicPressMediaLayerEditor.gif)
 
 ### **Overview**
 
@@ -110,6 +112,7 @@ With the Media Layer Editor, customize your game visuals within GarlicOS. Create
 1. **Media Layer Collections**:
    - Organize game art into different collections.
    - Each collection consists of list of Media Layers.
+![MEdiaLayerCollection](wwwroot/docs/GarlicPressMediaLayerCollection.gif)
 
 2. **Media Layers**:
    - Use media from ScreenScraper, game art and system art, or local files.
@@ -134,12 +137,15 @@ With the Media Layer Editor, customize your game visuals within GarlicOS. Create
      1. **Add Media Layer Collection**: Clicking this will open a dialog where you can:
         - Enter a name for your new collection.
         - Decide if you want this collection to be based on an existing one or if you'd prefer to start from scratch.
+![AddMediaLayerCollection](wwwroot/docs/GarlicPressAddMediaLayerCollection.gif)
      2. **Edit Media Layer Collection**: Use this to modify the name of an existing collection.
+![EditMediaLayerColloection](wwwroot/docs/GarlicPressUpdateMediaLayerCollection.gif)
      3. **Delete Media Layer Collection**: This allows you to remove a collection entirely.
+![DeleteMediaLayerCollection](wwwroot/docs/GarlicPressDeleteMediaLayerCollection.gif)
 
 2. **Too add a new Media Layers**:
    - Click on the media you want to add if there's no media loaded click on the Get Game Media/Get System Media buttons.
-   ![AddMEdiaLayer](wwwroot/docs/GarlicPressAddMediaLayer.png)
+   ![AddMEdiaLayer](wwwroot/docs/GarlicPressAddingMedia.gif)
    - Modify size, position, angle, and apply filters.
      1. Select the media layer you want to modify by clicking it in the preview window or by selecting it in Media Layers view.
      2. Transforms :
@@ -149,8 +155,10 @@ With the Media Layer Editor, customize your game visuals within GarlicOS. Create
         ![MediaLayerSize](wwwroot/docs/GarlicPressMediaLayerSize.gif)
 		- **Angle**: Drag the sqaure thats on top to either direction and it will rotate the media.
         ![MediaLayerRotation](wwwroot/docs/GarlicPressMediaLayerRotation.gif)
+        - **Delete**: Click on the delete button on Media Layers view or by selecting a media layer and pressing the delete key.
         - All of these can also be manupilated from the Media Layer Control View.
-        ![MediaLayerControl]
+        ![MediaLayerControl](wwwroot/docs/GarlicPressEditMediaLayerFromControls.mp4)
+        - **Draw Order**: Change the draw order by clicking Page Up or Page Down.
 
 
 4. **Filters**:

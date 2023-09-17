@@ -1,4 +1,6 @@
 ﻿@using System.IO
+@using Markdig;
+@using Markdig.Extensions.MediaLinks;
 
 <div class="markdown-content">
     @if (HtmlContent is not null)
@@ -19,8 +21,20 @@
         {
             try
             {
+                var mediaOptions = new MediaOptions()
+                    {
+                        Height = "1080",
+                        Width = "1920",
+                        AddControlsProperty = false
+
+                    };
+                var pipeline = new MarkdownPipelineBuilder()
+                .UseMediaLinks(mediaOptions)
+                .Build();
+
                 var markdownContent = await File.ReadAllTextAsync(MarkdownFilePath);
-                HtmlContent = Markdig.Markdown.ToHtml(markdownContent?.Replace("wwwroot/", "") ?? string.Empty);
+                HtmlContent = Markdig.Markdown.ToHtml(markdownContent ?? string.Empty, pipeline);
+                HtmlContent = HtmlContent.Replace("wwwroot/", "").Replace("<video", "<video autoplay loop muted");
             }
             catch (Exception ex)
             {
