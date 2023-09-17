@@ -219,7 +219,7 @@ namespace GarlicPress
             return finalImage;
         }
 
-        public static async Task<Bitmap?> GenerateGameMedia(GameResponse game, MediaLayerCollection? mediaLayerCollection = null)
+        public static async Task<Bitmap?> GenerateGameMedia(GameResponse? game, MediaLayerCollection? mediaLayerCollection = null)
         {
             if (mediaLayerCollection is null)
             {
@@ -233,11 +233,6 @@ namespace GarlicPress
             var finalImage = new Bitmap(640, 480, PixelFormat.Format32bppArgb);
             var graphics = Graphics.FromImage(finalImage);
             graphics.CompositingMode = CompositingMode.SourceOver;
-
-            if (game.status == "error")
-            {
-                return null;
-            }
 
             var orderedMediaLayout = mediaLayerCollection.mediaLayers.OrderBy(o => o.order).ToList();
 
@@ -283,11 +278,6 @@ namespace GarlicPress
         /// <returns>Returns when all media is downloaded</returns>
         public static async IAsyncEnumerable<(GameMediaResponse? media, MediaLayer layer)> GetGameMedia(GameResponse game, MediaLayerCollection mediaLayerCollection)
         {
-            if (game.status == "error")
-            {
-                yield break;
-            }
-
             // Fetch all the media layers in parallel
             var tasks = mediaLayerCollection.mediaLayers.OrderBy(o => o.order).Select(layer => GetMediaFromMediaLayer(game, layer)).ToList();
 
@@ -339,7 +329,7 @@ namespace GarlicPress
         /// <param name="game"></param>
         /// <param name="layer"></param>
         /// <returns></returns>
-        public static async Task<(GameMediaResponse? media, MediaLayer layer)> GetMediaFromMediaLayer(GameResponse game, MediaLayer layer)
+        public static async Task<(GameMediaResponse? media, MediaLayer layer)> GetMediaFromMediaLayer(GameResponse? game, MediaLayer layer)
         {
             try
             {
@@ -367,9 +357,9 @@ namespace GarlicPress
             return (null, layer);
         }
 
-        private static async Task<GameMediaResponse?> GetGameMediaResponse(GameResponse game, MediaLayer layer)
+        private static async Task<GameMediaResponse?> GetGameMediaResponse(GameResponse? game, MediaLayer layer)
         {
-            GameMediaResponse? media = null;
+            GameMediaResponse? media;
             if (layer.mediaType == "local")
             {
                 media = new GameMediaResponse()
@@ -391,10 +381,14 @@ namespace GarlicPress
             return (await LimitedDownloadMedia(game, type), type);
         }
 
-        private static async Task<GameMediaResponse?> LimitedDownloadMedia(GameResponse game, string mediaType)
+        private static async Task<GameMediaResponse?> LimitedDownloadMedia(GameResponse? game, string mediaType)
         {
+            if (game is null)
+            {
+                return null;
+            }
             int maxthreads = 1;
-            Int32.TryParse(game.response.ssuser?.maxthreads ?? "1", out maxthreads);
+            Int32.TryParse(game.response?.ssuser?.maxthreads ?? "1", out maxthreads);
             if (_semaphore is null)
             {
                 _semaphore = new SemaphoreSlim(maxthreads);
