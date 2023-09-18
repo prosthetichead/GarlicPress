@@ -83,7 +83,8 @@ Enhance or change the visual representation of your games with the 'Update Art' 
    - Within this window, you can:
      - View the Game Art update status for all the selected games.
      - Preview the game art for the most recently updated game.
-     - Choose the desired Media Layer Collection from a single dropdown menu. This will apply to all selected games.
+     - Choose the desired Media Layer Collection from a single dropdown menu. This will apply to all selected games. 
+     - Check the Allow only local media update checkbox if you want to force the update of local media even if game is not found on ScreenScraper.fr. It will only update if you have added local media to the Media Layer Collection.
      - Begin the art update process using the **Start Button**.
 
 ### **ScreenScraper.fr**
@@ -156,7 +157,7 @@ With the Media Layer Editor, customize your game visuals within GarlicOS. Create
         ![MediaLayerRotation](wwwroot/docs/GarlicPressMediaLayerRotation.gif)
         - **Delete**: Click on the delete button on Media Layers view or by selecting a media layer and pressing the delete key.
         - All of these can also be manupilated from the Media Layer Control View.
-        ![MediaLayerControl](wwwroot/docs/GarlicPressEditMediaLayerFromControls.mp4)
+        ![MediaLayerControl](wwwroot/docs/GarlicPressEditMediaLayerFromControls.gif)
         - **Draw Order**: Change the draw order by clicking Page Up or Page Down.
 
 

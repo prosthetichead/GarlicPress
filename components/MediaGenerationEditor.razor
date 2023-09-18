@@ -343,6 +343,11 @@
             _game = await ScreenScraper.GetGameData(_selectedSystem, _selectedGame, SearchType.GameName);
             if (_selectedMediaLayerCollection is not null)
             {
+                if (_game == null || _game?.status == "error")
+                {
+                    MessageBox.Show("Game not Found : " + _game?.statusMessage + "\nUpdating preview without game media", "warn");
+                }
+
                 await foreach (var gameMedia in GameMediaGeneration.GetGameMedia(_game, _selectedMediaLayerCollection))
                 {
                     if (gameMedia.media is MediaResponse media)
@@ -352,13 +357,9 @@
                     }
                 }
             }
-            else if (_game != null)
-            {
-                MessageBox.Show("Game not Found : " + _game.statusMessage, "warn");
-            }
             else
             {
-                MessageBox.Show("Error : null GameResponse! " + _selectedGame ?? "", "error");
+                MessageBox.Show("Error : no Media Layer Collection Selected", "error");
             }
 
             _artUpdateRunning = false;
@@ -371,8 +372,6 @@
         if (_selectedDrive is not null
             && _selectedSystem is not null
             && !String.IsNullOrWhiteSpace(_selectedGame)
-            && _game is not null
-            && _game.status != "error"
             && _selectedMediaLayerCollection is not null)
         {
             _artUpdateDeviceRunning = true;

@@ -111,7 +111,7 @@ namespace GarlicPress
 
         public static async Task<MediaResponse?> DownloadGameMedia(GameResponse game, string mediaType = "box-3D", string region = "")
         {
-            if (game.status != "error")
+            if (game?.status != "error")
             {
                 HttpClient httpClient = new HttpClient();
 
