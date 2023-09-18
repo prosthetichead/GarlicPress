@@ -136,9 +136,9 @@ namespace GarlicPress.forms
                             && _selectedMediaLayerCollection.mediaLayers.Where(x => x.mediaType == "local").Count() > 0
                             && cb_AllowOnlyLocalMedia.Checked)
                         {
-                            item.status = "Only Local Media Complete";
                             log("Game not Found : Using Local Media Only");
                             await UpdateGameArt(item, null);
+                            item.status = "Only Local Media Complete";
                         }
                         else if (game != null)
                         {
