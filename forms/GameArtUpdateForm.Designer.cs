@@ -66,7 +66,7 @@
             dataGridSearch.RowHeadersVisible = false;
             dataGridSearch.RowHeadersWidth = 10;
             dataGridSearch.RowTemplate.Height = 25;
-            dataGridSearch.Size = new Size(870, 487);
+            dataGridSearch.Size = new Size(857, 501);
             dataGridSearch.TabIndex = 0;
             // 
             // gridColFileName
@@ -117,7 +117,7 @@
             // btnGo
             // 
             btnGo.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnGo.Location = new Point(888, 474);
+            btnGo.Location = new Point(875, 488);
             btnGo.Name = "btnGo";
             btnGo.Size = new Size(75, 23);
             btnGo.TabIndex = 1;
@@ -128,7 +128,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnCancel.Location = new Point(888, 474);
+            btnCancel.Location = new Point(875, 488);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 23);
             btnCancel.TabIndex = 2;
@@ -141,10 +141,10 @@
             tabControl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             tabControl.Controls.Add(tabOptions);
             tabControl.Controls.Add(tabLog);
-            tabControl.Location = new Point(888, 12);
+            tabControl.Location = new Point(875, 12);
             tabControl.Name = "tabControl";
             tabControl.SelectedIndex = 0;
-            tabControl.Size = new Size(371, 460);
+            tabControl.Size = new Size(371, 474);
             tabControl.TabIndex = 4;
             // 
             // tabOptions
@@ -154,7 +154,7 @@
             tabOptions.Location = new Point(4, 24);
             tabOptions.Name = "tabOptions";
             tabOptions.Padding = new Padding(3, 3, 3, 3);
-            tabOptions.Size = new Size(363, 432);
+            tabOptions.Size = new Size(363, 446);
             tabOptions.TabIndex = 0;
             tabOptions.Text = "Options";
             tabOptions.UseVisualStyleBackColor = true;
@@ -174,7 +174,7 @@
             cbMediaLayerCollection.FormattingEnabled = true;
             cbMediaLayerCollection.Location = new Point(6, 25);
             cbMediaLayerCollection.Name = "cbMediaLayerCollection";
-            cbMediaLayerCollection.Size = new Size(357, 23);
+            cbMediaLayerCollection.Size = new Size(351, 23);
             cbMediaLayerCollection.TabIndex = 41;
             cbMediaLayerCollection.SelectedIndexChanged += cbMediaLayerCollection_SelectedIndexChanged;
             // 
@@ -219,7 +219,7 @@
             // btnClearCompleted
             // 
             btnClearCompleted.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnClearCompleted.Location = new Point(969, 474);
+            btnClearCompleted.Location = new Point(956, 488);
             btnClearCompleted.Name = "btnClearCompleted";
             btnClearCompleted.Size = new Size(116, 23);
             btnClearCompleted.TabIndex = 5;
@@ -231,7 +231,7 @@
             // btnClose
             // 
             btnClose.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnClose.Location = new Point(1180, 474);
+            btnClose.Location = new Point(1167, 488);
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(75, 23);
             btnClose.TabIndex = 6;
@@ -245,7 +245,7 @@
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             AutoSize = true;
-            ClientSize = new Size(1264, 511);
+            ClientSize = new Size(1251, 525);
             Controls.Add(btnClose);
             Controls.Add(btnClearCompleted);
             Controls.Add(tabControl);

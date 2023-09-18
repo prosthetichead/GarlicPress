@@ -6,7 +6,6 @@
 - [Setup](#setup)
 - [Usage](#usage)
 - [Media Layer Editor](#media-layer-editor)
-- [Feedback and Feature Requests](#feedback-and-feature-requests)
 
 ---
 
@@ -96,7 +95,7 @@ Enhance or change the visual representation of your games with the 'Update Art' 
 
 ---
 
-## **GarlicPress's Media Layer Editor**
+## **Media Layer Editor**
 
 ### **Introduction**
 
@@ -149,9 +148,9 @@ With the Media Layer Editor, customize your game visuals within GarlicOS. Create
    - Modify size, position, angle, and apply filters.
      1. Select the media layer you want to modify by clicking it in the preview window or by selecting it in Media Layers view.
      2. Transforms :
-		- **Position**: Drag the media by click and drag in the preview window.
+		- **Position**: Drag the media by click and drag in the preview window. Or by clicking the arrow keys.
         ![MediaLayerPosition](wwwroot/docs/GarlicPressMediaLayerPosition.gif)
-		- **Size**: Drag one of the corners of the media layer in the preview. Or by clicking the arrow keys.
+		- **Size**: Drag one of the corners of the media layer in the preview.
         ![MediaLayerSize](wwwroot/docs/GarlicPressMediaLayerSize.gif)
 		- **Angle**: Drag the sqaure thats on top to either direction and it will rotate the media.
         ![MediaLayerRotation](wwwroot/docs/GarlicPressMediaLayerRotation.gif)
@@ -171,7 +170,3 @@ With the Media Layer Editor, customize your game visuals within GarlicOS. Create
 
 6. **Saving Your Edits**:
    - Remember to click 'Save' before closing the editor to keep your changes.
-
----
-
-## **Feedback and Feature Requests**

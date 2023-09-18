@@ -23,6 +23,24 @@
     <script src="_framework/blazor.webview.js"></script>
     <script src="fabric.js/fabric.min.js"></script>
 
+    <script>
+        function scrollToElementWithText(tagName, searchText) {
+            // Convert the search text to a regex pattern where non-word characters are treated as wildcards for any non-word character or space
+            const regex = new RegExp(searchText.split(/\W+/).join('[\\W\\s]*'), 'i');
+
+            const elements = document.querySelectorAll(tagName);
+            for (let element of elements) {
+                if (regex.test(element.textContent)) {
+                    element.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                        inline: "nearest"
+                    });
+                    return;  // Exit the function once the element is found and scrolled to
+                }
+            }
+        }
+    </script>
 </body>
 
 </html>

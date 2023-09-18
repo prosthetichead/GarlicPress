@@ -35,18 +35,20 @@ partial class DocumentationForm
         // 
         bwv_Docs.Dock = DockStyle.Fill;
         bwv_Docs.Location = new Point(0, 0);
+        bwv_Docs.Margin = new Padding(2, 2, 2, 2);
         bwv_Docs.Name = "bwv_Docs";
-        bwv_Docs.Size = new Size(1650, 952);
+        bwv_Docs.Size = new Size(999, 711);
         bwv_Docs.TabIndex = 0;
         bwv_Docs.Text = "blazorWebView1";
         // 
         // DocumentationForm
         // 
-        AutoScaleDimensions = new SizeF(12F, 30F);
+        AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(1650, 952);
+        ClientSize = new Size(999, 711);
         Controls.Add(bwv_Docs);
         FormBorderStyle = FormBorderStyle.SizableToolWindow;
+        Margin = new Padding(2, 2, 2, 2);
         Name = "DocumentationForm";
         StartPosition = FormStartPosition.CenterScreen;
         Text = "DocumentationForm";

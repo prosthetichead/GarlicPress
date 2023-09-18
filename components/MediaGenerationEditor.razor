@@ -341,9 +341,7 @@
             await AddText();
 
             _game = await ScreenScraper.GetGameData(_selectedSystem, _selectedGame, SearchType.GameName);
-            if (_game is not null
-                && _game.status != "error"
-                && _selectedMediaLayerCollection is not null)
+            if (_selectedMediaLayerCollection is not null)
             {
                 await foreach (var gameMedia in GameMediaGeneration.GetGameMedia(_game, _selectedMediaLayerCollection))
                 {
