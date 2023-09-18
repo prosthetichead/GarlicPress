@@ -38,6 +38,7 @@
             btnCancel = new Button();
             tabControl = new TabControl();
             tabOptions = new TabPage();
+            cb_AllowOnlyLocalMedia = new CheckBox();
             label5 = new Label();
             cbMediaLayerCollection = new ComboBox();
             tabLog = new TabPage();
@@ -149,20 +150,31 @@
             // 
             // tabOptions
             // 
+            tabOptions.Controls.Add(cb_AllowOnlyLocalMedia);
             tabOptions.Controls.Add(label5);
             tabOptions.Controls.Add(cbMediaLayerCollection);
             tabOptions.Location = new Point(4, 24);
             tabOptions.Name = "tabOptions";
-            tabOptions.Padding = new Padding(3, 3, 3, 3);
+            tabOptions.Padding = new Padding(3);
             tabOptions.Size = new Size(363, 446);
             tabOptions.TabIndex = 0;
             tabOptions.Text = "Options";
             tabOptions.UseVisualStyleBackColor = true;
             // 
+            // cb_AllowOnlyLocalMedia
+            // 
+            cb_AllowOnlyLocalMedia.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cb_AllowOnlyLocalMedia.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            cb_AllowOnlyLocalMedia.Location = new Point(6, 54);
+            cb_AllowOnlyLocalMedia.Name = "cb_AllowOnlyLocalMedia";
+            cb_AllowOnlyLocalMedia.Size = new Size(350, 24);
+            cb_AllowOnlyLocalMedia.TabIndex = 0;
+            cb_AllowOnlyLocalMedia.Text = "Allow only local media gets updated";
+            // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(4, 6);
+            label5.Location = new Point(6, 7);
             label5.Name = "label5";
             label5.Size = new Size(128, 15);
             label5.TabIndex = 42;
@@ -185,8 +197,8 @@
             tabLog.Controls.Add(txtLog);
             tabLog.Location = new Point(4, 24);
             tabLog.Name = "tabLog";
-            tabLog.Padding = new Padding(3, 3, 3, 3);
-            tabLog.Size = new Size(363, 432);
+            tabLog.Padding = new Padding(3);
+            tabLog.Size = new Size(363, 446);
             tabLog.TabIndex = 1;
             tabLog.Text = "Update Log";
             // 
@@ -286,5 +298,6 @@
         private PictureBox ImgArtPreview;
         private Label label5;
         private ComboBox cbMediaLayerCollection;
+        private CheckBox cb_AllowOnlyLocalMedia;
     }
 }
