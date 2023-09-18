@@ -228,7 +228,7 @@
                 Directory.CreateDirectory(Path.Combine("wwwroot", "assets", "localmedia"));
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "assets", "localmedia", file.Name);
                 await using FileStream fs = new(path, FileMode.Create);
-                await file.OpenReadStream().CopyToAsync(fs);
+                await file.OpenReadStream(1_000_000_000).CopyToAsync(fs);
             }
         }
         dropClass = "bg-gray-700 border-dashed";

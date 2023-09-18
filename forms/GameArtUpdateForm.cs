@@ -132,12 +132,13 @@ namespace GarlicPress.forms
                             log("Generating Game Art");
                             await UpdateGameArt(item, game);
                         }
-                        else if (_selectedMediaLayerCollection is not null 
-                            && _selectedMediaLayerCollection.mediaLayers.Where(x => x.mediaType == "local").Count() > 0)
+                        else if (_selectedMediaLayerCollection is not null
+                            && _selectedMediaLayerCollection.mediaLayers.Where(x => x.mediaType == "local").Count() > 0
+                            && cb_AllowOnlyLocalMedia.Checked)
                         {
-                            item.status = "Complete";
                             log("Game not Found : Using Local Media Only");
                             await UpdateGameArt(item, null);
+                            item.status = "Only Local Media Complete";
                         }
                         else if (game != null)
                         {
