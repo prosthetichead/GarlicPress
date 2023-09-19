@@ -130,27 +130,15 @@ namespace GarlicPress.forms
                         {
                             log("Game Found");
                             log("Generating Game Art");
-                            var bitmap = await GameMediaGeneration.GenerateGameMedia(game, _selectedMediaLayerCollection);
-                            if (bitmap != null && !CancelArtRun)
-                            {
-                                ImgArtPreview.Image = GameMediaGeneration.OverlayImageWithSkinBackground(bitmap);
-                                log("Game Art Generation Complete");
-
-                                Directory.CreateDirectory(PathConstants.assetsTempPath);
-                                bitmap.Save(PathConstants.assetsTempPath + "gameart-up.png", ImageFormat.Png);
-                                bitmap.Dispose();
-
-                                log("Uploading Game Art to Device");
-                                Progress<int> progress = new Progress<int>(p => { log(".." + p.ToString() + "%", Color.Orange, false); });
-                                await ADBConnection.UploadFileAsync(PathConstants.assetsTempPath + "gameart-up.png", item.imgPath, progress, CancellationToken.None);
-                                log("");
-                                item.status = "Complete";
-                            }
-                            else if (bitmap == null)
-                            {
-                                item.status = "FAIL";
-                                log("Error : Null bitmap generating game art", "error");
-                            }
+                            await UpdateGameArt(item, game);
+                        }
+                        else if (_selectedMediaLayerCollection is not null
+                            && _selectedMediaLayerCollection.mediaLayers.Where(x => x.mediaType == "local").Count() > 0
+                            && cb_AllowOnlyLocalMedia.Checked)
+                        {
+                            log("Game not Found : Using Local Media Only");
+                            await UpdateGameArt(item, null);
+                            item.status = "Only Local Media Complete";
                         }
                         else if (game != null)
                         {
@@ -172,6 +160,31 @@ namespace GarlicPress.forms
                 //finished
                 StopArtUpdate();
                 Refresh();
+            }
+        }
+
+        private async Task UpdateGameArt(GarlicGameArtSearch item, GameResponse? game)
+        {
+            var bitmap = await GameMediaGeneration.GenerateGameMedia(game, _selectedMediaLayerCollection);
+            if (bitmap != null && !CancelArtRun)
+            {
+                ImgArtPreview.Image = GameMediaGeneration.OverlayImageWithSkinBackground(bitmap);
+                log("Game Art Generation Complete");
+
+                Directory.CreateDirectory(PathConstants.assetsTempPath);
+                bitmap.Save(PathConstants.assetsTempPath + "gameart-up.png", ImageFormat.Png);
+                bitmap.Dispose();
+
+                log("Uploading Game Art to Device");
+                Progress<int> progress = new Progress<int>(p => { log(".." + p.ToString() + "%", Color.Orange, false); });
+                await ADBConnection.UploadFileAsync(PathConstants.assetsTempPath + "gameart-up.png", item.imgPath, progress, CancellationToken.None);
+                log("");
+                item.status = "Complete";
+            }
+            else if (bitmap == null)
+            {
+                item.status = "FAIL";
+                log("Error : Null bitmap generating game art", "error");
             }
         }
 
