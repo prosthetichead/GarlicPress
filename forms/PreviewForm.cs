@@ -72,7 +72,7 @@ public partial class PreviewForm : Form
             {
                 if (lastGameResponse != null)
                 {
-                    var bitmap = await GameMediaGeneration.GenerateGameMedia(lastGameResponse, SelectedMediaLayerCollection);
+                    var bitmap = await GameMediaGeneration.GenerateGameMedia(lastGameResponse, SelectedSystem, SelectedMediaLayerCollection);
                     if (bitmap != null)
                     {
                         picGamePreview.Image = GameMediaGeneration.OverlayImageWithSkinBackground(bitmap);
@@ -87,7 +87,7 @@ public partial class PreviewForm : Form
             if (game != null && game.status != "error")
             {
                 lastGameResponse = game;
-                var bitmap = await GameMediaGeneration.GenerateGameMedia(game, SelectedMediaLayerCollection);
+                var bitmap = await GameMediaGeneration.GenerateGameMedia(game, SelectedSystem, SelectedMediaLayerCollection);
                 if (bitmap != null)
                 {
                     picGamePreview.Image = GameMediaGeneration.OverlayImageWithSkinBackground(bitmap);

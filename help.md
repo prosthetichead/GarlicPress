@@ -86,6 +86,9 @@ Enhance or change the visual representation of your games with the 'Update Art' 
      - Choose the desired Media Layer Collection from a single dropdown menu. This will apply to all selected games. 
      - Check the Allow only local media update checkbox if you want to force the update of local media even if game is not found on ScreenScraper.fr. It will only update if you have added local media to the Media Layer Collection.
      - Begin the art update process using the **Start Button**.
+     - When the update is complete you can check the status of each game. If any game failed to update you can Clear Completed games and try the failed games again by pressing start. 
+     - If game media failed to update, you can change the search text for that game and try again.
+     ![GameArtUpdateSearch](wwwroot/docs/GarlicPressGameUpdateSearch.png)
 
 ### **ScreenScraper.fr**
 

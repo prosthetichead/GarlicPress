@@ -127,7 +127,7 @@
             }
         </div>
         <div class="flex-initial border rounded-sm border-gray-800 overflow-auto scrollbar m-1 p-1">
-            <MediaLayerControl IsImageSelected="_imageSelected" OnApplyFilters="async () => await UpdateImage(_selectedMediaLayer, true)" mediaLayer="_selectedMediaLayer" mediaLayerChanged="async () => await UpdateImage(_selectedMediaLayer)" />
+            <MediaLayerControl IsImageSelected="_imageSelected" OnApplyFilters="async () => await UpdateImage(_selectedMediaLayer, _selectedSystem, true)" mediaLayer="_selectedMediaLayer" mediaLayerChanged="async () => await UpdateImage(_selectedMediaLayer, _selectedSystem)" />
         </div>
     </div>
 
@@ -348,7 +348,7 @@
                     MessageBox.Show("Game not Found : " + _game?.statusMessage + "\nUpdating preview without game media", "warn");
                 }
 
-                await foreach (var gameMedia in GameMediaGeneration.GetGameMedia(_game, _selectedMediaLayerCollection))
+                await foreach (var gameMedia in GameMediaGeneration.GetGameMedia(_game, _selectedMediaLayerCollection, _selectedSystem))
                 {
                     if (gameMedia.media is MediaResponse media)
                     {
@@ -380,7 +380,7 @@
             _artUpdateDeviceStatus = "Generating Game Art<br />";
             StateHasChanged();
             await Task.Yield();
-            var bitmap = await GameMediaGeneration.GenerateGameMedia(_game, _selectedMediaLayerCollection);
+            var bitmap = await GameMediaGeneration.GenerateGameMedia(_game, _selectedSystem, _selectedMediaLayerCollection);
             _artUpdateDeviceStatus += "Game Art Generation Complete<br />";
             StateHasChanged();
 
@@ -468,13 +468,13 @@
         return title;
     }
 
-    private async Task UpdateImage(MediaLayer? layer, bool updateImage = false)
+    private async Task UpdateImage(MediaLayer? layer, GarlicSystem? system, bool updateImage = false)
     {
-        if (layer is not null && _fabricCanvas is not null && _game is not null)
+        if (layer is not null && system is not null && _fabricCanvas is not null && _game is not null)
         {
             if (updateImage)
             {
-                var gameMedia = await GameMediaGeneration.GetMediaFromMediaLayer(_game, layer);
+                var gameMedia = await GameMediaGeneration.GetMediaFromMediaLayer(_game, layer, system);
                 if (gameMedia.media is MediaResponse media)
                 {
                     await _fabricCanvas.UpdateImage(layer.id, layer, media.path.Replace("wwwroot/", "").Replace(@"wwwroot\", ""));

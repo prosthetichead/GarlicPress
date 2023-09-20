@@ -219,7 +219,7 @@ namespace GarlicPress
             return finalImage;
         }
 
-        public static async Task<Bitmap?> GenerateGameMedia(GameResponse? game, MediaLayerCollection? mediaLayerCollection = null)
+        public static async Task<Bitmap?> GenerateGameMedia(GameResponse? game, GarlicSystem system, MediaLayerCollection? mediaLayerCollection = null)
         {
             if (mediaLayerCollection is null)
             {
@@ -237,7 +237,7 @@ namespace GarlicPress
             var orderedMediaLayout = mediaLayerCollection.mediaLayers.OrderBy(o => o.order).ToList();
 
             // Fetch all the media layers in parallel
-            var tasks = orderedMediaLayout.Select(layer => GetMediaFromMediaLayer(game, layer)).ToList();
+            var tasks = orderedMediaLayout.Select(layer => GetMediaFromMediaLayer(game, layer, system)).ToList();
 
             //Wait for all to complete so layers gets drawn in correct order
             var results = await Task.WhenAll(tasks);
@@ -276,10 +276,10 @@ namespace GarlicPress
         /// </summary>
         /// <param name="game"></param>
         /// <returns>Returns when all media is downloaded</returns>
-        public static async IAsyncEnumerable<(MediaResponse? media, MediaLayer layer)> GetGameMedia(GameResponse game, MediaLayerCollection mediaLayerCollection)
+        public static async IAsyncEnumerable<(MediaResponse? media, MediaLayer layer)> GetGameMedia(GameResponse? game, MediaLayerCollection mediaLayerCollection, GarlicSystem system)
         {
             // Fetch all the media layers in parallel
-            var tasks = mediaLayerCollection.mediaLayers.OrderBy(o => o.order).Select(layer => GetMediaFromMediaLayer(game, layer)).ToList();
+            var tasks = mediaLayerCollection.mediaLayers.OrderBy(o => o.order).Select(layer => GetMediaFromMediaLayer(game, layer, system)).ToList();
 
             while (tasks.Count > 0)
             {
@@ -351,11 +351,11 @@ namespace GarlicPress
         /// <param name="game"></param>
         /// <param name="layer"></param>
         /// <returns></returns>
-        public static async Task<(MediaResponse? media, MediaLayer layer)> GetMediaFromMediaLayer(GameResponse? game, MediaLayer layer)
+        public static async Task<(MediaResponse? media, MediaLayer layer)> GetMediaFromMediaLayer(GameResponse? game, MediaLayer layer, GarlicSystem system)
         {
             try
             {
-                if (await GetGameMediaResponse(game, layer) is MediaResponse downloadedMedia)
+                if (await GetGameMediaResponse(game, layer, system) is MediaResponse downloadedMedia)
                 {
                     var baseImage = (Bitmap)Image.FromFile(downloadedMedia.path);
 
@@ -379,7 +379,7 @@ namespace GarlicPress
             return (null, layer);
         }
 
-        private static async Task<MediaResponse?> GetGameMediaResponse(GameResponse? game, MediaLayer layer)
+        private static async Task<MediaResponse?> GetGameMediaResponse(GameResponse? game, MediaLayer layer, GarlicSystem system)
         {
             MediaResponse? media;
             if (layer.mediaType == "local")
@@ -392,7 +392,7 @@ namespace GarlicPress
             }
             else if (layer.mediaType.StartsWith("system-"))
             {
-                var systemId = int.Parse(game.response.jeu.systeme.id);
+                var systemId = int.Parse(system.ss_systemeid);
                 var systems = await ScreenScraper.GetSystemsData();
                 media = await LimitedDownloadSystemMedia(systems, systemId, layer.mediaType);
             }
