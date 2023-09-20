@@ -35,7 +35,7 @@ partial class DocumentationForm
         // 
         bwv_Docs.Dock = DockStyle.Fill;
         bwv_Docs.Location = new Point(0, 0);
-        bwv_Docs.Margin = new Padding(2, 2, 2, 2);
+        bwv_Docs.Margin = new Padding(2);
         bwv_Docs.Name = "bwv_Docs";
         bwv_Docs.Size = new Size(999, 711);
         bwv_Docs.TabIndex = 0;
@@ -48,10 +48,10 @@ partial class DocumentationForm
         ClientSize = new Size(999, 711);
         Controls.Add(bwv_Docs);
         FormBorderStyle = FormBorderStyle.SizableToolWindow;
-        Margin = new Padding(2, 2, 2, 2);
+        Margin = new Padding(2);
         Name = "DocumentationForm";
         StartPosition = FormStartPosition.CenterScreen;
-        Text = "DocumentationForm";
+        Text = "Help";
         ResumeLayout(false);
     }
 

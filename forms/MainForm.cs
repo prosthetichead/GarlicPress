@@ -268,7 +268,7 @@ namespace GarlicPress
                 e.Effect = DragDropEffects.Copy;
         }
 
-        private void MainForm_DragDrop(object sender, DragEventArgs e)
+        private async void MainForm_DragDrop(object sender, DragEventArgs e)
         {
             var system = (GarlicSystem)comboSystems.SelectedItem;
             var files = e.Data?.GetData(DataFormats.FileDrop) as string[];
@@ -278,13 +278,15 @@ namespace GarlicPress
                 if (attr != FileAttributes.Directory)
                 {
                     txtCurrentTask.Text = "uploading " + file + " for system " + system.name + " to SD " + comboDrive.SelectedIndex + 1;
-                    ADBConnection.UploadFile(file, SelectedRomPath + "/" + Path.GetFileName(file));
+                    Progress<int> progress = new Progress<int>(p => { txtCurrentTask.Text = $"uploading {p}%"; txtCurrentTask.ForeColor = p > 99 ? Color.Green : Color.OrangeRed; });
+                    await ADBConnection.UploadFileAsync(file, SelectedRomPath + "/" + Path.GetFileName(file).ToLower(), progress, CancellationToken.None);
                 }
                 else
                 {
                     MessageBox.Show(file + " apears to be a directory right now GarlicPress does not support uploading directories. ");
                 }
             }
+            txtCurrentTask.ForeColor = Color.Black;
             txtCurrentTask.Text = "upload complete";
             RefreshBrowserFiles();
         }
@@ -339,9 +341,9 @@ namespace GarlicPress
                 {
                     foreach (FileStatistics item in fileListBox.SelectedItems.Cast<FileStatistics>())
                     {
-                        var fullPath = "\"" + SelectedRomPath + "/" + item.Path + "\"";
+                        var fullPath = SelectedRomPath + "/" + item.Path;
                         string imgFile = Path.ChangeExtension(item.Path, ".png");
-                        var fullImgPath = "\"" + SelectedImgPath + imgFile + "\"";
+                        var fullImgPath = SelectedImgPath + imgFile;
                         ADBConnection.DeleteFile(fullPath);
                         ADBConnection.DeleteFile(fullImgPath);
                         txtCurrentTask.Text = item.Path + " Deleted ";
@@ -400,7 +402,7 @@ namespace GarlicPress
             }
         }
 
-        private void miBackupSaves_Click(object sender, EventArgs e)
+        private async void miBackupSaves_Click(object sender, EventArgs e)
         {
             if (ADBConnection.deviceConnected)
             {
@@ -413,9 +415,14 @@ namespace GarlicPress
                     Directory.CreateDirectory(backupPath);
                     var readPath = drive.path + "/Saves";
 
-                    txtCurrentTask.Text = "Backing up Saves on SD Card " + drive.number + " to " + backupPath;
+                    var backupText = "Backing up Saves on SD Card " + drive.number + " to " + backupPath;
+                    txtCurrentTask.Text = backupText;
 
-                    ADBConnection.DownloadDirectory(readPath, backupPath);
+                    var progress = new Progress<int>(p => { txtCurrentTask.Text = backupText + " " + p.ToString("000") + "%"; });
+
+                    await ADBConnection.DownloadDirectory(readPath, backupPath, progress);
+
+                    txtCurrentTask.Text = $"Backup Complete to {backupPath}";
                 }
             }
         }

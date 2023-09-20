@@ -153,6 +153,38 @@ namespace GarlicPress
             return false;
         }
 
+        public static async Task<bool> DownloadFileAsync(string readPath, string writePath, Progress<int> progress, CancellationToken cancellationToken = default)
+        {
+            if (deviceConnected && client is not null)
+            {
+                try
+                {
+                    DebugLog.Write($"Downloading File {readPath} to {writePath}");
+
+                    new FileInfo(writePath).Directory?.Create();
+
+                    using (SyncService service = new SyncService(new AdbSocket(client.EndPoint), device))
+                    {
+                        using (Stream stream = File.Create(writePath))
+                        {
+                            await Task.Run(() =>
+                                service.Pull(readPath, stream, progress, cancellationToken)
+                            );
+                            DebugLog.Write($"Download Complete");
+                            return true;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    DebugLog.Write($"Error {ex.GetType()} :  {ex.Message}", Color.OrangeRed);
+                    return false;
+                }
+            }
+            return false;
+        }
+
+
         public static bool DownloadFile(string readPath, string writePath)
         {
             Progress<int> progress = new Progress<int>();
@@ -183,9 +215,8 @@ namespace GarlicPress
             return false;
         }
 
-        public static bool DownloadDirectory(string readPath, string writePath)
+        public static async Task<bool> DownloadDirectory(string readPath, string writePath, Progress<int> progress)
         {
-
             Directory.CreateDirectory(writePath);
 
             //check if readpath is a Directory
@@ -204,12 +235,12 @@ namespace GarlicPress
                         {
                             //we have hit a directory lets make it and move down into it
                             Directory.CreateDirectory(writePath + "/" + file.Path);
-                            DownloadDirectory(readPath + "/" + file.Path, writePath + "/" + file.Path);
+                            await DownloadDirectory(readPath + "/" + file.Path, writePath + "/" + file.Path, progress);
                         }
                         if (DevicePathType(readPath + "/" + file.Path) == "file")
                         {
                             //we have hit a file pull it
-                            DownloadFile(readPath + "/" + file.Path, writePath + "/" + file.Path);
+                            await DownloadFileAsync(readPath + "/" + file.Path, writePath + "/" + file.Path, progress);
                         }
                     }
                 }

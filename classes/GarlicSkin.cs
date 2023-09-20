@@ -122,12 +122,13 @@ namespace GarlicPress
             }
         }
 
-        public static void ReadSkinFromDevice()
+        public static async void ReadSkinFromDevice()
         {
             ReadSkinSettings();
             ReadAllLangFiles();
             ReadFonts();
-            ADBConnection.DownloadDirectory("/mnt/mmc/CFW/skin", "assets/skin");          
+            var progress = new Progress<int>(p => { DebugLog.Write(".." + p.ToString() + "%", Color.Orange, false); });
+            await ADBConnection.DownloadDirectory("/mnt/mmc/CFW/skin", "assets/skin", progress);          
         }
 
     }
