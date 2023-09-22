@@ -182,7 +182,7 @@ namespace GarlicPress
             string imgFile = Path.ChangeExtension(item.Path, ".png");
             if (ADBConnection.DownloadFile(SelectedImgPath + imgFile, PathConstants.assetsTempPath + "gameart-down.png"))
             {
-                using var oImage = (Bitmap)Image.FromFile(PathConstants.assetsTempPath + "gameart-down.png");
+                using var oImage = Image.FromFile(PathConstants.assetsTempPath + "gameart-down.png");
                 using Bitmap overlayImage = new Bitmap(oImage);
                 picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage, SelectedSystem, filePaths, (fileListBox.SelectedItem as FileStatistics)?.Path ?? imgFile);
                 picGame.Refresh();

@@ -222,9 +222,16 @@ namespace GarlicPress
                     case SkinMedia.SkinMediaTypes.Picture:
                         if (File.Exists(mediaPath))
                         {
-                            using var image = Image.FromFile(mediaPath);
-                            using var skinImage = new Bitmap(image);
-                            graphics.DrawImage(skinImage, skinMedia.X, skinMedia.Y, skinImage.Width, skinImage.Height);
+                            try
+                            {
+                                using var image = Image.FromFile(mediaPath);
+                                using var skinImage = new Bitmap(image);
+                                graphics.DrawImage(skinImage, skinMedia.X, skinMedia.Y, skinImage.Width, skinImage.Height);
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message, "Error getting Image", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
                         }
                         break;
                     case SkinMedia.SkinMediaTypes.Text:
