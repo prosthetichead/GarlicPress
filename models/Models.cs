@@ -363,6 +363,57 @@ namespace GarlicPress
         }
     }
 
+    public class SkinMedia
+    {
+        public string MediaFileName { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+        public string Text { get; set; }
+        public SkinMediaTypes SkinMediaType { get; set; }
+
+        public enum SkinMediaTypes
+        {
+            Picture = 0,
+            Text = 1,
+            Clock = 2,
+            SystemName = 3,
+            NavigateLabel = 4,
+            OpenLabel = 5,
+            BackLabel = 6,
+            FavoriteLabel = 7
+        }
+
+        private static List<SkinMedia> _defaultSkinMedias = null;
+
+        public static List<SkinMedia> GetSkinMedias()
+        {
+            if (_defaultSkinMedias == null)
+            {
+                _defaultSkinMedias = new List<SkinMedia>()
+        {
+            new SkinMedia() { MediaFileName = "icon-dpad-54.png", X = 5, Y = 420, Text = "", SkinMediaType = SkinMediaTypes.Picture },
+            new SkinMedia() { MediaFileName = "", X = 55, Y = 427, Text = "NAVIGATE", SkinMediaType = SkinMediaTypes.NavigateLabel },
+
+            new SkinMedia() { MediaFileName = "icon-A-54.png", X = 195, Y = 420, Text = "", SkinMediaType = SkinMediaTypes.Picture },
+            new SkinMedia() { MediaFileName = "", X = 245, Y = 427, Text = "OPEN", SkinMediaType = SkinMediaTypes.OpenLabel },
+
+            new SkinMedia() { MediaFileName = "icon-B-54.png", X = 325, Y = 420, Text = "", SkinMediaType = SkinMediaTypes.Picture },
+            new SkinMedia() { MediaFileName = "", X = 375, Y = 427, Text = "BACK", SkinMediaType = SkinMediaTypes.BackLabel },
+
+            new SkinMedia() { MediaFileName = "icon-Y-54.png", X = 450, Y = 420, Text = "", SkinMediaType = SkinMediaTypes.Picture },
+            new SkinMedia() { MediaFileName = "", X = 500, Y = 427, Text = "FAVORITE", SkinMediaType = SkinMediaTypes.FavoriteLabel },
+
+            new SkinMedia() { MediaFileName = "logo.png", X = 15, Y = 8, Text = "", SkinMediaType = SkinMediaTypes.Picture },
+            new SkinMedia() { MediaFileName = "", X = 57, Y = 10, Text = "", SkinMediaType = SkinMediaTypes.SystemName },
+
+            new SkinMedia() { MediaFileName = "charging-05.png", X = 580, Y = 5, Text = "", SkinMediaType = SkinMediaTypes.Picture },
+            new SkinMedia() { MediaFileName = "", X = 490, Y = 10, Text = "", SkinMediaType = SkinMediaTypes.Clock },
+        };
+            }
+            return _defaultSkinMedias;
+        }
+    }
+
     public class GameResponse
     {
 

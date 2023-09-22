@@ -68,6 +68,13 @@ public partial class PreviewForm : Form
             btnUpdate.Text = "Updating...";
             ArtUpdateRunning = true;
 
+            List<string> filePaths = new List<string>();
+
+            foreach (string gameName in comboGames.Items)
+            {
+                filePaths.Add(gameName);
+            }
+
             if (lastGameSearched == comboGames.Text)
             {
                 if (lastGameResponse != null)
@@ -75,7 +82,7 @@ public partial class PreviewForm : Form
                     var bitmap = await GameMediaGeneration.GenerateGameMedia(lastGameResponse, SelectedSystem, SelectedMediaLayerCollection);
                     if (bitmap != null)
                     {
-                        picGamePreview.Image = GameMediaGeneration.OverlayImageWithSkinBackground(bitmap);
+                        picGamePreview.Image = GameMediaGeneration.OverlayImageWithSkinBackground(bitmap, SelectedSystem, filePaths, comboGames.Text);
                     }
                     ArtUpdateRunning = false;
                     btnUpdate.Text = "Update";
@@ -90,7 +97,7 @@ public partial class PreviewForm : Form
                 var bitmap = await GameMediaGeneration.GenerateGameMedia(game, SelectedSystem, SelectedMediaLayerCollection);
                 if (bitmap != null)
                 {
-                    picGamePreview.Image = GameMediaGeneration.OverlayImageWithSkinBackground(bitmap);
+                    picGamePreview.Image = GameMediaGeneration.OverlayImageWithSkinBackground(bitmap, SelectedSystem, filePaths, comboGames.Text);
                 }
             }
             else if (game != null)

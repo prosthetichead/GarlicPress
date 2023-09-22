@@ -33,7 +33,7 @@
             obj.model.y = Math.round(obj.top);
             obj.model.angle = Math.round(obj.angle);
             obj.model.resizePercent = Math.round(obj.scaleX * 100);
-            obj.model.order = BlazorFabric.canvas._objects.indexOf(obj);
+            obj.model.order = BlazorFabric.canvas._objects.filter(o => o.selectable).indexOf(obj);
 
 
             const imageDetails = JSON.stringify({
@@ -44,7 +44,7 @@
                 top: Math.round(obj.top),
                 angle: Math.round(obj.angle),
                 scale: Math.round(obj.scaleX * 100),
-                drawOrder: BlazorFabric.canvas._objects.indexOf(obj)
+                drawOrder: BlazorFabric.canvas._objects.filter(o => o.selectable).indexOf(obj)
             });
 
             BlazorFabric.dotnetMediaGenerationEditor.invokeMethodAsync(methodName, imageDetails)
@@ -55,6 +55,7 @@
     static clearCanvas = () => {
         if (BlazorFabric.canvas != null) {
             BlazorFabric.canvas.clear();
+            BlazorFabric.canvas.off('object:added');
         }
     };
 
@@ -70,6 +71,24 @@
                 img.moveTo(0);
                 BlazorFabric.canvas.add(img);
                 BlazorFabric.canvas.sendToBack(img);
+            }.bind(BlazorFabric));
+        }
+    };
+
+    static addStaticImage = (imageUrl, left, top) => {
+        if (BlazorFabric.canvas != null) {
+            fabric.Image.fromURL(imageUrl, function (img) {
+                img.set({
+                    left: left,
+                    top: top,
+                    angle: 0,
+                    selectable: false,
+                    drawOrder: 100
+                });
+                BlazorFabric.canvas.add(img);
+                BlazorFabric.canvas.on('object:added', function (options) {
+                    this.canvas.bringToFront(img);
+                }.bind(this));
             }.bind(BlazorFabric));
         }
     };
@@ -100,7 +119,7 @@
 
                 if (typeof model.order !== "undefined") {
                     // Find the position of the first object with a greater or equal draw order
-                    let position = BlazorFabric.canvas.getObjects().findIndex(obj => obj.drawOrder >= model.order);
+                    let position = BlazorFabric.canvas.getObjects().filter(o => o.selectable).findIndex(obj => obj.drawOrder >= model.order);
 
                     if (position === -1) {
                         BlazorFabric.canvas.add(img);
@@ -128,13 +147,13 @@
 
             const text = new fabric.IText(content, {
                 left: left,
-                top: top,
+                top: top + 6,
                 fill: textColor,
                 fontFamily: fontFamily,
                 selectable: false,
                 fontSize: fontSize,
                 textAlign: textAlign,
-                lineHeight: 1.25,
+                lineHeight: 1.35,
                 evented: false
             });
 
@@ -150,11 +169,8 @@
                 }
             }
 
-            BlazorFabric.canvas.off('object:added').on('object:added', function (options) {
-                var obj = options.target;
-                if (obj instanceof fabric.Image) {
-                    this.canvas.bringToFront(text);
-                }
+            BlazorFabric.canvas.on('object:added', function (options) {
+                this.canvas.bringToFront(text);
             }.bind(this));
 
             BlazorFabric.canvas.add(text);

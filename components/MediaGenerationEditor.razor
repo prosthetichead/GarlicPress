@@ -336,7 +336,8 @@
             }
 
             await _fabricCanvas.ClearCanvas();
-            await _fabricCanvas.AddBackgroundImage(PathConstants.assetSkinPath.Replace("wwwroot/", "") + "background.png");
+
+            await AddSkinMedia();
 
             await AddText();
 
@@ -364,6 +365,60 @@
 
             _artUpdateRunning = false;
             StateHasChanged();
+        }
+    }
+
+    async Task AddSkinMedia()
+    {
+        if (_fabricCanvas is not null && _selectedSystem is not null)
+        {
+            await _fabricCanvas.AddBackgroundImage(PathConstants.assetSkinPath.Replace("wwwroot/", "") + "background.png");
+
+            foreach (var skinMedia in SkinMedia.GetSkinMedias())
+            {
+                // Prepend the asset path for media files
+                string mediaPath = PathConstants.assetSkinPath.Replace("wwwroot/", "") + skinMedia.MediaFileName;
+
+                string textColor = "white";
+                int fontSize = 28;
+
+                if (GarlicSkin.skinSettings is not null)
+                {
+                    textColor = GarlicSkin.skinSettings.colorguide ?? "#FFFFFF";
+                    fontSize = GarlicSkin.languageFiles?.FirstOrDefault()?.garlicLanguageSettings?.fontsize ?? 28;
+                }
+
+                switch (skinMedia.SkinMediaType)
+                {
+                    case SkinMedia.SkinMediaTypes.Picture:
+                        if (File.Exists(mediaPath))
+                        {
+                            await _fabricCanvas.AddStaticImage(mediaPath, skinMedia.X, skinMedia.Y);
+                        }
+                        break;
+                    case SkinMedia.SkinMediaTypes.Text:
+                        await _fabricCanvas.AddText(skinMedia.Text, skinMedia.X, skinMedia.Y, textColor, "GarlicFont", fontSize);
+                        break;
+                    case SkinMedia.SkinMediaTypes.SystemName:
+                        await _fabricCanvas.AddText(_selectedSystem.folder, skinMedia.X, skinMedia.Y, textColor, "GarlicFont", fontSize);
+                        break;
+                    case SkinMedia.SkinMediaTypes.Clock:
+                        await _fabricCanvas.AddText(DateTime.Now.ToString("HH:mm"), skinMedia.X, skinMedia.Y, textColor, "GarlicFont", fontSize);
+                        break;
+                    case SkinMedia.SkinMediaTypes.NavigateLabel:
+                        await _fabricCanvas.AddText(GarlicSkin.skinSettings?.navigatelabel ?? skinMedia.Text, skinMedia.X, skinMedia.Y, textColor, "GarlicFont", fontSize);
+                        break;
+                    case SkinMedia.SkinMediaTypes.OpenLabel:
+                        await _fabricCanvas.AddText(GarlicSkin.skinSettings?.openlabel ?? skinMedia.Text, skinMedia.X, skinMedia.Y, textColor, "GarlicFont", fontSize);
+                        break;
+                    case SkinMedia.SkinMediaTypes.BackLabel:
+                        await _fabricCanvas.AddText(GarlicSkin.skinSettings?.backlabel ?? skinMedia.Text, skinMedia.X, skinMedia.Y, textColor, "GarlicFont", fontSize);
+                        break;
+                    case SkinMedia.SkinMediaTypes.FavoriteLabel:
+                        await _fabricCanvas.AddText(GarlicSkin.skinSettings?.favoritelabel ?? skinMedia.Text, skinMedia.X, skinMedia.Y, textColor, "GarlicFont", fontSize);
+                        break;
+                }
+            }
         }
     }
 
@@ -413,12 +468,12 @@
             {
                 var indexof = _games.IndexOf(_selectedGame);
 
-                var transformedGames = _games.Select(TransformTitle).ToList();
+                var transformedGames = _games.Select(GameMediaGeneration.TransformTitle).ToList();
 
                 await _fabricCanvas.AddText(
-                    String.Join("\n", GetSurroundingStrings(transformedGames, indexof)),
+                    String.Join("\n", GameMediaGeneration.GetSurroundingStrings(transformedGames, indexof)),
                     GarlicSkin.skinSettings.textmargin,
-                    90,
+                    70,
                     GarlicSkin.skinSettings.colorinactive ?? "white",
                     "GarlicFont",
                     GarlicSkin.languageFiles.First().garlicLanguageSettings.fontsize,
@@ -426,46 +481,29 @@
                     indexof < 4 ? indexof + 1 : 4,
                     GarlicSkin.skinSettings.coloractive ?? "white");
             }
+            else if (_games.Any())
+            {
+                var indexof = _games.IndexOf(_selectedGame);
+
+                var transformedGames = _games.Select(GameMediaGeneration.TransformTitle).ToList();
+
+                await _fabricCanvas.AddText(
+                    String.Join("\n", GameMediaGeneration.GetSurroundingStrings(transformedGames, indexof)),
+                    340,
+                    70,
+                    "lightgray",
+                    "GarlicFont");
+            }
             else if (ADBConnection.deviceConnected == false)
             {
                 await _fabricCanvas.AddText(
                     String.Join("\n", Enumerable.Repeat(_selectedGame, 8)),
                     340,
-                    90,
-                    "white",
+                    70,
+                    "lightgray",
                     "GarlicFont");
             }
         }
-    }
-
-    List<string> GetSurroundingStrings(List<string> source, int index)
-    {
-        int start = Math.Max(0, index - 3); // Ensure we don't go below 0
-        int count = 8;
-
-        // If we're near the start of the list, adjust count to get more elements after index
-        if (start < index - 3)
-        {
-            count += (index - 3) - start;
-        }
-
-        // If we're near the end of the list, adjust count to stay within bounds
-        if (start + count > source.Count)
-        {
-            count = source.Count - start;
-        }
-
-        return source.Skip(start).Take(count).ToList();
-    }
-
-    string TransformTitle(string title)
-    {
-        int index = title.IndexOf('(');
-        if (index != -1)
-        {
-            title = title.Substring(0, index).Trim();
-        }
-        return title;
     }
 
     private async Task UpdateImage(MediaLayer? layer, GarlicSystem? system, bool updateImage = false)

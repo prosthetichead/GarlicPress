@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Drawing.Text;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -174,49 +175,210 @@ namespace GarlicPress
             }
         }
 
-        public static Bitmap OverlayImageWithSkinBackground(Bitmap imageToOverlay)
+        public static Bitmap OverlayImageWithSkinBackground(Bitmap imageToOverlay, GarlicSystem selectedSystem, List<string> games, string selectedGame)
         {
-            var baseImage = (Bitmap)Image.FromFile(PathConstants.assetSkinPath + "background.png");
+            using var bImage = Image.FromFile(PathConstants.assetSkinPath + "background.png");
+            using var baseImage = new Bitmap(bImage);
             var overlayImage = imageToOverlay;
-            var textImage = (Bitmap)Image.FromFile(@"assets/SampleTextCenter.png");
-            int txtMargin = 0;
-            if (GarlicSkin.skinSettings is not null)
-            {
-                if (GarlicSkin.skinSettings.textalignment == "right")
-                {
-                    textImage = (Bitmap)Image.FromFile(@"assets/SampleTextRight.png");
-                    txtMargin = GarlicSkin.skinSettings.textmargin * -1;
-                }
-                else if (GarlicSkin.skinSettings.textalignment == "left")
-                {
-                    textImage = (Bitmap)Image.FromFile(@"assets/SampleTextLeft.png");
-                    txtMargin = GarlicSkin.skinSettings.textmargin;
-                }
-            }
-            else
-            {
-                textImage = (Bitmap)Image.FromFile(@"assets/SampleTextLeft.png");
-                txtMargin = 350;
-            }
 
             var finalImage = new Bitmap(640, 480, PixelFormat.Format32bppArgb);
             var graphics = Graphics.FromImage(finalImage);
             graphics.CompositingMode = CompositingMode.SourceOver;
+            graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
 
             baseImage.SetResolution(graphics.DpiX, graphics.DpiY);
             overlayImage.SetResolution(graphics.DpiX, graphics.DpiY);
-            textImage.SetResolution(graphics.DpiX, graphics.DpiY);
 
             graphics.DrawImage(baseImage, 0, 0, 640, 480);
             graphics.DrawImage(overlayImage, 0, 0, 640, 480);
-            if (GarlicSkin.validSkinSettings || GarlicSkin.skinSettings is null)
-            {
-                graphics.DrawImage(textImage, txtMargin, 0, 640, 480);
-            }
-            baseImage.Dispose();
-            textImage.Dispose();
+
+            int indexOfGame = 0;
+            try { indexOfGame = games.IndexOf(selectedGame); } catch { }
+
+            DrawGameTexts(graphics, GetSurroundingStrings(games, indexOfGame), selectedGame);
+            DrawSkinMedia(selectedSystem, graphics);
 
             return finalImage;
+        }
+
+        private static void DrawSkinMedia(GarlicSystem selectedSystem, Graphics graphics)
+        {
+            List<SkinMedia> skinMedias = SkinMedia.GetSkinMedias();
+            string textColor = "white";
+            int fontSize = 28;
+
+            if (GarlicSkin.skinSettings is not null)
+            {
+                textColor = GarlicSkin.skinSettings.colorguide ?? "#FFFFFF";
+                fontSize = GarlicSkin.languageFiles?.FirstOrDefault()?.garlicLanguageSettings?.fontsize ?? 28;
+            }
+
+            foreach (var skinMedia in skinMedias)
+            {
+                string mediaPath = PathConstants.assetSkinPath + skinMedia.MediaFileName;
+
+                switch (skinMedia.SkinMediaType)
+                {
+                    case SkinMedia.SkinMediaTypes.Picture:
+                        if (File.Exists(mediaPath))
+                        {
+                            using var image = Image.FromFile(mediaPath);
+                            using var skinImage = new Bitmap(image);
+                            graphics.DrawImage(skinImage, skinMedia.X, skinMedia.Y, skinImage.Width, skinImage.Height);
+                        }
+                        break;
+                    case SkinMedia.SkinMediaTypes.Text:
+                    case SkinMedia.SkinMediaTypes.Clock:
+                    case SkinMedia.SkinMediaTypes.SystemName:
+                    case SkinMedia.SkinMediaTypes.NavigateLabel:
+                    case SkinMedia.SkinMediaTypes.OpenLabel:
+                    case SkinMedia.SkinMediaTypes.BackLabel:
+                    case SkinMedia.SkinMediaTypes.FavoriteLabel:
+                        string textToDraw = skinMedia.Text;
+                        switch (skinMedia.SkinMediaType)
+                        {
+                            case SkinMedia.SkinMediaTypes.NavigateLabel: textToDraw = GarlicSkin.skinSettings?.navigatelabel ?? textToDraw; break;
+                            case SkinMedia.SkinMediaTypes.OpenLabel: textToDraw = GarlicSkin.skinSettings?.openlabel ?? textToDraw; break;
+                            case SkinMedia.SkinMediaTypes.BackLabel: textToDraw = GarlicSkin.skinSettings?.backlabel ?? textToDraw; break;
+                            case SkinMedia.SkinMediaTypes.FavoriteLabel: textToDraw = GarlicSkin.skinSettings?.favoritelabel ?? textToDraw; break;
+                            case SkinMedia.SkinMediaTypes.SystemName: textToDraw = selectedSystem.folder; break;
+                            case SkinMedia.SkinMediaTypes.Clock: textToDraw = DateTime.Now.ToString("HH:mm"); break;
+                        }
+
+                        // Load and use the custom font
+                        string fontPath = PathConstants.assetSkinPath + "font.ttf";
+                        PrivateFontCollection pfc = new PrivateFontCollection();
+                        if (File.Exists(fontPath))
+                        {
+                            pfc.AddFontFile(fontPath);
+                            using (Font font = new Font(pfc.Families[0], fontSize, GraphicsUnit.Pixel))
+                            {
+                                Color finalTextColor = ColorTranslator.FromHtml(textColor);
+                                graphics.DrawString(textToDraw, font, new SolidBrush(finalTextColor), new PointF(skinMedia.X, skinMedia.Y));
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+
+        private static void DrawGameTexts(Graphics graphics, List<string> games, string selectedGame)
+        {
+            int txtMargin = 0;
+            int startingY = 70;
+            int lineHeight = 42;
+            int canvasWidth = 640;
+
+            if (GarlicSkin.skinSettings is not null && GarlicSkin.validSkinSettings)
+            {
+                string alignment = GarlicSkin.skinSettings.textalignment ?? "left";
+                txtMargin = GarlicSkin.skinSettings.textmargin;
+
+                Color textColorInactive = ColorTranslator.FromHtml(GarlicSkin.skinSettings.colorinactive ?? "#AAAAAA");
+                Color textColorActive = ColorTranslator.FromHtml(GarlicSkin.skinSettings.coloractive ?? "#FFFFFF");
+                int fontSize = GarlicSkin.languageFiles?.FirstOrDefault()?.garlicLanguageSettings.fontsize ?? 28;
+
+                string fontPath = PathConstants.assetSkinPath + "font.ttf";
+                PrivateFontCollection pfc = new PrivateFontCollection();
+                if (File.Exists(fontPath))
+                {
+                    pfc.AddFontFile(fontPath);
+                    using (Font font = new Font(pfc.Families[0], fontSize, GraphicsUnit.Pixel))
+                    {
+                        for (int i = 0; i < games.Count && i < 8; i++)
+                        {
+                            string game = games[i];
+                            Color textColor = (game == selectedGame) ? textColorActive : textColorInactive;
+                            var gameTitle = TransformTitle(game).Trim();
+
+                            StringFormat format = new StringFormat();
+                            RectangleF layoutRect;
+                            if (alignment == "right")
+                            {
+                                format.Alignment = StringAlignment.Far;
+                                layoutRect = new RectangleF(0, startingY + (i * lineHeight), canvasWidth - txtMargin, lineHeight);
+                            }
+                            else if (alignment == "center")
+                            {
+                                format.Alignment = StringAlignment.Center;
+                                layoutRect = new RectangleF(0, startingY + (i * lineHeight), canvasWidth, lineHeight);
+                            }
+                            else
+                            {
+                                format.Alignment = StringAlignment.Near;
+                                layoutRect = new RectangleF(txtMargin - 5, startingY + (i * lineHeight), canvasWidth, lineHeight);
+                            }
+
+                            graphics.DrawString(gameTitle, font, new SolidBrush(textColor), layoutRect, format);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                txtMargin = 340;
+                Color textColorInactive = Color.LightGray;
+                Color textColorActive = Color.White;
+                int fontSize = 28;
+                string fontPath = PathConstants.assetSkinPath + "font.ttf";
+                PrivateFontCollection pfc = new PrivateFontCollection();
+                if (File.Exists(fontPath))
+                {
+                    pfc.AddFontFile(fontPath);
+                    using (Font font = new Font(pfc.Families[0], fontSize, GraphicsUnit.Pixel))
+                    {
+                        for (int i = 0; i < games.Count && i < 8; i++)
+                        {
+                            string game = games[i];
+                            Color textColor = (game == selectedGame) ? textColorActive : textColorInactive;
+                            var gameTitle = TransformTitle(game).Trim();
+
+                            StringFormat format = new StringFormat();
+                            RectangleF layoutRect = new RectangleF(txtMargin, startingY + (i * lineHeight), canvasWidth - txtMargin, lineHeight);
+                            graphics.DrawString(gameTitle, font, new SolidBrush(textColor), layoutRect, format);
+                        }
+                    }
+                }
+            }
+        }
+
+        public static List<string> GetSurroundingStrings(List<string> source, int index)
+        {
+            int start = Math.Max(0, index - 3); // Ensure we don't go below 0
+            int count = 8;
+
+            // If we're near the start of the list, adjust count to get more elements after index
+            if (start < index - 3)
+            {
+                count += (index - 3) - start;
+            }
+
+            // If we're near the end of the list, adjust count to stay within bounds
+            if (start + count > source.Count)
+            {
+                count = source.Count - start;
+            }
+
+            return source.Skip(start).Take(count).ToList();
+        }
+
+        public static string TransformTitle(string title)
+        {
+            //Remove file extension if present
+            int extIndex = title.LastIndexOf('.');
+            if (extIndex != -1)
+            {
+                title = title.Substring(0, extIndex).Trim();
+            }
+
+            //Remove text in brackets if present
+            int index = title.IndexOf('(');
+            if (index != -1)
+            {
+                title = title.Substring(0, index).Trim();
+            }
+
+            return title;
         }
 
         public static async Task<Bitmap?> GenerateGameMedia(GameResponse? game, GarlicSystem system, MediaLayerCollection? mediaLayerCollection = null)
@@ -246,7 +408,8 @@ namespace GarlicPress
             {
                 if (result.media is MediaResponse media)
                 {
-                    var baseImage = (Bitmap)Image.FromFile(media.path);
+                    using var bImage = Image.FromFile(media.path);
+                    using var baseImage = new Bitmap(bImage);
                     baseImage.SetResolution(graphics.DpiX, graphics.DpiY);
 
 
@@ -264,7 +427,6 @@ namespace GarlicPress
                     {
                         BitmapUtilites.DrawRotatedImage(graphics, baseImage, result.layer.angle, result.layer.x, result.layer.y);
                     }
-                    baseImage.Dispose();
                 }
             }
 
@@ -357,14 +519,13 @@ namespace GarlicPress
             {
                 if (await GetGameMediaResponse(game, layer, system) is MediaResponse downloadedMedia)
                 {
-                    var baseImage = (Bitmap)Image.FromFile(downloadedMedia.path);
+                    using var bImage = Image.FromFile(downloadedMedia.path);
+                    using var baseImage = new Bitmap(bImage);
 
-                    var newBaseImage = ApplyAllFilters(baseImage, layer);
-                    baseImage.Dispose();
+                    using var newBaseImage = ApplyAllFilters(baseImage, layer);
 
                     var tempPath = Path.Combine("wwwroot", "assets", "temp", $"temp{Path.GetFileName(downloadedMedia.path)}").Replace(@"\", "/");
                     newBaseImage.Save(tempPath, ImageFormat.Png);
-                    newBaseImage.Dispose();
 
                     downloadedMedia.path = tempPath;
 

@@ -130,14 +130,14 @@ namespace GarlicPress.forms
                         {
                             log("Game Found");
                             log("Generating Game Art");
-                            await UpdateGameArt(item, game, item.system);
+                            await UpdateGameArt(item, game, item.system, item.searchText);
                         }
                         else if (_selectedMediaLayerCollection is not null
                             && _selectedMediaLayerCollection.mediaLayers.Where(x => x.mediaType == "local").Count() > 0
                             && cb_AllowOnlyLocalMedia.Checked)
                         {
                             log("Game not Found : Using Local Media Only");
-                            await UpdateGameArt(item, null, item.system);
+                            await UpdateGameArt(item, null, item.system, item.searchText);
                             item.status = "Only Local Media Complete";
                         }
                         else if (game != null)
@@ -163,12 +163,12 @@ namespace GarlicPress.forms
             }
         }
 
-        private async Task UpdateGameArt(GarlicGameArtSearch item, GameResponse? game, GarlicSystem system)
+        private async Task UpdateGameArt(GarlicGameArtSearch item, GameResponse? game, GarlicSystem system, string previewText)
         {
             var bitmap = await GameMediaGeneration.GenerateGameMedia(game, system, _selectedMediaLayerCollection);
             if (bitmap != null && !CancelArtRun)
             {
-                ImgArtPreview.Image = GameMediaGeneration.OverlayImageWithSkinBackground(bitmap);
+                ImgArtPreview.Image = GameMediaGeneration.OverlayImageWithSkinBackground(bitmap, system, Enumerable.Repeat(previewText, 8).ToList(), previewText);
                 log("Game Art Generation Complete");
 
                 Directory.CreateDirectory(PathConstants.assetsTempPath);

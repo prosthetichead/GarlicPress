@@ -171,20 +171,27 @@ namespace GarlicPress
 
         private void UpdateImageFromDevice(FileStatistics item)
         {
+            List<string> filePaths = new List<string>();
+
+            foreach (FileStatistics fileStat in fileListBox.Items)
+            {
+                filePaths.Add(fileStat.Path);
+            }
+
             //get img file if one exists
             string imgFile = Path.ChangeExtension(item.Path, ".png");
             if (ADBConnection.DownloadFile(SelectedImgPath + imgFile, PathConstants.assetsTempPath + "gameart-down.png"))
             {
-                Bitmap overlayImage = (Bitmap)Image.FromFile(PathConstants.assetsTempPath + "gameart-down.png");
-                picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage);
-                overlayImage.Dispose();
+                using var oImage = (Bitmap)Image.FromFile(PathConstants.assetsTempPath + "gameart-down.png");
+                using Bitmap overlayImage = new Bitmap(oImage);
+                picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage, SelectedSystem, filePaths, (fileListBox.SelectedItem as FileStatistics)?.Path ?? imgFile);
                 picGame.Refresh();
             }
             else
             {
-                Bitmap overlayImage = (Bitmap)Image.FromFile(PathConstants.assetSkinPath + "background.png");
-                picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage);
-                overlayImage.Dispose();
+                using var oImage = (Bitmap)Image.FromFile(PathConstants.assetSkinPath + "background.png");
+                using Bitmap overlayImage = new Bitmap(oImage);
+                picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage, SelectedSystem, filePaths, (fileListBox.SelectedItem as FileStatistics)?.Path ?? imgFile);
             }
             picGame.Refresh();
         }

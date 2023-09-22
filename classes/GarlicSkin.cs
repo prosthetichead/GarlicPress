@@ -128,7 +128,7 @@ namespace GarlicPress
             ReadAllLangFiles();
             ReadFonts();
             var progress = new Progress<int>(p => { DebugLog.Write(".." + p.ToString() + "%", Color.Orange, false); });
-            await ADBConnection.DownloadDirectory("/mnt/mmc/CFW/skin", "assets/skin", progress);          
+            await ADBConnection.DownloadDirectory("/mnt/mmc/CFW/skin", PathConstants.assetSkinPath, progress);          
         }
 
     }

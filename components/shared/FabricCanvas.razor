@@ -63,6 +63,14 @@
         }
     }
 
+    public async Task AddStaticImage(string? imagePath, int left, int top)
+    {
+        if (module is not null)
+        {
+            await module.InvokeVoidAsync("BlazorFabric.addStaticImage", imagePath, left, top);
+        }
+    }
+
     public async Task AddImage(string? imagePath, Guid id, TItem model)
     {
         if (module is not null)
