@@ -15,76 +15,80 @@
     </button>
 </div>
 
-@* Local Media *@
-<div class="scrollbar overflow-auto h-[calc(100vh-50vh-145px)]" style="display: @(activeTab == Tabs.Local ? "block" : "none")">
-    <div class="border-2  border-gray-800 p-4 flex items-center justify-center text-white text-xl cursor-pointer relative min-h-[50px] hover:bg-gray-500 hover:text-black @dropClass">
-        Drag and drop, or click to add a local image.
-        <InputFile accept="image/*" multiple OnChange="AddLocalMedia"
-        @ondragenter="HandleDragEnter" @ondragleave="HandleDragLeave"
-                   class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"></InputFile>
-    </div>
+@{
+    var size = "h-[calc(100vh-50vh-150px)]";
 
-    <div class="p-2 flex overflow-auto flex-wrap w-full">
-        @foreach (var localMedia in _localMedia)
-        {
-            var mediaType = "local";
-            <div class="p-2 relative group">
-                <img class="max-h-40 max-w-[200px] m-1" src="@localMedia.Replace(@"wwwroot\", "")" @onclick="async () => await AddNewMediaLayerImageToCanvas(localMedia, mediaType)" />
-                <button @onclick="() => DeleteLocalMedia(localMedia)" class="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-bl-md hover:bg-red-600 opacity-0 group-hover:opacity-100">Delete</button>
-            </div>
-        }
-    </div>
-</div>
-
-@* Game Media *@
-<div class="scrollbar overflow-auto h-[calc(100vh-50vh-145px)]" style="display: @(activeTab == Tabs.Screenscraper ? "block" : "none")">
-    <div class="p-2 flex overflow-auto flex-wrap w-full">
-        <div class="grid w-full">
-            <Button ButtonText="Get Game Art" OnClick="GetAllGameMedia"></Button>
+    @* Local Media *@
+    <div class="scrollbar overflow-auto @size" style="display: @(activeTab == Tabs.Local ? "block" : "none")">
+        <div class="border-2  border-gray-800 p-4 flex items-center justify-center text-white text-xl cursor-pointer relative min-h-[50px] hover:bg-gray-500 hover:text-black @dropClass">
+            Drag and drop, or click to add a local image.
+            <InputFile accept="image/*" multiple OnChange="AddLocalMedia"
+            @ondragenter="HandleDragEnter" @ondragleave="HandleDragLeave"
+                       class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"></InputFile>
         </div>
 
-        @foreach (var gameMedia in _gameMedias)
-        {
-            <div class="p-2">
-                <img class="max-h-40 max-w-[200px] m-1" src="@gameMedia.path" @onclick="(async () => await AddNewMediaLayerImageToCanvas(gameMedia.path, gameMedia.mediaType))" />
-            </div>
-        }
-        @if (_artUpdateRunning)
-        {
-            <div class="grid place-content-center mt-8">
-                <div class="flex flex-col items-center gap-2">
-                    <GarlicLoading></GarlicLoading>
-                    <b>Loading Game Art...</b>
+        <div class="p-2 flex overflow-auto flex-wrap w-full">
+            @foreach (var localMedia in _localMedia)
+            {
+                var mediaType = "local";
+                <div class="p-2 relative group">
+                    <img class="max-h-40 max-w-[200px] m-1" src="@localMedia.Replace(@"wwwroot\", "")" @onclick="async () => await AddNewMediaLayerImageToCanvas(localMedia, mediaType)" />
+                    <button @onclick="() => DeleteLocalMedia(localMedia)" class="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-bl-md hover:bg-red-600 opacity-0 group-hover:opacity-100">Delete</button>
                 </div>
-            </div>
-        }
-    </div>
-</div>
-
-@* System Media *@
-<div class="scrollbar overflow-auto h-[calc(100vh-50vh-145px)]" style="display: @(activeTab == Tabs.ScreenscraperSystem ? "block" : "none")">
-    <div class="p-2 flex overflow-auto flex-wrap w-full">
-        <div class="grid w-full">
-            <Button ButtonText="Get System Art" OnClick="GetAllSystemMedia"></Button>
+            }
         </div>
-
-        @foreach (var systemMedia in _systemMedias)
-        {
-            <div class="p-2">
-                <img class="max-h-40 max-w-[200px] m-1" src="@systemMedia.path" @onclick="(async () => await AddNewMediaLayerImageToCanvas(systemMedia.path, systemMedia.mediaType))" />
-            </div>
-        }
-        @if (_artUpdateRunning)
-        {
-            <div class="grid place-content-center mt-8">
-                <div class="flex flex-col items-center gap-2">
-                    <GarlicLoading></GarlicLoading>
-                    <b>Loading Game Art...</b>
-                </div>
-            </div>
-        }
     </div>
-</div>
+
+    @* Game Media *@
+    <div class="scrollbar overflow-auto @size" style="display: @(activeTab == Tabs.Screenscraper ? "block" : "none")">
+        <div class="p-2 flex overflow-auto flex-wrap w-full">
+            <div class="grid w-full">
+                <Button ButtonText="Get Game Art" OnClick="GetAllGameMedia"></Button>
+            </div>
+
+            @foreach (var gameMedia in _gameMedias)
+            {
+                <div class="p-2">
+                    <img class="max-h-40 max-w-[200px] m-1" src="@gameMedia.path" @onclick="(async () => await AddNewMediaLayerImageToCanvas(gameMedia.path, gameMedia.mediaType))" />
+                </div>
+            }
+            @if (_artUpdateRunning)
+            {
+                <div class="grid place-content-center mt-8">
+                    <div class="flex flex-col items-center gap-2">
+                        <GarlicLoading></GarlicLoading>
+                        <b>Loading Game Art...</b>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    @* System Media *@
+    <div class="scrollbar overflow-auto @size" style="display: @(activeTab == Tabs.ScreenscraperSystem ? "block" : "none")">
+        <div class="p-2 flex overflow-auto flex-wrap w-full">
+            <div class="grid w-full">
+                <Button ButtonText="Get System Art" OnClick="GetAllSystemMedia"></Button>
+            </div>
+
+            @foreach (var systemMedia in _systemMedias)
+            {
+                <div class="p-2">
+                    <img class="max-h-40 max-w-[200px] m-1" src="@systemMedia.path" @onclick="(async () => await AddNewMediaLayerImageToCanvas(systemMedia.path, systemMedia.mediaType))" />
+                </div>
+            }
+            @if (_artUpdateRunning)
+            {
+                <div class="grid place-content-center mt-8">
+                    <div class="flex flex-col items-center gap-2">
+                        <GarlicLoading></GarlicLoading>
+                        <b>Loading Game Art...</b>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
 
 @code {
     [Parameter]

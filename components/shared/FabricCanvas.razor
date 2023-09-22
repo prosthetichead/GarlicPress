@@ -43,7 +43,14 @@
     {
         if (module is not null)
         {
-            await module.InvokeVoidAsync("BlazorFabric.clearCanvas");
+            try
+            {
+                await module.InvokeVoidAsync("BlazorFabric.clearCanvas");
+            }
+            catch (Exception)
+            {
+                module = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./components/shared/FabricCanvas.razor.js");
+            }
         }
     }
 

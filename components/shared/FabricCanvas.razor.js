@@ -54,8 +54,12 @@
 
     static clearCanvas = () => {
         if (BlazorFabric.canvas != null) {
-            BlazorFabric.canvas.clear();
-            BlazorFabric.canvas.off('object:added');
+            try {
+                BlazorFabric.canvas.clear();
+                BlazorFabric.canvas.off('object:added');
+            } catch (e) {
+
+            }
         }
     };
 
@@ -124,7 +128,7 @@
                     if (position === -1) {
                         BlazorFabric.canvas.add(img);
                     } else {
-                        BlazorFabric.canvas.insertAt(img, position);
+                        BlazorFabric.canvas.insertAt(img, position + 1);
                     }
                 } else {
                     BlazorFabric.canvas.add(img);

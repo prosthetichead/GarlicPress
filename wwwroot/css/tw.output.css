@@ -651,8 +651,8 @@ video {
   height: 50vh;
 }
 
-.h-\[calc\(100vh-50vh-145px\)\] {
-  height: calc(100vh - 50vh - 145px);
+.h-\[calc\(100vh-50vh-150px\)\] {
+  height: calc(100vh - 50vh - 150px);
 }
 
 .h-full {
