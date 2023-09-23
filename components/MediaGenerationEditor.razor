@@ -402,7 +402,7 @@
             foreach (var skinMedia in SkinMedia.GetSkinMedias())
             {
                 // Prepend the asset path for media files
-                string mediaPath = PathConstants.assetSkinPath.Replace("wwwroot/", "") + skinMedia.MediaFileName;
+                string mediaPath = PathConstants.assetSkinPath + skinMedia.MediaFileName;
 
                 string textColor = "white";
                 int fontSize = 28;
@@ -418,7 +418,7 @@
                     case SkinMedia.SkinMediaTypes.Picture:
                         if (File.Exists(mediaPath))
                         {
-                            await _fabricCanvas.AddStaticImage(mediaPath, skinMedia.X, skinMedia.Y);
+                            await _fabricCanvas.AddStaticImage(mediaPath.Replace("wwwroot/", ""), skinMedia.X, skinMedia.Y);
                         }
                         break;
                     case SkinMedia.SkinMediaTypes.Text:
