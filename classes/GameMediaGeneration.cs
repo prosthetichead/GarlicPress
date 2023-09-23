@@ -177,7 +177,8 @@ namespace GarlicPress
 
         public static Bitmap OverlayImageWithSkinBackground(Bitmap imageToOverlay, GarlicSystem selectedSystem, List<string> games, string selectedGame)
         {
-            using var bImage = Image.FromFile(PathConstants.assetSkinPath + "background.png");
+            using var stream = new FileStream(PathConstants.assetSkinPath + "background.png", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            using var bImage = Image.FromStream(stream);
             using var baseImage = new Bitmap(bImage);
             var overlayImage = imageToOverlay;
 
@@ -224,7 +225,8 @@ namespace GarlicPress
                         {
                             try
                             {
-                                using var image = Image.FromFile(mediaPath);
+                                using var stream = new FileStream(mediaPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                                using var image = Image.FromStream(stream);
                                 using var skinImage = new Bitmap(image);
                                 graphics.DrawImage(skinImage, skinMedia.X, skinMedia.Y, skinImage.Width, skinImage.Height);
                             }
@@ -415,7 +417,8 @@ namespace GarlicPress
             {
                 if (result.media is MediaResponse media)
                 {
-                    using var bImage = Image.FromFile(media.path);
+                    using var stream = new FileStream(media.path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    using var bImage = Image.FromStream(stream);
                     using var baseImage = new Bitmap(bImage);
                     baseImage.SetResolution(graphics.DpiX, graphics.DpiY);
 
@@ -526,7 +529,8 @@ namespace GarlicPress
             {
                 if (await GetGameMediaResponse(game, layer, system) is MediaResponse downloadedMedia)
                 {
-                    using var bImage = Image.FromFile(downloadedMedia.path);
+                    using var stream = new FileStream(downloadedMedia.path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    using var bImage = Image.FromStream(stream);
                     using var baseImage = new Bitmap(bImage);
 
                     using var newBaseImage = ApplyAllFilters(baseImage, layer);

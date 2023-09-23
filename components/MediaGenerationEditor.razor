@@ -63,7 +63,7 @@
         }
 
     </div>
-    <div class="grid grid-cols-3 gap-2">
+    <div class="grid grid-cols-7 gap-2">
         <div>
             <Select @bind-Value="_selectedDriveValue" @bind-Value:after="(() => { _selectedDrive = GarlicDrive.GetGarlicDrives().FirstOrDefault(x => x.name == _selectedDriveValue); UpdateGames();})"
                     Items="GarlicDrive.GetGarlicDrives()">
@@ -73,7 +73,7 @@
                 </Option>
             </Select>
         </div>
-        <div>
+        <div class="col-span-2">
             <Select @bind-Value="_selectedSystemValue" @bind-Value:after="(() => { _selectedSystem = GarlicSystem.GetAllSystems().FirstOrDefault(x => x.name == _selectedSystemValue); UpdateGames();})"
                     Items="GarlicSystem.GetAllSystems()">
                 <Label>System</Label>
@@ -82,17 +82,34 @@
                 </Option>
             </Select>
         </div>
-        <div>
-
+        <div class="col-span-4">
             @if (_games.Any())
             {
-                <Select @bind-Value="_selectedGame" @bind-Value:after="(async () => { await UpdateGameArt(); })"
-                        Items="_games">
-                    <Label>Games</Label>
-                    <Option Context="game">
-                    <option value="@game">@game</option>
-                    </Option>
-                </Select>
+                <div class="flex flex-grow">
+                    <div class="w-full">
+                        <Select @bind-Value="_selectedGame" @bind-Value:after="(async () => { await UpdateGameArt(); })"
+                                Items="_games">
+                            <Label>Games</Label>
+                            <Option Context="game">
+                            <option value="@game">@game</option>
+                            </Option>
+                        </Select>
+                    </div>
+                    <div class="flex items-stretch">
+                        <button @onclick="(() => ChangeGame(-1))" class="w-10 h-full flex items-center justify-center bg-gray-200 hover:bg-gray-300 rounded">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform rotate-180" viewBox="0 3 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.293 9.293a1 1 0 011.414 0L10 12.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="flex items-stretch">
+                        <button @onclick="() => ChangeGame(1)" class="w-10 h-full flex items-center justify-center bg-gray-200 hover:bg-gray-300 rounded">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.293 9.293a1 1 0 011.414 0L10 12.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
             }
             else
             {
@@ -236,6 +253,14 @@
             EditMediaLayersForm.Instance.OnUpdatedModels += OnUpdatedModels_Event;
             StateHasChanged();
         }
+    }
+
+    async Task ChangeGame(int direction)
+    {
+        var currentIndex = _games.IndexOf(_selectedGame);
+        var newIndex = (currentIndex + direction + _games.Count) % _games.Count;
+        _selectedGame = _games[newIndex];
+        await UpdateGameArt();
     }
 
     async void OnUpdatedModels_Event()
