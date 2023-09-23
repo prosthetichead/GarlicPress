@@ -419,7 +419,6 @@ namespace GarlicPress
 
                 foreach (GarlicDrive drive in comboDrive.Items)
                 {
-
                     var backupPath = Path.Combine(backupDir, "SD" + drive.number);
                     Directory.CreateDirectory(backupPath);
                     var readPath = drive.path + "/Saves";
@@ -462,12 +461,28 @@ namespace GarlicPress
 
         private void btnSelectAll_Click(object sender, EventArgs e)
         {
-
             fileListBox.BeginUpdate();
             //fileListBox.SelectionMode = SelectionMode.MultiSimple;
             for (int i = 0; i < fileListBox.Items.Count; i++)
                 fileListBox.SetSelected(i, true);
             //fileListBox.SelectionMode = SelectionMode.MultiExtended;
+            fileListBox.EndUpdate();
+            fileListBox.Focus();
+        }
+
+        private void btnSelectAllWithoutArt_Click(object sender, EventArgs e)
+        {
+            var list = ADBConnection.GetDirectoryListing(SelectedRomPath + "/Imgs");
+            fileListBox.BeginUpdate();
+            for (int i = 0; i < fileListBox.Items.Count; i++)
+            {
+                if (!list.Any(a => Path.GetFileNameWithoutExtension(a.Path) == Path.GetFileNameWithoutExtension((fileListBox.Items[i] as FileStatistics)?.Path)))
+                {
+                    fileListBox.SetSelected(i, true);
+                    continue;
+                }
+                fileListBox.SetSelected(i, false);
+            }
             fileListBox.EndUpdate();
             fileListBox.Focus();
         }
@@ -533,5 +548,7 @@ namespace GarlicPress
             var docForm = new DocumentationForm("help.md");
             docForm.Show();
         }
+
+
     }
 }
