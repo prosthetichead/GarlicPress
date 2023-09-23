@@ -66,6 +66,8 @@
             btnRename = new Button();
             btnOpenEditor = new Button();
             btnSelectAllWithoutArt = new Button();
+            comboSortBy = new ComboBox();
+            label4 = new Label();
             statusStrip.SuspendLayout();
             menuStrip.SuspendLayout();
             notifyIconMenu.SuspendLayout();
@@ -119,10 +121,10 @@
             fileListBox.ForeColor = Color.White;
             fileListBox.FormattingEnabled = true;
             fileListBox.ItemHeight = 17;
-            fileListBox.Location = new Point(12, 72);
+            fileListBox.Location = new Point(12, 106);
             fileListBox.Name = "fileListBox";
             fileListBox.SelectionMode = SelectionMode.MultiExtended;
-            fileListBox.Size = new Size(343, 493);
+            fileListBox.Size = new Size(343, 476);
             fileListBox.TabIndex = 5;
             fileListBox.SelectedIndexChanged += fileListBox_SelectedIndexChanged;
             fileListBox.KeyDown += fileListBox_KeyDown;
@@ -394,6 +396,27 @@
             btnSelectAllWithoutArt.UseVisualStyleBackColor = true;
             btnSelectAllWithoutArt.Click += btnSelectAllWithoutArt_Click;
             // 
+            // comboSortBy
+            // 
+            comboSortBy.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboSortBy.FlatStyle = FlatStyle.System;
+            comboSortBy.FormattingEnabled = true;
+            comboSortBy.Items.AddRange(new object[] { "GameBoy" });
+            comboSortBy.Location = new Point(65, 72);
+            comboSortBy.Name = "comboSortBy";
+            comboSortBy.Size = new Size(290, 23);
+            comboSortBy.TabIndex = 25;
+            comboSortBy.SelectedIndexChanged += comboSortBy_SelectedIndexChanged;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(12, 75);
+            label4.Name = "label4";
+            label4.Size = new Size(47, 15);
+            label4.TabIndex = 26;
+            label4.Text = "Sort by:";
+            // 
             // MainForm
             // 
             AllowDrop = true;
@@ -402,6 +425,8 @@
             AutoSize = true;
             AutoValidate = AutoValidate.EnablePreventFocusChange;
             ClientSize = new Size(1013, 612);
+            Controls.Add(label4);
+            Controls.Add(comboSortBy);
             Controls.Add(btnSelectAllWithoutArt);
             Controls.Add(btnOpenEditor);
             Controls.Add(btnRename);
@@ -481,5 +506,7 @@
         private Button btnOpenEditor;
         private ToolStripMenuItem helpToolStripMenuItem;
         private Button btnSelectAllWithoutArt;
+        private ComboBox comboSortBy;
+        private Label label4;
     }
 }

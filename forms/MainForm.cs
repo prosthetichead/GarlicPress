@@ -67,6 +67,8 @@ namespace GarlicPress
             comboSystems.ValueMember = "folder";
             comboSystems.BindingContext = this.BindingContext;
 
+            comboSortBy.DataSource = Enum.GetValues(typeof(SortBy));
+
             ADBConnection.StartADBServer();
             CheckConnection();
         }
@@ -143,6 +145,13 @@ namespace GarlicPress
             }
         }
 
+        private enum SortBy
+        {
+            Name,
+            Size,
+            Date
+        }
+
         private void RefreshBrowserFiles(int index = 0)
         {
             if (ADBConnection.deviceConnected)
@@ -150,6 +159,20 @@ namespace GarlicPress
                 var list = ADBConnection.GetDirectoryListing(SelectedRomPath);
                 var files = list.Where(w => w.Path != "." && w.Path != ".." && w.Path != "Imgs").OrderBy(o => o.Path).ToList();
                 fileListBox.ClearSelected();
+
+                switch (Enum.Parse<SortBy>(comboSortBy.SelectedItem.ToString() ?? "Name"))
+                {
+                    case SortBy.Name:
+                        files = files.OrderBy(o => o.Path).ToList();
+                        break;
+                    case SortBy.Size:
+                        files = files.OrderByDescending(o => o.Size).ToList();
+                        break;
+                    case SortBy.Date:
+                        files = files.OrderByDescending(o => o.Time).ToList();
+                        break;
+                }
+
                 fileListBox.DataSource = files;
                 if (files.Count > 0 && files.Count - 1 >= index)
                 {
@@ -549,6 +572,9 @@ namespace GarlicPress
             docForm.Show();
         }
 
-
+        private void comboSortBy_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RefreshBrowserFiles();
+        }
     }
 }
