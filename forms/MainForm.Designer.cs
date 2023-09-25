@@ -68,6 +68,7 @@
             btnSelectAllWithoutArt = new Button();
             comboSortBy = new ComboBox();
             label4 = new Label();
+            txtFreeSpace = new ToolStripStatusLabel();
             statusStrip.SuspendLayout();
             menuStrip.SuspendLayout();
             notifyIconMenu.SuspendLayout();
@@ -78,7 +79,7 @@
             // 
             statusStrip.BackColor = SystemColors.ControlLight;
             statusStrip.ImageScalingSize = new Size(28, 28);
-            statusStrip.Items.AddRange(new ToolStripItem[] { txtUpdate, toolStripDeviceStatus, txtCurrentTask });
+            statusStrip.Items.AddRange(new ToolStripItem[] { txtUpdate, toolStripDeviceStatus, txtCurrentTask, txtFreeSpace });
             statusStrip.Location = new Point(0, 588);
             statusStrip.Name = "statusStrip";
             statusStrip.RightToLeft = RightToLeft.Yes;
@@ -417,6 +418,12 @@
             label4.TabIndex = 26;
             label4.Text = "Sort by:";
             // 
+            // txtFreeSpace
+            // 
+            txtFreeSpace.Name = "txtFreeSpace";
+            txtFreeSpace.Size = new Size(91, 19);
+            txtFreeSpace.Text = "Free Space: N/A";
+            // 
             // MainForm
             // 
             AllowDrop = true;
@@ -508,5 +515,6 @@
         private Button btnSelectAllWithoutArt;
         private ComboBox comboSortBy;
         private Label label4;
+        private ToolStripStatusLabel txtFreeSpace;
     }
 }

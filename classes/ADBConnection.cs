@@ -300,5 +300,40 @@ namespace GarlicPress
             }
             return "device not connected";
         }
+
+        public class FreeSpaceResponse
+        {
+            public string? Path { get; set; }
+            public string? Size { get; set; }
+            public string? Used { get; set; }
+            public string? Available { get; set; }
+        }
+
+        public static FreeSpaceResponse GetFreeSpace(string path)
+        {
+            if (deviceConnected && client is not null)
+            {
+                ConsoleOutputReceiver receiver = new ConsoleOutputReceiver();
+                client.ExecuteRemoteCommand($"df {path}", device, receiver);
+
+                string results = receiver.ToString().Trim();
+
+                if (results.Length > 0)
+                {
+                    var lines = results.Split("\n");
+                    var line = lines[1].Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                    var response = new FreeSpaceResponse
+                    {
+                        Path = line[0],
+                        Size = line[1],
+                        Used = line[2],
+                        Available = line[3]
+                    };
+
+                    return response;
+                }
+            }
+            return new FreeSpaceResponse();
+        }
     }
 }

@@ -14,6 +14,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static GarlicPress.MediaLayer;
+using static GarlicPress.SSMediaType;
 using static System.Net.Mime.MediaTypeNames;
 using Image = System.Drawing.Image;
 
@@ -23,7 +24,6 @@ namespace GarlicPress
     {
         private static List<MediaLayerCollection> mediaLayerCollections;
         private static string jsonPath = "assets/mediaLayoutCollection.json";
-        private static SemaphoreSlim? _semaphore; //used to handle multiple requests to generate media at the same time
 
         static GameMediaGeneration()
         {
@@ -473,7 +473,10 @@ namespace GarlicPress
                 yield break;
             }
 
-            var tasks = SSMediaType.GetAllMediaTypes().Where(x => x.mediaType == SSMediaType.MediaTypes.SSGame).Select(media => GetMediaFromType(game, media.value)).ToList();
+            var tasks = SSMediaType.GetAllMediaTypes()
+                .Where(x => x.mediaType == SSMediaType.MediaTypes.SSGame)
+                .Select(async media => (await ScreenScraper.DownloadGameMedia(game, media.value), media.value))
+                .ToList();
 
             while (tasks.Count > 0)
             {
@@ -495,7 +498,10 @@ namespace GarlicPress
                 yield break;
             }
 
-            var tasks = SSMediaType.GetAllMediaTypes().Where(x => x.mediaType == SSMediaType.MediaTypes.SSSystem).Select(media => GetSystemMediaFromType(systems, systemId, media.value)).ToList();
+            var tasks = SSMediaType.GetAllMediaTypes()
+                .Where(x => x.mediaType == SSMediaType.MediaTypes.SSSystem)
+                .Select(async media => (await ScreenScraper.DownloadSystemMedia(systems, systemId, media.value.Replace("system-", "")), media.value))
+                .ToList();
 
             while (tasks.Count > 0)
             {
@@ -566,68 +572,14 @@ namespace GarlicPress
             {
                 var systemId = int.Parse(system.ss_systemeid);
                 var systems = await ScreenScraper.GetSystemsData();
-                media = await LimitedDownloadSystemMedia(systems, systemId, layer.mediaType);
+                media = await ScreenScraper.DownloadSystemMedia(systems, systemId, layer.mediaType.Replace("system-", ""));
             }
             else
             {
-                media = await LimitedDownloadGameMedia(game, layer.mediaType);
+                media = await ScreenScraper.DownloadGameMedia(game, layer.mediaType);
             }
 
             return media;
-        }
-
-        private static async Task<(MediaResponse? media, string type)> GetMediaFromType(GameResponse? game, string type)
-        {
-            return (await LimitedDownloadGameMedia(game, type), type);
-        }
-
-        private static async Task<(MediaResponse? media, string type)> GetSystemMediaFromType(SystemsResponse system, int systemId, string type)
-        {
-            return (await LimitedDownloadSystemMedia(system, systemId, type), type);
-        }
-
-        private static async Task<MediaResponse?> LimitedDownloadGameMedia(GameResponse? game, string mediaType)
-        {
-            if (game is null)
-            {
-                return null;
-            }
-            int maxthreads = 1;
-            Int32.TryParse(game.response?.ssuser?.maxthreads ?? "1", out maxthreads);
-            _semaphore ??= new SemaphoreSlim(maxthreads);
-
-            // Wait for an available slot (based on maxThreads)
-            await _semaphore.WaitAsync();
-
-            try
-            {
-                return await ScreenScraper.DownloadGameMedia(game, mediaType);
-            }
-            finally
-            {
-                // Release the slot after finishing the operation
-                _semaphore.Release();
-            }
-        }
-
-        private static async Task<MediaResponse?> LimitedDownloadSystemMedia(SystemsResponse systems, int systemId, string mediaType)
-        {
-            int maxthreads = 1;
-            Int32.TryParse(systems.response.ssuser?.maxthreads ?? "1", out maxthreads);
-            _semaphore ??= new SemaphoreSlim(maxthreads);
-
-            // Wait for an available slot (based on maxThreads)
-            await _semaphore.WaitAsync();
-
-            try
-            {
-                return await ScreenScraper.DownloadSystemMedia(systems, systemId, mediaType.Replace("system-", ""));
-            }
-            finally
-            {
-                // Release the slot after finishing the operation
-                _semaphore.Release();
-            }
         }
     }
 }

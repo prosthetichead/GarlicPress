@@ -13,11 +13,16 @@ using System.Web;
 using System.Windows.Forms;
 using static GarlicPress.GameResponse;
 using static GarlicPress.MediaLayer;
+using static GarlicPress.SSMediaType;
+using static GarlicPress.SystemsResponse;
 
 namespace GarlicPress
 {
     internal static partial class ScreenScraper
     {
+        private static SemaphoreSlim _semaphore = new(1, 10); //used to handle multiple requests to generate media at the same time
+        private static int _semaphoreCount = 1;
+
         public static async Task<GameResponse> GetGameData(GarlicSystem system, string searchText, SearchType searchType = SearchType.GameName)
         {
             UriBuilder uriBuilder = new UriBuilder("https://www.screenscraper.fr/api2/jeuInfos.php");
@@ -43,6 +48,9 @@ namespace GarlicPress
             uriBuilder.Query = query.ToString();
             string url = uriBuilder.ToString();
 
+            // Wait for an available slot (based on maxThreads)
+            await _semaphore.WaitAsync();
+
             try
             {
                 HttpClient client = new HttpClient();
@@ -56,6 +64,17 @@ namespace GarlicPress
                 GameResponse? game = JsonSerializer.Deserialize<GameResponse>(json);
                 if (game != null && client is not null)
                 {
+                    //If the user has a maxthreads value set in their account, use that value to set the semaphore count
+                    //This will allow multiple requests to be made at the same time
+                    if (game.response?.ssuser?.maxthreads is not null
+                        && _semaphoreCount == 1
+                        && Int32.TryParse(game.response.ssuser.maxthreads, out int maxthreads)
+                        && maxthreads > 1)
+                    {
+                        _semaphoreCount = maxthreads;
+                        _semaphore.Release(_semaphoreCount - 1); //Release the remaining slots
+                    }
+
                     game.status = "ok";
                     game.statusMessage = "ok";
                     return game;
@@ -65,13 +84,18 @@ namespace GarlicPress
             {
                 MessageBox.Show(ex.Message);
             }
+            finally
+            {
+                // Release the slot after finishing the operation
+                _semaphore.Release();
+            }
 
             return new GameResponse() { status = "error" };
         }
 
         public static async Task<SystemsResponse> GetSystemsData()
         {
-              UriBuilder uriBuilder = new UriBuilder("https://www.screenscraper.fr/api2/systemesListe.php");
+            UriBuilder uriBuilder = new UriBuilder("https://www.screenscraper.fr/api2/systemesListe.php");
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
             query["devid"] = ssDevId;
             query["devpassword"] = ssDevPassword;
@@ -82,6 +106,8 @@ namespace GarlicPress
 
             uriBuilder.Query = query.ToString();
             string url = uriBuilder.ToString();
+
+            await _semaphore.WaitAsync();
 
             try
             {
@@ -105,13 +131,18 @@ namespace GarlicPress
             {
                 MessageBox.Show(ex.Message);
             }
+            finally
+            {
+                // Release the slot after finishing the operation
+                _semaphore.Release();
+            }
 
             return new SystemsResponse() { status = "error" };
         }
 
-        public static async Task<MediaResponse?> DownloadGameMedia(GameResponse game, string mediaType = "box-3D", string region = "")
+        public static async Task<MediaResponse?> DownloadGameMedia(GameResponse? game, string mediaType = "box-3D", string region = "")
         {
-            if (game?.status != "error")
+            if (game is not null && game.status != "error")
             {
                 HttpClient httpClient = new HttpClient();
 
@@ -133,13 +164,19 @@ namespace GarlicPress
                         return new MediaResponse(mediaDownloadPath, media.region);
                     }
 
-                    using (var s = await httpClient.GetStreamAsync(new Uri(media.url)))
+                    await _semaphore.WaitAsync();
+
+                    try
                     {
-                        using (var fs = new FileStream(mediaDownloadPath, FileMode.Create))
-                        {
-                            await s.CopyToAsync(fs);
-                        }
+                        using var s = await httpClient.GetStreamAsync(new Uri(media.url));
+                        using var fs = new FileStream(mediaDownloadPath, FileMode.Create);
+                        await s.CopyToAsync(fs);
                     }
+                    finally
+                    {
+                        _semaphore.Release();
+                    }
+
                     return new MediaResponse(mediaDownloadPath, media.region);
                 }
             }
@@ -172,13 +209,19 @@ namespace GarlicPress
                         return new MediaResponse(mediaDownloadPath, media.region);
                     }
 
-                    using (var s = await httpClient.GetStreamAsync(new Uri(media.url.Replace("amp;", "")))) //amp; is a bug in the api
+                    await _semaphore.WaitAsync();
+
+                    try
                     {
-                        using (var fs = new FileStream(mediaDownloadPath, FileMode.Create))
-                        {
-                            await s.CopyToAsync(fs);
-                        }
+                        using var s = await httpClient.GetStreamAsync(new Uri(media.url.Replace("amp;", ""))); //amp; is a bug in the api
+                        using var fs = new FileStream(mediaDownloadPath, FileMode.Create);
+                        await s.CopyToAsync(fs);
                     }
+                    finally
+                    {
+                        _semaphore.Release();
+                    }
+
                     return new MediaResponse(mediaDownloadPath, media.region);
                 }
             }

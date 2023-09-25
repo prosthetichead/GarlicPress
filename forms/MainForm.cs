@@ -129,6 +129,7 @@ namespace GarlicPress
                 //LETS GO We are Connected
                 GarlicSkin.ReadSkinFromDevice();
                 RefreshBrowserFiles();
+                UpdateFreeSpaceLabel();
             }
             else if (!connect)
             {
@@ -292,6 +293,14 @@ namespace GarlicPress
         {
             RefreshBrowserFiles();
             fileListBox.Focus();
+            UpdateFreeSpaceLabel();
+        }
+
+        private void UpdateFreeSpaceLabel()
+        {
+            var drive = (GarlicDrive)comboDrive.SelectedItem;
+            var freeSpace = ADBConnection.GetFreeSpace(drive.path);
+            txtFreeSpace.Text = "Free Space: " + freeSpace.Available ?? "N/A";
         }
 
         private void MainForm_DragDropEnter(object sender, DragEventArgs e)
@@ -427,7 +436,7 @@ namespace GarlicPress
 
             if (searchItems.Count > 0)
             {
-                GameArtUpdateForm gameArtUpdateForm = new GameArtUpdateForm(searchItems);
+                GameArtUpdateForm gameArtUpdateForm = new GameArtUpdateForm(searchItems, fileListBox.Items.Cast<FileStatistics>().ToList());
                 gameArtUpdateForm.ShowDialog();
 
                 RefreshBrowserFiles(selectedIndex);
@@ -532,7 +541,7 @@ namespace GarlicPress
                 }
                 if (searchItems.Count > 0)
                 {
-                    GameArtUpdateForm gameArtUpdateForm = new GameArtUpdateForm(searchItems);
+                    GameArtUpdateForm gameArtUpdateForm = new GameArtUpdateForm(searchItems, null);
                     gameArtUpdateForm.ShowDialog();
                 }
             }
