@@ -30,7 +30,7 @@ namespace GarlicPress
 
         FileStatistics? currentSelectedItem;
 
-        DebugLogForm debugLogForm;
+        DebugLogForm? debugLogForm;
 
         public MainForm()
         {
@@ -66,6 +66,8 @@ namespace GarlicPress
             comboSystems.DisplayMember = "name";
             comboSystems.ValueMember = "folder";
             comboSystems.BindingContext = this.BindingContext;
+
+            comboSortBy.DataSource = Enum.GetValues(typeof(SortBy));
 
             ADBConnection.StartADBServer();
             CheckConnection();
@@ -127,6 +129,7 @@ namespace GarlicPress
                 //LETS GO We are Connected
                 GarlicSkin.ReadSkinFromDevice();
                 RefreshBrowserFiles();
+                UpdateFreeSpaceLabel();
             }
             else if (!connect)
             {
@@ -143,6 +146,13 @@ namespace GarlicPress
             }
         }
 
+        private enum SortBy
+        {
+            Name,
+            Size,
+            Date
+        }
+
         private void RefreshBrowserFiles(int index = 0)
         {
             if (ADBConnection.deviceConnected)
@@ -150,6 +160,20 @@ namespace GarlicPress
                 var list = ADBConnection.GetDirectoryListing(SelectedRomPath);
                 var files = list.Where(w => w.Path != "." && w.Path != ".." && w.Path != "Imgs").OrderBy(o => o.Path).ToList();
                 fileListBox.ClearSelected();
+
+                switch (Enum.Parse<SortBy>(comboSortBy.SelectedItem.ToString() ?? "Name"))
+                {
+                    case SortBy.Name:
+                        files = files.OrderBy(o => o.Path).ToList();
+                        break;
+                    case SortBy.Size:
+                        files = files.OrderByDescending(o => o.Size).ToList();
+                        break;
+                    case SortBy.Date:
+                        files = files.OrderByDescending(o => o.Time).ToList();
+                        break;
+                }
+
                 fileListBox.DataSource = files;
                 if (files.Count > 0 && files.Count - 1 >= index)
                 {
@@ -165,24 +189,37 @@ namespace GarlicPress
             {
                 currentSelectedItem = item;
                 txtFileName.Text = item.Path;
+                UpdateImageFromDevice(item);
+            }
+        }
 
-                //get img file if one exists
-                string imgFile = Path.ChangeExtension(item.Path, ".png");
-                if (ADBConnection.DownloadFile(SelectedImgPath + imgFile, PathConstants.assetsTempPath + "gameart-down.png"))
-                {
-                    Bitmap overlayImage = (Bitmap)Image.FromFile(PathConstants.assetsTempPath + "gameart-down.png");
-                    picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage);
-                    overlayImage.Dispose();
-                    picGame.Refresh();
-                }
-                else
-                {
-                    Bitmap overlayImage = (Bitmap)Image.FromFile(PathConstants.assetSkinPath + "background.png");
-                    picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage);
-                    overlayImage.Dispose();
-                }
+        private void UpdateImageFromDevice(FileStatistics item)
+        {
+            List<string> filePaths = new List<string>();
+
+            foreach (FileStatistics fileStat in fileListBox.Items)
+            {
+                filePaths.Add(fileStat.Path);
+            }
+
+            //get img file if one exists
+            string imgFile = Path.ChangeExtension(item.Path, ".png");
+            if (ADBConnection.DownloadFile(SelectedImgPath + imgFile, PathConstants.assetsTempPath + "gameart-down.png"))
+            {
+                using var stream = new FileStream(PathConstants.assetsTempPath + "gameart-down.png", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                using var oImage = Image.FromStream(stream);
+                using Bitmap overlayImage = new Bitmap(oImage);
+                picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage, SelectedSystem, filePaths, (fileListBox.SelectedItem as FileStatistics)?.Path ?? imgFile);
                 picGame.Refresh();
             }
+            else
+            {
+                using var stream = new FileStream(PathConstants.assetSkinPath + "background.png", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                using var oImage = Image.FromStream(stream);
+                using Bitmap overlayImage = new Bitmap(oImage);
+                picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage, SelectedSystem, filePaths, (fileListBox.SelectedItem as FileStatistics)?.Path ?? imgFile);
+            }
+            picGame.Refresh();
         }
 
         private void miSettings_Click(object sender, EventArgs e)
@@ -256,6 +293,14 @@ namespace GarlicPress
         {
             RefreshBrowserFiles();
             fileListBox.Focus();
+            UpdateFreeSpaceLabel();
+        }
+
+        private void UpdateFreeSpaceLabel()
+        {
+            var drive = (GarlicDrive)comboDrive.SelectedItem;
+            var freeSpace = ADBConnection.GetFreeSpace(drive.path);
+            txtFreeSpace.Text = "Free Space: " + freeSpace.Available ?? "N/A";
         }
 
         private void MainForm_DragDropEnter(object sender, DragEventArgs e)
@@ -264,7 +309,7 @@ namespace GarlicPress
                 e.Effect = DragDropEffects.Copy;
         }
 
-        private void MainForm_DragDrop(object sender, DragEventArgs e)
+        private async void MainForm_DragDrop(object sender, DragEventArgs e)
         {
             var system = (GarlicSystem)comboSystems.SelectedItem;
             var files = e.Data?.GetData(DataFormats.FileDrop) as string[];
@@ -274,13 +319,15 @@ namespace GarlicPress
                 if (attr != FileAttributes.Directory)
                 {
                     txtCurrentTask.Text = "uploading " + file + " for system " + system.name + " to SD " + comboDrive.SelectedIndex + 1;
-                    ADBConnection.UploadFile(file, SelectedRomPath + "/" + Path.GetFileName(file));
+                    Progress<int> progress = new Progress<int>(p => { txtCurrentTask.Text = $"uploading {p}%"; txtCurrentTask.ForeColor = p > 99 ? Color.Green : Color.OrangeRed; });
+                    await ADBConnection.UploadFileAsync(file, SelectedRomPath + "/" + Path.GetFileName(file).ToLower(), progress, CancellationToken.None);
                 }
                 else
                 {
                     MessageBox.Show(file + " apears to be a directory right now GarlicPress does not support uploading directories. ");
                 }
             }
+            txtCurrentTask.ForeColor = Color.Black;
             txtCurrentTask.Text = "upload complete";
             RefreshBrowserFiles();
         }
@@ -335,9 +382,9 @@ namespace GarlicPress
                 {
                     foreach (FileStatistics item in fileListBox.SelectedItems.Cast<FileStatistics>())
                     {
-                        var fullPath = "\"" + SelectedRomPath + "/" + item.Path + "\"";
+                        var fullPath = SelectedRomPath + "/" + item.Path;
                         string imgFile = Path.ChangeExtension(item.Path, ".png");
-                        var fullImgPath = "\"" + SelectedImgPath + imgFile + "\"";
+                        var fullImgPath = SelectedImgPath + imgFile;
                         ADBConnection.DeleteFile(fullPath);
                         ADBConnection.DeleteFile(fullImgPath);
                         txtCurrentTask.Text = item.Path + " Deleted ";
@@ -389,14 +436,14 @@ namespace GarlicPress
 
             if (searchItems.Count > 0)
             {
-                GameArtUpdateForm gameArtUpdateForm = new GameArtUpdateForm(searchItems);
+                GameArtUpdateForm gameArtUpdateForm = new GameArtUpdateForm(searchItems, fileListBox.Items.Cast<FileStatistics>().ToList());
                 gameArtUpdateForm.ShowDialog();
 
                 RefreshBrowserFiles(selectedIndex);
             }
         }
 
-        private void miBackupSaves_Click(object sender, EventArgs e)
+        private async void miBackupSaves_Click(object sender, EventArgs e)
         {
             if (ADBConnection.deviceConnected)
             {
@@ -404,14 +451,18 @@ namespace GarlicPress
 
                 foreach (GarlicDrive drive in comboDrive.Items)
                 {
-
                     var backupPath = Path.Combine(backupDir, "SD" + drive.number);
                     Directory.CreateDirectory(backupPath);
                     var readPath = drive.path + "/Saves";
 
-                    txtCurrentTask.Text = "Backing up Saves on SD Card " + drive.number + " to " + backupPath;
+                    var backupText = "Backing up Saves on SD Card " + drive.number + " to " + backupPath;
+                    txtCurrentTask.Text = backupText;
 
-                    ADBConnection.DownloadDirectory(readPath, backupPath);
+                    var progress = new Progress<int>(p => { txtCurrentTask.Text = backupText + " " + p.ToString("000") + "%"; });
+
+                    await ADBConnection.DownloadDirectory(readPath, backupPath, progress);
+
+                    txtCurrentTask.Text = $"Backup Complete to {backupPath}";
                 }
             }
         }
@@ -442,12 +493,28 @@ namespace GarlicPress
 
         private void btnSelectAll_Click(object sender, EventArgs e)
         {
-
             fileListBox.BeginUpdate();
             //fileListBox.SelectionMode = SelectionMode.MultiSimple;
             for (int i = 0; i < fileListBox.Items.Count; i++)
                 fileListBox.SetSelected(i, true);
             //fileListBox.SelectionMode = SelectionMode.MultiExtended;
+            fileListBox.EndUpdate();
+            fileListBox.Focus();
+        }
+
+        private void btnSelectAllWithoutArt_Click(object sender, EventArgs e)
+        {
+            var list = ADBConnection.GetDirectoryListing(SelectedRomPath + "/Imgs");
+            fileListBox.BeginUpdate();
+            for (int i = 0; i < fileListBox.Items.Count; i++)
+            {
+                if (!list.Any(a => Path.GetFileNameWithoutExtension(a.Path) == Path.GetFileNameWithoutExtension((fileListBox.Items[i] as FileStatistics)?.Path)))
+                {
+                    fileListBox.SetSelected(i, true);
+                    continue;
+                }
+                fileListBox.SetSelected(i, false);
+            }
             fileListBox.EndUpdate();
             fileListBox.Focus();
         }
@@ -474,7 +541,7 @@ namespace GarlicPress
                 }
                 if (searchItems.Count > 0)
                 {
-                    GameArtUpdateForm gameArtUpdateForm = new GameArtUpdateForm(searchItems);
+                    GameArtUpdateForm gameArtUpdateForm = new GameArtUpdateForm(searchItems, null);
                     gameArtUpdateForm.ShowDialog();
                 }
             }
@@ -482,13 +549,41 @@ namespace GarlicPress
 
         private void miShowDebugLog_Click(object sender, EventArgs e)
         {
-            debugLogForm.Show();
+            debugLogForm?.Show();
         }
 
         private void btnOpenEditor_Click(object sender, EventArgs e)
         {
-            EditMediaLayersForm editLayersForm = new(SelectedDrive, SelectedSystem, txtFileName.Text);
-            editLayersForm.Show();
+            EditMediaLayersForm.Instance._garlicDrive = SelectedDrive;
+            EditMediaLayersForm.Instance._garlicSystem = SelectedSystem;
+            EditMediaLayersForm.Instance._game = txtFileName.Text;
+            EditMediaLayersForm.Instance.UpdateModels();
+            EditMediaLayersForm.Instance.FormClosing -= EditMediaLayersForm_FormClosing;
+            EditMediaLayersForm.Instance.FormClosing += EditMediaLayersForm_FormClosing;
+            EditMediaLayersForm.Instance.ShowDialog();
+        }
+
+        private void EditMediaLayersForm_FormClosing(object? sender, FormClosingEventArgs e)
+        {
+            if (sender is EditMediaLayersForm form && form.Visible == false)
+            {
+                GameMediaGeneration.LoadMediaLayoutJson();
+                if (fileListBox.SelectedItem is FileStatistics item)
+                {
+                    UpdateImageFromDevice(item);
+                }
+            }
+        }
+
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var docForm = new DocumentationForm("help.md");
+            docForm.Show();
+        }
+
+        private void comboSortBy_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RefreshBrowserFiles();
         }
     }
 }

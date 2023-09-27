@@ -47,6 +47,7 @@
             toolStripSeparator2 = new ToolStripSeparator();
             miUpdateAllArt = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
+            helpToolStripMenuItem = new ToolStripMenuItem();
             notifyIcon = new NotifyIcon(components);
             notifyIconMenu = new ContextMenuStrip(components);
             miOpenGalicPress = new ToolStripMenuItem();
@@ -64,6 +65,10 @@
             label3 = new Label();
             btnRename = new Button();
             btnOpenEditor = new Button();
+            btnSelectAllWithoutArt = new Button();
+            comboSortBy = new ComboBox();
+            label4 = new Label();
+            txtFreeSpace = new ToolStripStatusLabel();
             statusStrip.SuspendLayout();
             menuStrip.SuspendLayout();
             notifyIconMenu.SuspendLayout();
@@ -74,7 +79,7 @@
             // 
             statusStrip.BackColor = SystemColors.ControlLight;
             statusStrip.ImageScalingSize = new Size(28, 28);
-            statusStrip.Items.AddRange(new ToolStripItem[] { txtUpdate, toolStripDeviceStatus, txtCurrentTask });
+            statusStrip.Items.AddRange(new ToolStripItem[] { txtUpdate, toolStripDeviceStatus, txtCurrentTask, txtFreeSpace });
             statusStrip.Location = new Point(0, 588);
             statusStrip.Name = "statusStrip";
             statusStrip.RightToLeft = RightToLeft.Yes;
@@ -117,10 +122,10 @@
             fileListBox.ForeColor = Color.White;
             fileListBox.FormattingEnabled = true;
             fileListBox.ItemHeight = 17;
-            fileListBox.Location = new Point(12, 72);
+            fileListBox.Location = new Point(12, 106);
             fileListBox.Name = "fileListBox";
             fileListBox.SelectionMode = SelectionMode.MultiExtended;
-            fileListBox.Size = new Size(343, 510);
+            fileListBox.Size = new Size(343, 476);
             fileListBox.TabIndex = 5;
             fileListBox.SelectedIndexChanged += fileListBox_SelectedIndexChanged;
             fileListBox.KeyDown += fileListBox_KeyDown;
@@ -128,7 +133,7 @@
             // menuStrip
             // 
             menuStrip.ImageScalingSize = new Size(28, 28);
-            menuStrip.Items.AddRange(new ToolStripItem[] { miFile, toolsToolStripMenuItem, aboutToolStripMenuItem });
+            menuStrip.Items.AddRange(new ToolStripItem[] { miFile, toolsToolStripMenuItem, aboutToolStripMenuItem, helpToolStripMenuItem });
             menuStrip.Location = new Point(0, 0);
             menuStrip.Name = "menuStrip";
             menuStrip.Size = new Size(1013, 24);
@@ -209,6 +214,13 @@
             aboutToolStripMenuItem.Size = new Size(52, 20);
             aboutToolStripMenuItem.Text = "About";
             aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
+            // 
+            // helpToolStripMenuItem
+            // 
+            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            helpToolStripMenuItem.Size = new Size(44, 20);
+            helpToolStripMenuItem.Text = "Help";
+            helpToolStripMenuItem.Click += helpToolStripMenuItem_Click;
             // 
             // notifyIcon
             // 
@@ -302,7 +314,7 @@
             // btnUpdateSelectedArt
             // 
             btnUpdateSelectedArt.FlatStyle = FlatStyle.Flat;
-            btnUpdateSelectedArt.Location = new Point(449, 556);
+            btnUpdateSelectedArt.Location = new Point(585, 556);
             btnUpdateSelectedArt.Name = "btnUpdateSelectedArt";
             btnUpdateSelectedArt.Size = new Size(82, 26);
             btnUpdateSelectedArt.TabIndex = 15;
@@ -366,13 +378,51 @@
             // btnOpenEditor
             // 
             btnOpenEditor.FlatStyle = FlatStyle.Flat;
-            btnOpenEditor.Location = new Point(537, 556);
+            btnOpenEditor.Location = new Point(673, 556);
             btnOpenEditor.Name = "btnOpenEditor";
             btnOpenEditor.Size = new Size(82, 26);
             btnOpenEditor.TabIndex = 23;
             btnOpenEditor.Text = "Open Editor";
             btnOpenEditor.UseVisualStyleBackColor = true;
             btnOpenEditor.Click += btnOpenEditor_Click;
+            // 
+            // btnSelectAllWithoutArt
+            // 
+            btnSelectAllWithoutArt.FlatStyle = FlatStyle.Flat;
+            btnSelectAllWithoutArt.Location = new Point(449, 556);
+            btnSelectAllWithoutArt.Name = "btnSelectAllWithoutArt";
+            btnSelectAllWithoutArt.Size = new Size(130, 26);
+            btnSelectAllWithoutArt.TabIndex = 24;
+            btnSelectAllWithoutArt.Text = "Select All without Art";
+            btnSelectAllWithoutArt.UseVisualStyleBackColor = true;
+            btnSelectAllWithoutArt.Click += btnSelectAllWithoutArt_Click;
+            // 
+            // comboSortBy
+            // 
+            comboSortBy.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboSortBy.FlatStyle = FlatStyle.System;
+            comboSortBy.FormattingEnabled = true;
+            comboSortBy.Items.AddRange(new object[] { "GameBoy" });
+            comboSortBy.Location = new Point(65, 72);
+            comboSortBy.Name = "comboSortBy";
+            comboSortBy.Size = new Size(290, 23);
+            comboSortBy.TabIndex = 25;
+            comboSortBy.SelectedIndexChanged += comboSortBy_SelectedIndexChanged;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(12, 75);
+            label4.Name = "label4";
+            label4.Size = new Size(47, 15);
+            label4.TabIndex = 26;
+            label4.Text = "Sort by:";
+            // 
+            // txtFreeSpace
+            // 
+            txtFreeSpace.Name = "txtFreeSpace";
+            txtFreeSpace.Size = new Size(91, 19);
+            txtFreeSpace.Text = "Free Space: N/A";
             // 
             // MainForm
             // 
@@ -382,6 +432,9 @@
             AutoSize = true;
             AutoValidate = AutoValidate.EnablePreventFocusChange;
             ClientSize = new Size(1013, 612);
+            Controls.Add(label4);
+            Controls.Add(comboSortBy);
+            Controls.Add(btnSelectAllWithoutArt);
             Controls.Add(btnOpenEditor);
             Controls.Add(btnRename);
             Controls.Add(label3);
@@ -401,7 +454,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip;
             MaximizeBox = false;
-            MaximumSize = new Size(9997, 9989);
+            MaximumSize = new Size(9994, 9978);
             Name = "MainForm";
             SizeGripStyle = SizeGripStyle.Hide;
             StartPosition = FormStartPosition.CenterScreen;
@@ -458,5 +511,10 @@
         private Button btnRename;
         private ToolStripMenuItem miShowDebugLog;
         private Button btnOpenEditor;
+        private ToolStripMenuItem helpToolStripMenuItem;
+        private Button btnSelectAllWithoutArt;
+        private ComboBox comboSortBy;
+        private Label label4;
+        private ToolStripStatusLabel txtFreeSpace;
     }
 }

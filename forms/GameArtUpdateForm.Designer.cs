@@ -46,6 +46,7 @@
             txtLog = new RichTextBox();
             btnClearCompleted = new Button();
             btnClose = new Button();
+            txtRemainingTime = new TextBox();
             ((System.ComponentModel.ISupportInitialize)dataGridSearch).BeginInit();
             tabControl.SuspendLayout();
             tabOptions.SuspendLayout();
@@ -193,6 +194,7 @@
             // tabLog
             // 
             tabLog.BackColor = Color.Black;
+            tabLog.Controls.Add(txtRemainingTime);
             tabLog.Controls.Add(ImgArtPreview);
             tabLog.Controls.Add(txtLog);
             tabLog.Location = new Point(4, 24);
@@ -206,7 +208,7 @@
             // 
             ImgArtPreview.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             ImgArtPreview.BackColor = Color.Black;
-            ImgArtPreview.Location = new Point(23, 189);
+            ImgArtPreview.Location = new Point(24, 189);
             ImgArtPreview.Name = "ImgArtPreview";
             ImgArtPreview.Size = new Size(320, 240);
             ImgArtPreview.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -224,7 +226,7 @@
             txtLog.Name = "txtLog";
             txtLog.ReadOnly = true;
             txtLog.ScrollBars = RichTextBoxScrollBars.None;
-            txtLog.Size = new Size(357, 179);
+            txtLog.Size = new Size(259, 179);
             txtLog.TabIndex = 5;
             txtLog.Text = "";
             // 
@@ -252,6 +254,17 @@
             btnClose.Visible = false;
             btnClose.Click += btnClose_Click;
             // 
+            // txtRemainingTime
+            // 
+            txtRemainingTime.BackColor = SystemColors.InfoText;
+            txtRemainingTime.Cursor = Cursors.Cross;
+            txtRemainingTime.ForeColor = SystemColors.Info;
+            txtRemainingTime.Location = new Point(268, 6);
+            txtRemainingTime.Multiline = true;
+            txtRemainingTime.Name = "txtRemainingTime";
+            txtRemainingTime.Size = new Size(89, 177);
+            txtRemainingTime.TabIndex = 7;
+            // 
             // GameArtUpdateForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -275,6 +288,7 @@
             tabOptions.ResumeLayout(false);
             tabOptions.PerformLayout();
             tabLog.ResumeLayout(false);
+            tabLog.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)ImgArtPreview).EndInit();
             ResumeLayout(false);
         }
@@ -299,5 +313,6 @@
         private Label label5;
         private ComboBox cbMediaLayerCollection;
         private CheckBox cb_AllowOnlyLocalMedia;
+        private TextBox txtRemainingTime;
     }
 }

@@ -13,11 +13,16 @@ using System.Web;
 using System.Windows.Forms;
 using static GarlicPress.GameResponse;
 using static GarlicPress.MediaLayer;
+using static GarlicPress.SSMediaType;
+using static GarlicPress.SystemsResponse;
 
 namespace GarlicPress
 {
     internal static partial class ScreenScraper
     {
+        private static SemaphoreSlim _semaphore = new(1, 10); //used to handle multiple requests to generate media at the same time
+        private static int _semaphoreCount = 1;
+
         public static async Task<GameResponse> GetGameData(GarlicSystem system, string searchText, SearchType searchType = SearchType.GameName)
         {
             UriBuilder uriBuilder = new UriBuilder("https://www.screenscraper.fr/api2/jeuInfos.php");
@@ -43,31 +48,101 @@ namespace GarlicPress
             uriBuilder.Query = query.ToString();
             string url = uriBuilder.ToString();
 
-            HttpClient client = new HttpClient();
-            var response = await client.GetAsync(url);
+            // Wait for an available slot (based on maxThreads)
+            await _semaphore.WaitAsync();
 
-            var json = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode && client is not null)
+            try
             {
-                return new GameResponse() { status = "error", statusMessage = response.StatusCode + "  " + json };
+                HttpClient client = new HttpClient();
+                var response = await client.GetAsync(url);
+
+                var json = await response.Content.ReadAsStringAsync();
+                if (!response.IsSuccessStatusCode && client is not null)
+                {
+                    return new GameResponse() { status = "error", statusMessage = response.StatusCode + "  " + json };
+                }
+                GameResponse? game = JsonSerializer.Deserialize<GameResponse>(json);
+                if (game != null && client is not null)
+                {
+                    //If the user has a maxthreads value set in their account, use that value to set the semaphore count
+                    //This will allow multiple requests to be made at the same time
+                    if (game.response?.ssuser?.maxthreads is not null
+                        && _semaphoreCount == 1
+                        && Int32.TryParse(game.response.ssuser.maxthreads, out int maxthreads)
+                        && maxthreads > 1)
+                    {
+                        _semaphoreCount = maxthreads;
+                        _semaphore.Release(_semaphoreCount - 1); //Release the remaining slots
+                    }
+
+                    game.status = "ok";
+                    game.statusMessage = "ok";
+                    return game;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                // Release the slot after finishing the operation
+                _semaphore.Release();
             }
 
-            GameResponse? game = JsonSerializer.Deserialize<GameResponse>(json);
-            if (game != null && client is not null)
-            {
-                game.status = "ok";
-                game.statusMessage = "ok";
-                return game;
-            }
-            else
-            {
-                return new GameResponse() { status = "error", statusMessage = response.StatusCode + "  " + json };
-            }
+            return new GameResponse() { status = "error" };
         }
 
-        public static async Task<GameMediaResponse?> DownloadMedia(GameResponse game, string mediaType = "box-3D", string region = "")
+        public static async Task<SystemsResponse> GetSystemsData()
         {
-            if (game.status != "error")
+            UriBuilder uriBuilder = new UriBuilder("https://www.screenscraper.fr/api2/systemesListe.php");
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+            query["devid"] = ssDevId;
+            query["devpassword"] = ssDevPassword;
+            query["softname"] = ssSoftname;
+            query["ssid"] = Settings.Default.ssUsername;
+            query["sspassword"] = Settings.Default.ssPassword;
+            query["output"] = "json";
+
+            uriBuilder.Query = query.ToString();
+            string url = uriBuilder.ToString();
+
+            await _semaphore.WaitAsync();
+
+            try
+            {
+                HttpClient client = new HttpClient();
+                var response = await client.GetAsync(url);
+
+                var json = await response.Content.ReadAsStringAsync();
+                if (!response.IsSuccessStatusCode && client is not null)
+                {
+                    return new SystemsResponse() { status = "error", statusMessage = response.StatusCode + "  " + json };
+                }
+                SystemsResponse? system = JsonSerializer.Deserialize<SystemsResponse>(json);
+                if (system != null && client is not null)
+                {
+                    system.status = "ok";
+                    system.statusMessage = "ok";
+                    return system;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                // Release the slot after finishing the operation
+                _semaphore.Release();
+            }
+
+            return new SystemsResponse() { status = "error" };
+        }
+
+        public static async Task<MediaResponse?> DownloadGameMedia(GameResponse? game, string mediaType = "box-3D", string region = "")
+        {
+            if (game is not null && game.status != "error")
             {
                 HttpClient httpClient = new HttpClient();
 
@@ -86,17 +161,68 @@ namespace GarlicPress
 
                     if (File.Exists(mediaDownloadPath))
                     {
-                        return new GameMediaResponse(mediaDownloadPath, media.region);
+                        return new MediaResponse(mediaDownloadPath, media.region);
                     }
 
-                    using (var s = await httpClient.GetStreamAsync(new Uri(media.url)))
+                    await _semaphore.WaitAsync();
+
+                    try
                     {
-                        using (var fs = new FileStream(mediaDownloadPath, FileMode.Create))
-                        {
-                            await s.CopyToAsync(fs);
-                        }
+                        using var s = await httpClient.GetStreamAsync(new Uri(media.url));
+                        using var fs = new FileStream(mediaDownloadPath, FileMode.Create);
+                        await s.CopyToAsync(fs);
                     }
-                    return new GameMediaResponse(mediaDownloadPath, media.region);
+                    finally
+                    {
+                        _semaphore.Release();
+                    }
+
+                    return new MediaResponse(mediaDownloadPath, media.region);
+                }
+            }
+            return null;
+        }
+
+
+        public static async Task<MediaResponse?> DownloadSystemMedia(SystemsResponse systems, int systemId, string mediaType = "system-box-3D", string region = "")
+        {
+            if (systems.status != "error")
+            {
+                HttpClient httpClient = new HttpClient();
+
+                List<string> ssRegionOrders = Settings.Default.ssRegionOrder.Split(',').ToList();
+
+                var system = systems.response.systemes.FirstOrDefault(w => w.id == systemId);
+
+                var medias = system?.medias.Where(x => x.type == mediaType.Replace("system-", "")).OrderBy(o => ssRegionOrders.IndexOf(o.region));
+
+                if (medias is not null && medias.Count() > 0)
+                {
+                    Media? media = GetMedia(region, ssRegionOrders, medias);
+
+                    Directory.CreateDirectory(PathConstants.assetsTempPath);
+
+                    string mediaDownloadPath = PathConstants.assetsTempPath + media.region + system!.id + mediaType + "." + media.format;
+
+                    if (File.Exists(mediaDownloadPath))
+                    {
+                        return new MediaResponse(mediaDownloadPath, media.region);
+                    }
+
+                    await _semaphore.WaitAsync();
+
+                    try
+                    {
+                        using var s = await httpClient.GetStreamAsync(new Uri(media.url.Replace("amp;", ""))); //amp; is a bug in the api
+                        using var fs = new FileStream(mediaDownloadPath, FileMode.Create);
+                        await s.CopyToAsync(fs);
+                    }
+                    finally
+                    {
+                        _semaphore.Release();
+                    }
+
+                    return new MediaResponse(mediaDownloadPath, media.region);
                 }
             }
             return null;

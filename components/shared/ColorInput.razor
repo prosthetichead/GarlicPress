@@ -1,12 +1,12 @@
 ﻿<div class="flex flex-col p-4 space-y-4 shadow-lg">
     @if (Value is null)
     {
-        <button @onclick="SetBlack" class="px-4 py-2 text-white bg-black rounded hover:bg-gray-900">Set Black</button>
+        <button @onclick="SetBlack" class="px-4 py-2 bg-black text-white rounded hover:bg-gray-900">Set Black</button>
     }
     else
     {
         <div>
-            <label for="colorPicker" class="block text-white text-sm font-medium">Color:</label>
+            <label for="colorPicker" class="block text-sm font-medium">Color:</label>
             <input type="color" id="colorPicker" @bind:event="oninput" @bind="RgbValue" @bind:after="UpdateCompositeValue" class="mt-1 p-1 w-full border rounded shadow-sm focus:ring focus:ring-opacity-50" />
         </div>
 
@@ -20,8 +20,8 @@
                       LabelValue="@((@Opacity * 100).ToString("F0") + "%")">
         </NumberSlider>
 
-        <button @onclick="SetNoColor" class="px-4 py-2 text-black bg-gray-200 border rounded hover:bg-gray-300">No Color</button>
-        <p class="text-white">Result: @Value</p>
+        <button @onclick="SetNoColor" class="px-4 py-2 text-black bg-gray-400 border rounded hover:bg-gray-500">No Color</button>
+        <p>Result: @Value</p>
     }
 </div>
 

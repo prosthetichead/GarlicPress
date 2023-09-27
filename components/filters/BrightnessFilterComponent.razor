@@ -3,7 +3,7 @@
               Value="@BrightnessFilterSettings.Brightness"
               ValueChanged="@(value => { BrightnessFilterSettings.Brightness = value; OnApplyFilters.InvokeAsync(); })"
               Max="5.0F"
-              Min="-5.0F"
+              Min="0.0F"
               Step="0.01F"
               LabelValue="@((@BrightnessFilterSettings.Brightness * 100).ToString("F0") + "%")">
 </NumberSlider>

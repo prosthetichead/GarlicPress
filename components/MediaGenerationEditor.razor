@@ -2,6 +2,7 @@
 @using GarlicPress.components.shared;
 @using GarlicPress.constants;
 @using GarlicPress.forms;
+@using System.Drawing.Imaging;
 @using static GarlicPress.MediaLayer;
 @using static GarlicPress.components.shared.FabricCanvas<MediaLayer>;
 @inject EditMediaLayersForm editMediaLayersForm
@@ -62,7 +63,7 @@
         }
 
     </div>
-    <div class="grid grid-cols-3 gap-2">
+    <div class="grid grid-cols-7 gap-2">
         <div>
             <Select @bind-Value="_selectedDriveValue" @bind-Value:after="(() => { _selectedDrive = GarlicDrive.GetGarlicDrives().FirstOrDefault(x => x.name == _selectedDriveValue); UpdateGames();})"
                     Items="GarlicDrive.GetGarlicDrives()">
@@ -72,7 +73,7 @@
                 </Option>
             </Select>
         </div>
-        <div>
+        <div class="col-span-2">
             <Select @bind-Value="_selectedSystemValue" @bind-Value:after="(() => { _selectedSystem = GarlicSystem.GetAllSystems().FirstOrDefault(x => x.name == _selectedSystemValue); UpdateGames();})"
                     Items="GarlicSystem.GetAllSystems()">
                 <Label>System</Label>
@@ -81,17 +82,34 @@
                 </Option>
             </Select>
         </div>
-        <div>
-
+        <div class="col-span-4">
             @if (_games.Any())
             {
-                <Select @bind-Value="_selectedGame" @bind-Value:after="(async () => { await UpdateGameArt(); })"
-                        Items="_games">
-                    <Label>Games</Label>
-                    <Option Context="game">
-                    <option value="@game">@game</option>
-                    </Option>
-                </Select>
+                <div class="flex flex-grow">
+                    <div class="w-full">
+                        <Select @bind-Value="_selectedGame" @bind-Value:after="(async () => { await UpdateGameArt(); })"
+                                Items="_games">
+                            <Label>Games</Label>
+                            <Option Context="game">
+                            <option value="@game">@game</option>
+                            </Option>
+                        </Select>
+                    </div>
+                    <div class="flex items-stretch">
+                        <button @onclick="(() => ChangeGame(-1))" class="w-10 h-full flex items-center justify-center bg-gray-200 hover:bg-gray-300 rounded">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform rotate-180" viewBox="0 3 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.293 9.293a1 1 0 011.414 0L10 12.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="flex items-stretch">
+                        <button @onclick="() => ChangeGame(1)" class="w-10 h-full flex items-center justify-center bg-gray-200 hover:bg-gray-300 rounded">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.293 9.293a1 1 0 011.414 0L10 12.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
             }
             else
             {
@@ -104,7 +122,7 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-3 overflow-auto gap-2 h-[50vh]">
+    <div class="grid grid-cols-4 overflow-auto gap-2 h-[50vh]">
         <div class="col-span-2 flex py-2 justify-center items-center overscroll-auto relative h-[50vh]">
             <FabricCanvas TItem="MediaLayer" @ref="_fabricCanvas" MediaUpdated="OnMediaUpdated" MediaDeleted="OnMediaDeleted" MediaSelected="OnMediaSelected" MediaUnselected="OnMediaUnselected" />
 
@@ -119,9 +137,14 @@
             }
 
         </div>
-
-        <div class="flex-initial border rounded-sm border-gray-800 overflow-auto scrollbar my-2 p-2">
-            <MediaLayerControl IsImageSelected="_imageSelected" OnApplyFilters="async () => await UpdateImage(_selectedMediaLayer, true)" mediaLayer="_selectedMediaLayer" mediaLayerChanged="async () => await UpdateImage(_selectedMediaLayer)" />
+        <div class="flex-initial border rounded-sm border-gray-800 overflow-auto scrollbar my-1 p-1">
+            @if (_selectedMediaLayerCollection is not null && _fabricCanvas is not null)
+            {
+                <MediaLayers MediaLayerList="_selectedMediaLayerCollection.mediaLayers" @bind-SelectedMediaLayer="_selectedMediaLayer" OnMediaLayerDelete="async id => { OnMediaDeleted(id); await _fabricCanvas.RemoveImage(id); }" OnMediaLayerSelected="_fabricCanvas.SelectObject" />
+            }
+        </div>
+        <div class="flex-initial border rounded-sm border-gray-800 overflow-auto scrollbar m-1 p-1">
+            <MediaLayerControl IsImageSelected="_imageSelected" OnApplyFilters="async () => await UpdateImage(_selectedMediaLayer, _selectedSystem, true)" mediaLayer="_selectedMediaLayer" mediaLayerChanged="async () => await UpdateImage(_selectedMediaLayer, _selectedSystem)" />
         </div>
     </div>
 
@@ -132,13 +155,59 @@
 
         <div class="grid gap-2 ml-2">
             <Button ButtonText="@(_artUpdateRunning ? "Updating..." : "Update")" disabled="@_artUpdateRunning" OnClick="(async () => { await UpdateGameArt(); })"></Button>
+            <Button ButtonText="@(_artUpdateDeviceRunning ? "Updating Art on Device..." : "Update Art on Device")" disabled="@_artUpdateDeviceRunning" OnClick="(async () => { await UpdateGameArtDevice(); })"></Button>
             <Button ButtonText="@(_saving ? "Saving..." : "Save")" disabled="@_saving" OnClick="SaveMediaLayoutCollection"></Button>
             <Button ButtonText="Close" OnClick="() => { editMediaLayersForm.Close(); }"></Button>
         </div>
     </div>
 </div>
 
+<ModalComponent @ref="_artUpdateModal">
+    <p class="m-2 p-2 ">
+        @((MarkupString)_artUpdateDeviceStatus)
+    </p>
+</ModalComponent>
+
 @code {
+    public GarlicDrive? _selectedDrive
+    {
+        get
+        {
+            return EditMediaLayersForm.Instance._garlicDrive;
+        }
+        set
+        {
+            EditMediaLayersForm.Instance._garlicDrive = value;
+        }
+    }
+    string? _selectedDriveValue { get; set; }
+
+    public GarlicSystem? _selectedSystem
+    {
+        get
+        {
+            return EditMediaLayersForm.Instance._garlicSystem;
+        }
+        set
+        {
+            EditMediaLayersForm.Instance._garlicSystem = value;
+        }
+    }
+    string? _selectedSystemValue { get; set; }
+
+    public string _selectedGame
+    {
+        get
+        {
+            return EditMediaLayersForm.Instance._game;
+        }
+        set
+        {
+            EditMediaLayersForm.Instance._game = value;
+        }
+    }
+    List<string> _games = new();
+
     FabricCanvas<MediaLayer>? _fabricCanvas;
 
     Guid? _selectedMediaLayerCollectionId { get; set; }
@@ -150,20 +219,13 @@
 
     bool _artUpdateRunning;
 
+    bool _artUpdateDeviceRunning;
+    string _artUpdateDeviceStatus = "";
+    ModalComponent? _artUpdateModal;
+
     string _selectedImgPath { get { return _selectedDrive?.path + "/Roms/" + _selectedSystem?.folder + "/Imgs/"; } }
     string _selectedRomPath { get { return _selectedDrive?.romPath + "/" + _selectedSystem?.folder; } }
 
-    [Parameter]
-    public GarlicDrive? _selectedDrive { get; set; }
-    string? _selectedDriveValue { get; set; }
-
-    [Parameter]
-    public GarlicSystem? _selectedSystem { get; set; }
-    string? _selectedSystemValue { get; set; }
-
-    [Parameter]
-    public string _selectedGame { get; set; } = "";
-    List<string> _games = new();
 
     GameResponse? _game;
 
@@ -188,8 +250,25 @@
         if (firstRender)
         {
             await UpdateGameArt();
+            EditMediaLayersForm.Instance.OnUpdatedModels += OnUpdatedModels_Event;
             StateHasChanged();
         }
+    }
+
+    async Task ChangeGame(int direction)
+    {
+        var currentIndex = _games.IndexOf(_selectedGame);
+        var newIndex = (currentIndex + direction + _games.Count) % _games.Count;
+        _selectedGame = _games[newIndex];
+        await UpdateGameArt();
+    }
+
+    async void OnUpdatedModels_Event()
+    {
+        _selectedDriveValue = _selectedDrive?.name;
+        _selectedSystemValue = _selectedSystem?.name;
+        UpdateGames();
+        await UpdateGameArt();
     }
 
     async void SaveMediaLayoutCollection()
@@ -268,35 +347,141 @@
             _artUpdateRunning = true;
             StateHasChanged();
             await Task.Yield();
-            await Task.Delay(100);
+
+            //Wait for the canvas to be ready
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+            while (_fabricCanvas.module is null)
+            {
+                if (sw.ElapsedMilliseconds > 5000)
+                {
+                    sw.Stop();
+                    break;
+                }
+                await Task.Delay(100);
+            }
 
             await _fabricCanvas.ClearCanvas();
-            await _fabricCanvas.AddBackgroundImage(PathConstants.assetSkinPath.Replace("wwwroot/", "") + "background.png");
+
+            await AddSkinMedia();
 
             await AddText();
 
             _game = await ScreenScraper.GetGameData(_selectedSystem, _selectedGame, SearchType.GameName);
             if (_selectedMediaLayerCollection is not null)
             {
-                await foreach (var gameMedia in GameMediaGeneration.GetGameMedia(_game, _selectedMediaLayerCollection))
+                if (_game == null || _game?.status == "error")
                 {
-                    if (gameMedia.media is GameMediaResponse media)
+                    MessageBox.Show("Game not Found : " + _game?.statusMessage + "\nUpdating preview without game media", "warn");
+                }
+
+                await foreach (var gameMedia in GameMediaGeneration.GetGameMedia(_game, _selectedMediaLayerCollection, _selectedSystem))
+                {
+                    if (gameMedia.media is MediaResponse media)
                     {
                         var mediaPath = media.path.Replace("wwwroot/", "");
                         await AddImageToCanvas(mediaPath, gameMedia.layer);
                     }
                 }
             }
-            else if (_game != null)
-            {
-                MessageBox.Show("Game not Found : " + _game.statusMessage, "warn");
-            }
             else
             {
-                MessageBox.Show("Error : null GameResponse! " + _selectedGame ?? "", "error");
+                MessageBox.Show("Error : no Media Layer Collection Selected", "error");
             }
 
             _artUpdateRunning = false;
+            StateHasChanged();
+        }
+    }
+
+    async Task AddSkinMedia()
+    {
+        if (_fabricCanvas is not null && _selectedSystem is not null)
+        {
+            await _fabricCanvas.AddBackgroundImage(PathConstants.assetSkinPath.Replace("wwwroot/", "") + "background.png");
+
+            foreach (var skinMedia in SkinMedia.GetSkinMedias())
+            {
+                // Prepend the asset path for media files
+                string mediaPath = PathConstants.assetSkinPath + skinMedia.MediaFileName;
+
+                string textColor = "white";
+                int fontSize = 28;
+
+                if (GarlicSkin.skinSettings is not null)
+                {
+                    textColor = GarlicSkin.skinSettings.colorguide ?? "#FFFFFF";
+                    fontSize = GarlicSkin.languageFiles?.FirstOrDefault()?.garlicLanguageSettings?.fontsize ?? 28;
+                }
+
+                switch (skinMedia.SkinMediaType)
+                {
+                    case SkinMedia.SkinMediaTypes.Picture:
+                        if (File.Exists(mediaPath))
+                        {
+                            await _fabricCanvas.AddStaticImage(mediaPath.Replace("wwwroot/", ""), skinMedia.X, skinMedia.Y);
+                        }
+                        break;
+                    case SkinMedia.SkinMediaTypes.Text:
+                        await _fabricCanvas.AddText(skinMedia.Text, skinMedia.X, skinMedia.Y, textColor, "GarlicFont", fontSize);
+                        break;
+                    case SkinMedia.SkinMediaTypes.SystemName:
+                        await _fabricCanvas.AddText(_selectedSystem.folder, skinMedia.X, skinMedia.Y, textColor, "GarlicFont", fontSize);
+                        break;
+                    case SkinMedia.SkinMediaTypes.Clock:
+                        await _fabricCanvas.AddText(DateTime.Now.ToString("HH:mm"), skinMedia.X, skinMedia.Y, textColor, "GarlicFont", fontSize);
+                        break;
+                    case SkinMedia.SkinMediaTypes.NavigateLabel:
+                        await _fabricCanvas.AddText(GarlicSkin.skinSettings?.navigatelabel ?? skinMedia.Text, skinMedia.X, skinMedia.Y, textColor, "GarlicFont", fontSize);
+                        break;
+                    case SkinMedia.SkinMediaTypes.OpenLabel:
+                        await _fabricCanvas.AddText(GarlicSkin.skinSettings?.openlabel ?? skinMedia.Text, skinMedia.X, skinMedia.Y, textColor, "GarlicFont", fontSize);
+                        break;
+                    case SkinMedia.SkinMediaTypes.BackLabel:
+                        await _fabricCanvas.AddText(GarlicSkin.skinSettings?.backlabel ?? skinMedia.Text, skinMedia.X, skinMedia.Y, textColor, "GarlicFont", fontSize);
+                        break;
+                    case SkinMedia.SkinMediaTypes.FavoriteLabel:
+                        await _fabricCanvas.AddText(GarlicSkin.skinSettings?.favoritelabel ?? skinMedia.Text, skinMedia.X, skinMedia.Y, textColor, "GarlicFont", fontSize);
+                        break;
+                }
+            }
+        }
+    }
+
+    async Task UpdateGameArtDevice()
+    {
+        if (_selectedDrive is not null
+            && _selectedSystem is not null
+            && !String.IsNullOrWhiteSpace(_selectedGame)
+            && _selectedMediaLayerCollection is not null)
+        {
+            _artUpdateDeviceRunning = true;
+            _artUpdateModal?.Open();
+
+            _artUpdateDeviceStatus = "Generating Game Art<br />";
+            StateHasChanged();
+            await Task.Yield();
+            var bitmap = await GameMediaGeneration.GenerateGameMedia(_game, _selectedSystem, _selectedMediaLayerCollection);
+            _artUpdateDeviceStatus += "Game Art Generation Complete<br />";
+            StateHasChanged();
+
+            Directory.CreateDirectory(PathConstants.assetsTempPath);
+            bitmap?.Save(PathConstants.assetsTempPath + "gameart-up.png", ImageFormat.Png);
+            bitmap?.Dispose();
+
+            _artUpdateDeviceStatus += "Uploading Game Art to Device<br />";
+            StateHasChanged();
+            GarlicGameArtSearch ggas = new GarlicGameArtSearch(_selectedSystem, _selectedDrive, SearchType.GameName, _selectedGame);
+            Progress<int> progress = new Progress<int>(async p =>
+            {
+                await InvokeAsync(() => StateHasChanged()); _artUpdateDeviceStatus += (".." + p.ToString() + "%");
+            });
+            await ADBConnection.UploadFileAsync(PathConstants.assetsTempPath + "gameart-up.png", ggas.imgPath, progress, CancellationToken.None);
+
+            _artUpdateDeviceStatus += "<br />Complete";
+            StateHasChanged();
+            await Task.Delay(1000);
+            _artUpdateDeviceRunning = false;
+            _artUpdateModal?.Close();
         }
     }
 
@@ -307,43 +492,53 @@
             if (_games.Any() && GarlicSkin.skinSettings is not null && GarlicSkin.languageFiles is not null && GarlicSkin.validSkinSettings)
             {
                 var indexof = _games.IndexOf(_selectedGame);
-                await _fabricCanvas.AddText(String.Join("\n", GetSurroundingStrings(_games, indexof)), GarlicSkin.skinSettings.textmargin, 90, GarlicSkin.skinSettings.colorinactive ?? "white", "GarlicFont", GarlicSkin.languageFiles.First().garlicLanguageSettings.fontsize, GarlicSkin.skinSettings.textalignment ?? "left");
+
+                var transformedGames = _games.Select(GameMediaGeneration.TransformTitle).ToList();
+
+                await _fabricCanvas.AddText(
+                    String.Join("\n", GameMediaGeneration.GetSurroundingStrings(transformedGames, indexof)),
+                    GarlicSkin.skinSettings.textmargin,
+                    70,
+                    GarlicSkin.skinSettings.colorinactive ?? "white",
+                    "GarlicFont",
+                    GarlicSkin.languageFiles.First().garlicLanguageSettings.fontsize,
+                    GarlicSkin.skinSettings.textalignment ?? "left",
+                    indexof < 4 ? indexof + 1 : 4,
+                    GarlicSkin.skinSettings.coloractive ?? "white");
+            }
+            else if (_games.Any())
+            {
+                var indexof = _games.IndexOf(_selectedGame);
+
+                var transformedGames = _games.Select(GameMediaGeneration.TransformTitle).ToList();
+
+                await _fabricCanvas.AddText(
+                    String.Join("\n", GameMediaGeneration.GetSurroundingStrings(transformedGames, indexof)),
+                    340,
+                    70,
+                    "lightgray",
+                    "GarlicFont");
             }
             else if (ADBConnection.deviceConnected == false)
             {
-                await _fabricCanvas.AddText(String.Join("\n", Enumerable.Repeat(_selectedGame, 8)), 340, 90, "white", "GarlicFont");
+                await _fabricCanvas.AddText(
+                    String.Join("\n", Enumerable.Repeat(_selectedGame, 8)),
+                    340,
+                    70,
+                    "lightgray",
+                    "GarlicFont");
             }
         }
     }
 
-    public static List<string> GetSurroundingStrings(List<string> source, int index)
+    private async Task UpdateImage(MediaLayer? layer, GarlicSystem? system, bool updateImage = false)
     {
-        int start = Math.Max(0, index - 3); // Ensure we don't go below 0
-        int count = 8;
-
-        // If we're near the start of the list, adjust count to get more elements after index
-        if (start < index - 3)
-        {
-            count += (index - 3) - start;
-        }
-
-        // If we're near the end of the list, adjust count to stay within bounds
-        if (start + count > source.Count)
-        {
-            count = source.Count - start;
-        }
-
-        return source.Skip(start).Take(count).ToList();
-    }
-
-    private async Task UpdateImage(MediaLayer? layer, bool updateImage = false)
-    {
-        if (layer is not null && _fabricCanvas is not null && _game is not null)
+        if (layer is not null && system is not null && _fabricCanvas is not null && _game is not null)
         {
             if (updateImage)
             {
-                var gameMedia = await GameMediaGeneration.GetMediaFromMediaLayer(_game, layer);
-                if (gameMedia.media is GameMediaResponse media)
+                var gameMedia = await GameMediaGeneration.GetMediaFromMediaLayer(_game, layer, system);
+                if (gameMedia.media is MediaResponse media)
                 {
                     await _fabricCanvas.UpdateImage(layer.id, layer, media.path.Replace("wwwroot/", "").Replace(@"wwwroot\", ""));
                 }

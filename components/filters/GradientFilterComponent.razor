@@ -1,4 +1,4 @@
-﻿<h2 class="text-lg mb-4 text-white">Gradient Controls</h2>
+﻿<h2 class="text-lg mb-4">Gradient Controls</h2>
 <NumberSlider T="float"
               Label="Angle: "
               Value="@GradientFilterSettings.Angle"
@@ -30,12 +30,12 @@
 </NumberSlider>
 
 <div class="border rounded p-1">
-    <p class="text-white">Color 1</p>
+    <p>Color 1</p>
     <ColorInput @bind-Value="GradientFilterSettings.Color1" @bind-Value:after="ApplyFilters" />
 </div>
 
 <div class="border rounded p-1">
-    <p class="text-white">Color 2</p>
+    <p>Color 2</p>
     <ColorInput @bind-Value="GradientFilterSettings.Color2" @bind-Value:after="ApplyFilters" />
 </div>
 

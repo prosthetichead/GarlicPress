@@ -29,6 +29,14 @@
         private void InitializeComponent()
         {
             GridMediaLayout = new DataGridView();
+            gridColMediaType = new DataGridViewComboBoxColumn();
+            gridColResizePercent = new DataGridViewTextBoxColumn();
+            gridColWidth = new DataGridViewTextBoxColumn();
+            gridColHeight = new DataGridViewTextBoxColumn();
+            gridColX = new DataGridViewTextBoxColumn();
+            gridColY = new DataGridViewTextBoxColumn();
+            gridColAngle = new DataGridViewTextBoxColumn();
+            gridColOrder = new DataGridViewTextBoxColumn();
             btnSave = new Button();
             btnAddLayer = new Button();
             btnDeleteLayer = new Button();
@@ -50,14 +58,7 @@
             label5 = new Label();
             label6 = new Label();
             txtRegionOrder = new TextBox();
-            gridColMediaType = new DataGridViewComboBoxColumn();
-            gridColResizePercent = new DataGridViewTextBoxColumn();
-            gridColWidth = new DataGridViewTextBoxColumn();
-            gridColHeight = new DataGridViewTextBoxColumn();
-            gridColX = new DataGridViewTextBoxColumn();
-            gridColY = new DataGridViewTextBoxColumn();
-            gridColAngle = new DataGridViewTextBoxColumn();
-            gridColOrder = new DataGridViewTextBoxColumn();
+            btnClearCache = new Button();
             ((System.ComponentModel.ISupportInitialize)GridMediaLayout).BeginInit();
             SuspendLayout();
             // 
@@ -73,22 +74,88 @@
             GridMediaLayout.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
             GridMediaLayout.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             GridMediaLayout.Columns.AddRange(new DataGridViewColumn[] { gridColMediaType, gridColResizePercent, gridColWidth, gridColHeight, gridColX, gridColY, gridColAngle, gridColOrder });
-            GridMediaLayout.Location = new Point(12, 219);
+            GridMediaLayout.Location = new Point(21, 383);
+            GridMediaLayout.Margin = new Padding(5);
             GridMediaLayout.MultiSelect = false;
             GridMediaLayout.Name = "GridMediaLayout";
-            GridMediaLayout.RowHeadersWidth = 72;
+            GridMediaLayout.RowHeadersWidth = 25;
             GridMediaLayout.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             GridMediaLayout.RowTemplate.Height = 25;
-            GridMediaLayout.Size = new Size(813, 161);
-            GridMediaLayout.TabIndex = 20;
+            GridMediaLayout.Size = new Size(1423, 282);
+            GridMediaLayout.TabIndex = 43;
             GridMediaLayout.CellValidating += GridMediaLayout_CellValidating;
+            // 
+            // gridColMediaType
+            // 
+            gridColMediaType.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            gridColMediaType.HeaderText = "Media Type";
+            gridColMediaType.MinimumWidth = 9;
+            gridColMediaType.Name = "gridColMediaType";
+            gridColMediaType.Width = 126;
+            // 
+            // gridColResizePercent
+            // 
+            gridColResizePercent.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            gridColResizePercent.HeaderText = "Resize %";
+            gridColResizePercent.MinimumWidth = 9;
+            gridColResizePercent.Name = "gridColResizePercent";
+            gridColResizePercent.Width = 135;
+            // 
+            // gridColWidth
+            // 
+            gridColWidth.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            gridColWidth.HeaderText = "Width";
+            gridColWidth.MinimumWidth = 9;
+            gridColWidth.Name = "gridColWidth";
+            gridColWidth.Width = 110;
+            // 
+            // gridColHeight
+            // 
+            gridColHeight.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            gridColHeight.HeaderText = "Height";
+            gridColHeight.MinimumWidth = 9;
+            gridColHeight.Name = "gridColHeight";
+            gridColHeight.Width = 116;
+            // 
+            // gridColX
+            // 
+            gridColX.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            gridColX.HeaderText = "X Position";
+            gridColX.MinimumWidth = 9;
+            gridColX.Name = "gridColX";
+            gridColX.Width = 145;
+            // 
+            // gridColY
+            // 
+            gridColY.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            gridColY.HeaderText = "Y Position";
+            gridColY.MinimumWidth = 9;
+            gridColY.Name = "gridColY";
+            gridColY.Width = 145;
+            // 
+            // gridColAngle
+            // 
+            gridColAngle.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            gridColAngle.HeaderText = "Angle";
+            gridColAngle.MinimumWidth = 9;
+            gridColAngle.Name = "gridColAngle";
+            gridColAngle.Width = 108;
+            // 
+            // gridColOrder
+            // 
+            gridColOrder.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            gridColOrder.HeaderText = "Draw Order";
+            gridColOrder.MinimumWidth = 9;
+            gridColOrder.Name = "gridColOrder";
+            gridColOrder.Width = 161;
             // 
             // btnSave
             // 
             btnSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnSave.Location = new Point(615, 407);
+            btnSave.Location = new Point(1076, 712);
+            btnSave.Margin = new Padding(5);
             btnSave.Name = "btnSave";
-            btnSave.Size = new Size(123, 31);
+            btnSave.Size = new Size(215, 54);
             btnSave.TabIndex = 21;
             btnSave.Text = "Save";
             btnSave.UseVisualStyleBackColor = true;
@@ -96,9 +163,10 @@
             // 
             // btnAddLayer
             // 
-            btnAddLayer.Location = new Point(12, 385);
+            btnAddLayer.Location = new Point(21, 674);
+            btnAddLayer.Margin = new Padding(5);
             btnAddLayer.Name = "btnAddLayer";
-            btnAddLayer.Size = new Size(75, 23);
+            btnAddLayer.Size = new Size(131, 40);
             btnAddLayer.TabIndex = 22;
             btnAddLayer.Text = "Add Layer";
             btnAddLayer.UseVisualStyleBackColor = true;
@@ -106,9 +174,10 @@
             // 
             // btnDeleteLayer
             // 
-            btnDeleteLayer.Location = new Point(93, 385);
+            btnDeleteLayer.Location = new Point(163, 674);
+            btnDeleteLayer.Margin = new Padding(5);
             btnDeleteLayer.Name = "btnDeleteLayer";
-            btnDeleteLayer.Size = new Size(84, 23);
+            btnDeleteLayer.Size = new Size(147, 40);
             btnDeleteLayer.TabIndex = 23;
             btnDeleteLayer.Text = "Delete Layer";
             btnDeleteLayer.UseVisualStyleBackColor = true;
@@ -116,69 +185,77 @@
             // 
             // txtSSUsername
             // 
-            txtSSUsername.Location = new Point(12, 46);
+            txtSSUsername.Location = new Point(21, 80);
+            txtSSUsername.Margin = new Padding(5);
             txtSSUsername.Name = "txtSSUsername";
-            txtSSUsername.Size = new Size(280, 23);
+            txtSSUsername.Size = new Size(487, 35);
             txtSSUsername.TabIndex = 24;
             // 
             // txtSSPassword
             // 
-            txtSSPassword.Location = new Point(12, 90);
+            txtSSPassword.Location = new Point(21, 158);
+            txtSSPassword.Margin = new Padding(5);
             txtSSPassword.Name = "txtSSPassword";
             txtSSPassword.PasswordChar = '*';
-            txtSSPassword.Size = new Size(280, 23);
+            txtSSPassword.Size = new Size(487, 35);
             txtSSPassword.TabIndex = 25;
             txtSSPassword.UseSystemPasswordChar = true;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(12, 28);
+            label1.Location = new Point(21, 49);
+            label1.Margin = new Padding(5, 0, 5, 0);
             label1.Name = "label1";
-            label1.Size = new Size(148, 15);
+            label1.Size = new Size(262, 30);
             label1.TabIndex = 26;
             label1.Text = "ScreenScraper.fr Username";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(12, 72);
+            label2.Location = new Point(21, 126);
+            label2.Margin = new Padding(5, 0, 5, 0);
             label2.Name = "label2";
-            label2.Size = new Size(145, 15);
+            label2.Size = new Size(255, 30);
             label2.TabIndex = 27;
             label2.Text = "ScreenScraper.fr Password";
             // 
             // label3
             // 
-            label3.Location = new Point(12, 116);
+            label3.Location = new Point(21, 203);
+            label3.Margin = new Padding(5, 0, 5, 0);
             label3.Name = "label3";
-            label3.Size = new Size(288, 34);
+            label3.Size = new Size(504, 60);
             label3.TabIndex = 28;
             label3.Text = "Please create an account at screenscraper.fr. Anon access is very limited and you will have issues.";
             label3.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // txtSaveBackupLocation
             // 
-            txtSaveBackupLocation.Location = new Point(343, 48);
+            txtSaveBackupLocation.Location = new Point(600, 84);
+            txtSaveBackupLocation.Margin = new Padding(5);
             txtSaveBackupLocation.Name = "txtSaveBackupLocation";
-            txtSaveBackupLocation.Size = new Size(280, 23);
+            txtSaveBackupLocation.Size = new Size(487, 35);
             txtSaveBackupLocation.TabIndex = 29;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(343, 30);
+            label4.Location = new Point(600, 52);
+            label4.Margin = new Padding(5, 0, 5, 0);
             label4.Name = "label4";
-            label4.Size = new Size(127, 15);
+            label4.Size = new Size(223, 30);
             label4.TabIndex = 30;
             label4.Text = "Saves Backup Location";
             // 
             // boolSystemTrayOnClose
             // 
             boolSystemTrayOnClose.AutoSize = true;
-            boolSystemTrayOnClose.Location = new Point(343, 150);
+            boolSystemTrayOnClose.Location = new Point(600, 262);
+            boolSystemTrayOnClose.Margin = new Padding(5);
             boolSystemTrayOnClose.Name = "boolSystemTrayOnClose";
-            boolSystemTrayOnClose.Size = new Size(203, 19);
+            boolSystemTrayOnClose.Size = new Size(348, 34);
             boolSystemTrayOnClose.TabIndex = 32;
             boolSystemTrayOnClose.Text = "Minimise to System Tray on Close";
             boolSystemTrayOnClose.UseVisualStyleBackColor = true;
@@ -187,9 +264,10 @@
             // 
             boolAutoBackup.AutoSize = true;
             boolAutoBackup.Enabled = false;
-            boolAutoBackup.Location = new Point(629, 50);
+            boolAutoBackup.Location = new Point(1101, 88);
+            boolAutoBackup.Margin = new Padding(5);
             boolAutoBackup.Name = "boolAutoBackup";
-            boolAutoBackup.Size = new Size(159, 19);
+            boolAutoBackup.Size = new Size(270, 34);
             boolAutoBackup.TabIndex = 31;
             boolAutoBackup.Text = "Auto Backup on Connect";
             boolAutoBackup.UseVisualStyleBackColor = true;
@@ -197,9 +275,10 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnCancel.Location = new Point(744, 407);
+            btnCancel.Location = new Point(1302, 712);
+            btnCancel.Margin = new Padding(5);
             btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(81, 31);
+            btnCancel.Size = new Size(142, 54);
             btnCancel.TabIndex = 34;
             btnCancel.Text = "Cancel";
             btnCancel.UseVisualStyleBackColor = true;
@@ -208,9 +287,10 @@
             // boolRomsRootSecondSD
             // 
             boolRomsRootSecondSD.AutoSize = true;
-            boolRomsRootSecondSD.Location = new Point(343, 125);
+            boolRomsRootSecondSD.Location = new Point(600, 219);
+            boolRomsRootSecondSD.Margin = new Padding(5);
             boolRomsRootSecondSD.Name = "boolRomsRootSecondSD";
-            boolRomsRootSecondSD.Size = new Size(246, 19);
+            boolRomsRootSecondSD.Size = new Size(426, 34);
             boolRomsRootSecondSD.TabIndex = 35;
             boolRomsRootSecondSD.Text = "Rom System Folders on Root of SD Card 2";
             boolRomsRootSecondSD.UseVisualStyleBackColor = true;
@@ -218,18 +298,20 @@
             // boolWarnBeforeDelete
             // 
             boolWarnBeforeDelete.AutoSize = true;
-            boolWarnBeforeDelete.Location = new Point(343, 173);
+            boolWarnBeforeDelete.Location = new Point(600, 303);
+            boolWarnBeforeDelete.Margin = new Padding(5);
             boolWarnBeforeDelete.Name = "boolWarnBeforeDelete";
-            boolWarnBeforeDelete.Size = new Size(149, 19);
+            boolWarnBeforeDelete.Size = new Size(258, 34);
             boolWarnBeforeDelete.TabIndex = 36;
             boolWarnBeforeDelete.Text = "Warning Before Deletes";
             boolWarnBeforeDelete.UseVisualStyleBackColor = true;
             // 
             // btnShowPreview
             // 
-            btnShowPreview.Location = new Point(183, 385);
+            btnShowPreview.Location = new Point(320, 674);
+            btnShowPreview.Margin = new Padding(5);
             btnShowPreview.Name = "btnShowPreview";
-            btnShowPreview.Size = new Size(109, 23);
+            btnShowPreview.Size = new Size(191, 40);
             btnShowPreview.TabIndex = 37;
             btnShowPreview.Text = "Show Preview";
             btnShowPreview.UseVisualStyleBackColor = true;
@@ -237,10 +319,10 @@
             // 
             // btnLayerEditor
             // 
-            btnLayerEditor.Location = new Point(297, 385);
-            btnLayerEditor.Margin = new Padding(2, 2, 2, 2);
+            btnLayerEditor.Location = new Point(520, 674);
+            btnLayerEditor.Margin = new Padding(4);
             btnLayerEditor.Name = "btnLayerEditor";
-            btnLayerEditor.Size = new Size(119, 23);
+            btnLayerEditor.Size = new Size(208, 40);
             btnLayerEditor.TabIndex = 38;
             btnLayerEditor.Text = "Show Layer Editor";
             btnLayerEditor.UseVisualStyleBackColor = true;
@@ -249,107 +331,60 @@
             // cbMediaLayerCollection
             // 
             cbMediaLayerCollection.FormattingEnabled = true;
-            cbMediaLayerCollection.Location = new Point(14, 189);
+            cbMediaLayerCollection.Location = new Point(24, 331);
+            cbMediaLayerCollection.Margin = new Padding(5);
             cbMediaLayerCollection.Name = "cbMediaLayerCollection";
-            cbMediaLayerCollection.Size = new Size(278, 23);
+            cbMediaLayerCollection.Size = new Size(484, 38);
             cbMediaLayerCollection.TabIndex = 39;
             cbMediaLayerCollection.SelectedIndexChanged += cbMediaLayerCollection_SelectedIndexChanged;
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(12, 171);
+            label5.Location = new Point(21, 299);
+            label5.Margin = new Padding(5, 0, 5, 0);
             label5.Name = "label5";
-            label5.Size = new Size(128, 15);
+            label5.Size = new Size(224, 30);
             label5.TabIndex = 40;
             label5.Text = "Media Layer Collection";
             // 
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(343, 72);
+            label6.Location = new Point(600, 126);
+            label6.Margin = new Padding(5, 0, 5, 0);
             label6.Name = "label6";
-            label6.Size = new Size(159, 15);
+            label6.Size = new Size(281, 30);
             label6.TabIndex = 42;
             label6.Text = "ScreenScrper.fr Region Order";
             // 
             // txtRegionOrder
             // 
-            txtRegionOrder.Location = new Point(343, 90);
+            txtRegionOrder.Location = new Point(600, 158);
+            txtRegionOrder.Margin = new Padding(5);
             txtRegionOrder.Name = "txtRegionOrder";
-            txtRegionOrder.Size = new Size(280, 23);
+            txtRegionOrder.Size = new Size(487, 35);
             txtRegionOrder.TabIndex = 41;
             // 
-            // gridColMediaType
+            // btnClearCache
             // 
-            gridColMediaType.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            gridColMediaType.HeaderText = "Media Type";
-            gridColMediaType.MinimumWidth = 9;
-            gridColMediaType.Name = "gridColMediaType";
-            gridColMediaType.Width = 73;
-            // 
-            // gridColResizePercent
-            // 
-            gridColResizePercent.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            gridColResizePercent.HeaderText = "Resize %";
-            gridColResizePercent.MinimumWidth = 9;
-            gridColResizePercent.Name = "gridColResizePercent";
-            gridColResizePercent.Width = 77;
-            // 
-            // gridColWidth
-            // 
-            gridColWidth.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            gridColWidth.HeaderText = "Width";
-            gridColWidth.MinimumWidth = 9;
-            gridColWidth.Name = "gridColWidth";
-            gridColWidth.Width = 64;
-            // 
-            // gridColHeight
-            // 
-            gridColHeight.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            gridColHeight.HeaderText = "Height";
-            gridColHeight.MinimumWidth = 9;
-            gridColHeight.Name = "gridColHeight";
-            gridColHeight.Width = 68;
-            // 
-            // gridColX
-            // 
-            gridColX.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            gridColX.HeaderText = "X Position";
-            gridColX.MinimumWidth = 9;
-            gridColX.Name = "gridColX";
-            gridColX.Width = 85;
-            // 
-            // gridColY
-            // 
-            gridColY.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            gridColY.HeaderText = "Y Position";
-            gridColY.MinimumWidth = 9;
-            gridColY.Name = "gridColY";
-            gridColY.Width = 85;
-            // 
-            // gridColAngle
-            // 
-            gridColAngle.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            gridColAngle.HeaderText = "Angle";
-            gridColAngle.MinimumWidth = 9;
-            gridColAngle.Name = "gridColAngle";
-            gridColAngle.Width = 63;
-            // 
-            // gridColOrder
-            // 
-            gridColOrder.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            gridColOrder.HeaderText = "Draw Order";
-            gridColOrder.MinimumWidth = 9;
-            gridColOrder.Name = "gridColOrder";
-            gridColOrder.Width = 92;
+            btnClearCache.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnClearCache.Location = new Point(1236, 329);
+            btnClearCache.Margin = new Padding(4);
+            btnClearCache.Name = "btnClearCache";
+            btnClearCache.Size = new Size(208, 40);
+            btnClearCache.TabIndex = 44;
+            btnClearCache.Text = "Clear Cache";
+            btnClearCache.UseVisualStyleBackColor = true;
+            btnClearCache.Click += btnClearCache_Click;
             // 
             // SettingsForm
             // 
-            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleDimensions = new SizeF(168F, 168F);
             AutoScaleMode = AutoScaleMode.Dpi;
             AutoSize = true;
-            ClientSize = new Size(837, 450);
+            ClientSize = new Size(1465, 788);
+            Controls.Add(btnClearCache);
             Controls.Add(label6);
             Controls.Add(txtRegionOrder);
             Controls.Add(label5);
@@ -373,6 +408,7 @@
             Controls.Add(btnSave);
             Controls.Add(GridMediaLayout);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            Margin = new Padding(5);
             Name = "SettingsForm";
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterParent;
@@ -414,5 +450,6 @@
         private DataGridViewTextBoxColumn gridColY;
         private DataGridViewTextBoxColumn gridColAngle;
         private DataGridViewTextBoxColumn gridColOrder;
+        private Button btnClearCache;
     }
 }

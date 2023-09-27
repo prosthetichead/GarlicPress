@@ -239,35 +239,60 @@ namespace GarlicPress
     {
         public string label { get; set; }
         public string value { get; set; }
+        public MediaTypes mediaType { get; set; }
 
-        public SSMediaType(string label, string value)
+        public SSMediaType(string label, string value, MediaTypes mediaType)
         {
             this.label = label;
             this.value = value;
+            this.mediaType = mediaType;
         }
 
         public static List<SSMediaType> GetAllMediaTypes()
         {
             List<SSMediaType> systems = new List<SSMediaType>()
         {
-            new SSMediaType("Logo", "wheel"),
-            new SSMediaType("Logo Steel", "wheel-steel"),
-            new SSMediaType("Logo Carbon", "wheel-carbon"),
-            new SSMediaType("Logo Steam Grid", "steamgrid"),
-            new SSMediaType("Screen Marquee", "screenmarquee"),
-            new SSMediaType("Screen Marquee Small", "screenmarqueesmall"),
-            new SSMediaType("3D Box", "box-3D"),
-            new SSMediaType("2D Box", "box-2D"),
-            new SSMediaType("2D Support", "support-2D"),
-            new SSMediaType("Screen Shot", "ss"),
-            new SSMediaType("Screen Shot Title", "sstitle"),
-            new SSMediaType("Fan Art", "fanart"),
-            new SSMediaType("Mixed Image v1", "mixrbv1"),
-            new SSMediaType("Mixed Image v2", "mixrbv2"),
-            new SSMediaType("Local Media", "local")
+            new SSMediaType("Logo", "wheel", MediaTypes.SSGame),
+            new SSMediaType("Logo Steel", "wheel-steel", MediaTypes.SSGame),
+            new SSMediaType("Logo Carbon", "wheel-carbon", MediaTypes.SSGame),
+            new SSMediaType("Logo Steam Grid", "steamgrid", MediaTypes.SSGame),
+            new SSMediaType("Screen Marquee", "screenmarquee", MediaTypes.SSGame),
+            new SSMediaType("Screen Marquee Small", "screenmarqueesmall", MediaTypes.SSGame),
+            new SSMediaType("3D Box", "box-3D", MediaTypes.SSGame),
+            new SSMediaType("2D Box", "box-2D", MediaTypes.SSGame),
+            new SSMediaType("2D Support", "support-2D", MediaTypes.SSGame),
+            new SSMediaType("Screen Shot", "ss", MediaTypes.SSGame),
+            new SSMediaType("Screen Shot Title", "sstitle", MediaTypes.SSGame),
+            new SSMediaType("Fan Art", "fanart", MediaTypes.SSGame),
+            new SSMediaType("Mixed Image v1", "mixrbv1", MediaTypes.SSGame),
+            new SSMediaType("Mixed Image v2", "mixrbv2", MediaTypes.SSGame),
+            new SSMediaType("Developer Logo", "pictomonochrome", MediaTypes.SSGame),
+            new SSMediaType("Developer Logo Color", "pictocouleur", MediaTypes.SSGame),
+            new SSMediaType("Local Media", "local", MediaTypes.Local),
+            new SSMediaType("System Logo Monochrome", "system-logo-monochrome", MediaTypes.SSSystem),
+            new SSMediaType("System Logo", "system-wheel", MediaTypes.SSSystem),
+            new SSMediaType("System Logo Steel", "system-wheel-steel", MediaTypes.SSSystem),
+            new SSMediaType("System Logo Carbon", "system-wheel-carbon", MediaTypes.SSSystem),
+            new SSMediaType("System Icon Mini", "system-minicon", MediaTypes.SSSystem),
+            new SSMediaType("System Icon", "system-icon", MediaTypes.SSSystem),
+            new SSMediaType("System Picture", "system-photo", MediaTypes.SSSystem),
+            new SSMediaType("System Illustration", "system-illustration", MediaTypes.SSSystem),
+            new SSMediaType("System Steam Grid", "system-steam-grid", MediaTypes.SSSystem),
+            new SSMediaType("System Bezel 4:3", "system-bezel-4-3", MediaTypes.SSSystem),
+            new SSMediaType("System Bezel 16:9", "system-bezel-16-9", MediaTypes.SSSystem),
+            new SSMediaType("System Bezel 16:9 Vertical", "system-bezel-16-9v", MediaTypes.SSSystem),
+            new SSMediaType("System Support 2D", "system-support2D", MediaTypes.SSSystem),
+            new SSMediaType("System Box Blank", "system-box-tranche-vierge", MediaTypes.SSSystem)
         };
 
             return systems;
+        }
+
+        public enum MediaTypes
+        {
+            SSGame = 0,
+            SSSystem = 1,
+            Local = 2
         }
     }
 
@@ -326,15 +351,66 @@ namespace GarlicPress
 
     }
 
-    public struct GameMediaResponse
+    public struct MediaResponse
     {
         public string path { get; set; }
         public string region { get; set; }
 
-        public GameMediaResponse(string path, string region)
+        public MediaResponse(string path, string region)
         {
             this.path = path;
             this.region = region;
+        }
+    }
+
+    public class SkinMedia
+    {
+        public string MediaFileName { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+        public string Text { get; set; }
+        public SkinMediaTypes SkinMediaType { get; set; }
+
+        public enum SkinMediaTypes
+        {
+            Picture = 0,
+            Text = 1,
+            Clock = 2,
+            SystemName = 3,
+            NavigateLabel = 4,
+            OpenLabel = 5,
+            BackLabel = 6,
+            FavoriteLabel = 7
+        }
+
+        private static List<SkinMedia> _defaultSkinMedias = null;
+
+        public static List<SkinMedia> GetSkinMedias()
+        {
+            if (_defaultSkinMedias == null)
+            {
+                _defaultSkinMedias = new List<SkinMedia>()
+        {
+            new SkinMedia() { MediaFileName = "icon-dpad-54.png", X = 5, Y = 420, Text = "", SkinMediaType = SkinMediaTypes.Picture },
+            new SkinMedia() { MediaFileName = "", X = 55, Y = 427, Text = "NAVIGATE", SkinMediaType = SkinMediaTypes.NavigateLabel },
+
+            new SkinMedia() { MediaFileName = "icon-A-54.png", X = 195, Y = 420, Text = "", SkinMediaType = SkinMediaTypes.Picture },
+            new SkinMedia() { MediaFileName = "", X = 245, Y = 427, Text = "OPEN", SkinMediaType = SkinMediaTypes.OpenLabel },
+
+            new SkinMedia() { MediaFileName = "icon-B-54.png", X = 325, Y = 420, Text = "", SkinMediaType = SkinMediaTypes.Picture },
+            new SkinMedia() { MediaFileName = "", X = 375, Y = 427, Text = "BACK", SkinMediaType = SkinMediaTypes.BackLabel },
+
+            new SkinMedia() { MediaFileName = "icon-Y-54.png", X = 450, Y = 420, Text = "", SkinMediaType = SkinMediaTypes.Picture },
+            new SkinMedia() { MediaFileName = "", X = 500, Y = 427, Text = "FAVORITE", SkinMediaType = SkinMediaTypes.FavoriteLabel },
+
+            new SkinMedia() { MediaFileName = "logo.png", X = 15, Y = 8, Text = "", SkinMediaType = SkinMediaTypes.Picture },
+            new SkinMedia() { MediaFileName = "", X = 57, Y = 10, Text = "", SkinMediaType = SkinMediaTypes.SystemName },
+
+            new SkinMedia() { MediaFileName = "charging-05.png", X = 580, Y = 5, Text = "", SkinMediaType = SkinMediaTypes.Picture },
+            new SkinMedia() { MediaFileName = "", X = 490, Y = 10, Text = "", SkinMediaType = SkinMediaTypes.Clock },
+        };
+            }
+            return _defaultSkinMedias;
         }
     }
 
@@ -346,61 +422,11 @@ namespace GarlicPress
         public string status { get; set; }
         public string statusMessage { get; set; }
 
-        public class Header
-        {
-            public string APIversion { get; set; }
-            public string dateTime { get; set; }
-            public string commandRequested { get; set; }
-            public string success { get; set; }
-            public string error { get; set; }
-        }
-
         public class Response
         {
             public Serveurs serveurs { get; set; }
             public Ssuser ssuser { get; set; }
             public Jeu jeu { get; set; }
-        }
-
-        public class Serveurs
-        {
-            public string cpu1 { get; set; }
-            public string cpu2 { get; set; }
-            public string cpu3 { get; set; }
-            public string threadsmin { get; set; }
-            public string nbscrapeurs { get; set; }
-            public string apiacces { get; set; }
-            public string closefornomember { get; set; }
-            public string closeforleecher { get; set; }
-            public string maxthreadfornonmember { get; set; }
-            public string threadfornonmember { get; set; }
-            public string maxthreadformember { get; set; }
-            public string threadformember { get; set; }
-        }
-
-        public class Ssuser
-        {
-            public string id { get; set; }
-            public string numid { get; set; }
-            public string niveau { get; set; }
-            public string contribution { get; set; }
-            public string uploadsysteme { get; set; }
-            public string uploadinfos { get; set; }
-            public string romasso { get; set; }
-            public string uploadmedia { get; set; }
-            public string propositionok { get; set; }
-            public string propositionko { get; set; }
-            public string quotarefu { get; set; }
-            public string maxthreads { get; set; }
-            public string maxdownloadspeed { get; set; }
-            public string requeststoday { get; set; }
-            public string requestskotoday { get; set; }
-            public string maxrequestspermin { get; set; }
-            public string maxrequestsperday { get; set; }
-            public string maxrequestskoperday { get; set; }
-            public string visites { get; set; }
-            public string datedernierevisite { get; set; }
-            public string favregion { get; set; }
         }
 
         public class Jeu
@@ -560,27 +586,119 @@ namespace GarlicPress
             public string text { get; set; }
             public string recalboxtext { get; set; }
         }
+    }
 
-        public class Media
+    public class SystemsResponse
+    {
+        public Header header { get; set; }
+        public Response response { get; set; }
+        public string status { get; internal set; }
+        public string statusMessage { get; internal set; }
+
+        public class Response
         {
-            public string type { get; set; }
-            public string parent { get; set; }
-            public string url { get; set; }
-            public string region { get; set; }
-            public string crc { get; set; }
-            public string md5 { get; set; }
-            public string sha1 { get; set; }
-            public string size { get; set; }
-            public string format { get; set; }
-            public string posx { get; set; }
-            public string posy { get; set; }
-            public string posw { get; set; }
-            public string posh { get; set; }
-            public string id { get; set; }
-            public string subparent { get; set; }
-
-            public string support { get; set; }
+            public Serveurs serveurs { get; set; }
+            public Ssuser ssuser { get; set; }
+            public Systeme[] systemes { get; set; }
         }
+
+        public class Systeme
+        {
+            public int id { get; set; }
+            public Noms noms { get; set; }
+            public string extensions { get; set; }
+            public string compagnie { get; set; }
+            public string type { get; set; }
+            public string datedebut { get; set; }
+            public string datefin { get; set; }
+            public string romtype { get; set; }
+            public string supporttype { get; set; }
+            public Media[] medias { get; set; }
+            public int parentid { get; set; }
+        }
+
+        public class Noms
+        {
+            public string nom_eu { get; set; }
+            public string nom_us { get; set; }
+            public string nom_recalbox { get; set; }
+            public string nom_retropie { get; set; }
+            public string nom_launchbox { get; set; }
+            public string nom_hyperspin { get; set; }
+            public string noms_commun { get; set; }
+            public string nom_jp { get; set; }
+        }
+    }
+
+    public class Header
+    {
+        public string APIversion { get; set; }
+        public string dateTime { get; set; }
+        public string commandRequested { get; set; }
+        public string success { get; set; }
+        public string error { get; set; }
+    }
+
+    public class Serveurs
+    {
+        public string cpu1 { get; set; }
+        public string cpu2 { get; set; }
+        public string cpu3 { get; set; }
+        public string threadsmin { get; set; }
+        public string nbscrapeurs { get; set; }
+        public string apiacces { get; set; }
+        public string closefornomember { get; set; }
+        public string closeforleecher { get; set; }
+        public string maxthreadfornonmember { get; set; }
+        public string threadfornonmember { get; set; }
+        public string maxthreadformember { get; set; }
+        public string threadformember { get; set; }
+    }
+
+    public class Ssuser
+    {
+        public string id { get; set; }
+        public string numid { get; set; }
+        public string niveau { get; set; }
+        public string contribution { get; set; }
+        public string uploadsysteme { get; set; }
+        public string uploadinfos { get; set; }
+        public string romasso { get; set; }
+        public string uploadmedia { get; set; }
+        public string propositionok { get; set; }
+        public string propositionko { get; set; }
+        public string quotarefu { get; set; }
+        public string maxthreads { get; set; }
+        public string maxdownloadspeed { get; set; }
+        public string requeststoday { get; set; }
+        public string requestskotoday { get; set; }
+        public string maxrequestspermin { get; set; }
+        public string maxrequestsperday { get; set; }
+        public string maxrequestskoperday { get; set; }
+        public string visites { get; set; }
+        public string datedernierevisite { get; set; }
+        public string favregion { get; set; }
+    }
+
+    public class Media
+    {
+        public string type { get; set; }
+        public string parent { get; set; }
+        public string url { get; set; }
+        public string region { get; set; }
+        public string crc { get; set; }
+        public string md5 { get; set; }
+        public string sha1 { get; set; }
+        public string size { get; set; }
+        public string format { get; set; }
+        public string posx { get; set; }
+        public string posy { get; set; }
+        public string posw { get; set; }
+        public string posh { get; set; }
+        public string id { get; set; }
+        public string subparent { get; set; }
+
+        public string support { get; set; }
     }
 }
 #nullable enable

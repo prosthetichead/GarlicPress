@@ -26,7 +26,7 @@
     public Dictionary<string, object>? AllOtherAttributes { get; set; }
 
     string canvasId = $"canvas-{Guid.NewGuid()}";
-    IJSObjectReference? module;
+    public IJSObjectReference? module;
     DotNetObjectReference<FabricCanvas<TItem>>? objRef;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -43,15 +43,22 @@
     {
         if (module is not null)
         {
-            await module.InvokeVoidAsync("BlazorFabric.clearCanvas");
+            try
+            {
+                await module.InvokeVoidAsync("BlazorFabric.clearCanvas");
+            }
+            catch (Exception)
+            {
+                module = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./components/shared/FabricCanvas.razor.js");
+            }
         }
     }
 
-    public async Task AddText(string text, int posX = 360, int posY = 90, string color = "white", string font = "GarlicFont", int fontSize = 28, string textAlignment = "left")
+    public async Task AddText(string text, int posX = 360, int posY = 90, string color = "white", string font = "GarlicFont", int fontSize = 28, string textAlignment = "left", int selectedRow = 4, string selectedColor = "white")
     {
         if (module is not null)
         {
-            await module.InvokeVoidAsync("BlazorFabric.addText", text, posX, posY, color, font, fontSize, textAlignment);
+            await module.InvokeVoidAsync("BlazorFabric.addText", text, posX, posY, color, font, fontSize, textAlignment, selectedRow, selectedColor);
         }
     }
 
@@ -60,6 +67,14 @@
         if (module is not null)
         {
             await module.InvokeVoidAsync("BlazorFabric.addBackgroundImage", imagePath);
+        }
+    }
+
+    public async Task AddStaticImage(string? imagePath, int left, int top)
+    {
+        if (module is not null)
+        {
+            await module.InvokeVoidAsync("BlazorFabric.addStaticImage", imagePath, left, top);
         }
     }
 
@@ -95,11 +110,27 @@
         }
     }
 
+    public async Task SelectObject(Guid id)
+    {
+        if (module is not null)
+        {
+            await module.InvokeVoidAsync("BlazorFabric.selectObject", id);
+        }
+    }
+
     public async Task RemoveSelectedImage(bool notitfyDotnet)
     {
         if (module is not null)
         {
             await module.InvokeVoidAsync("BlazorFabric.deleteSelectedObject", notitfyDotnet);
+        }
+    }
+
+    public async Task RemoveImage(Guid id)
+    {
+        if (module is not null)
+        {
+            await module.InvokeVoidAsync("BlazorFabric.deleteObject", id);
         }
     }
 

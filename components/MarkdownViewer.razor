@@ -1,0 +1,47 @@
+﻿@using System.IO
+@using Markdig;
+@using Markdig.Extensions.MediaLinks;
+
+<div class="markdown-content">
+    @if (HtmlContent is not null)
+    {
+        @((MarkupString)HtmlContent)
+    }
+</div>
+
+<AnchorNavigation></AnchorNavigation>
+
+@code {
+    [Parameter]
+    public string? MarkdownFilePath { get; set; }
+
+    private string? HtmlContent { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(MarkdownFilePath))
+        {
+            try
+            {
+                var mediaOptions = new MediaOptions()
+                    {
+                        Height = "1080",
+                        Width = "1920",
+                        AddControlsProperty = false
+
+                    };
+                var pipeline = new MarkdownPipelineBuilder()
+                .UseMediaLinks(mediaOptions)
+                .Build();
+
+                var markdownContent = await File.ReadAllTextAsync(MarkdownFilePath);
+                HtmlContent = Markdig.Markdown.ToHtml(markdownContent ?? string.Empty, pipeline);
+                HtmlContent = HtmlContent.Replace("wwwroot/", "").Replace("<video", "<video autoplay loop muted");
+            }
+            catch (Exception ex)
+            {
+                HtmlContent = $"Error loading markdown content: {ex.Message}";
+            }
+        }
+    }
+}
