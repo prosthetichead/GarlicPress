@@ -38,13 +38,13 @@
             btnCancel = new Button();
             tabControl = new TabControl();
             tabOptions = new TabPage();
+            label5 = new Label();
+            cbMediaLayerCollection = new ComboBox();
             tabLog = new TabPage();
             ImgArtPreview = new PictureBox();
             txtLog = new RichTextBox();
             btnClearCompleted = new Button();
             btnClose = new Button();
-            label5 = new Label();
-            cbMediaLayerCollection = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)dataGridSearch).BeginInit();
             tabControl.SuspendLayout();
             tabOptions.SuspendLayout();
@@ -61,13 +61,12 @@
             dataGridSearch.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
             dataGridSearch.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridSearch.Columns.AddRange(new DataGridViewColumn[] { gridColFileName, gridColSystem, gridColSearchType, gridColSearchText, gridColStatus });
-            dataGridSearch.Location = new Point(21, 21);
-            dataGridSearch.Margin = new Padding(5, 5, 5, 5);
+            dataGridSearch.Location = new Point(12, 12);
             dataGridSearch.Name = "dataGridSearch";
             dataGridSearch.RowHeadersVisible = false;
             dataGridSearch.RowHeadersWidth = 10;
             dataGridSearch.RowTemplate.Height = 25;
-            dataGridSearch.Size = new Size(1522, 852);
+            dataGridSearch.Size = new Size(870, 487);
             dataGridSearch.TabIndex = 0;
             // 
             // gridColFileName
@@ -118,10 +117,9 @@
             // btnGo
             // 
             btnGo.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnGo.Location = new Point(1554, 830);
-            btnGo.Margin = new Padding(5, 5, 5, 5);
+            btnGo.Location = new Point(888, 474);
             btnGo.Name = "btnGo";
-            btnGo.Size = new Size(131, 40);
+            btnGo.Size = new Size(75, 23);
             btnGo.TabIndex = 1;
             btnGo.Text = "Start";
             btnGo.UseVisualStyleBackColor = true;
@@ -130,10 +128,9 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnCancel.Location = new Point(1554, 830);
-            btnCancel.Margin = new Padding(5, 5, 5, 5);
+            btnCancel.Location = new Point(888, 474);
             btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(131, 40);
+            btnCancel.Size = new Size(75, 23);
             btnCancel.TabIndex = 2;
             btnCancel.Text = "Cancel";
             btnCancel.UseVisualStyleBackColor = true;
@@ -144,36 +141,52 @@
             tabControl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             tabControl.Controls.Add(tabOptions);
             tabControl.Controls.Add(tabLog);
-            tabControl.Location = new Point(1554, 21);
-            tabControl.Margin = new Padding(5, 5, 5, 5);
+            tabControl.Location = new Point(888, 12);
             tabControl.Name = "tabControl";
             tabControl.SelectedIndex = 0;
-            tabControl.Size = new Size(649, 805);
+            tabControl.Size = new Size(371, 460);
             tabControl.TabIndex = 4;
             // 
             // tabOptions
             // 
             tabOptions.Controls.Add(label5);
             tabOptions.Controls.Add(cbMediaLayerCollection);
-            tabOptions.Location = new Point(4, 39);
-            tabOptions.Margin = new Padding(5, 5, 5, 5);
+            tabOptions.Location = new Point(4, 24);
             tabOptions.Name = "tabOptions";
-            tabOptions.Padding = new Padding(5, 5, 5, 5);
-            tabOptions.Size = new Size(641, 762);
+            tabOptions.Padding = new Padding(3, 3, 3, 3);
+            tabOptions.Size = new Size(363, 432);
             tabOptions.TabIndex = 0;
             tabOptions.Text = "Options";
             tabOptions.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(4, 6);
+            label5.Name = "label5";
+            label5.Size = new Size(128, 15);
+            label5.TabIndex = 42;
+            label5.Text = "Media Layer Collection";
+            // 
+            // cbMediaLayerCollection
+            // 
+            cbMediaLayerCollection.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cbMediaLayerCollection.FormattingEnabled = true;
+            cbMediaLayerCollection.Location = new Point(6, 25);
+            cbMediaLayerCollection.Name = "cbMediaLayerCollection";
+            cbMediaLayerCollection.Size = new Size(357, 23);
+            cbMediaLayerCollection.TabIndex = 41;
+            cbMediaLayerCollection.SelectedIndexChanged += cbMediaLayerCollection_SelectedIndexChanged;
             // 
             // tabLog
             // 
             tabLog.BackColor = Color.Black;
             tabLog.Controls.Add(ImgArtPreview);
             tabLog.Controls.Add(txtLog);
-            tabLog.Location = new Point(4, 39);
-            tabLog.Margin = new Padding(5, 5, 5, 5);
+            tabLog.Location = new Point(4, 24);
             tabLog.Name = "tabLog";
-            tabLog.Padding = new Padding(5, 5, 5, 5);
-            tabLog.Size = new Size(641, 762);
+            tabLog.Padding = new Padding(3, 3, 3, 3);
+            tabLog.Size = new Size(363, 432);
             tabLog.TabIndex = 1;
             tabLog.Text = "Update Log";
             // 
@@ -181,10 +194,9 @@
             // 
             ImgArtPreview.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             ImgArtPreview.BackColor = Color.Black;
-            ImgArtPreview.Location = new Point(40, 331);
-            ImgArtPreview.Margin = new Padding(5, 5, 5, 5);
+            ImgArtPreview.Location = new Point(23, 189);
             ImgArtPreview.Name = "ImgArtPreview";
-            ImgArtPreview.Size = new Size(560, 420);
+            ImgArtPreview.Size = new Size(320, 240);
             ImgArtPreview.SizeMode = PictureBoxSizeMode.StretchImage;
             ImgArtPreview.TabIndex = 6;
             ImgArtPreview.TabStop = false;
@@ -196,22 +208,20 @@
             txtLog.BorderStyle = BorderStyle.None;
             txtLog.Font = new Font("Consolas", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             txtLog.ForeColor = Color.Lime;
-            txtLog.Location = new Point(5, 7);
-            txtLog.Margin = new Padding(5, 5, 5, 5);
+            txtLog.Location = new Point(3, 4);
             txtLog.Name = "txtLog";
             txtLog.ReadOnly = true;
             txtLog.ScrollBars = RichTextBoxScrollBars.None;
-            txtLog.Size = new Size(625, 313);
+            txtLog.Size = new Size(357, 179);
             txtLog.TabIndex = 5;
             txtLog.Text = "";
             // 
             // btnClearCompleted
             // 
             btnClearCompleted.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnClearCompleted.Location = new Point(1696, 830);
-            btnClearCompleted.Margin = new Padding(5, 5, 5, 5);
+            btnClearCompleted.Location = new Point(969, 474);
             btnClearCompleted.Name = "btnClearCompleted";
-            btnClearCompleted.Size = new Size(203, 40);
+            btnClearCompleted.Size = new Size(116, 23);
             btnClearCompleted.TabIndex = 5;
             btnClearCompleted.Text = "Clear Completed";
             btnClearCompleted.UseVisualStyleBackColor = true;
@@ -221,51 +231,28 @@
             // btnClose
             // 
             btnClose.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnClose.Location = new Point(2065, 830);
-            btnClose.Margin = new Padding(5, 5, 5, 5);
+            btnClose.Location = new Point(1180, 474);
             btnClose.Name = "btnClose";
-            btnClose.Size = new Size(131, 40);
+            btnClose.Size = new Size(75, 23);
             btnClose.TabIndex = 6;
             btnClose.Text = "Close";
             btnClose.UseVisualStyleBackColor = true;
             btnClose.Visible = false;
             btnClose.Click += btnClose_Click;
             // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new Point(7, 11);
-            label5.Margin = new Padding(5, 0, 5, 0);
-            label5.Name = "label5";
-            label5.Size = new Size(224, 30);
-            label5.TabIndex = 42;
-            label5.Text = "Media Layer Collection";
-            // 
-            // cbMediaLayerCollection
-            // 
-            cbMediaLayerCollection.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            cbMediaLayerCollection.FormattingEnabled = true;
-            cbMediaLayerCollection.Location = new Point(10, 43);
-            cbMediaLayerCollection.Margin = new Padding(5);
-            cbMediaLayerCollection.Name = "cbMediaLayerCollection";
-            cbMediaLayerCollection.Size = new Size(621, 38);
-            cbMediaLayerCollection.TabIndex = 41;
-            cbMediaLayerCollection.SelectedIndexChanged += cbMediaLayerCollection_SelectedIndexChanged;
-            // 
             // GameArtUpdateForm
             // 
-            AutoScaleDimensions = new SizeF(168F, 168F);
+            AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             AutoSize = true;
-            ClientSize = new Size(2212, 894);
+            ClientSize = new Size(1264, 511);
             Controls.Add(btnClose);
             Controls.Add(btnClearCompleted);
             Controls.Add(tabControl);
             Controls.Add(btnCancel);
             Controls.Add(btnGo);
             Controls.Add(dataGridSearch);
-            FormBorderStyle = FormBorderStyle.SizableToolWindow;
-            Margin = new Padding(5, 5, 5, 5);
+            FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Name = "GameArtUpdateForm";
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterParent;
