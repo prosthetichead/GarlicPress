@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace GarlicPress
@@ -30,14 +31,17 @@ namespace GarlicPress
             ADBConnection.DownloadFile("/mnt/mmc/CFW/skin/font.ttf", PathConstants.assetSkinPath + "font.ttf");
             try
             {
-                skinSettings = JsonSerializer.Deserialize<GarlicSkinSettings>(skinSettingsJson);
+                // Fix missing commas, bug in theme switcher in GarlicOS that removes commas from ints in settings.json
+                skinSettingsJson = Regex.Replace(skinSettingsJson, @"(\d|\w|"")(\n|\r\n|\s{1,})\s*""", "$1,$2\t\"");
+
+                skinSettings = JsonSerializer.Deserialize<GarlicSkinSettings>(skinSettingsJson) ?? new();
                 validSkinSettings = true;
             }
             catch (Exception ex)
             {
                 skinSettings = new GarlicSkinSettings();
                 validSkinSettings = false;
-                MessageBox.Show("CFW/skin/settings.json skin settings can not be loaded. \n\n Preview will not display text position \n skin settings tool will not function. \n\n Please report the skin you are using to issues link in About \n\n Error Text : \n " + ex.Message, "Error Reading Skin Settings Json on Device", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("CFW/skin/settings.json skin settings cannot be loaded. \n\n Preview will not display text position \n skin settings tool will not function. \n\n Please report the skin you are using to issues link in About \n\n Error Text : \n " + ex.Message, "Error Reading Skin Settings Json on Device", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

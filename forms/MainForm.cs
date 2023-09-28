@@ -341,6 +341,10 @@ namespace GarlicPress
 
                     SkinSettingsForm skinSettingsForm = new SkinSettingsForm();
                     skinSettingsForm.ShowDialog();
+                    if (fileListBox.SelectedItem is FileStatistics item)
+                    {
+                        UpdateImageFromDevice(item);
+                    }
                 }
                 else
                 {
