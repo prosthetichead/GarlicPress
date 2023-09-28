@@ -6,7 +6,7 @@
 - [Setup](#setup)
 - [Usage](#usage)
 - [Media Layer Editor](#media-layer-editor)
-
+- [Skin Settings (Edit Skin)](#skin-settings)
 ---
 
 ## **Introduction**
@@ -174,3 +174,76 @@ With the Media Layer Editor, customize your game visuals within GarlicOS. Create
 
 6. **Saving Your Edits**:
    - Remember to click 'Save' before closing the editor to keep your changes.
+
+---
+## Skin Settings
+
+![SkinSettings](wwwroot/docs/GarlicPressSkinSettings.png)
+
+Skin Settings provides a user-friendly interface for customizing the look and feel of GalicOS. Here's a breakdown of the functionalities and options available:
+
+1. **Opening the Skin Editor**:
+   - Click on `Tools` in the menu strip on the main window and click `Edit Skin Settings`.
+   ![OpenSkinSettings](wwwroot/docs/GarlicPressOpenSkinSettings.png)
+
+2. **Skin Settings Customization**:
+   - **Text Margin**:
+     - Adjust the margin of game list text elements.
+     - **Left aligned** the margin will be from the left side of the screen.
+     ![LeftAligned](wwwroot/docs/GarlicPressSkinSettingsLeftAligned.png)
+      - **Center aligned** the margin will not do anything, the text will always be in center of the screen.
+      ![CenterAligned](wwwroot/docs/GarlicPressSkinSettingsCenterAligned.png)
+      - **Right aligned** the margin will be from the right side of the screen.
+      ![RightAligned](wwwroot/docs/GarlicPressSkinSettingsRightAligned.png)
+   - **Game Text Alignment**:
+     - Customize the alignment of game list text in GarlicOS. See the `Text Margin` section for more information.
+   - **Color Settings**:
+     - Customize various color settings to match your preferences:
+       - **Active Color**: Color of selected game/element.
+       ![ActiveColor](wwwroot/docs/GarlicPressSkinSettingsActiveColor.png)
+       - **Inactive Color**: Color of inactive games/elements.
+         ![InactiveColor](wwwroot/docs/GarlicPressSkinSettingsInactiveColor.png)
+       - **Guide Color**: Color of the GarlicOS buttons NAVIGATE, OPEN, BACK, FAVORITE, VERSION, CLOCK etc.
+         ![GuideColor](wwwroot/docs/GarlicPressSkinSettingsGuideColor.png)
+       - **Favorite Active Color**: Color of favored games.
+     - **Color Picker**:
+        - Utilize the color picker tool to easily select and apply colors for different settings.
+        - Click on the color box next to each color setting to open the color picker.
+        ![ColorPicker](wwwroot/docs/GarlicPressSkinSettingsColorPicker.png)
+   - **Text Visibility**:
+     - Toggle the visibility of text in the Main Menu (Version text in top left corner) and Guide Button texts.
+   - **Label Customization**:
+     - Customize the labels for various sections and buttons within the GalicOS:
+       - Recent Label, Favorites Label, Consoles Label, Retroarch Label, RTC Label, Navigate Label, Open Label, Back Label, Favorite Label, Remove Label, Empty Label, Save States Unsupported Label, On Label, Off Label, AM Label, PM Label, Year Label, Month Label, Day Label, Hour Label, Minute Label, Meridian Time Label, and Title Label.
+       - **Note**: Most of these will not do anything as they come from the selected Language see `Language Settings` for more.
+
+3. **Language Settings**:
+   - **Customizing Language Labels**:
+     - Customize the language labels for various sections and buttons within GalicOS.
+     - These will take precedence over the labels in the `Label Customization` section.
+     - **How to change Language in GarlicOS**:
+       - On the Main Meny in GarlicOS press the Start button.
+       - Select the language under the Clock Settings.
+    - **Font Management**:
+   ![FontManagement](wwwroot/docs/GarlicPressSkinSettingsFonts.png)
+      - **Font Selection**:
+         - Select the font to be used for the GalicOS.
+      - **Uploading Fonts**:
+         - Upload new fonts to the GalicOS to use with your Language skin settings.
+      - **Deleting Fonts**:
+         - Delete the selected fonts that.
+
+4. **Boot Screen Customization**:
+   - **Uploading a New Boot Screen**:
+     - Upload a new boot screen image to customize the startup look of the GalicOS.
+   - **Preview of the Boot Screen**:
+     - Preview is the current boot screen image.
+
+5. **Saving and Applying Changes**:
+   - **Saving Customized Settings**:
+     - Save your customized settings to apply them to the GalicOS.
+   - **Applying Changes**:
+     - The settings will be applied to the GalicOS after saving. But they will not show until you restart the GalicOS, this can be done with the `Restart` button in lower left corner.
+
+6. **Troubleshooting**:
+   - If skin settings can not be read, you will get as error message when GarlicPress connects to your RG35XX saying settings.json is not valid json. If this happens you have to take out the SD card and edit the settings.json file with a text editor. You can use a json validator to check if the file is valid json.
