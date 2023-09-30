@@ -42,11 +42,11 @@
             label5 = new Label();
             cbMediaLayerCollection = new ComboBox();
             tabLog = new TabPage();
+            txtRemainingTime = new TextBox();
             ImgArtPreview = new PictureBox();
             txtLog = new RichTextBox();
             btnClearCompleted = new Button();
             btnClose = new Button();
-            txtRemainingTime = new TextBox();
             ((System.ComponentModel.ISupportInitialize)dataGridSearch).BeginInit();
             tabControl.SuspendLayout();
             tabOptions.SuspendLayout();
@@ -68,7 +68,7 @@
             dataGridSearch.RowHeadersVisible = false;
             dataGridSearch.RowHeadersWidth = 10;
             dataGridSearch.RowTemplate.Height = 25;
-            dataGridSearch.Size = new Size(857, 501);
+            dataGridSearch.Size = new Size(720, 487);
             dataGridSearch.TabIndex = 0;
             // 
             // gridColFileName
@@ -89,15 +89,14 @@
             gridColSystem.ReadOnly = true;
             gridColSystem.Resizable = DataGridViewTriState.True;
             gridColSystem.SortMode = DataGridViewColumnSortMode.NotSortable;
-            gridColSystem.Width = 120;
             // 
             // gridColSearchType
             // 
-            gridColSearchType.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            gridColSearchType.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             gridColSearchType.HeaderText = "Search Type";
             gridColSearchType.MinimumWidth = 9;
             gridColSearchType.Name = "gridColSearchType";
-            gridColSearchType.Width = 175;
+            gridColSearchType.Width = 75;
             // 
             // gridColSearchText
             // 
@@ -119,7 +118,7 @@
             // btnGo
             // 
             btnGo.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnGo.Location = new Point(875, 488);
+            btnGo.Location = new Point(738, 474);
             btnGo.Name = "btnGo";
             btnGo.Size = new Size(75, 23);
             btnGo.TabIndex = 1;
@@ -130,7 +129,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnCancel.Location = new Point(875, 488);
+            btnCancel.Location = new Point(738, 474);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 23);
             btnCancel.TabIndex = 2;
@@ -143,10 +142,10 @@
             tabControl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             tabControl.Controls.Add(tabOptions);
             tabControl.Controls.Add(tabLog);
-            tabControl.Location = new Point(875, 12);
+            tabControl.Location = new Point(738, 12);
             tabControl.Name = "tabControl";
             tabControl.SelectedIndex = 0;
-            tabControl.Size = new Size(371, 474);
+            tabControl.Size = new Size(371, 460);
             tabControl.TabIndex = 4;
             // 
             // tabOptions
@@ -157,7 +156,7 @@
             tabOptions.Location = new Point(4, 24);
             tabOptions.Name = "tabOptions";
             tabOptions.Padding = new Padding(3);
-            tabOptions.Size = new Size(363, 446);
+            tabOptions.Size = new Size(363, 432);
             tabOptions.TabIndex = 0;
             tabOptions.Text = "Options";
             tabOptions.UseVisualStyleBackColor = true;
@@ -165,7 +164,7 @@
             // cb_AllowOnlyLocalMedia
             // 
             cb_AllowOnlyLocalMedia.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            cb_AllowOnlyLocalMedia.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            cb_AllowOnlyLocalMedia.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
             cb_AllowOnlyLocalMedia.Location = new Point(6, 54);
             cb_AllowOnlyLocalMedia.Name = "cb_AllowOnlyLocalMedia";
             cb_AllowOnlyLocalMedia.Size = new Size(350, 24);
@@ -200,15 +199,26 @@
             tabLog.Location = new Point(4, 24);
             tabLog.Name = "tabLog";
             tabLog.Padding = new Padding(3);
-            tabLog.Size = new Size(363, 446);
+            tabLog.Size = new Size(363, 382);
             tabLog.TabIndex = 1;
             tabLog.Text = "Update Log";
+            // 
+            // txtRemainingTime
+            // 
+            txtRemainingTime.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            txtRemainingTime.BackColor = SystemColors.InfoText;
+            txtRemainingTime.ForeColor = SystemColors.Info;
+            txtRemainingTime.Location = new Point(268, 6);
+            txtRemainingTime.Multiline = true;
+            txtRemainingTime.Name = "txtRemainingTime";
+            txtRemainingTime.Size = new Size(89, 113);
+            txtRemainingTime.TabIndex = 7;
             // 
             // ImgArtPreview
             // 
             ImgArtPreview.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             ImgArtPreview.BackColor = Color.Black;
-            ImgArtPreview.Location = new Point(24, 189);
+            ImgArtPreview.Location = new Point(24, 125);
             ImgArtPreview.Name = "ImgArtPreview";
             ImgArtPreview.Size = new Size(320, 240);
             ImgArtPreview.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -226,14 +236,14 @@
             txtLog.Name = "txtLog";
             txtLog.ReadOnly = true;
             txtLog.ScrollBars = RichTextBoxScrollBars.None;
-            txtLog.Size = new Size(259, 179);
+            txtLog.Size = new Size(259, 115);
             txtLog.TabIndex = 5;
             txtLog.Text = "";
             // 
             // btnClearCompleted
             // 
             btnClearCompleted.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnClearCompleted.Location = new Point(956, 488);
+            btnClearCompleted.Location = new Point(819, 474);
             btnClearCompleted.Name = "btnClearCompleted";
             btnClearCompleted.Size = new Size(116, 23);
             btnClearCompleted.TabIndex = 5;
@@ -245,7 +255,7 @@
             // btnClose
             // 
             btnClose.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnClose.Location = new Point(1167, 488);
+            btnClose.Location = new Point(1030, 474);
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(75, 23);
             btnClose.TabIndex = 6;
@@ -254,23 +264,12 @@
             btnClose.Visible = false;
             btnClose.Click += btnClose_Click;
             // 
-            // txtRemainingTime
-            // 
-            txtRemainingTime.BackColor = SystemColors.InfoText;
-            txtRemainingTime.Cursor = Cursors.Cross;
-            txtRemainingTime.ForeColor = SystemColors.Info;
-            txtRemainingTime.Location = new Point(268, 6);
-            txtRemainingTime.Multiline = true;
-            txtRemainingTime.Name = "txtRemainingTime";
-            txtRemainingTime.Size = new Size(89, 177);
-            txtRemainingTime.TabIndex = 7;
-            // 
             // GameArtUpdateForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             AutoSize = true;
-            ClientSize = new Size(1251, 525);
+            ClientSize = new Size(1114, 511);
             Controls.Add(btnClose);
             Controls.Add(btnClearCompleted);
             Controls.Add(tabControl);
@@ -304,15 +303,15 @@
         private RichTextBox txtLog;
         private Button btnClearCompleted;
         private Button btnClose;
-        private DataGridViewTextBoxColumn gridColFileName;
-        private DataGridViewTextBoxColumn gridColSystem;
-        private DataGridViewComboBoxColumn gridColSearchType;
-        private DataGridViewTextBoxColumn gridColSearchText;
-        private DataGridViewTextBoxColumn gridColStatus;
         private PictureBox ImgArtPreview;
         private Label label5;
         private ComboBox cbMediaLayerCollection;
         private CheckBox cb_AllowOnlyLocalMedia;
         private TextBox txtRemainingTime;
+        private DataGridViewTextBoxColumn gridColFileName;
+        private DataGridViewTextBoxColumn gridColSystem;
+        private DataGridViewComboBoxColumn gridColSearchType;
+        private DataGridViewTextBoxColumn gridColSearchText;
+        private DataGridViewTextBoxColumn gridColStatus;
     }
 }

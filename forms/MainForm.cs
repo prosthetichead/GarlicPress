@@ -589,5 +589,6 @@ namespace GarlicPress
         {
             RefreshBrowserFiles();
         }
+
     }
 }

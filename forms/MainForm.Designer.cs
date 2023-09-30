@@ -34,6 +34,7 @@
             txtUpdate = new ToolStripStatusLabel();
             toolStripDeviceStatus = new ToolStripStatusLabel();
             txtCurrentTask = new ToolStripStatusLabel();
+            txtFreeSpace = new ToolStripStatusLabel();
             fileListBox = new ListBox();
             menuStrip = new MenuStrip();
             miFile = new ToolStripMenuItem();
@@ -46,8 +47,8 @@
             miBackupSaves = new ToolStripMenuItem();
             toolStripSeparator2 = new ToolStripSeparator();
             miUpdateAllArt = new ToolStripMenuItem();
-            aboutToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
+            aboutToolStripMenuItem = new ToolStripMenuItem();
             notifyIcon = new NotifyIcon(components);
             notifyIconMenu = new ContextMenuStrip(components);
             miOpenGalicPress = new ToolStripMenuItem();
@@ -68,7 +69,6 @@
             btnSelectAllWithoutArt = new Button();
             comboSortBy = new ComboBox();
             label4 = new Label();
-            txtFreeSpace = new ToolStripStatusLabel();
             statusStrip.SuspendLayout();
             menuStrip.SuspendLayout();
             notifyIconMenu.SuspendLayout();
@@ -114,6 +114,12 @@
             txtCurrentTask.Size = new Size(91, 19);
             txtCurrentTask.Text = "No Current Task";
             // 
+            // txtFreeSpace
+            // 
+            txtFreeSpace.Name = "txtFreeSpace";
+            txtFreeSpace.Size = new Size(91, 19);
+            txtFreeSpace.Text = "Free Space: N/A";
+            // 
             // fileListBox
             // 
             fileListBox.BackColor = Color.Black;
@@ -133,7 +139,7 @@
             // menuStrip
             // 
             menuStrip.ImageScalingSize = new Size(28, 28);
-            menuStrip.Items.AddRange(new ToolStripItem[] { miFile, toolsToolStripMenuItem, aboutToolStripMenuItem, helpToolStripMenuItem });
+            menuStrip.Items.AddRange(new ToolStripItem[] { miFile, toolsToolStripMenuItem, helpToolStripMenuItem, aboutToolStripMenuItem });
             menuStrip.Location = new Point(0, 0);
             menuStrip.Name = "menuStrip";
             menuStrip.Size = new Size(1013, 24);
@@ -208,19 +214,19 @@
             miUpdateAllArt.Text = "Update All Systems Art";
             miUpdateAllArt.Click += miUpdateAllArt_Click;
             // 
-            // aboutToolStripMenuItem
-            // 
-            aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(52, 20);
-            aboutToolStripMenuItem.Text = "About";
-            aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
-            // 
             // helpToolStripMenuItem
             // 
             helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             helpToolStripMenuItem.Size = new Size(44, 20);
             helpToolStripMenuItem.Text = "Help";
             helpToolStripMenuItem.Click += helpToolStripMenuItem_Click;
+            // 
+            // aboutToolStripMenuItem
+            // 
+            aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            aboutToolStripMenuItem.Size = new Size(52, 20);
+            aboutToolStripMenuItem.Text = "About";
+            aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
             // 
             // notifyIcon
             // 
@@ -417,12 +423,6 @@
             label4.Size = new Size(47, 15);
             label4.TabIndex = 26;
             label4.Text = "Sort by:";
-            // 
-            // txtFreeSpace
-            // 
-            txtFreeSpace.Name = "txtFreeSpace";
-            txtFreeSpace.Size = new Size(91, 19);
-            txtFreeSpace.Text = "Free Space: N/A";
             // 
             // MainForm
             // 
