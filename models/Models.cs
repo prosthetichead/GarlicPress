@@ -102,6 +102,7 @@ namespace GarlicPress
             new GarlicSystem("Nintendo Game Boy", "GB", "9", "rom", new List<string>(){".gb", ".gbc", ".dmg", ".zip", ".7z"}),
             new GarlicSystem("Nintendo Game Boy Color", "GBC", "10", "rom", new List<string>(){".gb", ".gbc", ".dmg", ".zip", ".7z"}),
             new GarlicSystem("Nintendo Game Boy Advance", "GBA", "12", "rom", new List<string>(){".gb", ".gbc", ".dmg", ".zip", ".7z"}),
+            new GarlicSystem("Nintendo DS", "NDS", "15", "rom", new List<string>(){".nds"}),
             new GarlicSystem("Sony Playstation", "PS", "57", "iso", new List<string>(){".chd"}),
             new GarlicSystem("PICO-8", "PICO", "234", "fichier", new List<string>(){}),
             new GarlicSystem("Ports collection", "PORTS", "?", "fichier", new List<string>(){}),
