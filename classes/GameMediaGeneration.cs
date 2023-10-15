@@ -279,12 +279,11 @@ namespace GarlicPress
                         }
 
                         string fontPath = PathConstants.assetSkinPath + "font.ttf";
-                        PrivateFontCollection pfc = new PrivateFontCollection();
-                        if (File.Exists(fontPath))
-                        {
-                            pfc.AddFontFile(fontPath);
-                            using Font font = new Font(pfc.Families[0], fontSize, GraphicsUnit.Pixel);
+                        Font? font = null;
+                        font = GetFont(fontSize, fontPath, font);
 
+                        using (font)
+                        {
                             SizeF stringSize = graphics.MeasureString(textToDraw, font);
 
                             float adjustedY = skinMedia.Y - (stringSize.Height / 2);
@@ -317,29 +316,7 @@ namespace GarlicPress
 
                 string fontPath = Path.Combine(PathConstants.assetSkinPath, "font.ttf");
                 Font? font = null;
-
-                if (File.Exists(fontPath))
-                {
-                    try
-                    {
-                        using PrivateFontCollection pfc = new PrivateFontCollection();
-                        pfc.AddFontFile(fontPath);
-
-                        if (pfc.Families.Length > 0)
-                        {
-                            font = new Font(pfc.Families[0], fontSize, GraphicsUnit.Pixel);
-                        }
-                    }
-                    catch
-                    {
-
-                    }
-                }
-
-                if (font is null)
-                {
-                    font = new Font("Arial", fontSize, GraphicsUnit.Pixel);
-                }
+                font = GetFont(fontSize, fontPath, font);
 
                 using (font)
                 {
@@ -394,6 +371,34 @@ namespace GarlicPress
                     }
                 }
             }
+        }
+
+        private static Font GetFont(int fontSize, string fontPath, Font? font)
+        {
+            if (File.Exists(fontPath))
+            {
+                try
+                {
+                    using PrivateFontCollection pfc = new PrivateFontCollection();
+                    pfc.AddFontFile(fontPath);
+
+                    if (pfc.Families.Length > 0)
+                    {
+                        font = new Font(pfc.Families[0], fontSize, GraphicsUnit.Pixel);
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+
+            if (font is null)
+            {
+                font = new Font("Arial", fontSize, GraphicsUnit.Pixel);
+            }
+
+            return font;
         }
 
         public static List<string> GetSurroundingStrings(List<string> source, int index)
