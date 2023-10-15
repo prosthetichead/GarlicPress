@@ -209,7 +209,7 @@ namespace GarlicPress
                 using var stream = new FileStream(PathConstants.assetsTempPath + "gameart-down.png", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 using var oImage = Image.FromStream(stream);
                 using Bitmap overlayImage = new Bitmap(oImage);
-                picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage, SelectedSystem, filePaths, (fileListBox.SelectedItem as FileStatistics)?.Path ?? imgFile);
+                picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage, SelectedSystem, filePaths, item.Path);
                 picGame.Refresh();
             }
             else
@@ -217,7 +217,7 @@ namespace GarlicPress
                 using var stream = new FileStream(PathConstants.assetSkinPath + "background.png", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 using var oImage = Image.FromStream(stream);
                 using Bitmap overlayImage = new Bitmap(oImage);
-                picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage, SelectedSystem, filePaths, (fileListBox.SelectedItem as FileStatistics)?.Path ?? imgFile);
+                picGame.Image = GameMediaGeneration.OverlayImageWithSkinBackground(overlayImage, SelectedSystem, filePaths, item.Path);
             }
             picGame.Refresh();
         }

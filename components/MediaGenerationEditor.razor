@@ -410,7 +410,7 @@
                 if (GarlicSkin.skinSettings is not null)
                 {
                     textColor = GarlicSkin.skinSettings.colorguide ?? "#FFFFFF";
-                    fontSize = GarlicSkin.languageFiles?.FirstOrDefault()?.garlicLanguageSettings?.fontsize ?? 28;
+                    fontSize = GarlicSkin.selectedLanguageFile?.garlicLanguageSettings?.buttonguidefontsize ?? 28;
                 }
 
                 switch (skinMedia.SkinMediaType)
@@ -431,16 +431,16 @@
                         await _fabricCanvas.AddText(DateTime.Now.ToString("HH:mm"), skinMedia.X, skinMedia.Y, textColor, "GarlicFont", fontSize);
                         break;
                     case SkinMedia.SkinMediaTypes.NavigateLabel:
-                        await _fabricCanvas.AddText(GarlicSkin.skinSettings?.navigatelabel ?? skinMedia.Text, skinMedia.X, skinMedia.Y, textColor, "GarlicFont", fontSize);
+                        await _fabricCanvas.AddText(GarlicSkin.selectedLanguageFile?.garlicLanguageSettings.navigatelabel ?? skinMedia.Text, skinMedia.X, skinMedia.Y, textColor, "GarlicFont", fontSize);
                         break;
                     case SkinMedia.SkinMediaTypes.OpenLabel:
-                        await _fabricCanvas.AddText(GarlicSkin.skinSettings?.openlabel ?? skinMedia.Text, skinMedia.X, skinMedia.Y, textColor, "GarlicFont", fontSize);
+                        await _fabricCanvas.AddText(GarlicSkin.selectedLanguageFile?.garlicLanguageSettings.openlabel ?? skinMedia.Text, skinMedia.X, skinMedia.Y, textColor, "GarlicFont", fontSize);
                         break;
                     case SkinMedia.SkinMediaTypes.BackLabel:
-                        await _fabricCanvas.AddText(GarlicSkin.skinSettings?.backlabel ?? skinMedia.Text, skinMedia.X, skinMedia.Y, textColor, "GarlicFont", fontSize);
+                        await _fabricCanvas.AddText(GarlicSkin.selectedLanguageFile?.garlicLanguageSettings.backlabel ?? skinMedia.Text, skinMedia.X, skinMedia.Y, textColor, "GarlicFont", fontSize);
                         break;
                     case SkinMedia.SkinMediaTypes.FavoriteLabel:
-                        await _fabricCanvas.AddText(GarlicSkin.skinSettings?.favoritelabel ?? skinMedia.Text, skinMedia.X, skinMedia.Y, textColor, "GarlicFont", fontSize);
+                        await _fabricCanvas.AddText(GarlicSkin.selectedLanguageFile?.garlicLanguageSettings.favoritelabel ?? skinMedia.Text, skinMedia.X, skinMedia.Y, textColor, "GarlicFont", fontSize);
                         break;
                 }
             }
@@ -489,7 +489,7 @@
     {
         if (_fabricCanvas is not null)
         {
-            if (_games.Any() && GarlicSkin.skinSettings is not null && GarlicSkin.languageFiles is not null && GarlicSkin.validSkinSettings)
+            if (_games.Any() && GarlicSkin.skinSettings is not null && GarlicSkin.selectedLanguageFile is not null && GarlicSkin.validSkinSettings)
             {
                 var indexof = _games.IndexOf(_selectedGame);
 
@@ -498,10 +498,10 @@
                 await _fabricCanvas.AddText(
                     String.Join("\n", GameMediaGeneration.GetSurroundingStrings(transformedGames, indexof)),
                     GarlicSkin.skinSettings.textmargin,
-                    70,
+                    480 / 2,
                     GarlicSkin.skinSettings.colorinactive ?? "white",
                     "GarlicFont",
-                    GarlicSkin.languageFiles.First().garlicLanguageSettings.fontsize,
+                    GarlicSkin.selectedLanguageFile.garlicLanguageSettings.fontsize,
                     GarlicSkin.skinSettings.textalignment ?? "left",
                     indexof < 4 ? indexof + 1 : 4,
                     GarlicSkin.skinSettings.coloractive ?? "white");
