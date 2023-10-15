@@ -389,7 +389,7 @@ namespace GarlicPress
 
         public static List<SkinMedia> GetSkinMedias()
         {
-            if (_defaultSkinMedias == null || true)
+            if (_defaultSkinMedias == null)
             {
                 _defaultSkinMedias = new List<SkinMedia>()
         {
