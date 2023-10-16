@@ -320,7 +320,7 @@ namespace GarlicPress
                 {
                     txtCurrentTask.Text = "uploading " + file + " for system " + system.name + " to SD " + comboDrive.SelectedIndex + 1;
                     Progress<int> progress = new Progress<int>(p => { txtCurrentTask.Text = $"uploading {p}%"; txtCurrentTask.ForeColor = p > 99 ? Color.Green : Color.OrangeRed; });
-                    await ADBConnection.UploadFileAsync(file, SelectedRomPath + "/" + Path.GetFileName(file).ToLower(), progress, CancellationToken.None);
+                    await ADBConnection.UploadFileAsync(file, SelectedRomPath + "/" + Path.GetFileName(file), progress, CancellationToken.None);
                 }
                 else
                 {
