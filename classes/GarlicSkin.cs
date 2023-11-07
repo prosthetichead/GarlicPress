@@ -16,6 +16,7 @@ namespace GarlicPress
 
         public static GarlicSkinSettings? skinSettings;
         public static List<GarlicLanguageSettingsFile>? languageFiles;
+        public static GarlicLanguageSettingsFile? selectedLanguageFile;
         public static List<string>? fonts;
         public static bool validSkinSettings;
 
@@ -28,7 +29,6 @@ namespace GarlicPress
         {
             string skinSettingsJson = ADBConnection.ReadTextFile("/mnt/mmc/CFW/skin/settings.json");
             ADBConnection.DownloadFile("/mnt/mmc/CFW/skin/background.png", PathConstants.assetSkinPath + "background.png");
-            ADBConnection.DownloadFile("/mnt/mmc/CFW/skin/font.ttf", PathConstants.assetSkinPath + "font.ttf");
             try
             {
                 // Fix missing commas, bug in theme switcher in GarlicOS that removes commas from ints in settings.json
@@ -42,6 +42,27 @@ namespace GarlicPress
                 skinSettings = new GarlicSkinSettings();
                 validSkinSettings = false;
                 MessageBox.Show("CFW/skin/settings.json skin settings cannot be loaded. \n\n Preview will not display text position \n skin settings tool will not function. \n\n Please report the skin you are using to issues link in About \n\n Error Text : \n " + ex.Message, "Error Reading Skin Settings Json on Device", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            string languageFlag = ADBConnection.ReadTextFile("/mnt/mmc/CFW/language.flag");
+            if (languageFlag != null)
+            {
+                string languageFileName = languageFlag.Trim() + ".json";
+                string languageFileJson = ADBConnection.ReadTextFile("/mnt/mmc/CFW/lang/" + languageFileName);
+                if (languageFileJson != null)
+                {
+                    try
+                    {
+                        var langSettings = JsonSerializer.Deserialize<GarlicLanguageSettings>(languageFileJson);
+                        selectedLanguageFile = new GarlicLanguageSettingsFile(languageFileName, langSettings ?? new());
+
+                        ADBConnection.DownloadFile($"/mnt/mmc/CFW/font/{selectedLanguageFile.garlicLanguageSettings.font}", PathConstants.assetSkinPath + "font.ttf");
+                    }
+                    catch (Exception ex)
+                    {
+                        DebugLog.Write("Error Reading Language File " + ex.Message, Color.OrangeRed);
+                    }
+                }
             }
         }
 
@@ -128,11 +149,11 @@ namespace GarlicPress
 
         public static async void ReadSkinFromDevice()
         {
+            var progress = new Progress<int>(p => { DebugLog.Write(".." + p.ToString() + "%", Color.Orange, false); });
+            await ADBConnection.DownloadDirectory("/mnt/mmc/CFW/skin", PathConstants.assetSkinPath, progress);          
             ReadSkinSettings();
             ReadAllLangFiles();
             ReadFonts();
-            var progress = new Progress<int>(p => { DebugLog.Write(".." + p.ToString() + "%", Color.Orange, false); });
-            await ADBConnection.DownloadDirectory("/mnt/mmc/CFW/skin", PathConstants.assetSkinPath, progress);          
         }
 
     }

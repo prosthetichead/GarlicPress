@@ -193,11 +193,32 @@ namespace GarlicPress
             graphics.DrawImage(baseImage, 0, 0, 640, 480);
             graphics.DrawImage(overlayImage, 0, 0, 640, 480);
 
-            int indexOfGame = 0;
-            try { indexOfGame = games.IndexOf(selectedGame); } catch { }
 
-            DrawGameTexts(graphics, GetSurroundingStrings(games, indexOfGame), selectedGame);
-            DrawSkinMedia(selectedSystem, graphics);
+            try
+            {
+                int indexOfGame = games.IndexOf(selectedGame);
+                if (indexOfGame == -1)
+                {
+                    indexOfGame = 0;
+                }
+
+                var surroundingGames = GetSurroundingStrings(games, indexOfGame);
+
+                DrawGameTexts(graphics, surroundingGames, selectedGame);
+            }
+            catch (Exception ex)
+            {
+                DebugLog.Write("Error Drawing Game Text " + ex.Message, Color.OrangeRed);
+            }
+
+            try
+            {
+                DrawSkinMedia(selectedSystem, graphics);
+            }
+            catch (Exception ex)
+            {
+                DebugLog.Write("Error Drawing System Media " + ex.Message, Color.OrangeRed);
+            }
 
             return finalImage;
         }
@@ -211,7 +232,7 @@ namespace GarlicPress
             if (GarlicSkin.skinSettings is not null)
             {
                 textColor = GarlicSkin.skinSettings.colorguide ?? "#FFFFFF";
-                fontSize = GarlicSkin.languageFiles?.FirstOrDefault()?.garlicLanguageSettings?.fontsize ?? 28;
+                fontSize = GarlicSkin.selectedLanguageFile?.garlicLanguageSettings?.buttonguidefontsize ?? 28;
             }
 
             foreach (var skinMedia in skinMedias)
@@ -228,7 +249,10 @@ namespace GarlicPress
                                 using var stream = new FileStream(mediaPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                                 using var image = Image.FromStream(stream);
                                 using var skinImage = new Bitmap(image);
-                                graphics.DrawImage(skinImage, skinMedia.X, skinMedia.Y, skinImage.Width, skinImage.Height);
+
+                                var imagePosX = skinMedia.X - (skinImage.Width / 2);
+                                var imagePosY = skinMedia.Y - (skinImage.Height / 2);
+                                graphics.DrawImage(skinImage, imagePosX, imagePosY, skinImage.Width, skinImage.Height);
                             }
                             catch (Exception ex)
                             {
@@ -246,25 +270,26 @@ namespace GarlicPress
                         string textToDraw = skinMedia.Text;
                         switch (skinMedia.SkinMediaType)
                         {
-                            case SkinMedia.SkinMediaTypes.NavigateLabel: textToDraw = GarlicSkin.skinSettings?.navigatelabel ?? textToDraw; break;
-                            case SkinMedia.SkinMediaTypes.OpenLabel: textToDraw = GarlicSkin.skinSettings?.openlabel ?? textToDraw; break;
-                            case SkinMedia.SkinMediaTypes.BackLabel: textToDraw = GarlicSkin.skinSettings?.backlabel ?? textToDraw; break;
-                            case SkinMedia.SkinMediaTypes.FavoriteLabel: textToDraw = GarlicSkin.skinSettings?.favoritelabel ?? textToDraw; break;
+                            case SkinMedia.SkinMediaTypes.NavigateLabel: textToDraw = GarlicSkin.selectedLanguageFile?.garlicLanguageSettings.navigatelabel ?? textToDraw; break;
+                            case SkinMedia.SkinMediaTypes.OpenLabel: textToDraw = GarlicSkin.selectedLanguageFile?.garlicLanguageSettings.openlabel ?? textToDraw; break;
+                            case SkinMedia.SkinMediaTypes.BackLabel: textToDraw = GarlicSkin.selectedLanguageFile?.garlicLanguageSettings.backlabel ?? textToDraw; break;
+                            case SkinMedia.SkinMediaTypes.FavoriteLabel: textToDraw = GarlicSkin.selectedLanguageFile?.garlicLanguageSettings.favoritelabel ?? textToDraw; break;
                             case SkinMedia.SkinMediaTypes.SystemName: textToDraw = selectedSystem.folder; break;
                             case SkinMedia.SkinMediaTypes.Clock: textToDraw = DateTime.Now.ToString("HH:mm"); break;
                         }
 
-                        // Load and use the custom font
                         string fontPath = PathConstants.assetSkinPath + "font.ttf";
-                        PrivateFontCollection pfc = new PrivateFontCollection();
-                        if (File.Exists(fontPath))
+                        Font? font = null;
+                        font = GetFont(fontSize, fontPath, font);
+
+                        using (font)
                         {
-                            pfc.AddFontFile(fontPath);
-                            using (Font font = new Font(pfc.Families[0], fontSize, GraphicsUnit.Pixel))
-                            {
-                                Color finalTextColor = ColorTranslator.FromHtml(textColor);
-                                graphics.DrawString(textToDraw, font, new SolidBrush(finalTextColor), new PointF(skinMedia.X, skinMedia.Y));
-                            }
+                            SizeF stringSize = graphics.MeasureString(textToDraw, font);
+
+                            float adjustedY = skinMedia.Y - (stringSize.Height / 2);
+
+                            Color finalTextColor = ColorTranslator.FromHtml(textColor);
+                            graphics.DrawString(textToDraw, font, new SolidBrush(finalTextColor), new PointF(skinMedia.X, adjustedY));
                         }
                         break;
                 }
@@ -285,43 +310,40 @@ namespace GarlicPress
 
                 Color textColorInactive = ColorTranslator.FromHtml(GarlicSkin.skinSettings.colorinactive ?? "#AAAAAA");
                 Color textColorActive = ColorTranslator.FromHtml(GarlicSkin.skinSettings.coloractive ?? "#FFFFFF");
-                int fontSize = GarlicSkin.languageFiles?.FirstOrDefault()?.garlicLanguageSettings.fontsize ?? 28;
+                int fontSize = GarlicSkin.selectedLanguageFile?.garlicLanguageSettings.fontsize ?? 28;
+                lineHeight = int.Parse(((GarlicSkin.selectedLanguageFile?.garlicLanguageSettings.buttonguidefontsize ?? 28) * 1.5).ToString());
+                startingY = (int)((480 - (lineHeight * 8)) / 2);
 
-                string fontPath = PathConstants.assetSkinPath + "font.ttf";
-                PrivateFontCollection pfc = new PrivateFontCollection();
-                if (File.Exists(fontPath))
+                string fontPath = Path.Combine(PathConstants.assetSkinPath, "font.ttf");
+                Font? font = null;
+                font = GetFont(fontSize, fontPath, font);
+
+                using (font)
                 {
-                    pfc.AddFontFile(fontPath);
-                    using (Font font = new Font(pfc.Families[0], fontSize, GraphicsUnit.Pixel))
+                    for (int i = 0; i < games.Count && i < 8; i++)
                     {
-                        for (int i = 0; i < games.Count && i < 8; i++)
+                        string game = games[i];
+                        Color textColor = (game == selectedGame) ? textColorActive : textColorInactive;
+                        var gameTitle = TransformTitle(game).Trim();
+
+                        StringFormat format = new StringFormat
                         {
-                            string game = games[i];
-                            Color textColor = (game == selectedGame) ? textColorActive : textColorInactive;
-                            var gameTitle = TransformTitle(game).Trim();
+                            Alignment = alignment switch
+                            {
+                                "right" => StringAlignment.Far,
+                                "center" => StringAlignment.Center,
+                                _ => StringAlignment.Near,
+                            }
+                        };
 
-                            StringFormat format = new StringFormat();
-                            RectangleF layoutRect;
-                            if (alignment == "right")
-                            {
-                                format.Alignment = StringAlignment.Far;
-                                layoutRect = new RectangleF(0, startingY + (i * lineHeight), canvasWidth - txtMargin, lineHeight);
-                            }
-                            else if (alignment == "center")
-                            {
-                                format.Alignment = StringAlignment.Center;
-                                layoutRect = new RectangleF(0, startingY + (i * lineHeight), canvasWidth, lineHeight);
-                            }
-                            else
-                            {
-                                format.Alignment = StringAlignment.Near;
-                                layoutRect = new RectangleF(txtMargin - 5, startingY + (i * lineHeight), canvasWidth, lineHeight);
-                            }
+                        float layoutX = alignment == "right" ? 0 : (alignment == "center" ? 0 : txtMargin - 5);
+                        RectangleF layoutRect = new RectangleF(layoutX, startingY + (i * lineHeight), canvasWidth - (alignment == "right" ? txtMargin : 0), lineHeight);
 
-                            graphics.DrawString(gameTitle, font, new SolidBrush(textColor), layoutRect, format);
-                        }
+                        using SolidBrush brush = new SolidBrush(textColor);
+                        graphics.DrawString(gameTitle, font, brush, layoutRect, format);
                     }
                 }
+
             }
             else
             {
@@ -349,6 +371,34 @@ namespace GarlicPress
                     }
                 }
             }
+        }
+
+        private static Font GetFont(int fontSize, string fontPath, Font? font)
+        {
+            if (File.Exists(fontPath))
+            {
+                try
+                {
+                    using PrivateFontCollection pfc = new PrivateFontCollection();
+                    pfc.AddFontFile(fontPath);
+
+                    if (pfc.Families.Length > 0)
+                    {
+                        font = new Font(pfc.Families[0], fontSize, GraphicsUnit.Pixel);
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+
+            if (font is null)
+            {
+                font = new Font("Arial", fontSize, GraphicsUnit.Pixel);
+            }
+
+            return font;
         }
 
         public static List<string> GetSurroundingStrings(List<string> source, int index)

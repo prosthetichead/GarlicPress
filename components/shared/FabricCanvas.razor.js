@@ -87,7 +87,9 @@
                     top: top,
                     angle: 0,
                     selectable: false,
-                    drawOrder: 100
+                    drawOrder: 100,
+                    originX: 'center',
+                    originY: 'center'
                 });
                 BlazorFabric.canvas.add(img);
                 BlazorFabric.canvas.on('object:added', function (options) {
@@ -151,12 +153,14 @@
 
             const text = new fabric.IText(content, {
                 left: left,
-                top: top + 6,
+                top: top,
                 fill: textColor,
                 fontFamily: fontFamily,
                 selectable: false,
                 fontSize: fontSize,
                 textAlign: textAlign,
+                originX: 'center',
+                originY: 'center',
                 lineHeight: 1.35,
                 evented: false
             });

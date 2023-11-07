@@ -1,5 +1,6 @@
 ﻿
 using GarlicPress.classes.bitmapClasses;
+using GarlicPress.constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -392,23 +393,23 @@ namespace GarlicPress
             {
                 _defaultSkinMedias = new List<SkinMedia>()
         {
-            new SkinMedia() { MediaFileName = "icon-dpad-54.png", X = 5, Y = 420, Text = "", SkinMediaType = SkinMediaTypes.Picture },
-            new SkinMedia() { MediaFileName = "", X = 55, Y = 427, Text = "NAVIGATE", SkinMediaType = SkinMediaTypes.NavigateLabel },
+            new SkinMedia() { MediaFileName = "icon-dpad-54.png", X = 20, Y = 460, Text = "", SkinMediaType = SkinMediaTypes.Picture },
+            new SkinMedia() { MediaFileName = "", X = 40, Y = 460, Text = "NAVIGATE", SkinMediaType = SkinMediaTypes.NavigateLabel },
 
-            new SkinMedia() { MediaFileName = "icon-A-54.png", X = 195, Y = 420, Text = "", SkinMediaType = SkinMediaTypes.Picture },
-            new SkinMedia() { MediaFileName = "", X = 245, Y = 427, Text = "OPEN", SkinMediaType = SkinMediaTypes.OpenLabel },
+            new SkinMedia() { MediaFileName = "icon-A-54.png", X = 210, Y = 460, Text = "", SkinMediaType = SkinMediaTypes.Picture },
+            new SkinMedia() { MediaFileName = "", X = 230, Y = 460, Text = "OPEN", SkinMediaType = SkinMediaTypes.OpenLabel },
 
-            new SkinMedia() { MediaFileName = "icon-B-54.png", X = 325, Y = 420, Text = "", SkinMediaType = SkinMediaTypes.Picture },
-            new SkinMedia() { MediaFileName = "", X = 375, Y = 427, Text = "BACK", SkinMediaType = SkinMediaTypes.BackLabel },
+            new SkinMedia() { MediaFileName = "icon-B-54.png", X = 340, Y = 460, Text = "", SkinMediaType = SkinMediaTypes.Picture },
+            new SkinMedia() { MediaFileName = "", X = 360, Y = 460, Text = "BACK", SkinMediaType = SkinMediaTypes.BackLabel },
 
-            new SkinMedia() { MediaFileName = "icon-Y-54.png", X = 450, Y = 420, Text = "", SkinMediaType = SkinMediaTypes.Picture },
-            new SkinMedia() { MediaFileName = "", X = 500, Y = 427, Text = "FAVORITE", SkinMediaType = SkinMediaTypes.FavoriteLabel },
+            new SkinMedia() { MediaFileName = "icon-Y-54.png", X = 465, Y = 460, Text = "", SkinMediaType = SkinMediaTypes.Picture },
+            new SkinMedia() { MediaFileName = "", X = 485, Y = 460, Text = "FAVORITE", SkinMediaType = SkinMediaTypes.FavoriteLabel },
 
-            new SkinMedia() { MediaFileName = "logo.png", X = 15, Y = 8, Text = "", SkinMediaType = SkinMediaTypes.Picture },
-            new SkinMedia() { MediaFileName = "", X = 57, Y = 10, Text = "", SkinMediaType = SkinMediaTypes.SystemName },
+            new SkinMedia() { MediaFileName = "logo.png", X = 37, Y = 25, Text = "", SkinMediaType = SkinMediaTypes.Picture },
+            new SkinMedia() { MediaFileName = "", X = 60, Y = 25, Text = "", SkinMediaType = SkinMediaTypes.SystemName },
 
-            new SkinMedia() { MediaFileName = "charging-05.png", X = 580, Y = 5, Text = "", SkinMediaType = SkinMediaTypes.Picture },
-            new SkinMedia() { MediaFileName = "", X = 490, Y = 10, Text = "", SkinMediaType = SkinMediaTypes.Clock },
+            new SkinMedia() { MediaFileName = "charging-05.png", X = 600, Y = 25, Text = "", SkinMediaType = SkinMediaTypes.Picture },
+            new SkinMedia() { MediaFileName = "", X = 480, Y = 25, Text = "", SkinMediaType = SkinMediaTypes.Clock },
         };
             }
             return _defaultSkinMedias;
