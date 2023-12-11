@@ -154,5 +154,41 @@ namespace GarlicPress.Properties {
                 this["cleanTempOnExit"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("q88_hd")]
+        public string adbDeviceName {
+            get {
+                return ((string)(this["adbDeviceName"]));
+            }
+            set {
+                this["adbDeviceName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ToyCloud")]
+        public string adbDeviceModel {
+            get {
+                return ((string)(this["adbDeviceModel"]));
+            }
+            set {
+                this["adbDeviceModel"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0123456789ABCDEF")]
+        public string adbDeviceSerial {
+            get {
+                return ((string)(this["adbDeviceSerial"]));
+            }
+            set {
+                this["adbDeviceSerial"] = value;
+            }
+        }
     }
 }

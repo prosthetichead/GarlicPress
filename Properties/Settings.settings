@@ -35,5 +35,14 @@
     <Setting Name="cleanTempOnExit" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="adbDeviceName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">q88_hd</Value>
+    </Setting>
+    <Setting Name="adbDeviceModel" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ToyCloud</Value>
+    </Setting>
+    <Setting Name="adbDeviceSerial" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0123456789ABCDEF</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -49,9 +49,28 @@ namespace GarlicPress
             }
         }
 
+        public static DeviceData? DetectADBDevice()
+        {
+            if (AdbServer.Instance.GetStatus().IsRunning)
+            {
+                Thread.Sleep(1000);
+                client = new AdbClient();
+                var devices = client.GetDevices();
+                if (devices != null && devices.Count > 0)
+                {
+                    return devices[0];
+                }               
+            }
+            return null;
+        }
+
         public static bool ConnectToDevice()
         {
             bool isConnected = false;
+
+            var deviceModel = Properties.Settings.Default.adbDeviceModel;
+            var deviceName = Properties.Settings.Default.adbDeviceName;
+            var deviceSerial = Properties.Settings.Default.adbDeviceSerial;
 
             if (AdbServer.Instance.GetStatus().IsRunning)
             {
@@ -60,9 +79,9 @@ namespace GarlicPress
                 var devices = client.GetDevices();
                 foreach (var d in devices)
                 {
-                    DebugLog.Write($"AdbServer found Device. Name: {d.Name} Model: {d.Model}");
-
-                    if (d.Name == "q88_hd" && d.Model == "ToyCloud")
+                    DebugLog.Write($"AdbServer found a Device. Name: {d.Name} Model: {d.Model} Serial: {d.Serial} Product: {d.Product}"  );
+                       
+                    if ((!string.IsNullOrEmpty(d.Name) && !string.IsNullOrEmpty(d.Model) && d.Name == deviceName && d.Model == deviceModel) || (!string.IsNullOrEmpty(d.Serial) && d.Serial == deviceSerial))
                     {
                         device = d;
                         isConnected = true;
@@ -168,7 +187,7 @@ namespace GarlicPress
                         using (Stream stream = File.Create(writePath))
                         {
                             await Task.Run(() =>
-                                service.Pull(readPath, stream, progress, cancellationToken)
+                            service.Pull(readPath, stream, progress, cancellationToken)
                             );
                             DebugLog.Write($"Download Complete");
                             return true;

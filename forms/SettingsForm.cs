@@ -43,6 +43,9 @@ public partial class SettingsForm : Form
         txtSSPassword.Text = Properties.Settings.Default.ssPassword;
         txtSaveBackupLocation.Text = Properties.Settings.Default.saveBackupPath;
         txtRegionOrder.Text = Properties.Settings.Default.ssRegionOrder;
+        txtADBDeviceName.Text = Properties.Settings.Default.adbDeviceName;
+        txtADBDeviceModel.Text = Properties.Settings.Default.adbDeviceModel;
+        txtADBDeviceSerial.Text = Properties.Settings.Default.adbDeviceSerial;
         boolAutoBackup.Checked = Properties.Settings.Default.autoBackup;
         boolSystemTrayOnClose.Checked = Properties.Settings.Default.systemTrayOnClose;
         boolWarnBeforeDelete.Checked = Properties.Settings.Default.warningBeforeDelete;
@@ -96,6 +99,10 @@ public partial class SettingsForm : Form
         Properties.Settings.Default.systemTrayOnClose = boolSystemTrayOnClose.Checked;
         Properties.Settings.Default.romsOnRootSD2 = boolRomsRootSecondSD.Checked;
         Properties.Settings.Default.warningBeforeDelete = boolWarnBeforeDelete.Checked;
+        Properties.Settings.Default.adbDeviceModel = txtADBDeviceModel.Text;
+        Properties.Settings.Default.adbDeviceName = txtADBDeviceName.Text;
+        Properties.Settings.Default.adbDeviceSerial = txtADBDeviceSerial.Text;
+
         Properties.Settings.Default.Save();
 
         if (cbMediaLayerCollection.SelectedItem is MediaLayerCollection collection)
@@ -220,6 +227,30 @@ public partial class SettingsForm : Form
         else
         {
             MessageBox.Show("Cache already cleared.");
+        }
+    }
+
+    private void btnADBDeviceNameDefaults_Click(object sender, EventArgs e)
+    {
+        txtADBDeviceModel.Text = "ToyCloud";
+        txtADBDeviceName.Text = "q88_hd";
+    }
+
+    private void btnADBDetectDevice_Click(object sender, EventArgs e)
+    {
+        MessageBox.Show("Device will be attempted to be detected. Make sure only one ADB capable device is connected");
+
+        var device = ADBConnection.DetectADBDevice();
+        if (device != null)
+        {
+            MessageBox.Show($"Device found! Name: {device.Name} Model: {device.Model} Product: {device.Product} Serial: {device.Serial} ");
+            txtADBDeviceModel.Text = device.Model;
+            txtADBDeviceName.Text = device.Name;
+            txtADBDeviceSerial.Text = device.Serial;
+        }
+        else
+        {
+            MessageBox.Show("No ADB device could be found. Please make sure the device is connected and powered on.");
         }
     }
 }
